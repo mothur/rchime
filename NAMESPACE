@@ -1,0 +1,24 @@
+useDynLib(rchime, .registration=TRUE)
+
+#general
+import(cli)
+
+# c++ code
+import(RcppThread)
+importFrom(Rcpp, evalCpp)
+
+# R6 classes
+importFrom(R6, R6Class)
+importFrom(methods, new)
+importFrom(waldo, compare)
+import(stringi)
+import(r2r)
+import(data.table)
+
+# r6_sequence_dataset
+importFrom(microseq, readFasta)
+
+# paralellized code
+importFrom(parallelly, availableCores)
+
+exportPattern("^[[:alpha:]]+")
