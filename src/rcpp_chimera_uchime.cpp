@@ -1,7 +1,5 @@
-#include <Rcpp.h>
 #include "chimera_uchime.h"
 #include "chimera.h"
-//#include "rcpp_utils.h"
 
 // ============================================================================
 //' @title chimeraUchimeReference
@@ -30,7 +28,8 @@ Rcpp::List chimeraUchimeReference(Rcpp::Environment& dataset,
          hasGroupData = false;
      }
 
-     Chimera* chimera = new ChimeraUchime(dereplicate, processors, silent);
+     Chimera* chimera = new ChimeraUchime(dereplicate, processors, silent,
+                                            hasGroupData, options);
 
      Rcpp::List chimera_report = chimera->removeChimeras(dataset, reference);
 
@@ -64,7 +63,8 @@ Rcpp::List chimeraUchime(Rcpp::Environment& dataset,
          hasGroupData = false;
      }
 
-     Chimera* chimera = new ChimeraUchime(dereplicate, processors, silent);
+     Chimera* chimera = new ChimeraUchime(dereplicate, processors, silent,
+                                            hasGroupData, options);
 
      Rcpp::List chimera_report = chimera->removeChimeras(dataset);
 
@@ -72,3 +72,4 @@ Rcpp::List chimeraUchime(Rcpp::Environment& dataset,
 
      return chimera_report;
 }
+// ============================================================================

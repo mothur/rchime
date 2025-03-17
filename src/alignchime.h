@@ -13,7 +13,6 @@
 #include "myutils.h"
 #include "seqdb.h"
 #include "chime.h"
-//#include "dp.h"
 #include "make3way.h"
 
 /******************************************************************************/

@@ -14,18 +14,16 @@
 
 #include "mothur.h"
 #include "mothur-r.h"
+#include "rcpp_utils.h"
+#include "myopts.h"
 
-/******************************************************************************/
-struct chimeraData {
-
-};
 /******************************************************************************/
 class Chimera {
 
 public:
 
     // dereplicate, processors, silent
-    Chimera(bool derep, int proc, bool si);
+    Chimera(bool derep, int proc, bool si, bool hg, Rcpp::List options);
 
     virtual ~Chimera(){};
 
@@ -36,7 +34,8 @@ public:
 protected:
 
     int processors;
-    bool silent, dereplicate;
+    bool silent, dereplicate, hasGroupData;
+    Options* opts;
 
 private:
 

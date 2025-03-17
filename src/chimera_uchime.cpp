@@ -10,14 +10,23 @@
 #include "chimera_uchime.h"
 
 /******************************************************************************/
-ChimeraUchime::ChimeraUchime(bool derep, int proc, bool si) :
-    Chimera(derep, proc, si) {
+ChimeraUchime::ChimeraUchime(bool derep, int proc, bool si, bool hg, Rcpp::List options) :
+    Chimera(derep, proc, si, hg, options) {
 }
 /******************************************************************************/
 Rcpp::List ChimeraUchime::removeChimeras(Rcpp::Environment& dataset) {
     Rcpp::List results;
 
-    // uchime wants unaligned sequences
+    // if hasGroups then createThreads
+
+    // else
+       // get names 
+
+       // get sequences
+
+       // get counts
+
+       // run as one sample
 
     return results;
 }

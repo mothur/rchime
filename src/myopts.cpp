@@ -80,9 +80,9 @@ void Options::setSkipgaps2(bool sg) {
     skipgaps2 = sg;
 }
 /******************************************************************************/
-void Options::setUcl(bool u) {
-    ucl = u;
-}
+// void Options::setUcl(bool u) {
+//     ucl = u;
+// }
 /******************************************************************************/
 void Options::setWordLength(int wl) {
     wlength = wl;

@@ -23,7 +23,7 @@ class ChimeraUchime : public Chimera {
 public:
 
     // dereplicate, processors, silent
-    ChimeraUchime(bool derep, int proc, bool si);
+    ChimeraUchime(bool derep, int proc, bool si, bool hg, Rcpp::List options);
 
     Rcpp::List removeChimeras(Rcpp::Environment& dataset);
     Rcpp::List removeChimeras(Rcpp::Environment& dataset,

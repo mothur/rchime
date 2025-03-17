@@ -25,39 +25,56 @@
 #' @param processors Integer, number of cores to use. Default = all available
 #' @param silent Boolean, suppress progress updates and console output
 #'
+#'
+#' ## Parameters used directly by uchime. It is recommended to use the default
+#' values for the parameters below unless you have a pressing reason to change
+#' them.
+#'
+#' @param chimealns bool, Default = FALSE. When TRUE a DataFrame is returned
+#'                  containing multiple alignments of query sequences to parents
+#'                  in human-readable format. Alignments show columns with
+#'                  differences that support or contradict a chimeric model.
+#' @param abskew Float, the minimum abundance skew (denovo only). Default = 1.9.
+#'               abskew <- min [ abund(parent1), abund(parent2) ] / abund(query)
+#' @param minh Float, Mininum score to report chimera. Default 0.3. Values from
+#'     0.1 to 5 might be reasonable. Lower values increase sensitivity
+#'    but may report more false positives. If you decrease --xn,
+#'    you may need to increase --minh, and vice versa.
+#' @param mindiv Float, Minimum divergence ratio, default 0.5. Div ratio is
+#'    100%% %%identity between query sequence and the closest candidate for
+#'    being a parent. If you don't care about very close chimeras,
+#'    then you could increase --mindiv to, say, 1.0 or 2.0, and
+#'    also decrease --min h, say to 0.1, to increase sensitivity.
+#'    How well this works will depend on your data. Best is to
+#'    tune parameters on a good benchmark.
+#' @param xn Float, Weight of a no vote, also called the beta parameter.
+#'    Default 8.0. Decreasing this weight to around 3 or 4 may give better
+#'    performance on denoised data.
+#' @param dn Float, Pseudo-count prior on number of no votes. Default 1.4.
+#'    Probably no good reason to change this unless you can retune to a good
+#'    benchmark for your data. Reasonable values are probably in the
+#'    range from 0.2 to 2.
+#' @param xa Float, Weight of an abstain vote. Default 1. So far, results do not
+#'    seem to be very sensitive to this parameter, but if you have
+#'    a good training set might be worth trying. Reasonable values
+#'    might range from 0.1 to 2.
+#' @param chunks Integer, Number of chunks to extract from the query sequence
+#'    when searching for parents. Default 4.
+#' @param minchunk Integer, Minimum length of a chunk. Default 64.
+#' @param idsmoothwindow Integer, Length of id smoothing window. Default 32.
+#' @param maxp Integer, Maximum number of candidate parents to consider.
+#'   Default 2. In tests so far, increasing maxp gives only a very small
+#'   improvement in sensivity but tends to increase the error rate quite a bit.
+#' @param skipgaps, bool, If skipgaps is specified, columns containing gaps do
+#'  not count as diffs. Default = TRUE.
+#' @param skipgaps2 bool, If skipgaps2 is specified, if column is immediately
+#'  adjacent to a column containing a gap, it is not counted as a diff.
+#'  Default = TRUE.
+#' @param minlen Integer, Minimum sequence length. Default = 10.
+#' @param maxlen Integer, Maximum sequence length. Default = 10000.
+#'
 #' @return DataFrame containing chimera results and an updated dataset with the
 #'  chimeras removed
-#'
-#'  Column descriptions from uchime's manual:
-#'
-#'  1	Score	Higher score means more strongly chimeric alignment.
-#'  2	Q	Query Name.
-#'  3	A	Parent A Name.
-#'  4	B	Parent B Name.
-#'  5	T	Top parent (T) Name. This is the closest reference sequence; usually
-#'          either A or B.
-#'  6	IdQM	Percent identity of query and the model (M) constructed as a
-#'              segment of A and a segment of B.
-#'  7	IdQA	Percent identity of Q and A.
-#'  8	IdQA	Percent identity of Q and B.
-#'  9	IdAB	Percent identity of A and B
-#'  10	IdQT	Percent identity of Q and T.
-#'  11	LY	Yes votes in left segment.
-#'  12	LN	No votes in left segment.
-#'  13	LA	Abstain votes in left segment.
-#'  14	RY	Yes votes in right segment.
-#'  15	RN	No votes in right segment.
-#'  16	RA	Abstain votes in right segment.
-#'  17	Div	Divergence, defined as (IdQM - IdQT).
-#'  18	YN	Y, N or ?, indicating whether the query was classified as
-#'          chimeric (Y), not chimeric (N) or borderline case (?).
-#'          The query is classified as chimeric if h >= threshold specified by
-#'          -minh, Div > minimum divergence specified by ‑mindiv and the number
-#'          of diffs ( (Y+N+A) in each segment (L and R) is greater than the
-#'          minimum specified by -mindiffs. A query is unclassified if the
-#'          maxh > h > minh, i.e. maxh is the maximum score for a non-chimera,
-#'          and minh is the minimum score for a chimera; in between is
-#'          unclassified.
 #'
 #' @author Sarah Westcott, \email{swestcot@@umich.edu}
 #' @examples
@@ -97,7 +114,11 @@
 chimera_uchime <- function(dataset = NULL, fasta = NULL, count = NULL,
                            reference = NULL, dereplicate = FALSE,
                            processors = parallelly::availableCores(),
-                           silent = FALSE) {
+                           silent = FALSE, chimealns = FALSE, abskew = 1.9,
+                           minh = 0.3, mindiv = 0.5, xn = 8.0,
+                           dn = 1.4, xa = 1.0, chunks = 4, minchunk = 64,
+                           idsmoothwindow = 32, maxp = 2, skipgaps = TRUE,
+                           skipgaps2 = TRUE, minlen = 10, maxlen = 10000) {
   # no inputs provided
   if (is.null(dataset) && is.null(fasta)) {
     message <- paste(
@@ -135,10 +156,66 @@ chimera_uchime <- function(dataset = NULL, fasta = NULL, count = NULL,
 
   num_seqs <- dataset$get_num_seqs()
 
+  # make sure the dataset is aligned
+  if (!dataset$is_aligned()) {
+    message <- paste0(
+      "[ERROR]: chimera_uchime requires your dataset to be",
+      "aligned."
+    )
+    cli::cli_abort(message)
+  }
+
   parameters <- list(
     processors = processors, silent = silent,
     dereplicate = dereplicate
   )
+
+  # if the user sets uchime options then add to parameters
+  if (abskew != 1.9) {
+    parameters <- c(parameters, abskew = abskew)
+  }
+  if (chimealns) {
+    parameters <- c(parameters, chimealns = TRUE)
+  }
+  if (minh != 0.3) {
+    parameters <- c(parameters, minh = minh)
+  }
+  if (mindiv != 0.5) {
+    parameters <- c(parameters, mindiv = mindiv)
+  }
+  if (xn != 8.0) {
+    parameters <- c(parameters, xn = xn)
+  }
+  if (dn != 1.4) {
+    parameters <- c(parameters, dn = dn)
+  }
+  if (xa != 1.0) {
+    parameters <- c(parameters, xa = xa)
+  }
+  if (chunks != 4) {
+    parameters <- c(parameters, chunks = chunks)
+  }
+  if (minchunk != 64) {
+    parameters <- c(parameters, minchunk = minchunk)
+  }
+  if (idsmoothwindow != 32) {
+    parameters <- c(parameters, idsmoothwindow = idsmoothwindow)
+  }
+  if (maxp != 2) {
+    parameters <- c(parameters, maxp = maxp)
+  }
+  if (!skipgaps) {
+    parameters <- c(parameters, skipgaps = FALSE)
+  }
+  if (!skipgaps2) {
+    parameters <- c(parameters, skipgaps2 = FALSE)
+  }
+  if (minlen != 10) {
+    parameters <- c(parameters, minlen = minlen)
+  }
+  if (maxlen != 10000) {
+    parameters <- c(parameters, maxlen = maxlen)
+  }
 
   # build reference dataset if provided
   chimera_report <- NULL
