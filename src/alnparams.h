@@ -24,7 +24,8 @@ class AlnParams {
 
 public:
 
-    static AlnParams* getInstance();
+	AlnParams();
+	~AlnParams(){}
 
 	const float * const *SubstMx;
 
@@ -51,24 +52,12 @@ public:
 
 private:
 
-    static AlnParams* _uniqueInstance;
-    AlnParams( const AlnParams& ); // Disable copy constructor
-    void operator=( const AlnParams& ); // Disable assignment operator
-
-    // set to default options
-    AlnParams() {   
-		opt = Options::getInstance();
-		util = Utils::getInstance();
-		InitFromCmdLine(true);
-    }
-    ~AlnParams() = default;
-
 	// Local gaps
 	float LocalOpen;
 	float LocalExt;
 
 	Options* opt;
-	Utils* util;
+	Utilities* util;
 
 	Mx<float> g_SubstMxf;
 	float **g_SubstMx;

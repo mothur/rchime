@@ -11,6 +11,7 @@ const int OPT_ZERO_BASED = 0x04;
 const float MINUS_INFINITY = -9e9f;
 const float UNINIT = -8e8f;
 
+/******************************************************************************/
 struct MxBase {
 private:
 	MxBase(const MxBase &rhs);
@@ -93,7 +94,7 @@ public:
 	void Alloc(const char *Name, unsigned RowCount, unsigned ColCount,
 	  const SeqData *SA, const SeqData *SB);
 };
-
+/******************************************************************************/
 template<class T> struct Mx : public MxBase {
 	
 // Disable unimplemented stuff
@@ -101,12 +102,12 @@ private:
 	Mx(Mx &rhs);
 	Mx &operator=(Mx &rhs);
 	
-    Utils* util;
+    Utilities* util;
 
 public:
 	T **m_Data;
 
-	Mx()  { m_Data = 0; util = Utils::getInstance(); }
+	Mx()  { m_Data = 0; util = Utilities::getInstance(); }
 	~Mx() { FreeData(); }
 
 	virtual void AllocData(unsigned RowCount, unsigned ColCount) {
@@ -155,5 +156,6 @@ public:
 				m_Data[i][j] = v;
 	}
 };
+/******************************************************************************/
 
 #endif // mx_h

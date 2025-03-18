@@ -15,7 +15,7 @@
 
 /******************************************************************************/
 SeqDB::SeqDB() {
-	util = Utils::getInstance();
+	util = Utilities::getInstance();
 
 	names = new std::vector<string>;
 	seqs = new std::vector<string>;
@@ -30,7 +30,7 @@ SeqDB::SeqDB() {
 SeqDB::SeqDB(vector<string>& seqNames, vector<string>& sequences,
 			   vector<int>& ab, bool descending) {
 	
-	util = Utils::getInstance();
+	util = Utilities::getInstance();
 
 	names = new std::vector<string>;
 	seqs = new std::vector<string>;

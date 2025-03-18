@@ -6,7 +6,7 @@ static char *AllocBuffer(unsigned Size){
 	if (Size == 0) {
 		return 0;
 	}
-	Utils* util = Utils::getInstance();
+	Utilities* util = Utilities::getInstance();
 	
 	// Is a free buffer that is big enough?
 	for (unsigned i = 0; i < g_PathBufferSize; ++i) {

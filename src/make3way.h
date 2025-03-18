@@ -10,9 +10,10 @@
  */
 
 #include "uchime.h"
-#include "myutils.h"
+//#include "myutils.h"
 #include "chime.h"
 
+/******************************************************************************/
 class Make3way {
     public:
 
@@ -25,5 +26,5 @@ class Make3way {
 						string &A3, string &B3);
 
 };
-
+/******************************************************************************/
 #endif

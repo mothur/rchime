@@ -1911,6 +1911,7 @@ processedSeq
 processorsSEXP
 processSimple
 processTree
+processUchime
 processUnoise
 prUsesNone
 psapi
@@ -2619,11 +2620,13 @@ uchime
 UCHIME
 uchime's
 uchimealns
+uchimeAlnsResults
 uchimeDeNovo
 UchimeDeNovo
 UchimeMain
 uchimeout
 UchimeOutputConverter
+uchimeOutResults
 UCHIMES
 ucl
 ui

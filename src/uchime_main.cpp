@@ -17,12 +17,11 @@
 
 /******************************************************************************/
 Options* Options::_uniqueInstance = 0;
-Utils* Utils::_uniqueInstance = 0;
-AlnParams* AlnParams::_uniqueInstance = 0;
+Utilities* Utilities::_uniqueInstance = 0;
 /******************************************************************************/
 UchimeMain::UchimeMain()    { 
 	dataUchime = nullptr; 
-	util = Utils::getInstance();
+	util = Utilities::getInstance();
 	reference = nullptr;
 	data = nullptr;
 }
@@ -38,7 +37,7 @@ Rcpp::List UchimeMain::runUchime(vector<string>& names,
                                  vector<string>& seqs,
                                  vector<string>& refNames,
                                  vector<string>& refSeqs,
-                                 vector<int>& abunds, bool chimeAlns)
+                                 vector<int>& abunds)
 	{
 
     Rcpp::List results = Rcpp::List::create();

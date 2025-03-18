@@ -28,9 +28,9 @@ class GlobalAligner {
 
 public:
 
-	GlobalAligner() { alignParams = AlnParams::getInstance();
-                      util = Utils::getInstance();           }
-	~GlobalAligner() {}
+	GlobalAligner() { alignParams = new AlnParams();
+                      util = Utilities::getInstance();           }
+	~GlobalAligner() { delete alignParams; }
 
 	bool globalAlign(const SeqData &Query, const SeqData &Target, PathData &PD);
 	
@@ -38,7 +38,7 @@ public:
 private:
 
 	AlnParams* alignParams;
-    Utils* util;
+    Utilities* util;
 	
     Mx<Byte> g_Mx_TBBit;
     Byte **g_TBBit;

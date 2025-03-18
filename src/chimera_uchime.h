@@ -12,10 +12,10 @@
 
 /* This class is inherits from Chimera */
 
-#include "mothur.h"
-#include "mothur-r.h"
-#include "chimera.h"
 
+#include "chimera.h"
+#include "utils.h"
+#include "uchime_main.h"
 
 /******************************************************************************/
 class ChimeraUchime : public Chimera {
@@ -31,6 +31,7 @@ public:
 
 private:
 
+    Rcpp::List createProcesses(Rcpp::Environment& dataset);
 
 };
 /******************************************************************************/

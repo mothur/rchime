@@ -13,14 +13,14 @@
 #include "myutils.h"
 
 /******************************************************/
-Utils* Utils::getInstance() {
+Utilities* Utilities::getInstance() {
 	if( _uniqueInstance == 0) {
-		_uniqueInstance = new Utils();
+		_uniqueInstance = new Utilities();
 	}
 	return _uniqueInstance;
 }
 /******************************************************************************/
-unsigned Utils::getRandomIndex(unsigned maxIndex){
+unsigned Utilities::getRandomIndex(unsigned maxIndex){
     if (maxIndex == 0) {  return 0; }
 
     uniform_int_distribution<unsigned> dis(0, maxIndex);
@@ -30,7 +30,7 @@ unsigned Utils::getRandomIndex(unsigned maxIndex){
     return (random);
 }
 /******************************************************************************/
-void* Utils::mymalloc(unsigned Bytes) {
+void* Utilities::mymalloc(unsigned Bytes) {
     ++g_NewCalls;
     if (g_InitialMemUseBytes == 0)
         g_InitialMemUseBytes = GetMemUseBytes();
@@ -57,7 +57,7 @@ void* Utils::mymalloc(unsigned Bytes) {
     return p;
 }
 /******************************************************************************/
-void Utils::myfree(void *p, unsigned Bytes) {
+void Utilities::myfree(void *p, unsigned Bytes) {
     ++g_FreeCalls;
     g_TotalFreeBytes += Bytes;
     g_NetBytes -= Bytes;
@@ -67,20 +67,20 @@ void Utils::myfree(void *p, unsigned Bytes) {
     }
 }
 /******************************************************************************/
-double Utils::Pct(double x, double y) {
+double Utilities::Pct(double x, double y) {
     if (y == 0.0f) {
         return 0.0f;
     }
     return (x*100.0f)/y;
 }
 /******************************************************************************/
-double Utils::GetPeakMemUseBytes() {
+double Utilities::GetPeakMemUseBytes() {
     return g_PeakMemUseBytes;
 }
 /******************************************************************************/
 #ifdef _MSC_VER
 
-double Utils::GetMemUseBytes() {
+double Utilities::GetMemUseBytes() {
 	HANDLE hProc = GetCurrentProcess();
 	PROCESS_MEMORY_COUNTERS PMC;
 	BOOL bOk = GetProcessMemoryInfo(hProc, &PMC, sizeof(PMC));
@@ -94,7 +94,7 @@ double Utils::GetMemUseBytes() {
 
 #elif	linux || __linux__
 
-double Utils::GetMemUseBytes() {
+double Utilities::GetMemUseBytes() {
 	static char statm[64];
 	static int PageSize = 1;
 	if (0 == statm[0])
@@ -128,7 +128,7 @@ double Utils::GetMemUseBytes() {
 
 #define DEFAULT_MEM_USE	100000000.0
 
-double Utils::GetMemUseBytes() {
+double Utilities::GetMemUseBytes() {
 	task_t mytask = mach_task_self();
 	struct task_basic_info ti;
 	memset((void *) &ti, 0, sizeof(ti));
@@ -148,7 +148,7 @@ double Utils::GetMemUseBytes() {
 
 #else
 
-double Utils::GetMemUseBytes() {
+double Utilities::GetMemUseBytes() {
 	return 0;
 }
 

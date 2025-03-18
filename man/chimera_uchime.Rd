@@ -158,6 +158,9 @@ reference <- sequence_data_table$new(
 chimera_report <- chimera_uchime(dataset, reference = reference)
 
 }
+\seealso{
+\code{\link[=uchimeout_help]{uchimeout_help()}} for a description of the DataFrame returned
+}
 \author{
 Sarah Westcott, \email{swestcot@umich.edu}
 }

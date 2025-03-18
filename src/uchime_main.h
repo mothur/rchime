@@ -32,7 +32,7 @@ public:
     // returns list of dataframes with results
     Rcpp::List runUchime(vector<string>& names, vector<string>& seqs,
                          vector<string>& refNames, vector<string>& refSeqs,
-                         vector<int>& abunds, bool chimeAlns);
+                         vector<int>& abunds);
 
 private:
 
@@ -40,7 +40,7 @@ private:
    UchimeOutputConverter* dataUchime;
    SeqDB* reference;
    SeqDB* data;
-   Utils* util;
+   Utilities* util;
 
    bool uchimeDeNovo;
 };

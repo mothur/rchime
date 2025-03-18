@@ -14,6 +14,7 @@
 #include "myutils.h"
 #include "seq.h"
 
+/******************************************************************************/
 class SeqDB {
 
 public:
@@ -52,7 +53,7 @@ public:
 
 	private:
 
-	Utils* util;
+	Utilities* util;
     vector<int>* abunds;
 	vector<string>* names;
 	vector<string>* seqs;
@@ -65,5 +66,6 @@ public:
 	void SetIsNucleo();
 	void sortDescending();
 };
+/******************************************************************************/
 
 #endif

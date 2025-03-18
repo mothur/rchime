@@ -3,11 +3,10 @@
 #include "hsp.h"
 
 /******************************************************************************/
-AlnParams* AlnParams::getInstance() {
-	if( _uniqueInstance == 0) {
-		_uniqueInstance = new AlnParams();
-	}
-	return _uniqueInstance;
+AlnParams::AlnParams() {   
+	opt = Options::getInstance();
+	util = Utilities::getInstance();
+	InitFromCmdLine(true);
 }
 /******************************************************************************/
 void AlnParams::Clear() {

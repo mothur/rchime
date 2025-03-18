@@ -17,11 +17,11 @@
 #include "mothur.h"
 
 /******************************************************************************/
-class Utils {
+class Utilities {
 
 public:
 
-    static Utils* getInstance();
+    static Utilities* getInstance();
 
     double Pct(double x, double y);
     unsigned getRandomIndex(unsigned maxIndex);
@@ -31,13 +31,13 @@ public:
 
 private:
 
-    static Utils* _uniqueInstance;
-    Utils( const Utils& ); // Disable copy constructor
-    void operator=( const Utils& ); // Disable assignment operator
+    static Utilities* _uniqueInstance;
+    Utilities( const Utilities& ); // Disable copy constructor
+    void operator=( const Utilities& ); // Disable assignment operator
 
     // set to default options
-    Utils() {}
-    ~Utils() = default;
+    Utilities() {}
+    ~Utilities() = default;
 
     double GetMemUseBytes();
     double GetPeakMemUseBytes();

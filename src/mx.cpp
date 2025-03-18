@@ -5,13 +5,14 @@
 
 char ProbToChar(float p);
 
+/******************************************************************************/
 list<MxBase *> *MxBase::m_Matrices = 0;
 unsigned MxBase::m_AllocCount;
 unsigned MxBase::m_ZeroAllocCount;
 unsigned MxBase::m_GrowAllocCount;
 double MxBase::m_TotalBytes;
 double MxBase::m_MaxBytes;
-
+/******************************************************************************/
 void MxBase::OnCtor(MxBase *Mx) {
 	if (m_Matrices == 0) {
 		m_Matrices = new list<MxBase *>;
@@ -19,7 +20,7 @@ void MxBase::OnCtor(MxBase *Mx) {
 	
 	m_Matrices->push_front(Mx);
 }
-
+/******************************************************************************/
 void MxBase::OnDtor(MxBase *Mx) {
 	if (m_Matrices == 0) {
 		return;
@@ -36,17 +37,17 @@ void MxBase::OnDtor(MxBase *Mx) {
 		}
 	}
 }
-
+/******************************************************************************/
 void MxBase::Alloc(const char *Name, unsigned RowCount, unsigned ColCount,
   const SeqDB *DB, unsigned IdA, unsigned IdB) {
 	Alloc(Name, RowCount, ColCount, DB, IdA, IdB, 0, 0);
 }
-
+/******************************************************************************/
 void MxBase::Alloc(const char *Name, unsigned RowCount, unsigned ColCount,
   const SeqData *SA, const SeqData *SB) {
 	Alloc(Name, RowCount, ColCount, 0, UINT_MAX, UINT_MAX, SA, SB);
 }
-
+/******************************************************************************/
 void MxBase::Alloc(const char *Name, unsigned RowCount, unsigned ColCount,
   const SeqDB *DB, unsigned IdA, unsigned IdB, const SeqData *SA, const SeqData *SB) {
 
@@ -86,5 +87,5 @@ void MxBase::Alloc(const char *Name, unsigned RowCount, unsigned ColCount,
 	m_SA = SA;
 	m_SB = SB;
 }
-
-static unsigned g_MatrixFileCount;
+/******************************************************************************/
+//static unsigned g_MatrixFileCount;

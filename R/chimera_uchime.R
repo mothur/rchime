@@ -73,6 +73,8 @@
 #' @param minlen Integer, Minimum sequence length. Default = 10.
 #' @param maxlen Integer, Maximum sequence length. Default = 10000.
 #'
+#' @seealso [uchimeout_help()] for a description of the DataFrame returned
+#'
 #' @return DataFrame containing chimera results and an updated dataset with the
 #'  chimeras removed
 #'
