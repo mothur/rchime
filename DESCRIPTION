@@ -8,8 +8,8 @@ Authors@R: c(person("Sarah", "Westcott", role = c("aut", "cre"),
 Maintainer: Schloss Lab <pschloss@umich.edu>
 Description: One paragraph description of what the package
        does as one or more full sentences. XXX
-URL: XXX
-BugReports: XXX
+URL: https://github.com/SchlossLab/rchime
+BugReports: https://github.com/SchlossLab/rchime/issues
 License: GPL (>= 2)
 Roxygen: list(markdown = TRUE)              
 Config/testthat/edition: 3

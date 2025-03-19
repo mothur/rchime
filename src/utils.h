@@ -16,29 +16,30 @@ class Utils {
 
 public:
 
-  Utils(long long s = 1972);
+  Utils() = default;
   ~Utils() = default;
 
-  // checks
-  bool checkGroupName(string& name);
-  bool checkGroupNames(vector<string>& name);
-  bool checkName(string&);
-  bool inUsersGroups(string, vector<string>);
-  bool inUsersGroups(int, vector<int>);
-  bool isContainingOnlyDigits(string);
-  bool isAllAlphaNumerics(string);
+  vector<pieceOfWork> divideWork(double numItems, int& numProcessors) {
+    // divide work between processors
+    vector<pieceOfWork> work;
 
-  // filenames functions
-  string hasPath(string);
-  string getSimpleName(string longName);
-  string getRootName(string);
+    if (numItems < numProcessors) { numProcessors = numItems; }
+    size_t startIndex = 0;
 
-  //string manipulations
-  vector<string> splitWhiteSpace(string);
-  void splitAtChar(string&, vector<string>&, char);
-  string removeQuotes(string);
+    for (size_t remainingProcessors = numProcessors; remainingProcessors > 0;
+    remainingProcessors--) {
 
-  vector<pieceOfWork> divideWork(double numItems, int& numProcessors);
+        //case for last processor
+        size_t numToProcess = numItems;
+        if (remainingProcessors != 1) {
+            numToProcess = ceil(numItems / remainingProcessors);
+        }
+        work.push_back(pieceOfWork(startIndex, (startIndex+numToProcess)));
+        startIndex += numToProcess;
+        numItems -= numToProcess;
+    }
+    return work;
+  }
 
   set<string> get_errors()      { return errors;            }
   set<string> get_warnings()    { return warnings;          }
@@ -48,7 +49,7 @@ public:
 private:
 
   set<string> errors, warnings;
-  std::mt19937_64 mersenne_twister_engine;
+  
 };
 
 #endif /* utils_hpp */

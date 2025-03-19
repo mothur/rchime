@@ -393,6 +393,7 @@ CHIMERAUCHIME
 chimeraUchimeReference
 ChimeraVsearch
 chimericStatus
+chims
 ChunkCount
 ChunkIndex
 ChunkIndexToBestId
@@ -498,6 +499,8 @@ createThreads
 createThreadsAlign
 createThreadsContigs
 createThreadsFasta
+createUchimeAlns
+createUchimeOut
 criteriaPercentile
 crtdbg
 cSEXP
@@ -726,6 +729,7 @@ firstForward
 FirstForward
 firstHalf
 FirstM
+flaggedChimericInAllSamples
 flippedNames
 flippedResults
 flipQScores
@@ -905,6 +909,7 @@ getInputDir
 getInstance
 GetIsNucleo
 GetKarlinDBLength
+getKeys
 getKmerBases
 getKmerNumber
 getKmerString
@@ -1563,6 +1568,7 @@ nA
 na
 NACCTTCGTTA
 nam
+namesOfChimeras
 namesSEXP
 nast
 Nast
@@ -2011,6 +2017,7 @@ relicensing
 remainingProcessors
 removeAmbigBases
 removeChimeras
+removeChimerasFromDataset
 removeExtraGaps
 removeQuotes
 removeSeqs
@@ -2201,6 +2208,7 @@ seqNodes
 seqPNode
 seqs
 seqsToMerge
+seqsToRemove
 seqString
 seqSumData
 SeqToShortWords
@@ -2625,8 +2633,11 @@ uchimeDeNovo
 UchimeDeNovo
 UchimeMain
 uchimeout
+uchimeOut
 UchimeOutputConverter
+uchimeOutputs
 uchimeOutResults
+uchimeResults
 UCHIMES
 ucl
 ui

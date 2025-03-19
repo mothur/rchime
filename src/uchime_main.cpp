@@ -20,45 +20,32 @@ Options* Options::_uniqueInstance = 0;
 Utilities* Utilities::_uniqueInstance = 0;
 /******************************************************************************/
 UchimeMain::UchimeMain()    { 
-	dataUchime = nullptr; 
 	util = Utilities::getInstance();
 	reference = nullptr;
 	data = nullptr;
 }
 /******************************************************************************/
 UchimeMain::~UchimeMain()   {
-	 if (dataUchime != nullptr) { delete dataUchime; }
 	 if (reference != nullptr) { delete reference; }
 	 if (data != nullptr) { delete data; }
 }
 /******************************************************************************/
 // this is the entry point to uchime source code from chimera_findur
-Rcpp::List UchimeMain::runUchime(vector<string>& names,
+vector<ChimeHit2> UchimeMain::runUchime(vector<string>& names,
                                  vector<string>& seqs,
                                  vector<string>& refNames,
                                  vector<string>& refSeqs,
-                                 vector<int>& abunds)
+                                 vector<int>& abunds,
+								 set<string>& namesOfChimeras)
 	{
 
-    Rcpp::List results = Rcpp::List::create();
-    vector<string> resultsNames;
-
-    Options* options = Options::getInstance();
+    vector<ChimeHit2> Hits;
 
 	// loading SeqDB with data from R, sort descending order by abundace
 	data = new SeqDB(names, seqs, abunds, true);
 
 	if (!data->isNucleo()) {
-	    return results;
-	}
-
-	// replace file output with object - uchimeout file
-	dataUchime = new UchimeOutputConverter();
-
-	if (options->getChimealns()) {
-	    // 	g_fUChimeAlns = CreateStdioFile(opt_uchimealns);
-	    // WriteChimeHitX creates the file from the Hits
-	    // resultsNames.push_back("chimealns");
+	    return Hits;
 	}
 
 	// are we running with a reference, or denovo
@@ -70,11 +57,10 @@ Rcpp::List UchimeMain::runUchime(vector<string>& names,
 		vector<int> refAbunds(refNames.size(), 1);
 		reference = new SeqDB(refNames, refSeqs, refAbunds, false);
 		if (!reference->isNucleo()) {
-		    return results;
+		    return Hits;
 		}
 	}
 
-	vector<ChimeHit2> Hits;
 	unsigned numQuerySeqs = data->getSeqCount();
 	SearchChime search;
 	for (unsigned i = 0; i < numQuerySeqs; ++i) {
@@ -90,20 +76,12 @@ Rcpp::List UchimeMain::runUchime(vector<string>& names,
 			}
 		}
 
-		string chimeraStatus = "N";
-		if (Hit.Accept()) {  chimeraStatus = "Y"; }
-
-		dataUchime->addOutput(Hit.Score, Hit.QLabel, Hit.ALabel, Hit.BLabel,
-                                chimeraStatus, Hit.PctIdQM, Hit.PctIdQA,
-                                Hit.PctIdQB, Hit.PctIdAB, Hit.PctIdQT,
-                                Hit.Div, Hit.CS_LY, Hit.CS_LN, Hit.CS_LA,
-                                Hit.CS_RY, Hit.CS_RN, Hit.CS_RA);
+		Hits.push_back(Hit);
+		if (Hit.Accept()) {  
+			namesOfChimeras.insert(queryData.getName());
+		}
 	}
 
-	resultsNames.push_back("uchimeout");
-	results.push_back(dataUchime->getUchimeOutput());
-	results.attr("names") = resultsNames;
-
-	return results;
+	return Hits;
 }
 /******************************************************************************/

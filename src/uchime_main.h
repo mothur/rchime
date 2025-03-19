@@ -14,7 +14,6 @@
 #include "chime.h"
 #include "seqdb.h"
 #include "searchchime.h"
-#include "uchime_output_converter.h"
 #include "mothur-r.h"
 
 //const vector<float> *g_SortVecFloat;
@@ -30,14 +29,14 @@ public:
     ~UchimeMain();  
 
     // returns list of dataframes with results
-    Rcpp::List runUchime(vector<string>& names, vector<string>& seqs,
+    vector<ChimeHit2> runUchime(vector<string>& names, vector<string>& seqs,
                          vector<string>& refNames, vector<string>& refSeqs,
-                         vector<int>& abunds);
+                         vector<int>& abunds, set<string>& chims);
 
 private:
 
    // create a dataframe to pass back to R
-   UchimeOutputConverter* dataUchime;
+   //UchimeOutputConverter* dataUchime;
    SeqDB* reference;
    SeqDB* data;
    Utilities* util;

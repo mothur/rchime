@@ -35,7 +35,7 @@
 #'                  in human-readable format. Alignments show columns with
 #'                  differences that support or contradict a chimeric model.
 #' @param abskew Float, the minimum abundance skew (denovo only). Default = 1.9.
-#'               abskew <- min [ abund(parent1), abund(parent2) ] / abund(query)
+#'               abskew <- min (abund(parent1), abund(parent2)) / abund(query)
 #' @param minh Float, Mininum score to report chimera. Default 0.3. Values from
 #'     0.1 to 5 might be reasonable. Lower values increase sensitivity
 #'    but may report more false positives. If you decrease --xn,
@@ -159,7 +159,7 @@ chimera_uchime <- function(dataset = NULL, fasta = NULL, count = NULL,
   num_seqs <- dataset$get_num_seqs()
 
   # make sure the dataset is aligned
-  if (!dataset$is_aligned()) {
+  if (!dataset$is_aligned()[1]) {
     message <- paste0(
       "[ERROR]: chimera_uchime requires your dataset to be",
       "aligned."

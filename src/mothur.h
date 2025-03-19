@@ -260,6 +260,19 @@ vector<T> toVector(const set<T>& x) {
     return results;
 }
 /**********************************************************************/
+template<typename T>
+vector<T> getKeys(const map<T, vector<int> >& x) {
+    vector<T> keys;
+
+    if (x.size() == 0) { return keys; }
+
+    for (auto it = x.begin(); it != x.end(); it++) {
+        keys.push_back(it->first);
+    }
+
+    return keys;
+}
+/**********************************************************************/
 struct pieceOfWork {
   double start;
   double end;

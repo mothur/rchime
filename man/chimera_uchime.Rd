@@ -61,7 +61,7 @@ in human-readable format. Alignments show columns with
 differences that support or contradict a chimeric model.}
 
 \item{abskew}{Float, the minimum abundance skew (denovo only). Default = 1.9.
-abskew <- min \link{ abund(parent1), abund(parent2) } / abund(query)}
+abskew <- min (abund(parent1), abund(parent2)) / abund(query)}
 
 \item{minh}{Float, Mininum score to report chimera. Default 0.3. Values from
 0.1 to 5 might be reasonable. Lower values increase sensitivity

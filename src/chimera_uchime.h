@@ -31,7 +31,14 @@ public:
 
 private:
 
-    Rcpp::List createProcesses(Rcpp::Environment& dataset);
+    vector<ChimeHit2> createProcesses(Rcpp::Environment& dataset);
+    Rcpp::DataFrame createUchimeOut(vector<ChimeHit2>);
+    Rcpp::DataFrame createUchimeAlns(vector<ChimeHit2>);
+
+    map<string, vector<int> > combineResults(chimeraData*& dataBundle,
+                                    vector<chimeraData*>& data,
+                                    vector<RcppThread::Thread*>& workerThreads,
+                                    vector<ChimeHit2>& results);
 
 };
 /******************************************************************************/

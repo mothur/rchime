@@ -16,6 +16,7 @@
 #include "mothur-r.h"
 #include "rcpp_utils.h"
 #include "myopts.h"
+#include "chime.h"
 
 /******************************************************************************/
 struct chimeraData {
@@ -27,31 +28,52 @@ struct chimeraData {
     vector<string> refNames;
     vector<string> refSeqs;
     vector<vector<int> > abunds;
+    vector<set<string> > chimeras;
 
-    // outputs 
-    // list of dataframes storing uchimeout for each sample
-    Rcpp::List uchimeOutResults;
-    // list of dataframes storing uchimealns for each sample (optional)
-    Rcpp::List uchimeAlnsResults;
+    // outputs - one for each sample
+    vector<vector<ChimeHit2> > uchimeResults;
 
-    chimeraData(vector<string> g, vector<vector<string> > n,
-                vector<vector<string> > s, vector<vector<int> > a) {
+    // denovo
+    chimeraData(Rcpp::Environment& dataset, vector<string> g) {
         groups = g;
-        names = n;
-        seqs = s;
-        abunds = a;
+        chimeras.resize(groups.size());
+        for (int i = 0; i < groups.size(); i++) {
+            fillData(dataset, groups[i], "dataset");
+        }
     }
-    chimeraData(vector<string> g, vector<vector<string> > n,
-                vector<vector<string> > s, vector<vector<int> > a,
-                vector<string>  rn, vector<string>  rs) {
-        groups = g;
-        names = n;
-        seqs = s;
-        abunds = a;
-        refNames = rn;
-        refSeqs = rs;
+
+    // reference
+    chimeraData(Rcpp::Environment& dataset, Rcpp::Environment& reference) {
+        fillData(dataset, "", "dataset");
+        fillData(reference, "", "reference");
+        chimeras.resize(1);
     }
     ~chimeraData() {}
+
+    void fillData(Rcpp::Environment& dataset, string group, string mode){
+
+        Rcpp::Function getSeqs = dataset["get_seqs"];
+        Rcpp::Function getNames = dataset["get_names"];
+
+        if (mode == "dataset") {
+            
+            Rcpp::Function getCounts = dataset["get_seqs_abunds"];
+
+            if (group == "") {
+                seqs.push_back(Rcpp::as<vector<string>>(getSeqs()));
+                names.push_back(Rcpp::as<vector<string>>(getNames()));
+                abunds.push_back(Rcpp::as<vector<int>>(getCounts()));
+            }else{
+                seqs.push_back(Rcpp::as<vector<string>>(getSeqs(group)));
+                names.push_back(Rcpp::as<vector<string>>(getNames(group)));
+                abunds.push_back(Rcpp::as<vector<int>>(getCounts(group)));
+            }
+        }else {
+            refNames = Rcpp::as<vector<string>>(getNames());
+            refSeqs = Rcpp::as<vector<string>>(getSeqs());
+        }
+    }
+    
 };
 /******************************************************************************/
 class Chimera {
@@ -74,16 +96,8 @@ protected:
     vector<string> groups;
 
     Options* opts;
-
-    void fillData(Rcpp::Environment& dataset, string group, 
-                       vector<vector<string>>& names, 
-                       vector<vector<string>>& seqs,
-                       vector<vector<int>>& counts);
-
-    map<string, vector<int> > combineResults(chimeraData*& dataBundle,
-                                         vector<chimeraData*>& data,
-                                         vector<RcppThread::Thread*>& workerThreads,
-                                         Rcpp::List& results);
+    void removeChimerasFromDataset(Rcpp::Environment& dataset,
+                                   vector<string>& seqsToRemove, string reason);
 
 private:
 
