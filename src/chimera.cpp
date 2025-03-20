@@ -22,7 +22,6 @@ Chimera::Chimera(bool derep, int proc, bool si, bool hg, Rcpp::List options) {
     Rcpp::CharacterVector optionsNames = options.names();
     Rcpp_Utils utils;
 
-     bool isAligned = true;
      if (utils.contains("abskew", optionsNames))   {
          opts->setAbskew(Rcpp::as<float>(options["abskew"]));   }
      if (utils.contains("chimealns", optionsNames))   {
@@ -65,5 +64,23 @@ void Chimera::removeChimerasFromDataset(Rcpp::Environment& dataset, vector<strin
     // remove sequences found to be chimeric
     Rcpp::Function removeSeqs = dataset["remove_seqs"];
     removeSeqs(seqsToRemove, trashCodes);
+}
+/******************************************************************************/
+int Chimera::getNumBases(string seq) {
+        
+    int numbases = 0;
+
+    for (int i = 0; i < seq.length(); i++) {
+        if ((seq[i] != '.') && (seq[i] != '-')) {
+            numbases++;
+        }
+    }
+
+    return numbases;
+}
+/******************************************************************************/
+bool Chimera::isGap(char c) {
+    if ((c == '.') || (c == '-')) { return true; }
+    return false;
 }
 /******************************************************************************/

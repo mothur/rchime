@@ -1,9 +1,13 @@
 a's
 AAAA
+AAAAAAAAAAAAAAAAAAAAAAxBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB
 AaBbCcDdEeFfGgHhIiJjKkLlMmNnOopPQqRrSsTtUuVvWwXxYyZz
 AAC
 AACCGTGTC
 AAG
+AAGgAAGAtTAATACaagATGgCaTCatgAGtccgCATgTtcAcatGATTAAAG
+AAGgAAGAtTAATcCaggATGggaTCatgAGttcACATgTccgcatGATTAAAGgtATTTtcCGGTagacGATGGGGATG
+AAGTAAGACTAATACCCAATGACGTCTCTAGAAGACATCTGAAAGAGATTAAAG
 AAHi
 AALo
 AAPos
@@ -181,6 +185,7 @@ ao
 Aparents
 APInitDone
 APos
+aPos
 Appl
 applyOrder
 ar
@@ -228,6 +233,7 @@ ATTACCGCGGCTGCTGG
 ATTAGATACCCCTGTAGTCCTTGACC
 ATTAGAWACCCBDGTAGTCC
 attr
+ATTTATCGGTGATGGATGGGGATG
 aut
 aveQScore
 AvgId
@@ -251,6 +257,8 @@ barcodeString
 barGroup
 bayesian
 BBaseMap
+BBBBBBBBBBBBBBBBBBBBB
+BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB
 bd
 bdf
 bdiffs
@@ -299,6 +307,7 @@ bool
 Bparents
 BPData
 BPos
+bPos
 BPs
 Brodie
 brUsesNone
@@ -358,6 +367,9 @@ CGCATTCCG
 CGCGTCAATTCATTTAAGTGTACCT
 CGG
 CGT
+CGTCTGATTAGCTTGTTGGCGGGGTAACGGCCCACCAAGGCAACGATCAGTAGGGGTTCTGAGAGGAAGGTCCCCCACAT
+CGTtccATTAGaTaGTaGGCGGGGTAACGGCCCACCtAGtCAACGATggaTAGGGGTTCTGAGAGGAAGGTCCCCCACAT
+CGTtccATTAGaTaGTaGGCGGGGTAACGGCCCACCtAGtCttCGATggaTAGGGGTTCTGAGAGGAAGGTCCCCCACAT
 ChainBrute
 ChainCov
 ChainData
@@ -501,6 +513,7 @@ createThreadsContigs
 createThreadsFasta
 createUchimeAlns
 createUchimeOut
+createUchimeResults
 criteriaPercentile
 crtdbg
 cSEXP
@@ -680,6 +693,7 @@ fb
 fbarcode
 fbdiffs
 fcntl
+Fcsw
 fd
 feq
 fi
@@ -724,6 +738,7 @@ findReverse
 findReverseMatch
 findur
 FirstA
+firstBase
 firstChooseSeq
 firstForward
 FirstForward
@@ -1111,6 +1126,7 @@ GrowAllocCount
 GTA
 GTACCT
 GTAGGTGAACCTGCRGAAGG
+gTaTtcCGGTagacGATGGGGATG
 GTC
 GTCA
 GTG
@@ -1256,6 +1272,7 @@ isEqual
 isEquivalent
 isExplicit
 isgap
+isGap
 IsGlobalFull
 isinf
 IsLo
@@ -1308,6 +1325,7 @@ kSize
 ksize
 lA
 LAs
+lastBase
 lastChooseSeq
 LastHSPIndex
 lastLoop
@@ -1570,6 +1588,7 @@ NACCTTCGTTA
 nam
 namesOfChimeras
 namesSEXP
+NaNNN
 nast
 Nast
 NAST
@@ -1620,6 +1639,8 @@ nKmersA
 nKmersB
 nLinkers
 nm
+NN
+NNN
 NNNN
 NNNNNN
 NNNNNNN
@@ -1675,6 +1696,7 @@ num
 numBad
 numBarcodes
 numBases
+numbases
 numBasesNeeded
 numDiff
 numdiffs
@@ -1945,6 +1967,7 @@ qm
 QModel
 qn
 QPos
+qPos
 qs
 qScores
 QSD
@@ -2500,6 +2523,7 @@ TGCAT
 TGCCAAGCATAACAGGTCTGTGATGCCCT
 TGCGTCAATTCATTTAAGTGTACCT
 TGG
+TGGAACTGAGACACGGTCCAA
 TGGTGAAC
 tGGTTG
 TGT
@@ -2628,6 +2652,7 @@ uchime
 UCHIME
 uchime's
 uchimealns
+uchimeAlns
 uchimeAlnsResults
 uchimeDeNovo
 UchimeDeNovo

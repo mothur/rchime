@@ -82,17 +82,8 @@ Rcpp::List ChimeraUchime::removeChimeras(Rcpp::Environment& dataset) {
         removeChimerasFromDataset(dataset, chimeras, "chimera_uchime");
     }
 
-    Rcpp::List results;
-    results.push_back(createUchimeOut(uchimeOutputs));
+    Rcpp::List results = createUchimeResults(uchimeOutputs);
     
-    resultsNames.push_back("uchimeout");
-    
-    if (opts->getChimealns()) {
-        results.push_back(createUchimeAlns(uchimeOutputs));
-        resultsNames.push_back("uchimealns");
-    }
-    results.attr("names") = resultsNames;
-
     return results;
 }
 /******************************************************************************/
@@ -153,14 +144,11 @@ vector<ChimeHit2> ChimeraUchime::createProcesses(Rcpp::Environment& dataset) {
 /******************************************************************************/
 Rcpp::List ChimeraUchime::removeChimeras(Rcpp::Environment& dataset,
                                          Rcpp::Environment& reference) {
-    Rcpp::List results = Rcpp::List::create();
-    vector<string> resultsNames;
 
     chimeraData* dataBundle = new chimeraData(dataset, reference);
 
     // run as one sample
     processUchime(dataBundle);
-
 
     vector<ChimeHit2> hits = (dataBundle->uchimeResults[0]);
     vector<string> chimeras = toVector(dataBundle->chimeras[0]);
@@ -168,14 +156,7 @@ Rcpp::List ChimeraUchime::removeChimeras(Rcpp::Environment& dataset,
 
     removeChimerasFromDataset(dataset, chimeras, "chimera_uchime");
 
-    results.push_back(createUchimeOut(hits));
-    resultsNames.push_back("uchimeout");
-    
-    if (opts->getChimealns()) {
-        results.push_back(createUchimeAlns(hits));
-        resultsNames.push_back("uchimealns");
-    }
-    results.attr("names") = resultsNames;
+    Rcpp::List results = createUchimeResults(hits);
 
     return results;
 }
@@ -334,21 +315,247 @@ map<string, vector<int> > ChimeraUchime::combineResults(chimeraData*& dataBundle
     return seqAbunds;
 }
 /******************************************************************************/
-Rcpp::DataFrame ChimeraUchime::createUchimeOut(vector<ChimeHit2>) {
-
-    Rcpp::DataFrame output;
-
-
-    return output;
+// uchimealns
+// Each chimeric sequence creates the following:
+//
+// Query   (  179 nt) F21Fcsw_11639
+// ParentA (  179 nt) F11Fcsw_6529
+// ParentB (  181 nt) F21Fcsw_12128
+	 
+// A     1 AAGgAAGAtTAATACaagATGgCaTCatgAGtccgCATgTtcAcatGATTAAAG--gTaTtcCGGTagacGATGGGGATG 78
+// Q     1 AAGTAAGACTAATACCCAATGACGTCTCTAGAAGACATCTGAAAGAGATTAAAG--ATTTATCGGTGATGGATGGGGATG 78
+// B     1 AAGgAAGAtTAATcCaggATGggaTCatgAGttcACATgTccgcatGATTAAAGgtATTTtcCGGTagacGATGGGGATG 80
+// Diffs      N    N    A N?N   N N  NNN  N?NB   N ?NaNNN          B B NN    NNNN          
+// Votes      0    0    + 000   0 0  000  000+   0 00!000            + 00    0000          
+// Model   AAAAAAAAAAAAAAAAAAAAAAxBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB
+	 
+// A    79 CGTtccATTAGaTaGTaGGCGGGGTAACGGCCCACCtAGtCttCGATggaTAGGGGTTCTGAGAGGAAGGTCCCCCACAT 158
+// Q    79 CGTCTGATTAGCTTGTTGGCGGGGTAACGGCCCACCAAGGCAACGATCAGTAGGGGTTCTGAGAGGAAGGTCCCCCACAT 158
+// B    81 CGTtccATTAGaTaGTaGGCGGGGTAACGGCCCACCtAGtCAACGATggaTAGGGGTTCTGAGAGGAAGGTCCCCCACAT 160
+// Diffs      NNN     N N  N                   N  N BB    NNN                              
+// Votes      000     0 0  0                   0  0 ++    000                              
+// Model   BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB
+	 
+// A   159 TGGAACTGAGACACGGTCCAA 179
+// Q   159 TGGAACTGAGACACGGTCCAA 179
+// B   161 TGGAACTGAGACACGGTCCAA 181
+// Diffs                        
+// Votes                        
+// Model   BBBBBBBBBBBBBBBBBBBBB
+	 
+// Ids.  QA 76.6%, QB 77.7%, AB 93.7%, QModel 78.9%, Div. +1.5%
+// Diffs Left 7: N 0, A 6, Y 1 (14.3%); Right 35: N 1, A 30, Y 4 (11.4%), Score 0.0047	
+/******************************************************************************/
+Rcpp::List ChimeraUchime::createUchimeResults(vector<ChimeHit2> hits) {
     
+    Rcpp::List results;
+    vector<string> resultsNames;
+
+    // Q, A, B, Y
+    vector<string> queries, Aparents, Bparents, chimericStatus;
+ 
+    // Score(Higher score indicates chimeric status), Divs(IdQM - IdQT)
+    // IdQM, IdQA, IdQB, IdQT, IdAB - similarity scores
+    vector<double> scores, IdQMs, IdQAs, IdQBs, IdABs, IdQTs, Divs;
+ 
+    // LY, LN, LA, RN, RY, RA - segment votes
+    vector<int> LYs, LNs, LAs, RNs, RYs, RAs;
+
+    Rcpp::List uchimeAlns;
+
+    // create a uchimeout
+    for (int i = 0; i < hits.size(); i++) {
+        
+        string status = "N";
+        if (hits[i].Accept()) { 
+            status = "Y"; 
+
+            //create uchimealns record
+            if (opts->getChimealns()) {
+
+                string query = hits[i].Q3;
+                string parentA = hits[i].A3;
+                string parentB = hits[i].B3;
+                int length = query.length();
+
+                string record = "Query ( " + toString(getNumBases(query)) + "nt )" + hits[i].QLabel + "\n";
+                record += "ParentA ( " + toString(getNumBases(parentA)) + "nt )" + hits[i].ALabel + "\n";
+                record += "ParentB ( " + toString(getNumBases(parentB)) + "nt )" + hits[i].BLabel + "\n\n";
+
+                int firstBase, lastBase, qPos, aPos, bPos;
+                firstBase = MOTHURMAX;
+                aPos = 0; bPos = 0;
+                // Strip terminal gaps in query
+                for (int j = 0; j < length; j++) {
+                    // if not a gap
+                    if (!isGap(query[j])) {
+                        if (firstBase == MOTHURMAX) {
+                            firstBase = j;
+                        }
+                        lastBase = j;
+                    }
+                }
+
+                // set parents positions
+                for (int j = 0; j < firstBase; j++) {
+                    // if not a gap
+                    if (!isGap(parentA[j])) { aPos++; }
+                    if (!isGap(parentB[j])) { bPos++; }
+                }
+
+                // create Q, A, B, Diffs, Votes, and Model rows
+                string A, Q, B, Diffs, Votes, Model;
+                A = "A " + toString(aPos+1) + " ";
+                Q = "Q " + toString(qPos+1) + " "; 
+                B = "B " + toString(bPos+1) + " "; 
+                Diffs = "Diffs   ";
+                Votes = "Votes   ";
+                Model = "Model   ";
+                for (int j = firstBase; j <= lastBase; j++) {
+
+                    char q = query[j];
+                    char a = parentA[j];
+                    char b = parentB[j];
+
+                    // Q, A, B rows
+                    Q += q;
+                    if (a != q) { A += tolower(a); }
+                    if (b != q) { B += tolower(b); }
+                    if ((a != '.') && (a != '-')) { aPos++; }
+                    if ((b != '.') && (b != '-')) { bPos++; }
+
+                    // Diffs row
+                    char c = ' ';
+                    if (isGap(q) || isGap(a) || isGap(b)) { 
+                        c = ' '; 
+                    }else if (j < hits[i].ColXLo) {
+				        if (q == a && q == b)      { c = ' '; }
+                        else if (q == a && q != b) { c = 'A'; }
+                        else if (q == b && q != a) { c = 'b'; }
+                        else if (a == b && q != a) { c = 'N'; }
+                        else                       { c = '?'; }
+				    }else if (j > hits[i].ColXHi) {
+				        if (q == a && q == b)      { c = ' '; }
+                        else if (q == b && q != a) { c = 'B'; }
+                        else if (q == a && q != b) { c = 'a'; }
+                        else if (a == b && q != a) { c = 'N'; }
+                        else                       { c = '?'; }
+				    }
+                    Diffs += c;
+
+                    // Votes row
+                    bool PrevGap = false;
+                    if (j > 0) {
+                        PrevGap = (isgap(query[j-1]) || isgap(parentA[j-1]) || isgap(parentB[j-1]));
+                    }
+                    bool NextGap = false;
+                    if (j+1 < length) {
+                        NextGap = (isgap(query[j+1]) || isgap(parentA[j+1]) || isgap(parentB[j+1]));
+                    }
+
+                    c = ' ';
+			        if (isgap(q) || isgap(a) || isgap(b) || PrevGap || NextGap) { }
+                    else if (j < hits[i].ColXLo) {
+				        if (q == a && q == b)        { c = ' '; }
+                        else if (q == a && q != b)   { c = '+'; }
+                        else if (q == b && q != a)   { c = '!'; }
+                        else                         { c = '0'; }
+			        }else if (j > hits[i].ColXHi) {
+				        if (q == a && q == b)        { c = ' '; }
+				        else if (q == b && q != a)   { c = '+'; }
+				        else if (q == a && q != b)   { c = '!'; }
+				        else                         { c = '0'; }
+			        }
+                    Votes += c;
+
+                    // Model row
+                    if (j < hits[i].ColXLo)   { Model += "A"; }
+                    else if (j >= hits[i].ColXLo && j <= hits[i].ColXHi) { Model += "x"; }
+                    else                  { Model += "B"; }
+
+
+                }
+
+                record += A + "\n";
+                record += Q + "\n";
+                record += B + "\n";
+                record += Diffs + "\n";
+                record += Votes + "\n";
+                record += Model + "\n\n";
+
+                // Ids row
+	            double PctIdBestP = max(hits[i].PctIdQA, hits[i].PctIdQB);
+	            double Div = (hits[i].PctIdQM - PctIdBestP)*100.0/PctIdBestP;
+
+	            unsigned LTot = hits[i].CS_LY + hits[i].CS_LN + hits[i].CS_LA;
+	            unsigned RTot = hits[i].CS_RY + hits[i].CS_RN + hits[i].CS_RA;
+
+                record += "Ids.  QA " + toString(hits[i].PctIdQA);
+                record += ", QB " + toString(hits[i].PctIdQB);
+                record += ", AB " + toString(hits[i].PctIdAB);
+                record += ", QModel " + toString(hits[i].PctIdQM);
+                record += ", Div. " + toString(Div) + "\n";
+
+                double PctL = Pct(hits[i].CS_LY, LTot);
+	            double PctR = Pct(hits[i].CS_RY, RTot);
+
+                // Diffs row
+                record += "Diffs Left " + toString(LTot) + ": N " +  toString(hits[i].CS_LN);
+                record += ", A " + toString(hits[i].CS_LA) + ", Y " + toString(hits[i].CS_LY);
+                record += "(" + toString(PctL) + ");"; 
+                record += "Right " + toString(RTot) + ": N " +  toString(hits[i].CS_RN);
+                record += ", A " + toString(hits[i].CS_RA) + ", Y " + toString(hits[i].CS_RY);
+                record += "(" + toString(PctR) + "), Score " + toString(hits[i].Score) + "\n";     
+
+                uchimeAlns.push_back(record);
+            }
+        }
+
+        // uchimeout
+        chimericStatus.push_back(status);
+        scores.push_back(hits[i].Score);
+        queries.push_back(hits[i].QLabel);
+        Aparents.push_back(hits[i].ALabel);
+        Bparents.push_back(hits[i].BLabel);
+        IdQMs.push_back(hits[i].PctIdQM);
+        IdQAs.push_back(hits[i].PctIdQA);
+        IdQBs.push_back(hits[i].PctIdQB);
+        IdABs.push_back(hits[i].PctIdAB);
+        IdQTs.push_back(hits[i].PctIdQT);
+        Divs.push_back(hits[i].Div);
+        LYs.push_back(hits[i].CS_LY);
+        LNs.push_back(hits[i].CS_LN);
+        LAs.push_back(hits[i].CS_LA);
+        RNs.push_back(hits[i].CS_RY); 
+        RYs.push_back(hits[i].CS_RN);
+        RAs.push_back(hits[i].CS_RA);
+    }
+
+    Rcpp::DataFrame uchimeOut = DataFrame::create(
+         Named("Score") = scores,
+         _("Query") = queries, _("A") = Aparents, _("B") = Bparents,
+         _("IdQM") = IdQMs, _("IdQA") = IdQAs, _("IdQB") = IdQBs,
+         _("IdAB") = IdABs, _("IdQT") = IdQTs,
+         _("LY") = LYs, _("LN") = LNs, _("LA") = LAs,
+         _("RY") = RYs, _("RN") = RNs, _("RA") = RAs, 
+         _("Div") = Divs, _("Y") = chimericStatus);
+ 
+    results.push_back(uchimeOut);
+    resultsNames.push_back("uchimeout");
+
+    if (opts->getChimealns()) {
+        resultsNames.push_back("uchimealns");
+        results.push_back(uchimeAlns);
+    }
+    results.attr("names") = resultsNames;
+
+    return results;
 }
 /******************************************************************************/
-Rcpp::DataFrame ChimeraUchime::createUchimeAlns(vector<ChimeHit2>) {
-    
-    Rcpp::DataFrame output;
-
-
-    return output;
-    
+double ChimeraUchime::Pct(double x, double y) {
+    if (y == 0.0f) {
+        return 0.0f;
+    }
+    return (x*100.0f)/y;
 }
 /******************************************************************************/

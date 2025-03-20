@@ -98,6 +98,8 @@ protected:
     Options* opts;
     void removeChimerasFromDataset(Rcpp::Environment& dataset,
                                    vector<string>& seqsToRemove, string reason);
+    int getNumBases(string);
+    bool isGap(char c);
 
 private:
 
