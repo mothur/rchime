@@ -8,7 +8,17 @@
  */
 
 #include "globalalign2.h"
+#include "mxmatrix.h"
 
+/******************************************************************************/
+GlobalAligner::GlobalAligner() { 
+	alignParams = new AlnParams();
+    //util = Utilities::getInstance(); 
+	g_TBBit = new MxByteMatrix();
+	g_CacheLB = 0;
+}
+/******************************************************************************/
+GlobalAligner::~GlobalAligner() { delete alignParams; }
 /******************************************************************************/
 bool GlobalAligner::runViterbiFast(const SeqData &Query, const SeqData &Target, PathData &PD) {
 	viterbiFast(Query.getSeq(), Query.getSeqLength(),
@@ -48,18 +58,18 @@ float GlobalAligner::viterbiFast(string seqA, unsigned alength,
 
 	allocBit(alength, blength);
 
-	const float * const *Mx = alignParams->SubstMx;
+	MxFloatMatrix* Mx = alignParams->SubstMx;
 	float OpenA = alignParams->LOpenA;
 	float ExtA = alignParams->LExtA;
 
-	Byte **TB = g_TBBit;
+	//Byte **TB = g_TBBit;
 	// convert to vector<float>
-	float *Mrow = g_DPRow1;
-	float *Drow = g_DPRow2;
+	//vector<float> Mrow = g_DPRow1;
+	//vector<float> Drow = g_DPRow2;
 
 // Use Mrow[-1], so...
-	Mrow[-1] = MINUS_INFINITY;
-	for (unsigned j = 0; j <= blength; ++j) {
+	//Mrow[-1] = MINUS_INFINITY;
+	for (unsigned j = 0; j < g_CacheLB+3; ++j) {
 		Mrow[j] = MINUS_INFINITY;
 		Drow[j] = MINUS_INFINITY;
 	}
@@ -69,12 +79,12 @@ float GlobalAligner::viterbiFast(string seqA, unsigned alength,
 	for (unsigned i = 0; i < alength; ++i) {
 
 		Byte a = seqA[i];
-		const float *MxRow = Mx[a];
+		vector<float> MxRow = Mx->matrix[a];
 		float OpenB = alignParams->LOpenB;
 		float ExtB = alignParams->LExtB;
 		float I0 = MINUS_INFINITY;
 
-		Byte *TBrow = TB[i];
+		vector<Byte> TBrow = g_TBBit->matrix[i];
 		for (unsigned j = 0; j < blength; ++j) {
 			Byte b = seqB[j];
 			Byte TraceBits = 0;
@@ -149,7 +159,7 @@ float GlobalAligner::viterbiFast(string seqA, unsigned alength,
 	}
 
 // Special case for last row of DPI
-	Byte *TBrow = TB[alength];
+	vector<Byte>TBrow = g_TBBit->matrix[alength];
 	float I1 = MINUS_INFINITY;
 
 	for (unsigned j = 1; j < blength; ++j) {
@@ -187,22 +197,29 @@ float GlobalAligner::viterbiFast(string seqA, unsigned alength,
 /******************************************************************************/
 void GlobalAligner::allocBit(unsigned LA, unsigned LB) {
 
-	g_Mx_TBBit.Alloc("TBBit", LA+1, LB+1);
-	g_TBBit = g_Mx_TBBit.GetData();
+	//g_Mx_TBBit.Alloc("TBBit", LA+1, LB+1);
+	g_TBBit->resize(LA+1, LB+1);
+	//g_TBBit = g_Mx_TBBit.GetData();
 
 	if (LB > g_CacheLB) {
-		util->myfree(g_DPBuffer1, g_CacheLB);
-		util->myfree(g_DPBuffer2, g_CacheLB);
+
+		//util->myfree(g_DPBuffer1, g_CacheLB);
+		//util->myfree(g_DPBuffer2, g_CacheLB);
+		Mrow.clear();
+		Drow.clear();
 
 		g_CacheLB = LB + 128;
 
 		// Allow use of [-1]
 		//g_DPBuffer1 = myalloc<float>(g_CacheLB+3);
 		//g_DPBuffer2 = myalloc<float>(g_CacheLB+3);
-		g_DPBuffer1 = static_cast<float*>(util->mymalloc(sizeof(float) * (g_CacheLB+3)));
-		g_DPBuffer2 = static_cast<float*>(util->mymalloc(sizeof(float) * (g_CacheLB+3)));
-		g_DPRow1 = g_DPBuffer1 + 1;
-		g_DPRow2 = g_DPBuffer2 + 1;
+		//g_DPBuffer1 = static_cast<float*>(util->mymalloc(sizeof(float) * (g_CacheLB+3)));
+		//g_DPBuffer2 = static_cast<float*>(util->mymalloc(sizeof(float) * (g_CacheLB+3)));
+		Mrow.resize(g_CacheLB+3, MINUS_INFINITY);
+		Drow.resize(g_CacheLB+3, MINUS_INFINITY);
+
+		//g_DPRow1 = g_DPBuffer1 + 1;
+		//g_DPRow2 = g_DPBuffer2 + 1;
 	}
 }
 /******************************************************************************/
@@ -212,8 +229,6 @@ void GlobalAligner::traceBackBit(unsigned alength, unsigned blength, char State,
 
 	char *PathPtr = PD.Back;
 	*PathPtr = 0;
-
-	Byte **TB = g_TBBit;
 
 	size_t i = alength;
 	size_t j = blength;
@@ -229,7 +244,7 @@ void GlobalAligner::traceBackBit(unsigned alength, unsigned blength, char State,
 		Byte t;
 		switch (State) {
 		case 'M':
-			t = TB[i-1][j-1];
+			t = g_TBBit->matrix[i-1][j-1];
 			if (t & TRACEBITS_DM) {
 				State = 'D';
 			} else if (t & TRACEBITS_IM) {
@@ -242,7 +257,7 @@ void GlobalAligner::traceBackBit(unsigned alength, unsigned blength, char State,
 			break;
 		case 'D':
 			
-			t = TB[i-1][j];
+			t = g_TBBit->matrix[i-1][j];
 			if (t & TRACEBITS_MD) {
 				State = 'M';
 			}else{
@@ -252,7 +267,7 @@ void GlobalAligner::traceBackBit(unsigned alength, unsigned blength, char State,
 			break;
 
 		case 'I':
-			t = TB[i][j-1];
+			t = g_TBBit->matrix[i][j-1];
 			if (t & TRACEBITS_MI) {
 				State = 'M';
 			}else {

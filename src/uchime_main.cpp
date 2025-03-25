@@ -12,8 +12,8 @@
 #include "seqdb.h"
 #include <Rcpp.h>
 #include <RcppThread.h>
+#include <__config>
 #include <cli/progress.h>
-
 
 /******************************************************************************/
 Options* Options::_uniqueInstance = 0;
@@ -21,55 +21,50 @@ Utilities* Utilities::_uniqueInstance = 0;
 /******************************************************************************/
 UchimeMain::UchimeMain()    { 
 	util = Utilities::getInstance();
-	reference = nullptr;
-	data = nullptr;
 }
 /******************************************************************************/
-UchimeMain::~UchimeMain()   {
-	 if (reference != nullptr) { delete reference; }
-	 if (data != nullptr) { delete data; }
-}
+UchimeMain::~UchimeMain()   {}
+
 /******************************************************************************/
 // this is the entry point to uchime source code from chimera_findur
-vector<ChimeHit2> UchimeMain::runUchime(vector<string>& names,
-                                 vector<string>& seqs,
-                                 vector<string>& refNames,
-                                 vector<string>& refSeqs,
-                                 vector<int>& abunds,
+vector<ChimeHit2> UchimeMain::runUchime(vector<string> names,
+                                 vector<string> seqs,
+                                 vector<string> refNames,
+                                 vector<string> refSeqs,
+                                 vector<int> abunds,
 								 set<string>& namesOfChimeras)
 	{
 
     vector<ChimeHit2> Hits;
 
 	// loading SeqDB with data from R, sort descending order by abundace
-	data = new SeqDB(names, seqs, abunds, true);
+	SeqDB data(names, seqs, abunds, true);
 
-	if (!data->isNucleo()) {
+	if (!data.isNucleo()) {
 	    return Hits;
 	}
 
 	// are we running with a reference, or denovo
 	uchimeDeNovo = (refNames.size() == 0);
 
+	SeqDB* reference = nullptr;
 	if (uchimeDeNovo) {
 		reference = new SeqDB();
 	}else{
 		vector<int> refAbunds(refNames.size(), 1);
 		reference = new SeqDB(refNames, refSeqs, refAbunds, false);
-		if (!reference->isNucleo()) {
-		    return Hits;
-		}
+		if (!reference->isNucleo()) { return Hits; }
 	}
 
-	unsigned numQuerySeqs = data->getSeqCount();
+	unsigned numQuerySeqs = data.getSeqCount();
 	SearchChime search;
 	for (unsigned i = 0; i < numQuerySeqs; ++i) {
 
-		SeqData queryData = data->getSeqData(i);
+		SeqData queryData = data.getSeqData(i);
 
 		ChimeHit2 Hit;
-		bool Found = search.searchChime(reference, queryData, Hit);
-		if (!Found) {
+		bool chimeric = search.searchChime(reference, queryData, Hit);
+		if (!chimeric) {
 			// add more abundant query sequences as potential parents
 			if (uchimeDeNovo) {
 				reference->addSeq(queryData.getName(), queryData.getSeq(), queryData.getAbund());
@@ -77,11 +72,10 @@ vector<ChimeHit2> UchimeMain::runUchime(vector<string>& names,
 		}
 
 		Hits.push_back(Hit);
-		if (Hit.Accept()) {  
-			namesOfChimeras.insert(queryData.getName());
-		}
+		if (chimeric) {  namesOfChimeras.insert(queryData.getName()); }
 	}
 
+	delete reference;
 	return Hits;
 }
 /******************************************************************************/

@@ -50,11 +50,6 @@ sequence_data_table <- R6Class("sequence_data_table",
       invisible(self)
     },
 
-    #' @description Clear sequences from dataset
-    finalize = function() {
-      self$clear()
-    },
-
     #' @description
     #' Get summary of sequences data - (summary_seqs output)
     #' @examples
@@ -1002,9 +997,15 @@ sequence_data_table <- R6Class("sequence_data_table",
         }
       } else if (!is.null(filename)) {
         df <- super$read_count_file(self$get_names(), filename, path)
-
         group_names <- names(df)[2:ncol(df)]
         private$has_group_data <- TRUE
+
+        if (nrow(df) != self$get_num_unique_seqs()) {
+          super$abort_length_mismatch(
+            "names", "count table rows", length(self$get_num_unique_seqs()),
+            nrow(df)
+          )
+        }
 
         if (group_names[1] == "total") {
           group_names <- NULL
@@ -1019,12 +1020,12 @@ sequence_data_table <- R6Class("sequence_data_table",
         for (i in seq_len(nrow(df))) {
           counts <- as.numeric(df[i, 2:ncols])
           group_indexes <- which(counts != 0)
+          name <- as.character(df[i, 1])
           if (private$has_group_data) {
-            private$counts[[as.character(df[i, 1])]] <-
+            private$counts[[name]] <-
               list(group_indexes, counts[group_indexes])
           } else {
-            private$counts[[as.character(df[i, 1])]] <-
-              list(counts[group_indexes])
+            private$counts[[name]] <- list(counts[group_indexes])
           }
         }
       }
@@ -1032,7 +1033,6 @@ sequence_data_table <- R6Class("sequence_data_table",
       # this count file has groups
       if (private$has_group_data) {
         sums <- rep(0, self$get_num_groups())
-
         names <- self$get_names()
         for (i in seq_along(names)) {
           counts <- self$get_abunds(names[i])
@@ -1393,6 +1393,11 @@ sequence_data_table <- R6Class("sequence_data_table",
         return(list(group_indexes, abunds[[1]][indexes]))
       }
       return(abunds)
+    },
+
+    # Clear sequences from dataset
+    finalize = function() {
+      self$clear()
     },
 
     # Get names of groups in the dataset

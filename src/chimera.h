@@ -23,28 +23,31 @@ struct chimeraData {
     
     // inputs
     vector<string> groups;
-    vector<vector<string> > names;
-    vector<vector<string> > seqs;
+    vector< vector<string> >  names;
+    vector< vector<string> >  seqs;
     vector<string> refNames;
     vector<string> refSeqs;
-    vector<vector<int> > abunds;
+    vector< vector<int> > abunds;
     vector<set<string> > chimeras;
 
     // outputs - one for each sample
     vector<vector<ChimeHit2> > uchimeResults;
+    bool silent;
 
     // denovo
-    chimeraData(Rcpp::Environment& dataset, vector<string> g) {
+    chimeraData(Rcpp::Environment& d, vector<string> g, bool s = true) {
         groups = g;
         chimeras.resize(groups.size());
+        silent = s;
+
         for (int i = 0; i < groups.size(); i++) {
-            fillData(dataset, groups[i], "dataset");
+            fillData(d, groups[i], "dataset");
         }
     }
 
     // reference
-    chimeraData(Rcpp::Environment& dataset, Rcpp::Environment& reference) {
-        fillData(dataset, "", "dataset");
+    chimeraData(Rcpp::Environment& d, Rcpp::Environment& reference) {
+        fillData(d, "", "dataset");
         fillData(reference, "", "reference");
         chimeras.resize(1);
     }
@@ -52,25 +55,25 @@ struct chimeraData {
 
     void fillData(Rcpp::Environment& dataset, string group, string mode){
 
-        Rcpp::Function getSeqs = dataset["get_seqs"];
         Rcpp::Function getNames = dataset["get_names"];
+        Rcpp::Function getSeqs = dataset["get_seqs"];
 
         if (mode == "dataset") {
             
             Rcpp::Function getCounts = dataset["get_seqs_abunds"];
 
             if (group == "") {
-                seqs.push_back(Rcpp::as<vector<string>>(getSeqs()));
-                names.push_back(Rcpp::as<vector<string>>(getNames()));
-                abunds.push_back(Rcpp::as<vector<int>>(getCounts()));
+                seqs.push_back(Rcpp::as<vector<string> >(getSeqs()));
+                names.push_back(Rcpp::as<vector<string> >(getNames()));
+                abunds.push_back(Rcpp::as<vector<int> >(getCounts()));
             }else{
-                seqs.push_back(Rcpp::as<vector<string>>(getSeqs(group)));
-                names.push_back(Rcpp::as<vector<string>>(getNames(group)));
-                abunds.push_back(Rcpp::as<vector<int>>(getCounts(group)));
+                seqs.push_back(Rcpp::as<vector<string> >(getSeqs(group)));
+                names.push_back(Rcpp::as<vector<string> >(getNames(group)));
+                abunds.push_back(Rcpp::as<vector<int> >(getCounts(group)));
             }
         }else {
-            refNames = Rcpp::as<vector<string>>(getNames());
-            refSeqs = Rcpp::as<vector<string>>(getSeqs());
+            refNames = Rcpp::as<vector<string> >(getNames());
+            refSeqs = Rcpp::as<vector<string> >(getSeqs());
         }
     }
     
@@ -80,7 +83,7 @@ class Chimera {
 
 public:
 
-    // dereplicate, processors, silent
+    // dereplicate, processors, silent, hasGroups, uchime options
     Chimera(bool derep, int proc, bool si, bool hg, Rcpp::List options);
 
     virtual ~Chimera(){};

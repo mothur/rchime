@@ -23,7 +23,7 @@ void Make3way::Make3Way(const SeqData &QSD, const SeqData &ASD, const SeqData &B
 	
 	const Byte *Q = (const Byte *) querySeq.c_str();
 	const Byte *A = (const Byte *) parentASeq.c_str();
-	const Byte *B = (const Byte *) B3.c_str();
+	const Byte *B = (const Byte *) parentBSeq.c_str();
 
 	unsigned LQ = QSD.getSeqLength();
 	unsigned LA = ASD.getSeqLength();

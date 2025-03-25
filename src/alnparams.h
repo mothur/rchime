@@ -12,7 +12,7 @@
 
 #include "uchime.h"
 #include "myopts.h"
-#include "mx.h"
+#include "mxmatrix.h"
 #include "myutils.h"
 #include "hsp.h"
 
@@ -27,7 +27,8 @@ public:
 	AlnParams();
 	~AlnParams(){}
 
-	const float * const *SubstMx;
+	//const float * const *SubstMx;
+	MxFloatMatrix* SubstMx; 
 
 	bool Nucleo;
 	bool NucleoSet;
@@ -59,16 +60,18 @@ private:
 	Options* opt;
 	Utilities* util;
 
-	Mx<float> g_SubstMxf;
-	float **g_SubstMx;
+	//Mx<float> g_SubstMxf;
+	//float **g_SubstMx;
+	//MxMatrix* g_SubstMx;
 
     void Clear();
 	void setLocal(float Open, float Ext);
 	void SetMxFromCmdLine(bool Nucleo);
 	void setPenalties(const string &OpenStr, const string &ExtStr);
-	void Init4(float Open, float Ext, float TermOpen, float TermExt);
 	void InitFromCmdLine(bool Nucleo);
 	void setNucSubstMx(double Match, double Mismatch);
+	static void ParseGapStr(const string &s, float &QI, float &QL, float &QR,
+  						float &TI, float &TL, float &TR);
 
 };
 /******************************************************************************/

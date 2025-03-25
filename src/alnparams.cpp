@@ -33,13 +33,6 @@ void AlnParams::setLocal(float Open, float Ext) {
 	LocalExt = Ext;
 }
 /******************************************************************************/
-void AlnParams::Init4(float Open, float Ext, float TermOpen, float TermExt) {
-	SubstMx = g_SubstMx;
-	OpenA = OpenB = Open;
-	LOpenA = LOpenB = ROpenA = ROpenB = TermOpen;
-	ExtA = ExtB = Ext;
-	LExtA = LExtB = RExtA = RExtB = TermExt;
-}
 /***
 Open/Ext format string is one or more:
 	[<flag><flag>...]<value>
@@ -54,7 +47,7 @@ Flag is:
 	R		Right end.
 ***/
 /******************************************************************************/
-static void ParseGapStr(const string &s, float &QI, float &QL, float &QR,
+void AlnParams::ParseGapStr(const string &s, float &QI, float &QL, float &QR,
   						float &TI, float &TL, float &TR) {
 	if (s.empty()) {
 		return;
@@ -171,18 +164,17 @@ void AlnParams::SetMxFromCmdLine(bool IsNucleo) {
 	if (IsNucleo) {
 		setNucSubstMx(1.0, -2.0); // opt_match, opt_mismatch
 	}
-	SubstMx = g_SubstMx;
 }
 /******************************************************************************/
 void AlnParams::setNucSubstMx(double Match, double Mismatch) {
 	
 	unsigned N = unsigned(strlen(Alphabet));
 
-	g_SubstMxf.Alloc("NUCMX", 256, 256);
-	strcpy(g_SubstMxf.m_Alpha, "ACGT");
-	g_SubstMxf.Init(0);
-	g_SubstMx = g_SubstMxf.GetData();
-
+	SubstMx = new MxFloatMatrix(256, 256, 0);
+	//strcpy(g_SubstMxf.m_Alpha, "ACGT");
+	//g_SubstMxf.Init(0);
+	//SubstMx = g_SubstMx->getData();
+	
 	for (unsigned i = 0; i < N; ++i) {
 		for (unsigned j = 0; j < N; ++j) {
 			float v = float(i == j ? Match : Mismatch);
@@ -194,17 +186,17 @@ void AlnParams::setNucSubstMx(double Match, double Mismatch) {
 			ui = (Byte) toupper(ui);
 			uj = (Byte) toupper(uj);
 
-			g_SubstMx[ui][uj] = v;
-			g_SubstMx[uj][ui] = v;
+			SubstMx->matrix[ui][uj] = v;
+			SubstMx->matrix[uj][ui] = v;
 
-			g_SubstMx[ui][lj] = v;
-			g_SubstMx[uj][li] = v;
+			SubstMx->matrix[ui][lj] = v;
+			SubstMx->matrix[uj][li] = v;
 
-			g_SubstMx[li][uj] = v;
-			g_SubstMx[lj][ui] = v;
+			SubstMx->matrix[li][uj] = v;
+			SubstMx->matrix[lj][ui] = v;
 
-			g_SubstMx[li][lj] = v;
-			g_SubstMx[lj][li] = v;
+			SubstMx->matrix[li][lj] = v;
+			SubstMx->matrix[lj][li] = v;
 		}
 	}
 
@@ -218,17 +210,17 @@ void AlnParams::setNucSubstMx(double Match, double Mismatch) {
 		ui = (Byte) toupper(ui);
 		uj = (Byte) toupper(uj);
 
-		g_SubstMx[ui][uj] = v;
-		g_SubstMx[uj][ui] = v;
+		SubstMx->matrix[ui][uj] = v;
+		SubstMx->matrix[uj][ui] = v;
 
-		g_SubstMx[ui][lj] = v;
-		g_SubstMx[uj][li] = v;
+		SubstMx->matrix[ui][lj] = v;
+		SubstMx->matrix[uj][li] = v;
 
-		g_SubstMx[li][uj] = v;
-		g_SubstMx[lj][ui] = v;
+		SubstMx->matrix[li][uj] = v;
+		SubstMx->matrix[lj][ui] = v;
 
-		g_SubstMx[li][lj] = v;
-		g_SubstMx[lj][li] = v;
+		SubstMx->matrix[li][lj] = v;
+		SubstMx->matrix[lj][li] = v;
 	}
 }
 /******************************************************************************/
@@ -244,10 +236,14 @@ void AlnParams::InitFromCmdLine(bool IsNucleo) {
 	
 	// Global
 	if (IsNucleo) {
-		Init4(-10.0, -1.0, -0.5, -0.5);
-	}//else {
-		//Init4(-17.0, -1.0, -0.5, -0.5);
-	//}
-	setPenalties(0, 0);
+		OpenA = OpenB = -10.0;
+	}else {
+		OpenA = OpenB = -17.0;
+	}
+	LOpenA = LOpenB = ROpenA = ROpenB = -0.5;
+	ExtA = ExtB = -1.0;
+	LExtA = LExtB = RExtA = RExtB = -0.5;
+
+	setPenalties("", "");
 }
 /******************************************************************************/

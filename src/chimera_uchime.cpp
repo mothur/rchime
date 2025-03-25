@@ -36,40 +36,74 @@
     //     _("Y") = chimericStatus);
 
 
-    
+
 /******************************************************************************/
 ChimeraUchime::ChimeraUchime(bool derep, int proc, bool si, bool hg, Rcpp::List options) :
     Chimera(derep, proc, si, hg, options) {
 }
 /******************************************************************************/
 void processUchime(chimeraData* params) {
-    
-    // for each group in dataset
-    for (int k = 0; k < params->seqs.size(); k++) {
-        // long long numSeqs = params->seqs[k].size();
 
-        // call uchime source code
-        UchimeMain* uchime = new UchimeMain();
-        params->uchimeResults.push_back(uchime->runUchime(params->names[k], params->seqs[k],
+    UchimeMain* uchime = new UchimeMain();
+
+    if (params->groups.size() != 0) {
+
+        SEXP* bar = nullptr;
+
+        // main thread will update progress
+        if (!params->silent) {
+            // create progress bar
+            int numGroups = params->groups.size();
+            bar = new SEXP(PROTECT(cli_progress_bar(numGroups, NULL)));
+            cli_progress_set_name(*bar, "Checking for chimeric sequences");
+        }
+
+        // for each group in dataset
+        for (int k = 0; k < params->groups.size(); k++) {
+
+            RcppThread::checkUserInterrupt();
+
+            // main thread updates progress
+            if (!params->silent) {
+                if (CLI_SHOULD_TICK) {
+                    cli_progress_set(*bar, k+1); }
+            }
+
+            // call uchime source code
+            params->uchimeResults.push_back(uchime->runUchime(params->names[k], params->seqs[k],
                                                 params->refNames, params->refSeqs,
-                                                params->abunds[k], params->chimeras[k]));                                         
-        delete uchime;
+                                                params->abunds[k], params->chimeras[k]));
+        }
+
+        // terminate progress bar
+        if (!params->silent) {
+            cli_progress_done(*bar);
+            UNPROTECT(1);
+            delete bar;
+        }
+    }else {
+        params->uchimeResults.push_back(uchime->runUchime(params->names[0], params->seqs[0],
+                                        params->refNames, params->refSeqs,
+                                        params->abunds[0], params->chimeras[0]));
     }
+
+    delete uchime;
+
 }
 /******************************************************************************/
 Rcpp::List ChimeraUchime::removeChimeras(Rcpp::Environment& dataset) {
-    
+
     vector<ChimeHit2> uchimeOutputs;
-    vector<string> resultsNames; 
+    vector<string> resultsNames;
 
     if (hasGroupData) {
-        
+
         Rcpp::Function getGroups = dataset["get_groups"];
         groups = Rcpp::as<vector<string>>(getGroups());
 
         // run uchime on each sample individually
         uchimeOutputs = createProcesses(dataset);
-    
+
     } else {
         chimeraData* dataBundle = new chimeraData(dataset, groups);
         // run as one sample
@@ -83,7 +117,7 @@ Rcpp::List ChimeraUchime::removeChimeras(Rcpp::Environment& dataset) {
     }
 
     Rcpp::List results = createUchimeResults(uchimeOutputs);
-    
+
     return results;
 }
 /******************************************************************************/
@@ -115,10 +149,11 @@ vector<ChimeHit2> ChimeraUchime::createProcesses(Rcpp::Environment& dataset) {
         theseGroups.push_back(groups[j]);
     }
 
-    chimeraData* dataBundle = new chimeraData(dataset, theseGroups);
+    // only the main thread reports progress if silent is false
+    chimeraData* dataBundle = new chimeraData(dataset, theseGroups, silent);
     processUchime(dataBundle);
-
-    map<string, vector<int> > seqAbunds = combineResults(dataBundle, data,
+cout << "about to merge results" << endl;
+    map<string, uchimeAbunds > seqAbunds = combineResults(dataBundle, data,
                                                          workerThreads, results);
 
     if (dereplicate) {
@@ -128,14 +163,17 @@ vector<ChimeHit2> ChimeraUchime::createProcesses(Rcpp::Environment& dataset) {
         vector<string> names;
         for (auto it = seqAbunds.begin(); it != seqAbunds.end(); it++) {
             names.push_back(it->first);
-            abundances.push_back(it->second);
+            abundances.push_back(it->second.abundances);
         }
 
         setAbundances(names, abundances, Rcpp::Named("reason",
                                                  "chimera_uchime"));
     }else {
         // seqAbunds just contains seqs to be removed
-        vector<string> seqsToRemove = getKeys(seqAbunds);
+        vector<string> seqsToRemove;
+        for (auto it = seqAbunds.begin(); it != seqAbunds.end(); it++) {
+            seqsToRemove.push_back(it->first);
+        }
         removeChimerasFromDataset(dataset, seqsToRemove, "chimera_uchime");
     }
 
@@ -161,24 +199,23 @@ Rcpp::List ChimeraUchime::removeChimeras(Rcpp::Environment& dataset,
     return results;
 }
 /******************************************************************************/
-// this is called when dereplicate = TRUE, meaning sequence are only removed 
+// this is called when dereplicate = TRUE, meaning sequence are only removed
 // from the samples they are flagged as chimeric in
-map<string, vector<int> > ChimeraUchime::combineResults(chimeraData*& dataBundle,
+map<string, uchimeAbunds > ChimeraUchime::combineResults(chimeraData*& dataBundle,
                                          vector<chimeraData*>& data,
                                          vector<RcppThread::Thread*>& workerThreads,
                                          vector<ChimeHit2>& results) {
-    
-    map<string, vector<int> > seqAbunds;
+
+    map<string, uchimeAbunds > seqAbunds;
     int groupIndex = 0;
     vector<vector<ChimeHit2> > uchimeOut = dataBundle->uchimeResults;
-          
+
     // dereplicate = TRUE, guilty until proven innocent (all samples must find it to be chimeric)
     // dereplicate = FALSE, innocent until proven guilty (any sample can find it to be chimeric)
-    map<string, bool> flaggedChimericInAllSamples;
-    
+
     // collect main threads results
     for (int i = 0; i < dataBundle->groups.size(); i++) {
-
+cout << dataBundle->groups[i] << endl;
         for (int j = 0; j < dataBundle->names[i].size(); j++) {
 
             string seqName = dataBundle->names[i][j];
@@ -186,38 +223,38 @@ map<string, vector<int> > ChimeraUchime::combineResults(chimeraData*& dataBundle
 
             // create new abunds vector and fill this groups abunds
             if (it == seqAbunds.end()) {
-                vector<int> abunds(groups.size(), 0);
-                flaggedChimericInAllSamples[seqName] = dereplicate;
+                
+                uchimeAbunds abundFlag;
 
                 if (dereplicate) {
+                    abundFlag.abundances.resize(groups.size(), 0);
                     // if not chimeric in this sample, then add abundance
                     if (dataBundle->chimeras[i].count(seqName) == 0){
-                        abunds[groupIndex] = dataBundle->abunds[i][j];
-                        flaggedChimericInAllSamples[seqName] = false;
+                        abundFlag.abundances[groupIndex] = dataBundle->abunds[i][j];
+                        abundFlag.chimeric = false;
                     }
-                    seqAbunds[seqName] = abunds;
+                    
                 }else {
                     // if chimeric in this sample, then remove from dataset
                     if (dataBundle->chimeras[i].count(seqName) != 0){
-                       seqAbunds[seqName] = nullIntVector; 
-                       flaggedChimericInAllSamples[seqName] = true;
+                       abundFlag.chimeric = true;
                     }
                 }
+                seqAbunds[seqName] = abundFlag;
             }else{
                 if (dereplicate) {
                     // if not chimeric in this sample, then add abundance
                     if (dataBundle->chimeras[i].count(seqName) == 0) {
-                        it->second[groupIndex] = dataBundle->abunds[i][j];
-                        flaggedChimericInAllSamples[seqName] = false;
+                        it->second.abundances[groupIndex] = dataBundle->abunds[i][j];
+                        it->second.chimeric = false;
                     }
                 }else {
                     // if chimeric in this sample, then remove from dataset
                     if (dataBundle->chimeras[i].count(seqName) != 0){
-                       it->second = nullIntVector; 
-                       flaggedChimericInAllSamples[seqName] = true;
+                       it->second.chimeric = true;
                     }
                 }
-            } 
+            }
         }
         groupIndex++;
     }
@@ -230,7 +267,7 @@ map<string, vector<int> > ChimeraUchime::combineResults(chimeraData*& dataBundle
         workerThreads[i]->join();
 
         for (int j = 0; j < data[i]->groups.size(); j++) {
-
+cout << data[i]->groups[j] << endl;
             uchimeOut.push_back(data[i]->uchimeResults[j]);
 
             for (int k = 0; k < data[i]->names[j].size(); k++) {
@@ -240,39 +277,38 @@ map<string, vector<int> > ChimeraUchime::combineResults(chimeraData*& dataBundle
 
                 // create new abunds vector and fill this groups abunds
                 if (it == seqAbunds.end()) {
-                    
-                    vector<int> abunds(groups.size(), 0);
-                    flaggedChimericInAllSamples[seqName] = dereplicate;
+                
+                uchimeAbunds abundFlag;
 
-                    if (dereplicate) {
-                        // if not chimeric in this sample, then add abundance
-                        if (data[i]->chimeras[i].count(seqName) == 0){
-                            abunds[groupIndex] = data[i]->abunds[i][j];
-                            flaggedChimericInAllSamples[seqName] = false;
-                        }
-                        seqAbunds[seqName] = abunds;
-                    }else {
-                        // if chimeric in this sample, then remove from dataset
-                        if (data[i]->chimeras[i].count(seqName) != 0){
-                            seqAbunds[seqName] = nullIntVector; 
-                            flaggedChimericInAllSamples[seqName] = true;
-                        }
+                if (dereplicate) {
+                    abundFlag.abundances.resize(groups.size(), 0);
+                    // if not chimeric in this sample, then add abundance
+                    if (data[i]->chimeras[j].count(seqName) == 0){
+                        abundFlag.abundances[groupIndex] = data[i]->abunds[j][k];
+                        abundFlag.chimeric = false;
                     }
-                }else{
-                    if (dereplicate) {
-                        // if not chimeric in this sample, then add abundance
-                        if (data[i]->chimeras[i].count(seqName) == 0) {
-                            it->second[groupIndex] = data[i]->abunds[i][j];
-                            flaggedChimericInAllSamples[seqName] = false;
-                        }
-                    }else {
-                        // if chimeric in this sample, then remove from dataset
-                        if (data[i]->chimeras[i].count(seqName) != 0){
-                            it->second = nullIntVector; 
-                            flaggedChimericInAllSamples[seqName] = true;
-                        }
+                    
+                }else {
+                    // if chimeric in this sample, then remove from dataset
+                    if (data[i]->chimeras[j].count(seqName) != 0){
+                       abundFlag.chimeric = true;
                     }
-                } 
+                }
+                seqAbunds[seqName] = abundFlag;
+            }else{
+                if (dereplicate) {
+                    // if not chimeric in this sample, then add abundance
+                    if (data[i]->chimeras[j].count(seqName) == 0) {
+                        it->second.abundances[groupIndex] = data[i]->abunds[j][k];
+                        it->second.chimeric = false;
+                    }
+                }else {
+                    // if chimeric in this sample, then remove from dataset
+                    if (data[i]->chimeras[j].count(seqName) != 0){
+                       it->second.chimeric = true;
+                    }
+                }
+            }
             }
             groupIndex++;
         }
@@ -287,8 +323,9 @@ map<string, vector<int> > ChimeraUchime::combineResults(chimeraData*& dataBundle
     // if all samples find the query to be chimeric, choose first chimeric result
     // else pick first non-chimeric result.
 
-    set<string> resolved; 
+    set<string> resolved;
     for (int i = 0; i < uchimeOut.size(); i++) {
+        cout << i << endl;
         for (int j = 0; j < uchimeOut[i].size(); j++) {
 
             string seqName = uchimeOut[i][j].QLabel;
@@ -298,7 +335,7 @@ map<string, vector<int> > ChimeraUchime::combineResults(chimeraData*& dataBundle
             if (it == resolved.end()) {
 
                 // sequence was found to be chimeric in all samples
-                if (flaggedChimericInAllSamples[seqName]) {
+                if (seqAbunds[seqName].chimeric) {
                         results.push_back(uchimeOut[i][j]);
                         resolved.insert(seqName);
                 }else {
@@ -321,54 +358,56 @@ map<string, vector<int> > ChimeraUchime::combineResults(chimeraData*& dataBundle
 // Query   (  179 nt) F21Fcsw_11639
 // ParentA (  179 nt) F11Fcsw_6529
 // ParentB (  181 nt) F21Fcsw_12128
-	 
+
 // A     1 AAGgAAGAtTAATACaagATGgCaTCatgAGtccgCATgTtcAcatGATTAAAG--gTaTtcCGGTagacGATGGGGATG 78
 // Q     1 AAGTAAGACTAATACCCAATGACGTCTCTAGAAGACATCTGAAAGAGATTAAAG--ATTTATCGGTGATGGATGGGGATG 78
 // B     1 AAGgAAGAtTAATcCaggATGggaTCatgAGttcACATgTccgcatGATTAAAGgtATTTtcCGGTagacGATGGGGATG 80
-// Diffs      N    N    A N?N   N N  NNN  N?NB   N ?NaNNN          B B NN    NNNN          
-// Votes      0    0    + 000   0 0  000  000+   0 00!000            + 00    0000          
+// Diffs      N    N    A N?N   N N  NNN  N?NB   N ?NaNNN          B B NN    NNNN
+// Votes      0    0    + 000   0 0  000  000+   0 00!000            + 00    0000
 // Model   AAAAAAAAAAAAAAAAAAAAAAxBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB
-	 
+
 // A    79 CGTtccATTAGaTaGTaGGCGGGGTAACGGCCCACCtAGtCttCGATggaTAGGGGTTCTGAGAGGAAGGTCCCCCACAT 158
 // Q    79 CGTCTGATTAGCTTGTTGGCGGGGTAACGGCCCACCAAGGCAACGATCAGTAGGGGTTCTGAGAGGAAGGTCCCCCACAT 158
 // B    81 CGTtccATTAGaTaGTaGGCGGGGTAACGGCCCACCtAGtCAACGATggaTAGGGGTTCTGAGAGGAAGGTCCCCCACAT 160
-// Diffs      NNN     N N  N                   N  N BB    NNN                              
-// Votes      000     0 0  0                   0  0 ++    000                              
+// Diffs      NNN     N N  N                   N  N BB    NNN
+// Votes      000     0 0  0                   0  0 ++    000
 // Model   BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB
-	 
+
 // A   159 TGGAACTGAGACACGGTCCAA 179
 // Q   159 TGGAACTGAGACACGGTCCAA 179
 // B   161 TGGAACTGAGACACGGTCCAA 181
-// Diffs                        
-// Votes                        
+// Diffs
+// Votes
 // Model   BBBBBBBBBBBBBBBBBBBBB
-	 
+
 // Ids.  QA 76.6%, QB 77.7%, AB 93.7%, QModel 78.9%, Div. +1.5%
-// Diffs Left 7: N 0, A 6, Y 1 (14.3%); Right 35: N 1, A 30, Y 4 (11.4%), Score 0.0047	
+// Diffs Left 7: N 0, A 6, Y 1 (14.3%); Right 35: N 1, A 30, Y 4 (11.4%), Score 0.0047
 /******************************************************************************/
 Rcpp::List ChimeraUchime::createUchimeResults(vector<ChimeHit2> hits) {
-    
+
     Rcpp::List results;
     vector<string> resultsNames;
 
     // Q, A, B, Y
     vector<string> queries, Aparents, Bparents, chimericStatus;
- 
+
     // Score(Higher score indicates chimeric status), Divs(IdQM - IdQT)
     // IdQM, IdQA, IdQB, IdQT, IdAB - similarity scores
     vector<double> scores, IdQMs, IdQAs, IdQBs, IdABs, IdQTs, Divs;
- 
+
     // LY, LN, LA, RN, RY, RA - segment votes
     vector<int> LYs, LNs, LAs, RNs, RYs, RAs;
 
     Rcpp::List uchimeAlns;
+    vector<string> chimeras;
 
     // create a uchimeout
     for (int i = 0; i < hits.size(); i++) {
-        
+
         string status = "N";
-        if (hits[i].Accept()) { 
-            status = "Y"; 
+        if (hits[i].Accept()) {
+            status = "Y";
+            chimeras.push_back(hits[i].QLabel);
 
             //create uchimealns record
             if (opts->getChimealns()) {
@@ -384,7 +423,7 @@ Rcpp::List ChimeraUchime::createUchimeResults(vector<ChimeHit2> hits) {
 
                 int firstBase, lastBase, qPos, aPos, bPos;
                 firstBase = MOTHURMAX;
-                aPos = 0; bPos = 0;
+                aPos = 0; bPos = 0; qPos = 0;
                 // Strip terminal gaps in query
                 for (int j = 0; j < length; j++) {
                     // if not a gap
@@ -406,8 +445,8 @@ Rcpp::List ChimeraUchime::createUchimeResults(vector<ChimeHit2> hits) {
                 // create Q, A, B, Diffs, Votes, and Model rows
                 string A, Q, B, Diffs, Votes, Model;
                 A = "A " + toString(aPos+1) + " ";
-                Q = "Q " + toString(qPos+1) + " "; 
-                B = "B " + toString(bPos+1) + " "; 
+                Q = "Q " + toString(qPos+1) + " ";
+                B = "B " + toString(bPos+1) + " ";
                 Diffs = "Diffs   ";
                 Votes = "Votes   ";
                 Model = "Model   ";
@@ -426,8 +465,8 @@ Rcpp::List ChimeraUchime::createUchimeResults(vector<ChimeHit2> hits) {
 
                     // Diffs row
                     char c = ' ';
-                    if (isGap(q) || isGap(a) || isGap(b)) { 
-                        c = ' '; 
+                    if (isGap(q) || isGap(a) || isGap(b)) {
+                        c = ' ';
                     }else if (j < hits[i].ColXLo) {
 				        if (q == a && q == b)      { c = ' '; }
                         else if (q == a && q != b) { c = 'A'; }
@@ -502,33 +541,54 @@ Rcpp::List ChimeraUchime::createUchimeResults(vector<ChimeHit2> hits) {
                 // Diffs row
                 record += "Diffs Left " + toString(LTot) + ": N " +  toString(hits[i].CS_LN);
                 record += ", A " + toString(hits[i].CS_LA) + ", Y " + toString(hits[i].CS_LY);
-                record += "(" + toString(PctL) + ");"; 
+                record += "(" + toString(PctL) + ");";
                 record += "Right " + toString(RTot) + ": N " +  toString(hits[i].CS_RN);
                 record += ", A " + toString(hits[i].CS_RA) + ", Y " + toString(hits[i].CS_RY);
-                record += "(" + toString(PctR) + "), Score " + toString(hits[i].Score) + "\n";     
+                record += "(" + toString(PctR) + "), Score " + toString(hits[i].Score) + "\n";
 
                 uchimeAlns.push_back(record);
             }
         }
 
-        // uchimeout
         chimericStatus.push_back(status);
-        scores.push_back(hits[i].Score);
-        queries.push_back(hits[i].QLabel);
-        Aparents.push_back(hits[i].ALabel);
-        Bparents.push_back(hits[i].BLabel);
-        IdQMs.push_back(hits[i].PctIdQM);
-        IdQAs.push_back(hits[i].PctIdQA);
-        IdQBs.push_back(hits[i].PctIdQB);
-        IdABs.push_back(hits[i].PctIdAB);
-        IdQTs.push_back(hits[i].PctIdQT);
-        Divs.push_back(hits[i].Div);
-        LYs.push_back(hits[i].CS_LY);
-        LNs.push_back(hits[i].CS_LN);
-        LAs.push_back(hits[i].CS_LA);
-        RNs.push_back(hits[i].CS_RY); 
-        RYs.push_back(hits[i].CS_RN);
-        RAs.push_back(hits[i].CS_RA);
+        
+
+        // uchimeout
+        if (hits[i].Div <= 0.0) {
+            scores.push_back(0.0000);
+            queries.push_back(hits[i].QLabel);
+            Aparents.push_back("*");
+            Bparents.push_back("*");
+            IdQMs.push_back(-1.0);
+            IdQAs.push_back(-1.0);
+            IdQBs.push_back(-1.0);
+            IdABs.push_back(-1.0);
+            IdQTs.push_back(-1.0);
+            Divs.push_back(-1.0);
+            LYs.push_back(-1);
+            LNs.push_back(-1);
+            LAs.push_back(-1);
+            RNs.push_back(-1);
+            RYs.push_back(-1);
+            RAs.push_back(-1);
+        }else {
+            scores.push_back(hits[i].Score);
+            queries.push_back(hits[i].QLabel+"/ab="+toString(hits[i].AbQ)+"/");
+            Aparents.push_back(hits[i].ALabel+"/ab="+toString(hits[i].AbA)+"/");
+            Bparents.push_back(hits[i].BLabel+"/ab="+toString(hits[i].AbB)+"/");
+            IdQMs.push_back(hits[i].PctIdQM);
+            IdQAs.push_back(hits[i].PctIdQA);
+            IdQBs.push_back(hits[i].PctIdQB);
+            IdABs.push_back(hits[i].PctIdAB);
+            IdQTs.push_back(hits[i].PctIdQT);
+            Divs.push_back(hits[i].Div);
+            LYs.push_back(hits[i].CS_LY);
+            LNs.push_back(hits[i].CS_LN);
+            LAs.push_back(hits[i].CS_LA);
+            RNs.push_back(hits[i].CS_RY);
+            RYs.push_back(hits[i].CS_RN);
+            RAs.push_back(hits[i].CS_RA);
+        }
     }
 
     Rcpp::DataFrame uchimeOut = DataFrame::create(
@@ -537,11 +597,14 @@ Rcpp::List ChimeraUchime::createUchimeResults(vector<ChimeHit2> hits) {
          _("IdQM") = IdQMs, _("IdQA") = IdQAs, _("IdQB") = IdQBs,
          _("IdAB") = IdABs, _("IdQT") = IdQTs,
          _("LY") = LYs, _("LN") = LNs, _("LA") = LAs,
-         _("RY") = RYs, _("RN") = RNs, _("RA") = RAs, 
+         _("RY") = RYs, _("RN") = RNs, _("RA") = RAs,
          _("Div") = Divs, _("Y") = chimericStatus);
- 
+
     results.push_back(uchimeOut);
     resultsNames.push_back("uchimeout");
+
+    results.push_back(chimeras);
+    resultsNames.push_back("accnos");
 
     if (opts->getChimealns()) {
         resultsNames.push_back("uchimealns");

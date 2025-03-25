@@ -321,7 +321,6 @@ Sarah Westcott, \email{swestcot@umich.edu}
 \subsection{Public methods}{
 \itemize{
 \item \href{#method-sequence_data_table-new}{\code{sequence_data_table$new()}}
-\item \href{#method-sequence_data_table-finalize}{\code{sequence_data_table$finalize()}}
 \item \href{#method-sequence_data_table-print}{\code{sequence_data_table$print()}}
 \item \href{#method-sequence_data_table-print_bad_accnos}{\code{sequence_data_table$print_bad_accnos()}}
 \item \href{#method-sequence_data_table-print_count_summary}{\code{sequence_data_table$print_count_summary()}}
@@ -405,16 +404,6 @@ A new \code{sequence_data_table} object.
 }
 \if{html}{\out{</div>}}
 
-}
-
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-sequence_data_table-finalize"></a>}}
-\if{latex}{\out{\hypertarget{method-sequence_data_table-finalize}{}}}
-\subsection{Method \code{finalize()}}{
-Clear sequences from dataset
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{sequence_data_table$finalize()}\if{html}{\out{</div>}}
 }
 
 }

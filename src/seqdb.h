@@ -21,7 +21,7 @@ public:
 
 	SeqDB();
 	SeqDB(vector<string>& seqNames, vector<string>& seqs,
-		  vector<int>& abunds, bool descending = TRUE);
+		  vector<int>& abunds, bool descending = true);
 	~SeqDB();
 
 	void addSeq(string, string, int a = 1);
@@ -54,9 +54,9 @@ public:
 	private:
 
 	Utilities* util;
-    vector<int>* abunds;
-	vector<string>* names;
-	vector<string>* seqs;
+    vector<int> abunds;
+	vector<string> names;
+	vector<string> seqs;
 
 	unsigned numSeqs;
 	bool isAligned; //m_isAligned

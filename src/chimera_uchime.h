@@ -14,9 +14,20 @@
 
 
 #include "chimera.h"
+#include "mothur.h"
 #include "utils.h"
 #include "uchime_main.h"
 
+/******************************************************************************/
+struct uchimeAbunds {
+    vector<int> abundances;
+    bool chimeric;
+
+    uchimeAbunds() { abundances = nullIntVector; chimeric = true; }
+    uchimeAbunds(vector<int> abunds, bool c) { abundances = abunds; chimeric = c; }
+    ~uchimeAbunds() {}
+
+};
 /******************************************************************************/
 class ChimeraUchime : public Chimera {
 
@@ -34,7 +45,7 @@ private:
     vector<ChimeHit2> createProcesses(Rcpp::Environment& dataset);
     Rcpp::List createUchimeResults(vector<ChimeHit2>);
 
-    map<string, vector<int> > combineResults(chimeraData*& dataBundle,
+    map<string, uchimeAbunds > combineResults(chimeraData*& dataBundle,
                                     vector<chimeraData*>& data,
                                     vector<RcppThread::Thread*>& workerThreads,
                                     vector<ChimeHit2>& results);

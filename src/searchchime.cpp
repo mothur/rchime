@@ -14,16 +14,11 @@
 /******************************************************************************/
 SearchChime::SearchChime() {
 	opt = Options::getInstance();
-	aligner = new GlobalAligner();
-	chimeAlign = new AlignChimes();
 }
 /******************************************************************************/
-SearchChime::~SearchChime() {
-	delete aligner;
-	delete chimeAlign;
-}
+SearchChime::~SearchChime() {}
 /******************************************************************************/
-static vector<unsigned> getSmoothedIdVec(const SeqData &queryData, const SeqData &parentData,
+vector<unsigned> SearchChime::getSmoothedIdVec(const SeqData &queryData, const SeqData &parentData,
  									const string &Path, unsigned d) {
 	vector<unsigned> IdVec;
 	const unsigned ColCount = SIZE(Path);
@@ -120,11 +115,9 @@ bool SearchChime::searchChime(SeqDB* database, const SeqData & queryData,
 		SeqData parentData = database->getSeqData(ParentSeqIndex);
 		PSDs.push_back(parentData);
 
-		PathData PD;
-		//float HSPId;
-
 		// align query to each parent
-		bool Found = aligner->globalAlign(queryData, parentData, PD);
+		PathData PD;
+		bool Found = aligner.globalAlign(queryData, parentData, PD);
 		if (!Found) {
 			Paths.push_back("");
 			continue;
@@ -192,7 +185,7 @@ bool SearchChime::searchChime(SeqDB* database, const SeqData & queryData,
 
 	unsigned BestParentCount = SIZE(BestParents);
 
-	bool Found = false;
+	bool chimeric = false;
 	for (unsigned k1 = 0; k1 < BestParentCount; ++k1) {
 		unsigned i1 = BestParents[k1];
 
@@ -205,11 +198,11 @@ bool SearchChime::searchChime(SeqDB* database, const SeqData & queryData,
 			const SeqData &PSD2 = PSDs[i2];
 			const string &Path2 = Paths[i2];
 
-			ChimeHit2 Hit2 = chimeAlign->alignChime(queryData, PSD1, PSD2, Path1, Path2);
+			ChimeHit2 Hit2 = chimeAlign.alignChime(queryData, PSD1, PSD2, Path1, Path2);
 			Hit2.PctIdQT = TopPctId;
 
 			if (Hit2.Accept()) {
-				Found = true;
+				chimeric = true;
 			}
 			if (Hit2.Score > Hit.Score) {
 				Hit = Hit2;
@@ -217,7 +210,7 @@ bool SearchChime::searchChime(SeqDB* database, const SeqData & queryData,
 		}
 	}
 
-	return Found;
+	return chimeric;
 }
 /******************************************************************************/
 double SearchChime::getFractIdGivenPath(string A,  string B, const char *Path) {

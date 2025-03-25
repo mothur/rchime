@@ -159,6 +159,7 @@ bool isEqual(const T& num1, const T& num2) {
 
     return equal;
 }
+
 /**********************************************************************/
 inline string toString(const set<string>& x, char delim) {
     string result = "";

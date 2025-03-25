@@ -28,9 +28,8 @@ class GlobalAligner {
 
 public:
 
-	GlobalAligner() { alignParams = new AlnParams();
-                      util = Utilities::getInstance();           }
-	~GlobalAligner() { delete alignParams; }
+	GlobalAligner(); 
+	~GlobalAligner(); 
 
 	bool globalAlign(const SeqData &Query, const SeqData &Target, PathData &PD);
 	
@@ -38,14 +37,15 @@ public:
 private:
 
 	AlnParams* alignParams;
-    Utilities* util;
+    //Utilities* util;
 	
-    Mx<Byte> g_Mx_TBBit;
-    Byte **g_TBBit;
-    float *g_DPRow1;
-    float *g_DPRow2;
-    float *g_DPBuffer1;
-    float *g_DPBuffer2;
+    //Mx<Byte> g_Mx_TBBit;
+    MxByteMatrix* g_TBBit;
+    //Byte **g_TBBit;
+    vector<float> Mrow;
+    vector<float> Drow;
+    //vector<float> g_DPBuffer1;
+    //vector<float> g_DPBuffer2;
     unsigned g_CacheLB;
 
     bool globalAlign(const SeqData &Query, const SeqData &Target, string &Path);

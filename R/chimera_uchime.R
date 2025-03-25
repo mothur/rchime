@@ -159,9 +159,9 @@ chimera_uchime <- function(dataset = NULL, fasta = NULL, count = NULL,
   num_seqs <- dataset$get_num_seqs()
 
   # make sure the dataset is aligned
-  if (!dataset$is_aligned()[1]) {
+  if (!dataset$is_aligned()$aligned) {
     message <- paste0(
-      "[ERROR]: chimera_uchime requires your dataset to be",
+      "[ERROR]: chimera_uchime requires your dataset to be ",
       "aligned."
     )
     cli::cli_abort(message)

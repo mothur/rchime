@@ -25,6 +25,7 @@ AbR
 abskew
 abund
 abundace
+abundFlag
 abunds
 ACA
 ACC
@@ -1367,6 +1368,7 @@ linux
 listSEXP
 lj
 Lj
+lldb
 ln
 LNs
 LoA
@@ -1557,11 +1559,16 @@ msg
 multipleMatches
 mx
 MxBase
+MxByteMatrix
 MxDPD
 MxDPI
 MxDPM
 Mxf
+MxFloatMatrix
 mxi
+mxmatrix
+MxMatrix
+MXMATRIX
 MxRow
 MxTBD
 MxTBI
@@ -1600,6 +1607,7 @@ NCGCATTCCGCATACTTCTCGCT
 NCGCAUUCWG
 nCols
 NDEBUG
+neccesary
 NeededBytes
 needleman
 NeedlemanOverlap
@@ -1895,6 +1903,7 @@ Phe
 PHREDCLAMP
 PHREDMAX
 Piceno
+pickMyProcess
 pid
 pieceOfWork
 pkgdown
@@ -2346,6 +2355,7 @@ splitMe
 splitWhiteSpace
 sprintf
 SRC
+src
 sstream
 startCharPosition
 startEndIndexes
@@ -2361,6 +2371,7 @@ stdarg
 stderr
 stdlib
 stepSize
+stopOnEntry
 stopSpot
 STP
 str
@@ -2513,6 +2524,7 @@ testQual
 testSeq
 testSet
 testthat
+testthat's
 tF
 tfn
 TG
@@ -2640,6 +2652,7 @@ tTTCTTGAC
 tTTGGT
 TTTT
 tV
+twoPlusTwo
 tY
 typedef
 typename
@@ -2651,6 +2664,7 @@ UCFile
 uchime
 UCHIME
 uchime's
+uchimeAbunds
 uchimealns
 uchimeAlns
 uchimeAlnsResults

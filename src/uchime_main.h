@@ -16,8 +16,6 @@
 #include "searchchime.h"
 #include "mothur-r.h"
 
-//const vector<float> *g_SortVecFloat;
-//bool g_UchimeDeNovo = false;
 
 /* This class is the access point to the uchime source */
 /******************************************************************************/
@@ -29,18 +27,13 @@ public:
     ~UchimeMain();  
 
     // returns list of dataframes with results
-    vector<ChimeHit2> runUchime(vector<string>& names, vector<string>& seqs,
-                         vector<string>& refNames, vector<string>& refSeqs,
-                         vector<int>& abunds, set<string>& chims);
+    vector<ChimeHit2> runUchime(vector<string> names, vector<string> seqs,
+                         vector<string> refNames, vector<string> refSeqs,
+                         vector<int> abunds, set<string>& chims);
 
 private:
 
-   // create a dataframe to pass back to R
-   //UchimeOutputConverter* dataUchime;
-   SeqDB* reference;
-   SeqDB* data;
    Utilities* util;
-
    bool uchimeDeNovo;
 };
 /******************************************************************************/

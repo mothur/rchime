@@ -39,10 +39,12 @@ public:
 private:
 
     Options* opt;
-    GlobalAligner* aligner;
-    AlignChimes* chimeAlign;
+    GlobalAligner aligner;
+    AlignChimes chimeAlign;
 
     double getFractIdGivenPath(string A, string B, const char *Path);
+    static vector<unsigned> getSmoothedIdVec(const SeqData &queryData, const SeqData &parentData,
+ 									const string &Path, unsigned d);
 };
 /******************************************************************************/
 #endif

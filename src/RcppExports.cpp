@@ -11,6 +11,19 @@ Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
 Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
+// summarize_fasta
+Rcpp::DataFrame summarize_fasta(Rcpp::DataFrame& summary_report, Rcpp::IntegerVector& count, int processors);
+RcppExport SEXP _rchime_summarize_fasta(SEXP summary_reportSEXP, SEXP countSEXP, SEXP processorsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::DataFrame& >::type summary_report(summary_reportSEXP);
+    Rcpp::traits::input_parameter< Rcpp::IntegerVector& >::type count(countSEXP);
+    Rcpp::traits::input_parameter< int >::type processors(processorsSEXP);
+    rcpp_result_gen = Rcpp::wrap(summarize_fasta(summary_report, count, processors));
+    return rcpp_result_gen;
+END_RCPP
+}
 // chimeraUchimeReference
 Rcpp::List chimeraUchimeReference(Rcpp::Environment& dataset, Rcpp::Environment& reference, Rcpp::List options);
 RcppExport SEXP _rchime_chimeraUchimeReference(SEXP datasetSEXP, SEXP referenceSEXP, SEXP optionsSEXP) {
@@ -37,9 +50,13 @@ BEGIN_RCPP
 END_RCPP
 }
 
+RcppExport SEXP run_testthat_tests(SEXP);
+
 static const R_CallMethodDef CallEntries[] = {
+    {"_rchime_summarize_fasta", (DL_FUNC) &_rchime_summarize_fasta, 3},
     {"_rchime_chimeraUchimeReference", (DL_FUNC) &_rchime_chimeraUchimeReference, 3},
     {"_rchime_chimeraUchime", (DL_FUNC) &_rchime_chimeraUchime, 2},
+    {"run_testthat_tests", (DL_FUNC) &run_testthat_tests, 1},
     {NULL, NULL, 0}
 };
 

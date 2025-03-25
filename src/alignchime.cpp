@@ -11,6 +11,7 @@
 #include "alignchime.h"
 
 /******************************************************************************/
+// dn = 1.4, xn = 8, xa = 1
 double AlignChimes::GetScore2(double Y, double N, double A) {
 	return Y/(opt->getXn()*(N + opt->getDn()) + opt->getXa()*A);
 }
@@ -26,6 +27,10 @@ ChimeHit2 AlignChimes::alignChime(const SeqData &QSD, const SeqData &ASD, const 
 
 	ChimeHit2 Hit;
 	Hit.QLabel = QSD.getName();
+	Hit.AbQ = QSD.getAbund();
+	Hit.AbA = ASD.getAbund();
+	Hit.AbB = B_SD.getAbund();
+
 
 	const Byte *Q3Seq = (const Byte *) Q3.c_str();
 	const Byte *A3Seq = (const Byte *) A3.c_str();
@@ -36,19 +41,18 @@ ChimeHit2 AlignChimes::alignChime(const SeqData &QSD, const SeqData &ASD, const 
 // Discard terminal gaps
 	unsigned ColLo = UINT_MAX;
 	unsigned ColHi = UINT_MAX;
-	for (unsigned Col = 2; Col + 2 < ColCount; ++Col)
-		{
+	for (unsigned Col = 2; Col + 2 < ColCount; ++Col) {
 		char q = Q3Seq[Col];
 		char a = A3Seq[Col];
 		char b = B3Seq[Col];
 
-		if (isacgt(q) && isacgt(a) && isacgt(b))
-			{
-			if (ColLo == UINT_MAX)
+		if (isacgt(q) && isacgt(a) && isacgt(b)) {
+			if (ColLo == UINT_MAX) {
 				ColLo = Col;
-			ColHi = Col;
 			}
+			ColHi = Col;
 		}
+	}
  
 	if (ColLo == UINT_MAX) {
 		return Hit;
