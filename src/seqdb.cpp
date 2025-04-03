@@ -3,24 +3,12 @@
 #include "alpha.h"
 #include <__config>
 
-//inline int compare_doubles1(const void* a, const void* b)
-//{
-   // double* arg1 = (double *) a;
-  //  double* arg2 = (double *) b;
-  //  if( *arg1 < *arg2 ) return -1;
-  //  else if( *arg1 == *arg2 ) return 0;
-  ////  else return 1;
-//}
-//inline bool compareAbunds();//
-
 /******************************************************************************/
 SeqDB::SeqDB() {
-	util = Utilities::getInstance();
 	numSeqs = 0;
-
 	isAligned = false;
-	isNucleotide = false;
-	isNucleoSet = false;
+	//isNucleotide = false;
+	//isNucleoSet = false;
 }
 /******************************************************************************/
 SeqDB::SeqDB(vector<string>& seqNames, vector<string>& sequences,
@@ -28,16 +16,25 @@ SeqDB::SeqDB(vector<string>& seqNames, vector<string>& sequences,
 	
 	util = Utilities::getInstance();
 
+	// degap sequences
+	for (int i = 0; i < sequences.size(); i++) {
+		string temp = sequences[i];
+		sequences[i] = "";
+		for(int j = 0; j < temp.length(); j++) {
+			if(isalpha(temp[j]))	{	sequences[i] += temp[j];	}
+		}
+	}
+
 	names = seqNames;
 	seqs = sequences;
 	abunds = ab;
 	numSeqs = seqNames.size();
 	
 	isAligned = false;
-	isNucleotide = false;
-	isNucleoSet = false;
+	//isNucleotide = false;
+	//isNucleoSet = false;
 
-	SetIsNucleo();
+	//SetIsNucleo();
 
 	if (descending) {
 		sortDescending();
@@ -46,7 +43,17 @@ SeqDB::SeqDB(vector<string>& seqNames, vector<string>& sequences,
 /******************************************************************************/
 SeqDB::~SeqDB() {}
 /******************************************************************************/
-void SeqDB::addSeq(string name, string seq, int abund) {
+void SeqDB::addSeq(string name, string seq, int abund, bool degap) {
+	// degap sequences
+	
+	if (degap) {
+		string temp = seq;
+		seq = "";
+		for(int j = 0; j < temp.length(); j++) {
+			if(isalpha(temp[j]))	{	seq += temp[j];	}
+		}
+	}
+	
 	names.push_back(name);
 	seqs.push_back(seq);
 	abunds.push_back(abund);
@@ -77,13 +84,9 @@ unsigned SeqDB::getSeqCount() const {
 	return numSeqs;
 }
 /******************************************************************************/
-bool SeqDB::isNucleo() const {
-	return isNucleotide;
-}
-/******************************************************************************/
 SeqData SeqDB::getSeqData(unsigned id) const {
 	SeqData seq(getName(id), getSeq(id), getAbundance(id),
-	 id, false, isNucleotide);
+	 id, false);
 	return seq;
 }
 /******************************************************************************/
@@ -105,24 +108,5 @@ void SeqDB::sortDescending() {
     
     applyOrder(names, order);
     applyOrder(seqs, order);
-    //applyOrder(abunds, order);
-}
-/******************************************************************************/
-void SeqDB::SetIsNucleo() {
-	unsigned N = 0;
-	for (unsigned i = 0; i < 100; ++i) {
-		unsigned randomSeqIndex = util->getRandomIndex(numSeqs-1);
-
-		string seq = getSeq(randomSeqIndex);
-		
-		unsigned L = seq.length();
-		const unsigned Pos = util->getRandomIndex(L-1);
-		Byte c = seq[Pos];
-
-		if (g_IsNucleoChar[c])
-			++N;
-	}
-	isNucleotide = (N > 80);
-	isNucleoSet = true;
 }
 /******************************************************************************/

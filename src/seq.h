@@ -23,16 +23,14 @@ public:
         seq = "";
         index = UINT_MAX;
         revComp = false;
-        nucleo = false;
         abund = 0;
     }
     SeqData(string seqname, string sequence, unsigned abundance, unsigned ind,
-            bool rev = false, bool isNucleo = false) { 
+            bool rev = false) { 
         name = seqname;
         seq = sequence;
         index = ind;
         revComp = rev;
-        nucleo = isNucleo;
         abund = abundance;
     }
     ~SeqData() = default;
@@ -44,8 +42,6 @@ public:
     string getSeq() const          { return seq;          }
     unsigned getIndex() const      { return index;        }
     unsigned getSeqLength() const  { return seq.length(); }
-    //Nucleo
-    bool isNucleo() const          { return nucleo;       }
     int  getAbund() const          { return abund;        }
     
 private:
@@ -53,7 +49,6 @@ private:
     string name;
     string seq;
     unsigned index;
-    bool nucleo;
     int abund;
 
     // RevComp means that SeqData.Seq is reverse-complemented relative

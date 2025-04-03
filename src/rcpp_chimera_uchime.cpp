@@ -54,7 +54,7 @@ Rcpp::List chimeraUchime(Rcpp::Environment& dataset,
      bool dereplicate = Rcpp::as<bool>(options["dereplicate"]);
      bool silent = Rcpp::as<bool>(options["silent"]);
      int processors = Rcpp::as<int>(options["processors"]);
-cout << "silent = " << toString(silent) << endl;
+
      Rcpp::Function getNumGroups = dataset["get_num_groups"];
 
      int numGroups = Rcpp::as<int>(getNumGroups());

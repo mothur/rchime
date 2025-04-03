@@ -37,11 +37,16 @@ struct chimeraData {
     // denovo
     chimeraData(Rcpp::Environment& d, vector<string> g, bool s = true) {
         groups = g;
-        chimeras.resize(groups.size());
         silent = s;
 
-        for (int i = 0; i < groups.size(); i++) {
-            fillData(d, groups[i], "dataset");
+        if (groups.size() != 0) {
+            for (int i = 0; i < groups.size(); i++) {
+                fillData(d, groups[i], "dataset");
+            }
+            chimeras.resize(groups.size());
+        }else{
+            fillData(d, "", "dataset");
+            chimeras.resize(1);
         }
     }
 

@@ -6,7 +6,7 @@
 AlnParams::AlnParams() {   
 	opt = Options::getInstance();
 	util = Utilities::getInstance();
-	InitFromCmdLine(true);
+	InitFromCmdLine();
 }
 /******************************************************************************/
 void AlnParams::Clear() {
@@ -24,8 +24,6 @@ void AlnParams::Clear() {
 	LExtB = OBVIOUSLY_WRONG_PENALTY;
 	RExtA = OBVIOUSLY_WRONG_PENALTY;
 	RExtB = OBVIOUSLY_WRONG_PENALTY;
-	Nucleo = false;
-	NucleoSet = false;
 }
 /******************************************************************************/
 void AlnParams::setLocal(float Open, float Ext) {
@@ -160,20 +158,11 @@ void AlnParams::setPenalties(const string &OpenStr, const string &ExtStr) {
 	ParseGapStr(ExtStr, ExtA, LExtA, RExtA, ExtB, LExtB, RExtB);
 }
 /******************************************************************************/
-void AlnParams::SetMxFromCmdLine(bool IsNucleo) {
-	if (IsNucleo) {
-		setNucSubstMx(1.0, -2.0); // opt_match, opt_mismatch
-	}
-}
-/******************************************************************************/
 void AlnParams::setNucSubstMx(double Match, double Mismatch) {
 	
 	unsigned N = unsigned(strlen(Alphabet));
 
 	SubstMx = new MxFloatMatrix(256, 256, 0);
-	//strcpy(g_SubstMxf.m_Alpha, "ACGT");
-	//g_SubstMxf.Init(0);
-	//SubstMx = g_SubstMx->getData();
 	
 	for (unsigned i = 0; i < N; ++i) {
 		for (unsigned j = 0; j < N; ++j) {
@@ -224,22 +213,17 @@ void AlnParams::setNucSubstMx(double Match, double Mismatch) {
 	}
 }
 /******************************************************************************/
-void AlnParams::InitFromCmdLine(bool IsNucleo) {
+void AlnParams::InitFromCmdLine() {
 	Clear();
-	Nucleo = IsNucleo;
-	NucleoSet = true;
-
-	SetMxFromCmdLine(IsNucleo);
+	
+	setNucSubstMx(1.0, -2.0); // opt_match, opt_mismatch
 
 	// Local
 	setLocal(-10.0f, -1.0f);
 	
 	// Global
-	if (IsNucleo) {
-		OpenA = OpenB = -10.0;
-	}else {
-		OpenA = OpenB = -17.0;
-	}
+	OpenA = OpenB = -10.0;
+	
 	LOpenA = LOpenB = ROpenA = ROpenB = -0.5;
 	ExtA = ExtB = -1.0;
 	LExtA = LExtB = RExtA = RExtB = -0.5;

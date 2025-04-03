@@ -39,22 +39,19 @@ vector<unsigned> PotentialParents::USort(const SeqData &Query, const SeqDB* DB,
 
 	setQueryWords(Query);
 
+	vector<orderFloatAbundance> sortedVector(WordCounts.size());
 	const unsigned SeqCount = DB->getSeqCount();
 	for (unsigned SeqIndex = 0; SeqIndex < SeqCount; ++SeqIndex) {
 		SeqData Target = DB->getSeqData(SeqIndex);
 		float WordCount = (float) getUniqueWordsInCommon(Target);
-		WordCounts.push_back(WordCount);
+		sortedVector[SeqIndex].index = SeqIndex;
+        sortedVector[SeqIndex].abund = WordCount;
 	}
 
-	vector<orderFloatAbundance> sortedVector(WordCounts.size());
-
-    for (int i = 0; i < WordCounts.size(); i++) {
-        sortedVector[i].index = i;
-        sortedVector[i].abund = WordCounts[i];
-    }
     sort(sortedVector.begin(), sortedVector.end(), compareFloatAbundance);
 
-    vector<unsigned> order(WordCounts.size(), 0);
+    vector<unsigned> order(sortedVector.size(), 0);
+	WordCounts.resize(sortedVector.size(), 0);
     for (int i = 0; i < WordCounts.size(); i++) {
         order[i] = sortedVector[i].index;
         WordCounts[i] = sortedVector[i].abund;

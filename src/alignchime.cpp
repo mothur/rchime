@@ -1,4 +1,3 @@
-
 /*
  *  The AlignChime class is based on alignchime.cpp from Robert Edgar.
  *
@@ -7,13 +6,13 @@
  *
  */
 
-
 #include "alignchime.h"
 
 /******************************************************************************/
 // dn = 1.4, xn = 8, xa = 1
 double AlignChimes::GetScore2(double Y, double N, double A) {
-	return Y/(opt->getXn()*(N + opt->getDn()) + opt->getXa()*A);
+	double denominator = (opt->getXn()*(N + opt->getDn()) + opt->getXa()*A);
+	return (Y/denominator);
 }
 /******************************************************************************/
 ChimeHit2 AlignChimes::alignChime(const SeqData &QSD, const SeqData &ASD, const SeqData &B_SD,
@@ -31,14 +30,12 @@ ChimeHit2 AlignChimes::alignChime(const SeqData &QSD, const SeqData &ASD, const 
 	Hit.AbA = ASD.getAbund();
 	Hit.AbB = B_SD.getAbund();
 
-
 	const Byte *Q3Seq = (const Byte *) Q3.c_str();
 	const Byte *A3Seq = (const Byte *) A3.c_str();
 	const Byte *B3Seq = (const Byte *) B3.c_str();
-
 	const unsigned ColCount = SIZE(Q3);
 
-// Discard terminal gaps
+    // Discard terminal gaps
 	unsigned ColLo = UINT_MAX;
 	unsigned ColHi = UINT_MAX;
 	for (unsigned Col = 2; Col + 2 < ColCount; ++Col) {
@@ -53,14 +50,12 @@ ChimeHit2 AlignChimes::alignChime(const SeqData &QSD, const SeqData &ASD, const 
 			ColHi = Col;
 		}
 	}
- 
-	if (ColLo == UINT_MAX) {
-		return Hit;
-	}
+
+	if (ColLo == UINT_MAX) { return Hit; }
+
 	unsigned QPos = 0;
 	unsigned APos = 0;
 	unsigned BPos = 0;
-	//unsigned DiffCount = 0;
 
 	vector<unsigned> ColToQPos(ColLo, UINT_MAX);
 	vector<unsigned> AccumCount(ColLo, UINT_MAX);
@@ -85,24 +80,16 @@ ChimeHit2 AlignChimes::alignChime(const SeqData &QSD, const SeqData &ASD, const 
 		char a = A3Seq[Col];
 		char b = B3Seq[Col];
 
-		if (isacgt(q) && isacgt(a) && isacgt(b))
-			{
-			if (q == a)
-				++SumSameA;
-			if (q == b)
-				++SumSameB;
-			if (a == b)
-				++SumSameAB;
-			if (q == a && q != b)
-				++SumForA;
-			if (q == b && q != a)
-				++SumForB;
-			if (a == b && q != a)
-				++SumAgainst;
-			if (q != a && q != b)
-				++SumAbstain;
+		if (isacgt(q) && isacgt(a) && isacgt(b)) {
+			if (q == a)              { ++SumSameA;   }
+			if (q == b)              { ++SumSameB;   }
+			if (a == b)              { ++SumSameAB;  }
+			if (q == a && q != b)    { ++SumForA;    }
+			if (q == b && q != a)    { ++SumForB;    }
+			if (a == b && q != a)    { ++SumAgainst; }
+			if (q != a && q != b)    { ++SumAbstain; }
 			++Sum;
-			}
+		}
 
 		ColToQPos.push_back(QPos);
 		AccumSameA.push_back(SumSameA);
@@ -113,12 +100,9 @@ ChimeHit2 AlignChimes::alignChime(const SeqData &QSD, const SeqData &ASD, const 
 		AccumAbstain.push_back(SumAbstain);
 		AccumAgainst.push_back(SumAgainst);
 
-		if (q != '-')
-			++QPos;
-		if (a != '-')
-			++APos;
-		if (b != '-')
-			++BPos;
+		if (q != '-') { ++QPos; }
+		if (a != '-') { ++APos; }
+		if (b != '-') { ++BPos; }
 	}
 
 	double IdQA = double(SumSameA)/Sum;
@@ -136,12 +120,8 @@ ChimeHit2 AlignChimes::alignChime(const SeqData &QSD, const SeqData &ASD, const 
 	bool FirstA = false;
 
 // NOTE: Must be < ColHi not <= because use Col+1 below
-	for (unsigned Col = ColLo; Col < ColHi; ++Col)
-		{
-		//char q = Q3Seq[Col];
-		//char a = A3Seq[Col];
-		//char b = B3Seq[Col];
-
+	for (unsigned Col = ColLo; Col < ColHi; ++Col) {
+		
 		unsigned SameAL = AccumSameA[Col];
 		unsigned SameBL = AccumSameB[Col];
 		unsigned SameAR = SumSameA - AccumSameA[Col];
@@ -165,82 +145,65 @@ ChimeHit2 AlignChimes::alignChime(const SeqData &QSD, const SeqData &ASD, const 
 		double MaxDiv = max(DivAB, DivBA);
 		double MaxScore = max(ScoreAB, ScoreBA);
 
-		if (MaxScore > BestScore)
-			{
+		if (MaxScore > BestScore) {
 			BestScore = MaxScore;
 			BestXLo = Col;
 			BestXHi = Col;
 			FirstA = (ScoreAB > ScoreBA);
-			if (FirstA)
-				BestIdQM = IdAB;
-			else
-				BestIdQM = IdBA;
-			if (MaxDiv > BestDiv)
-				BestDiv = MaxDiv;
-			}
-		else if (MaxScore == BestScore)
-			{
-			BestXHi = Col;
-			if (MaxDiv > BestDiv)
-				BestDiv = MaxDiv;
-			}
 
+			if (FirstA) { BestIdQM = IdAB; }
+			else        { BestIdQM = IdBA; }
+
+			if (MaxDiv > BestDiv) { BestDiv = MaxDiv; }
+
+		} else if (MaxScore == BestScore) {
+			BestXHi = Col;
+			if (MaxDiv > BestDiv) { BestDiv = MaxDiv; }
 		}
+	}
 
 	if (BestXLo == UINT_MAX) { return Hit; }
 
-// Find maximum region of identity within BestXLo..BestXHi
+	// Find maximum region of identity within BestXLo..BestXHi
 	unsigned ColXLo = (BestXLo + BestXHi)/2;
 	unsigned ColXHi = ColXLo;
 	unsigned SegLo = UINT_MAX;
 	unsigned SegHi = UINT_MAX;
-	for (unsigned Col = BestXLo; Col <= BestXHi; ++Col)
-		{
+
+	for (unsigned Col = BestXLo; Col <= BestXHi; ++Col) {
 		char q = Q3Seq[Col];
 		char a = A3Seq[Col];
 		char b = B3Seq[Col];
 
-		if (q == a && q == b)
-			{
-			if (SegLo == UINT_MAX)
-				SegLo = Col;
+		if (q == a && q == b) {
+			if (SegLo == UINT_MAX) { SegLo = Col; }
 			SegHi = Col;
-			}
-		else
-			{
+		} else {
 			unsigned SegLength = SegHi - SegLo + 1;
 			unsigned BestSegLength = ColXHi - ColXLo + 1;
-			if (SegLength > BestSegLength)
-				{
+			if (SegLength > BestSegLength) {
 				ColXLo = SegLo;
 				ColXHi = SegHi;
-				}
+			}
 			SegLo = UINT_MAX;
 			SegHi = UINT_MAX;
-			}
 		}
+	}
 	unsigned SegLength = SegHi - SegLo + 1;
 	unsigned BestSegLength = ColXHi - ColXLo + 1;
-	if (SegLength > BestSegLength)
-		{
+	if (SegLength > BestSegLength) {
 		ColXLo = SegLo;
 		ColXHi = SegHi;
-		}
+	}
 
 	QPos = 0;
-	for (unsigned x = 0; x < ColCount; ++x)
-		{
-		if (x == ColXLo)
-			Hit.QXLo = QPos;
-		else if (x == ColXHi)
-			{
-			Hit.QXHi = QPos;
-			break;
-			}
+	for (unsigned x = 0; x < ColCount; ++x) {
+		if (x == ColXLo)       { Hit.QXLo = QPos; }
+		else if (x == ColXHi)  { Hit.QXHi = QPos; break; }
+		
 		char q = Q3Seq[x];
-		if (q != '-')
-			++QPos;
-		}
+		if (q != '-') { ++QPos; }
+	}
 
 	Hit.ColXLo = ColXLo;
 	Hit.ColXHi = ColXHi;
@@ -252,24 +215,21 @@ ChimeHit2 AlignChimes::alignChime(const SeqData &QSD, const SeqData &ASD, const 
 	//Hit.QSD = QSD;
 	Hit.Q3 = Q3;
 	Hit.QLabel = QSD.getName();
-	if (FirstA)
-		{
+	if (FirstA) {
 		Hit.A3 = A3;
 		Hit.B3 = B3;
 		Hit.ALabel = ASD.getName();
 		Hit.BLabel = B_SD.getName();
 		Hit.PctIdQA = IdQA*100.0;
 		Hit.PctIdQB = IdQB*100.0;
-		}
-	else
-		{
+	} else {
 		Hit.A3 = B3;
 		Hit.B3 = A3;
 		Hit.ALabel = B_SD.getName();
 		Hit.BLabel = ASD.getName();
 		Hit.PctIdQA = IdQB*100.0;
 		Hit.PctIdQB = IdQA*100.0;
-		}
+	}
 
 // CS SNPs
 	Hit.CS_LY = 0;
@@ -279,73 +239,49 @@ ChimeHit2 AlignChimes::alignChime(const SeqData &QSD, const SeqData &ASD, const 
 	Hit.CS_LA = 0;
 	Hit.CS_RA = 0;
 
-	for (unsigned Col = ColLo; Col <= ColHi; ++Col)
-		{
+	for (unsigned Col = ColLo; Col <= ColHi; ++Col) {
+
 		char q = Q3Seq[Col];
 		char a = A3Seq[Col];
 		char b = B3Seq[Col];
-		if (q == a && q == b && a == b)
+		if (q == a && q == b && a == b) {
 			continue;
+		}
 
 		unsigned ngaps = 0;
-		if (isgap(q))
-			++ngaps;
-		if (isgap(a))
-			++ngaps;
-		if (isgap(b))
-			++ngaps;
+		if (isgap(q)) { ++ngaps; }
+		if (isgap(a)) { ++ngaps; }
+		if (isgap(b)) { ++ngaps; }
 
-		if (opt->getSkipgaps()) {
-			if (ngaps == 3) {
-				continue;
-			}
-		}else {
-			if (ngaps == 2) {
-				continue;
-			}
-		}
-		if (!FirstA)
+		if (opt->getSkipgaps()) { if (ngaps == 3) { continue; } }
+		else                    { if (ngaps == 2) { continue; } }
+		
+		if (!FirstA) {
 			swap(a, b);
-
-		if (opt->getSkipgaps2())
-			{
-			if (Col > 0 && (isgap(Q3Seq[Col-1]) || isgap(A3Seq[Col-1]) || isgap(B3Seq[Col-1])))
-				continue;
-			if (Col + 1 < ColCount && (isgap(Q3Seq[Col+1]) || isgap(A3Seq[Col+1]) || isgap(B3Seq[Col+1])))
-				continue;
-			}
-
-		if (Col < ColXLo)
-			{
-			if (q == a && q != b)
-				++Hit.CS_LY;
-			else if (q == b && q != a)
-				++Hit.CS_LN;
-			else
-				++Hit.CS_LA;
-			}
-		else if (Col > ColXHi)
-			{
-			if (q == b && q != a)
-				++Hit.CS_RY;
-			else if (q == a && q != b)
-				++Hit.CS_RN;
-			else
-				++Hit.CS_RA;
-			}
 		}
+
+		if (opt->getSkipgaps2()) {
+			if (Col > 0 && (isgap(Q3Seq[Col-1]) || isgap(A3Seq[Col-1]) || isgap(B3Seq[Col-1]))) {
+				continue; }
+			if (Col + 1 < ColCount && (isgap(Q3Seq[Col+1]) || isgap(A3Seq[Col+1]) || isgap(B3Seq[Col+1]))) {
+				continue; }
+		}
+
+		if (Col < ColXLo) {
+			if (q == a && q != b)        { ++Hit.CS_LY; }
+			else if (q == b && q != a)   { ++Hit.CS_LN; }
+			else                         { ++Hit.CS_LA; }
+		}else if (Col > ColXHi) {
+			if (q == b && q != a)        { ++Hit.CS_RY; }
+			else if (q == a && q != b)   { ++Hit.CS_RN; }
+			else                         { ++Hit.CS_RA; }
+		}
+	}
 
 	double ScoreL = GetScore2(Hit.CS_LY, Hit.CS_LN, Hit.CS_LA);
 	double ScoreR = GetScore2(Hit.CS_RY, Hit.CS_RN, Hit.CS_RA);
 	Hit.Score = ScoreL*ScoreR;
 
 	return Hit;
-
-//	extern FILE *g_fUChimeAlns;
-//	if (g_fUChimeAlns != 0 && Hit.Div > 0.0)
-//		{
-//		void WriteChimeHitX(FILE *f, const ChimeHit2 &Hit);
-//		WriteChimeHitX(g_fUChimeAlns, Hit);
-//		}
 }
 /******************************************************************************/

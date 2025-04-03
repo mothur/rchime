@@ -551,6 +551,7 @@ DEBLUR
 DeblurCluster
 deconvolute
 defafault
+degap
 del
 delim
 Delim
@@ -573,6 +574,7 @@ DiagLo
 DiagRejects
 DiffChar
 DiffCount
+diffsRow
 dir
 dirSEXP
 dists
@@ -1206,6 +1208,7 @@ IdQMs
 IdQT
 IdQTs
 idsmoothwindow
+idsRow
 idsuffix
 IdVec
 ie
@@ -1291,6 +1294,7 @@ isspace
 istringstream
 IsValidChain
 itBar
+itChime
 itemsToProcess
 itForward
 itGroup

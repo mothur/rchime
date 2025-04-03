@@ -30,9 +30,6 @@ public:
 	//const float * const *SubstMx;
 	MxFloatMatrix* SubstMx; 
 
-	bool Nucleo;
-	bool NucleoSet;
-
 // Global internal gaps
 	float OpenA;
 	float OpenB;
@@ -60,15 +57,10 @@ private:
 	Options* opt;
 	Utilities* util;
 
-	//Mx<float> g_SubstMxf;
-	//float **g_SubstMx;
-	//MxMatrix* g_SubstMx;
-
     void Clear();
 	void setLocal(float Open, float Ext);
-	void SetMxFromCmdLine(bool Nucleo);
 	void setPenalties(const string &OpenStr, const string &ExtStr);
-	void InitFromCmdLine(bool Nucleo);
+	void InitFromCmdLine();
 	void setNucSubstMx(double Match, double Mismatch);
 	static void ParseGapStr(const string &s, float &QI, float &QL, float &QR,
   						float &TI, float &TL, float &TR);

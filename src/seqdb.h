@@ -24,7 +24,7 @@ public:
 		  vector<int>& abunds, bool descending = true);
 	~SeqDB();
 
-	void addSeq(string, string, int a = 1);
+	void addSeq(string, string, int a = 1, bool degap = true);
 
 	SeqData getSeqData(unsigned Id) const;
 
@@ -42,14 +42,6 @@ public:
 
 	// number of sequences in SeqDB GetSeqCount
 	unsigned getSeqCount() const; 
-	bool isNucleo() const;
-
-	void setIsNucleo(bool nucleo) {
-		isNucleotide = nucleo;
-	}
-	void setIsNucleoSet(bool nucleo) {
-		isNucleoSet = nucleo;
-	}
 
 	private:
 
@@ -60,10 +52,7 @@ public:
 
 	unsigned numSeqs;
 	bool isAligned; //m_isAligned
-	bool isNucleotide; //m_IsNucleo
-	bool isNucleoSet; //m_IsNucleoSet
 
-	void SetIsNucleo();
 	void sortDescending();
 };
 /******************************************************************************/

@@ -33,27 +33,14 @@ public:
 
 	bool globalAlign(const SeqData &Query, const SeqData &Target, PathData &PD);
 	
-
 private:
 
 	AlnParams* alignParams;
-    //Utilities* util;
-	
-    //Mx<Byte> g_Mx_TBBit;
     MxByteMatrix* g_TBBit;
-    //Byte **g_TBBit;
-    vector<float> Mrow;
-    vector<float> Drow;
-    //vector<float> g_DPBuffer1;
-    //vector<float> g_DPBuffer2;
-    unsigned g_CacheLB;
 
     bool globalAlign(const SeqData &Query, const SeqData &Target, string &Path);
-	bool runViterbiFast(const SeqData &Query, const SeqData &Target, PathData &PD);
     float viterbiFast(string seqA, unsigned alength, string seqB, unsigned blength,
             PathData &PD);
-    // for traceback
-    void allocBit(unsigned LA, unsigned LB);
     void traceBackBit(unsigned LA, unsigned LB, char State, PathData &PD);
 };
 /******************************************************************************/

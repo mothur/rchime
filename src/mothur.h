@@ -261,51 +261,12 @@ vector<T> toVector(const set<T>& x) {
     return results;
 }
 /**********************************************************************/
-template<typename T>
-vector<T> getKeys(const map<T, vector<int> >& x) {
-    vector<T> keys;
-
-    if (x.size() == 0) { return keys; }
-
-    for (auto it = x.begin(); it != x.end(); it++) {
-        keys.push_back(it->first);
-    }
-
-    return keys;
-}
-/**********************************************************************/
 struct pieceOfWork {
   double start;
   double end;
   pieceOfWork(double i, double j) : start(i), end(j) {}
   pieceOfWork() { start = 0; end = 0; }
   ~pieceOfWork() {}
-};
-/**********************************************************************/
-struct oligosPair {
-  string forward;
-  string reverse;
-
-  oligosPair() { forward = ""; reverse = "";  }
-  oligosPair(string f, string r) : forward(f), reverse(r) {}
-  ~oligosPair() = default;
-};
-/************************************************************/
-struct seqPNode {
-    int numIdentical;
-    string name;
-    string sequence;
-    int diffs;
-
-    seqPNode() { diffs = 0; numIdentical = 0; name = ""; sequence = "";  }
-    seqPNode(string na, string seq, int n) : numIdentical(n),
-    name(na), sequence(seq) { diffs = 0; }
-    ~seqPNode() = default;
-
-    void print() {
-        cout << (name + " " + toString(numIdentical) + " " + toString(diffs) +
-            " " + sequence) << endl;
-    }
 };
 /**********************************************************************/
 

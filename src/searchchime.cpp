@@ -113,6 +113,12 @@ bool SearchChime::searchChime(SeqDB* database, const SeqData & queryData,
 		unsigned ParentSeqIndex = Parents[ParentIndex];
 
 		SeqData parentData = database->getSeqData(ParentSeqIndex);
+		if (Hit.QLabel == "M00967_43_000000000-A3JHG_1_1114_16114_2126" ) {
+if ((parentData.getName() == "M00967_43_000000000-A3JHG_1_1113_11330_5862") ||
+(parentData.getName() == "M00967_43_000000000-A3JHG_1_1105_10504_27107")) {
+	cout << "here";
+}
+		}
 		PSDs.push_back(parentData);
 
 		// align query to each parent
