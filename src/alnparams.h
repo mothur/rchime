@@ -7,16 +7,12 @@
  *  Modified by Sarah Westcott on 3/6/25.
  *  Copyright 2025 SchlossLab. All rights reserved.
  *
- * This class will XXXXX
+ * This class is used when aligning the query to the parents.
  */
 
 #include "uchime.h"
-#include "myopts.h"
 #include "mxmatrix.h"
-#include "myutils.h"
-#include "hsp.h"
 
-const float OBVIOUSLY_WRONG_PENALTY = 1000.0;
 static const char Alphabet[] = "ACGTU";
 
 /******************************************************************************/
@@ -27,7 +23,6 @@ public:
 	AlnParams();
 	~AlnParams(){}
 
-	//const float * const *SubstMx;
 	MxFloatMatrix* SubstMx; 
 
 // Global internal gaps
@@ -54,17 +49,7 @@ private:
 	float LocalOpen;
 	float LocalExt;
 
-	Options* opt;
-	Utilities* util;
-
-    void Clear();
-	void setLocal(float Open, float Ext);
-	void setPenalties(const string &OpenStr, const string &ExtStr);
-	void InitFromCmdLine();
 	void setNucSubstMx(double Match, double Mismatch);
-	static void ParseGapStr(const string &s, float &QI, float &QL, float &QR,
-  						float &TI, float &TL, float &TR);
-
 };
 /******************************************************************************/
 

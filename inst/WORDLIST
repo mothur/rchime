@@ -122,6 +122,7 @@ ALIGNMENTDB
 alignmentLength
 alignMethod
 alignOptions
+alignParameters
 alignParams
 alignPrimer
 AlignQueryToSeed
