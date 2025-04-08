@@ -567,7 +567,7 @@ Rcpp::List ChimeraUchime::createUchimeResults(vector<ChimeHit2> hits) {
         // uchimeout
         if (hits[i].Div <= 0.0) {
             scores.push_back(0.0000);
-            queries.push_back(hits[i].QLabel);
+            queries.push_back(hits[i].QLabel+"/ab="+toString(hits[i].AbQ)+"/");
             Aparents.push_back("*");
             Bparents.push_back("*");
             IdQMs.push_back(-1.0);

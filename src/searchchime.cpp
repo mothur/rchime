@@ -1,12 +1,4 @@
 
-
-
-//void AlignChime(const SeqData &QSD, const SeqData &ASD, const SeqData &BSD,
- // const string &PathQA, const string &PathQB, ChimeHit2 &Hit);
-
-// fractid.cpp
-//double GetFractIdGivenPath(const Byte *A, const Byte *B, const char *Path, bool Nucleo);
-
 #include "searchchime.h"
 #include "alignchime.h"
 #include "globalalign2.h"
@@ -113,12 +105,7 @@ bool SearchChime::searchChime(SeqDB* database, const SeqData & queryData,
 		unsigned ParentSeqIndex = Parents[ParentIndex];
 
 		SeqData parentData = database->getSeqData(ParentSeqIndex);
-		if (Hit.QLabel == "M00967_43_000000000-A3JHG_1_1114_16114_2126" ) {
-if ((parentData.getName() == "M00967_43_000000000-A3JHG_1_1113_11330_5862") ||
-(parentData.getName() == "M00967_43_000000000-A3JHG_1_1105_10504_27107")) {
-	cout << "here";
-}
-		}
+
 		PSDs.push_back(parentData);
 
 		// align query to each parent
@@ -178,7 +165,6 @@ if ((parentData.getName() == "M00967_43_000000000-A3JHG_1_1113_11330_5862") ||
 			break;
 
 		BestParents.push_back(BestParent);
-		
 
 		const SeqData &parentData = PSDs[BestParent];
 		const string &Path = Paths[BestParent];

@@ -56,9 +56,7 @@ vector<ChimeHit2> UchimeMain::runUchime(vector<string> names,
 	for (unsigned i = 0; i < numQuerySeqs; ++i) {
 
 		SeqData queryData = data.getSeqData(i);
-if (queryData.getName() == "M00967_43_000000000-A3JHG_1_1114_16114_2126" ) {
-    cout << "here;";
-}
+
 		ChimeHit2 Hit;
 		bool chimeric = search.searchChime(reference, queryData, Hit);
 		if (!chimeric) {

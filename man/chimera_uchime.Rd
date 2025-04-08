@@ -13,7 +13,7 @@ chimera_uchime(
   processors = parallelly::availableCores(),
   silent = FALSE,
   chimealns = FALSE,
-  abskew = 1.9,
+  abskew = 2,
   minh = 0.3,
   mindiv = 0.5,
   xn = 8,
@@ -60,7 +60,7 @@ containing multiple alignments of query sequences to parents
 in human-readable format. Alignments show columns with
 differences that support or contradict a chimeric model.}
 
-\item{abskew}{Float, the minimum abundance skew (denovo only). Default = 1.9.
+\item{abskew}{Float, the minimum abundance skew (denovo only). Default = 2.0.
 abskew <- min (abund(parent1), abund(parent2)) / abund(query)}
 
 \item{minh}{Float, Mininum score to report chimera. Default 0.3. Values from

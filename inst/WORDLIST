@@ -59,6 +59,7 @@ addLinker
 addOutput
 addPairedBarcode
 addPairedReads
+addParents
 addPrefix
 addPrimer
 addReorientedPairedBarcodes
@@ -228,6 +229,7 @@ ATGCTATGCT
 ATGCTATGCTATGCT
 ATGCTATGCTATGCTGGTTC
 ATGCU
+ATGGCATGTTACC
 atof
 ATT
 ATTACCGCGGCTGCTGG
@@ -988,6 +990,7 @@ getNumReads
 getNumReversePrimers
 getNumSeqs
 getNumSpacers
+getNumWordsInCommon
 getOEnd
 GetOffDiagAvgs
 getOLength
@@ -1918,6 +1921,7 @@ poligos
 pos
 PosA
 PosB
+potentialParent
 PotentialParents
 ppg
 PPos

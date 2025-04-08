@@ -21,7 +21,7 @@ public:
     static Options* getInstance();
 
     // set individual options
-    void setAbskew(double abs = 1.9);
+    void setAbskew(double abs = 2.0);
     void setChimealns(bool c = false);
     void setChunks(int c = 4);
     void setDn(double d = 1.4);

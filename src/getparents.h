@@ -2,7 +2,6 @@
 #define GETPARENTS_H
 
 /*
- *  The GetParents class is based on getparents.cpp from Robert Edgar.
  *
  *  Created by Sarah Westcott on 2/27/25.
  *  Copyright 2025 SchlossLab. All rights reserved.
@@ -12,6 +11,7 @@
 #include "uchime.h"
 #include "myopts.h"
 #include "seqdb.h"
+#include "alpha.h"
 
 /******************************************************************************/
 class GetParents {
@@ -20,12 +20,25 @@ class GetParents {
     GetParents() { opt = Options::getInstance(); }
     ~GetParents() = default;
 
-    vector<unsigned> getChunkInfo(unsigned L, unsigned &Length);
     vector<unsigned> getCandidateParents(SeqDB* data, const SeqData& query);
-
+    
+    vector<unsigned> getChunkInfo(unsigned L, unsigned &Length);
+    unsigned getWord(string Seq, unsigned offset);
+    
     private:
 
     Options* opt;
+SeqData queryData;
+    vector<unsigned> queryHasWord;
+    vector<unsigned> USort(const string &Query, const SeqDB* DB,
+                             vector<float> &WordCounts);
+    void setQueryWords(const string &Query);
+    unsigned getNumWordsInCommon(const SeqData &Target);
+
+    // this function is called repeatedly from getCandidateParents with different chucks
+    // of the query sequence to find a pool of close potential parents
+    void addParents(SeqDB* DB, const string &Query, set<unsigned> &ParentIndexes);
+    
 };
 /******************************************************************************/
 #endif
