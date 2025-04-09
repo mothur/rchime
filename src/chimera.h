@@ -15,7 +15,7 @@
 #include "mothur.h"
 #include "mothur-r.h"
 #include "rcpp_utils.h"
-#include "myopts.h"
+#include "options.h"
 #include "chime.h"
 
 /******************************************************************************/

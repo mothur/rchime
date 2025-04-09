@@ -19,7 +19,7 @@
 #include "uchime.h"
 #include "chime.h"
 #include "getparents.h"
-#include "myopts.h"
+#include "options.h"
 #include "path.h"
 #include "globalalign2.h"
 #include "alignchime.h"

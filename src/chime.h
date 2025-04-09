@@ -2,7 +2,7 @@
 #define chime_h
 
 #include "seq.h"
-#include "myopts.h"
+#include "options.h"
 
 struct ChimeHit2 {
 

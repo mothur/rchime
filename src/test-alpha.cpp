@@ -5,8 +5,12 @@ context("Alpha C++ unit tests") {
 
     test_that("test g_CharToLetterNucleo") {
 
-        expect_true(g_CharToLetterNucleo[0] == INVALID_LETTER);
-        expect_true(g_CharToLetterNucleo[150] == INVALID_LETTER);
+        for (int i = 0; i < 65; i++) {
+            expect_true(g_CharToLetterNucleo[i] == INVALID_LETTER);
+        }
+        for (int i = 118; i < 256; i++) {
+            expect_true(g_CharToLetterNucleo[i] == INVALID_LETTER);
+        }
 
         // A / a
         expect_true(g_CharToLetterNucleo[65] == 0);
@@ -29,8 +33,12 @@ context("Alpha C++ unit tests") {
 
     test_that("test g_IsACGTU") {
 
-        expect_false(g_IsACGTU[10]);
-        expect_false(g_IsACGTU[170]);
+        for (int i = 0; i < 65; i++) {
+            expect_false(g_IsACGTU[i]);
+        }
+        for (int i = 118; i < 256; i++) {
+            expect_false(g_IsACGTU[i]);
+        }
 
         // A / a
         expect_true(g_IsACGTU[65]);

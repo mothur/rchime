@@ -36,8 +36,6 @@ public:
     void setQueryfract(double qf = 0.5);
     void setSkipgaps(bool sg = true);
     void setSkipgaps2(bool sg = true);
-    //void setUcl(bool u = false);
-    void setWordLength(int wl = 8);
     void setXa(double x = 1.0);
     void setXn(double x = 8.0);
 
@@ -57,8 +55,6 @@ public:
     double getQueryfract() const { return queryfract;    }
     bool getSkipgaps() const     { return skipgaps;      }
     bool getSkipgaps2() const    { return skipgaps2;     }
-    //bool getUcl() const          { return ucl;           }
-    bool getWordLength() const   { return wlength;       }
     double getXa() const         { return xa;            }
     double getXn() const         { return xn;            }
 
@@ -87,17 +83,15 @@ private:
         setQueryfract();
         setSkipgaps();
         setSkipgaps2();
-        //setUcl();
-        setWordLength();
         setXa();
         setXn();
     }
     ~Options() = default;
 
     double abskew, minh, mindiv, xn, dn, xa, queryfract;
-    int chunks, minchunk, idsmoothwindow, maxp, minlen, maxlen, wlength,
+    int chunks, minchunk, idsmoothwindow, maxp, minlen, maxlen,
         mindiffs;
-    bool ucl, chimealns, skipgaps, skipgaps2;
+    bool chimealns, skipgaps, skipgaps2;
 };
 
 #endif

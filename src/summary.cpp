@@ -40,32 +40,6 @@ vector<long long> Summary::getDefaults() {
         return locations;
 }
 //**************************************************************************
-long long Summary::getValue(map<int, long long>& spots, double value) {
-
-    long long percentage = 1+(long long)(total * value * 0.01);
-    long long result = 0;
-    long long totalSoFar = 0;
-    long long lastValue = 0;
-
-    //minimum
-    if ((spots.begin())->first == -1) { result = 0; }
-    else {result = (spots.begin())->first; }
-
-    for (auto it = spots.begin(); it != spots.end(); it++) {
-        long long value = it->first; if (value == -1) { value = 0; }
-        totalSoFar += it->second;
-
-        if (((totalSoFar <= percentage) && (totalSoFar > 1)) ||
-            ((lastValue < percentage) && (totalSoFar > percentage))){
-            result = value;
-        }
-        lastValue = totalSoFar;
-    }
-
-    return result;
-
-}
-//**************************************************************************
 vector<int> Summary::getValues(map<int, long long>& positions) {
         vector<long long> defaults = getDefaults();
         vector<int> results; results.resize(7,0);

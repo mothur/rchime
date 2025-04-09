@@ -9,7 +9,7 @@
  */
 
 #include "uchime.h"
-#include "myopts.h"
+#include "options.h"
 #include "seqdb.h"
 #include "alpha.h"
 

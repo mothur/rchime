@@ -7,7 +7,7 @@
  */
 
 #include "uchime_main.h"
-#include "myopts.h"
+#include "options.h"
 #include "myutils.h"
 #include "seqdb.h"
 #include <Rcpp.h>
