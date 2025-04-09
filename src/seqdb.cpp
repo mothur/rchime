@@ -13,7 +13,7 @@ SeqDB::SeqDB() {
 /******************************************************************************/
 SeqDB::SeqDB(vector<string>& seqNames, vector<string>& sequences,
 			   vector<int>& ab, bool descending) {
-	
+
 	util = Utilities::getInstance();
 
 	// degap sequences
@@ -29,7 +29,7 @@ SeqDB::SeqDB(vector<string>& seqNames, vector<string>& sequences,
 	seqs = sequences;
 	abunds = ab;
 	numSeqs = seqNames.size();
-	
+
 	isAligned = false;
 	//isNucleotide = false;
 	//isNucleoSet = false;
@@ -45,7 +45,7 @@ SeqDB::~SeqDB() {}
 /******************************************************************************/
 void SeqDB::addSeq(string name, string seq, int abund, bool degap) {
 	// degap sequences
-	
+
 	if (degap) {
 		string temp = seq;
 		seq = "";
@@ -53,7 +53,7 @@ void SeqDB::addSeq(string name, string seq, int abund, bool degap) {
 			if(isalpha(temp[j]))	{	seq += temp[j];	}
 		}
 	}
-	
+
 	names.push_back(name);
 	seqs.push_back(seq);
 	abunds.push_back(abund);
@@ -86,7 +86,7 @@ unsigned SeqDB::getSeqCount() const {
 /******************************************************************************/
 SeqData SeqDB::getSeqData(unsigned id) const {
 	SeqData seq(getName(id), getSeq(id), getAbundance(id),
-	 id, false);
+	 id);
 	return seq;
 }
 /******************************************************************************/
@@ -105,7 +105,7 @@ void SeqDB::sortDescending() {
         order[i] = sortedVector[i].index;
         (abunds)[i] = sortedVector[i].abund;
     }
-    
+
     applyOrder(names, order);
     applyOrder(seqs, order);
 }

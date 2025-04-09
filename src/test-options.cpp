@@ -1,6 +1,5 @@
 #include <testthat.h>
 #include "options.h"
-#include <iostream>
 
 context("Options class C++ unit tests") {
 

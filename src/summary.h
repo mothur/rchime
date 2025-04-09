@@ -51,6 +51,7 @@ private:
                                           vector<int>& counts);
     
     vector<int> getValues(map<int, long long>& positions);
+    long long getValue(map<int, long long>& positions, double);
     vector<long long> getDefaults();
 
     //fasta
