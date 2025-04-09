@@ -1,13 +1,7 @@
 # test sequence_data_table R6 Class
 
 test_that("test sequence_data_table R6 class", {
-  seq1 <- sequence$new(
-    "mySeq",
-    "NACGGAGGATGCGAGCGTTATCCGGATTTATTGGGTTTAAAGGGTGCGT",
-    "This is my comment"
-  )
-
-  expect_error(dataset <- sequence_data_table$new(sequences = seq1))
+  expect_error(dataset <- sequence_data_table$new(sequences = "seq1"))
 
   sequences <- c(
     "NACGGAGGATGCGAGCGTTATCCGGATTTATTGGGTTTAAAGGGTGCGT",

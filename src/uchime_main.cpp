@@ -20,10 +20,7 @@ vector<ChimeHit2> UchimeMain::runUchime(vector<string> names,
                                  vector<string> refNames,
                                  vector<string> refSeqs,
                                  vector<int> abunds,
-								 set<string>& namesOfChimeras)
-	{
-
-    vector<ChimeHit2> Hits;
+								 set<string>& namesOfChimeras) {
 
 	// loading SeqDB with data from R, sort descending order by abundace
 	SeqDB data(names, seqs, abunds, true);
@@ -39,6 +36,7 @@ vector<ChimeHit2> UchimeMain::runUchime(vector<string> names,
 		reference = new SeqDB(refNames, refSeqs, refAbunds, false);
 	}
 
+	vector<ChimeHit2> Hits;
 	unsigned numQuerySeqs = data.getSeqCount();
 	SearchChime search;
 	for (unsigned i = 0; i < numQuerySeqs; ++i) {

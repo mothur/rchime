@@ -1,13 +1,7 @@
 # test sequence_dataset R6 Class
 
 test_that("test sequence_dataset R6 class", {
-  seq1 <- sequence$new(
-    "mySeq",
-    "NACGGAGGATGCGAGCGTTATCCGGATTTATTGGGTTTAAAGGGTGCGT",
-    "This is my comment"
-  )
-
-  expect_error(dataset <- sequence_data_table$new(sequences = seq1))
+  expect_error(dataset <- sequence_data_table$new(sequences = "seq1"))
 
   dataset <- sequence_data_table$new()
   df <- dataset$read_fasta_file(filename = rchime_example("test.fasta"))

@@ -79,39 +79,6 @@ static inline char yon(bool x)		{ return x ? 'Y' : 'N';	}
 const double epsilon = 0.01;
 const unsigned wordCount = 65536;
 
-inline bool feq(double x, double y, double epsilon)
-{
-    if (fabs(x) > 10000)
-        epsilon = fabs(x)/10000;
-    if (fabs(x - y) > epsilon)
-        return false;
-    return true;
-}
-
-inline bool feq(double x, double y)
-{
-    if (x < -1e6 && y < -1e6)
-        return true;
-    double e = epsilon;
-    if (fabs(x) > 10000)
-        e = fabs(x)/10000;
-    if (fabs(x - y) > e)
-        return false;
-    return true;
-}
-
-template<typename T>
-const char* toCharStar(const T&x){
-    string output = toString(x);
-
-    char* converted = new char[output.length()+1];
-        
-    *converted = '\0'; 
-    strncat(converted, output.c_str(), output.length());
-        
-    return converted;
-}
-
 struct orderAbundance {
     int abund;
     unsigned index;

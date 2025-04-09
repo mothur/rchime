@@ -18,11 +18,8 @@ double AlignChimes::GetScore2(double Y, double N, double A) {
 ChimeHit2 AlignChimes::alignChime(const SeqData &QSD, const SeqData &ASD, const SeqData &B_SD,
  const string &PathQA, const string &PathQB) {
 
-	string Q3;
-	string A3;
-	string B3;
-	Make3way m3w;
-	m3w.Make3Way(QSD, ASD, B_SD, PathQA, PathQB, Q3, A3, B3);
+	string Q3, A3, B3;
+	make3Way(QSD, ASD, B_SD, PathQA, PathQB, Q3, A3, B3);
 
 	ChimeHit2 Hit;
 	Hit.QLabel = QSD.getName();
@@ -68,7 +65,7 @@ ChimeHit2 AlignChimes::alignChime(const SeqData &QSD, const SeqData &ASD, const 
 	unsigned SumForB = 0;
 	unsigned SumAbstain = 0;
 	unsigned SumAgainst = 0;
-	
+
 	for (unsigned Col = ColLo; Col <= ColHi; ++Col) {
 		char q = Q3[Col];
 		char a = A3[Col];
@@ -115,7 +112,7 @@ ChimeHit2 AlignChimes::alignChime(const SeqData &QSD, const SeqData &ASD, const 
 
 // NOTE: Must be < ColHi not <= because use Col+1 below
 	for (unsigned Col = ColLo; Col < ColHi; ++Col) {
-		
+
 		unsigned SameAL = AccumSameA[Col];
 		unsigned SameBL = AccumSameB[Col];
 		unsigned SameAR = SumSameA - AccumSameA[Col];
@@ -194,7 +191,7 @@ ChimeHit2 AlignChimes::alignChime(const SeqData &QSD, const SeqData &ASD, const 
 	for (unsigned x = 0; x < ColCount; ++x) {
 		if (x == ColXLo)       { Hit.QXLo = QPos; }
 		else if (x == ColXHi)  { Hit.QXHi = QPos; break; }
-		
+
 		char q = Q3[x];
 		if (q != '-') { ++QPos; }
 	}
@@ -247,7 +244,7 @@ ChimeHit2 AlignChimes::alignChime(const SeqData &QSD, const SeqData &ASD, const 
 
 		if (opt->getSkipgaps()) { if (ngaps == 3) { continue; } }
 		else                    { if (ngaps == 2) { continue; } }
-		
+
 		if (!FirstA) {
 			swap(a, b);
 		}
@@ -275,5 +272,116 @@ ChimeHit2 AlignChimes::alignChime(const SeqData &QSD, const SeqData &ASD, const 
 	Hit.Score = ScoreL*ScoreR;
 
 	return Hit;
+}
+/******************************************************************************/
+void AlignChimes::make3Way(const SeqData &QSD, const SeqData &ASD,
+                           const SeqData &B_SD, const string &PathQA,
+                           const string &PathQB, string &Q3, string &A3,
+                           string &B3) {
+    Q3.clear();
+    A3.clear();
+    B3.clear();
+
+    string querySeq = QSD.getSeq();
+    string parentASeq = ASD.getSeq();
+    string parentBSeq = B_SD.getSeq();
+
+    unsigned LQ = QSD.getSeqLength();
+    unsigned LA = ASD.getSeqLength();
+    unsigned LB = B_SD.getSeqLength();
+
+    vector<unsigned> InsertCountsA(LQ+1, 0);
+    unsigned QPos = 0;
+    for (unsigned i = 0; i < SIZE(PathQA); ++i) {
+        char c = PathQA[i];
+        if (c == 'M' || c == 'D') {
+            ++QPos;
+        }else {
+            ++(InsertCountsA[QPos]);
+        }
+    }
+
+    vector<unsigned> InsertCountsB(LQ+1, 0);
+    QPos = 0;
+    for (unsigned i = 0; i < SIZE(PathQB); ++i) {
+
+        char c = PathQB[i];
+        if (c == 'M' || c == 'D') {
+            ++QPos;
+        }else {
+            ++(InsertCountsB[QPos]);
+        }
+    }
+
+    vector<unsigned> InsertCounts;
+    for (unsigned i = 0; i <= LQ; ++i) {
+        unsigned is = max(InsertCountsA[i], InsertCountsB[i]);
+        InsertCounts.push_back(is);
+    }
+
+    for (unsigned i = 0; i < LQ; ++i) {
+        for (unsigned k = 0; k < InsertCounts[i]; ++k) {
+            Q3.push_back('-');
+        }
+        Q3.push_back(toupper(querySeq[i]));
+    }
+    for (unsigned k = 0; k < InsertCounts[LQ]; ++k) {
+        Q3.push_back('-');
+    }
+    // A
+    QPos = 0;
+    unsigned APos = 0;
+    unsigned is = 0;
+    for (unsigned i = 0; i < SIZE(PathQA); ++i) {
+
+        char c = PathQA[i];
+        if (c == 'M' || c == 'D') {
+            unsigned isq = InsertCounts[QPos];
+            for (unsigned i = 0; i < InsertCounts[QPos]-is; ++i) {
+                A3.push_back('-');
+            }
+            is = 0;
+            ++QPos;
+        }
+        if (c == 'M') {
+            A3.push_back(toupper(parentASeq[APos++]));
+        }else if (c == 'D') {
+            A3.push_back('-');
+        }else if (c == 'I')  {
+            ++is;
+            A3.push_back(toupper(parentASeq[APos++]));
+        }
+    }
+    for (unsigned k = 0; k < InsertCounts[LQ]-is; ++k) {
+        A3.push_back('-');
+    }
+    // B
+    QPos = 0;
+    unsigned BPos = 0;
+    is = 0;
+    for (unsigned i = 0; i < SIZE(PathQB); ++i) {
+
+        char c = PathQB[i];
+        if (c == 'M' || c == 'D') {
+            for (unsigned i = 0; i < InsertCounts[QPos]-is; ++i) {
+                B3.push_back('-');
+            }
+            is = 0;
+            ++QPos;
+        }
+
+        if (c == 'M') {
+            B3.push_back(toupper(parentBSeq[BPos++]));
+        } else if (c == 'D') {
+            B3.push_back('-');
+        }else if (c == 'I') {
+            ++is;
+            B3.push_back(toupper(parentBSeq[BPos++]));
+        }
+    }
+
+    for (unsigned k = 0; k < InsertCounts[LQ]-is; ++k) {
+        B3.push_back('-');
+    }
 }
 /******************************************************************************/
