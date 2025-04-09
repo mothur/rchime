@@ -13,22 +13,13 @@
 /******************************************************************************/
 GlobalAligner::GlobalAligner() { 
 	alignParams = new AlnParams();
-    //util = Utilities::getInstance(); 
 	g_TBBit = new MxByteMatrix();
-	//g_CacheLB = 0;
 }
 /******************************************************************************/
 GlobalAligner::~GlobalAligner() { delete alignParams; }
 /******************************************************************************/
-// bool GlobalAligner::runViterbiFast(const SeqData &Query, const SeqData &Target, PathData &PD) {
-// 	viterbiFast(Query.getSeq(), Query.getSeqLength(),
-// 				 Target.getSeq(), Target.getSeqLength(), PD);
-// 	return true;
-// }
-/******************************************************************************/
 bool GlobalAligner::globalAlign(const SeqData &Query, const SeqData &Target, string &Path) {
 	PathData PD; 
-	//runViterbiFast(Query, Target, PD);
 	
 	viterbiFast(Query.getSeq(), Query.getSeqLength(),
 				 Target.getSeq(), Target.getSeqLength(), PD);

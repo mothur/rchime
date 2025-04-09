@@ -17,7 +17,7 @@
 class GetParents {
     public:
 
-    GetParents() { opt = Options::getInstance(); }
+    GetParents(); 
     ~GetParents() = default;
 
     vector<unsigned> getCandidateParents(SeqDB* data, const SeqData& query);
@@ -27,10 +27,11 @@ class GetParents {
     
     private:
 
-    Options* opt;
-SeqData queryData;
+    int minChunk, numChunks;
+    float abskew;
+
     vector<unsigned> queryHasWord;
-    vector<unsigned> USort(const string &Query, const SeqDB* DB,
+    vector<unsigned> RankParents(const string &Query, const SeqDB* DB,
                              vector<float> &WordCounts);
     void setQueryWords(const string &Query);
     unsigned getNumWordsInCommon(const SeqData &Target);

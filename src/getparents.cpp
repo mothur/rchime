@@ -9,18 +9,25 @@
 
 // default - minchuck 64 chunk 4
 /******************************************************************************/
+GetParents::GetParents() {
+	Options* opt = Options::getInstance(); 
+	minChunk = opt->getMinchunk();
+	numChunks = opt->getChunks();
+	abskew = opt->getAbskew();
+}
+/******************************************************************************/
 vector<unsigned> GetParents::getChunkInfo(unsigned L, unsigned &Length) {
 	vector<unsigned> Los;
 
-	if (L <= opt->getMinchunk()) {
+	if (L <= minChunk) {
 		Length = L;
 		Los.push_back(0);
 		return Los;
 	}
 
-	Length = (L - 1)/opt->getChunks() + 1;
-	if (Length < opt->getMinchunk()) {
-		Length = opt->getMinchunk();
+	Length = (L - 1)/numChunks + 1;
+	if (Length < minChunk) {
+		Length = minChunk;
 	}
 
 	unsigned Lo = 0;
@@ -56,7 +63,7 @@ vector<unsigned> GetParents::getCandidateParents(SeqDB* data, const SeqData & qu
 	}
 
 	// add all potential parents that meet abundance requirements
-	float cutoff = opt->getAbskew()*query.getAbund();
+	float cutoff = abskew*query.getAbund();
 	for (auto p = ParentIndexes.begin(); p != ParentIndexes.end(); ++p) {
 		unsigned ParentIndex = *p;
 
@@ -79,7 +86,7 @@ void GetParents::addParents(SeqDB* DB, const string &Query,
 		return;
 
 	vector<float> WordCounts;
-	vector<unsigned> Order = USort(Query, DB, WordCounts);
+	vector<unsigned> Order = RankParents(Query, DB, WordCounts);
 
 	unsigned TopSeqIndex = Order[0];
 	float TopWordCount = WordCounts[0];
@@ -91,7 +98,7 @@ void GetParents::addParents(SeqDB* DB, const string &Query,
 	}
 }
 /******************************************************************************/
-vector<unsigned> GetParents::USort(const string &Query, const SeqDB* DB,
+vector<unsigned> GetParents::RankParents(const string &Query, const SeqDB* DB,
 											 vector<float> &WordCounts) {
 	vector<unsigned> Order;
 	WordCounts.clear();

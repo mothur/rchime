@@ -76,8 +76,8 @@ bool SearchChime::searchChime(SeqDB* database, const SeqData & queryData,
 
 	float MinFractId = 0.95f;	
 
-	Hit.Clear();
 	Hit.QLabel = queryData.getName();
+	Hit.AbQ = queryData.getAbund();
 
 	GetParents parentFinder;
 	vector<unsigned> Parents = parentFinder.getCandidateParents(database, queryData);

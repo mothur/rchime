@@ -1513,6 +1513,7 @@ mh
 microseq
 minchuck
 minchunk
+minChunk
 minCount
 mincriteriaPercentile
 minDiff
@@ -1714,6 +1715,7 @@ numBarcodes
 numBases
 numbases
 numBasesNeeded
+numChunks
 numDiff
 numdiffs
 numDiffs
@@ -2010,6 +2012,7 @@ QXHi
 QXLo
 ra
 randomSeqIndex
+RankParents
 RAs
 rawChunk
 rawFSequence

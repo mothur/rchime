@@ -29,24 +29,18 @@ ChimeHit2 AlignChimes::alignChime(const SeqData &QSD, const SeqData &ASD, const 
 	Hit.AbQ = QSD.getAbund();
 	Hit.AbA = ASD.getAbund();
 	Hit.AbB = B_SD.getAbund();
-
-	const Byte *Q3Seq = (const Byte *) Q3.c_str();
-	const Byte *A3Seq = (const Byte *) A3.c_str();
-	const Byte *B3Seq = (const Byte *) B3.c_str();
 	const unsigned ColCount = SIZE(Q3);
 
     // Discard terminal gaps
 	unsigned ColLo = UINT_MAX;
 	unsigned ColHi = UINT_MAX;
 	for (unsigned Col = 2; Col + 2 < ColCount; ++Col) {
-		char q = Q3Seq[Col];
-		char a = A3Seq[Col];
-		char b = B3Seq[Col];
+		char q = Q3[Col];
+		char a = A3[Col];
+		char b = B3[Col];
 
 		if (isacgt(q) && isacgt(a) && isacgt(b)) {
-			if (ColLo == UINT_MAX) {
-				ColLo = Col;
-			}
+			if (ColLo == UINT_MAX) { ColLo = Col; }
 			ColHi = Col;
 		}
 	}
@@ -76,9 +70,9 @@ ChimeHit2 AlignChimes::alignChime(const SeqData &QSD, const SeqData &ASD, const 
 	unsigned SumAgainst = 0;
 	
 	for (unsigned Col = ColLo; Col <= ColHi; ++Col) {
-		char q = Q3Seq[Col];
-		char a = A3Seq[Col];
-		char b = B3Seq[Col];
+		char q = Q3[Col];
+		char a = A3[Col];
+		char b = B3[Col];
 
 		if (isacgt(q) && isacgt(a) && isacgt(b)) {
 			if (q == a)              { ++SumSameA;   }
@@ -171,9 +165,9 @@ ChimeHit2 AlignChimes::alignChime(const SeqData &QSD, const SeqData &ASD, const 
 	unsigned SegHi = UINT_MAX;
 
 	for (unsigned Col = BestXLo; Col <= BestXHi; ++Col) {
-		char q = Q3Seq[Col];
-		char a = A3Seq[Col];
-		char b = B3Seq[Col];
+		char q = Q3[Col];
+		char a = A3[Col];
+		char b = B3[Col];
 
 		if (q == a && q == b) {
 			if (SegLo == UINT_MAX) { SegLo = Col; }
@@ -201,7 +195,7 @@ ChimeHit2 AlignChimes::alignChime(const SeqData &QSD, const SeqData &ASD, const 
 		if (x == ColXLo)       { Hit.QXLo = QPos; }
 		else if (x == ColXHi)  { Hit.QXHi = QPos; break; }
 		
-		char q = Q3Seq[x];
+		char q = Q3[x];
 		if (q != '-') { ++QPos; }
 	}
 
@@ -209,10 +203,8 @@ ChimeHit2 AlignChimes::alignChime(const SeqData &QSD, const SeqData &ASD, const 
 	Hit.ColXHi = ColXHi;
 	Hit.PctIdAB = IdAB*100.0;
 	Hit.PctIdQM = BestIdQM*100.0;
-
 	Hit.Div = (BestDiv - 1.0)*100.0;
 
-	//Hit.QSD = QSD;
 	Hit.Q3 = Q3;
 	Hit.QLabel = QSD.getName();
 	if (FirstA) {
@@ -241,9 +233,9 @@ ChimeHit2 AlignChimes::alignChime(const SeqData &QSD, const SeqData &ASD, const 
 
 	for (unsigned Col = ColLo; Col <= ColHi; ++Col) {
 
-		char q = Q3Seq[Col];
-		char a = A3Seq[Col];
-		char b = B3Seq[Col];
+		char q = Q3[Col];
+		char a = A3[Col];
+		char b = B3[Col];
 		if (q == a && q == b && a == b) {
 			continue;
 		}
@@ -261,9 +253,9 @@ ChimeHit2 AlignChimes::alignChime(const SeqData &QSD, const SeqData &ASD, const 
 		}
 
 		if (opt->getSkipgaps2()) {
-			if (Col > 0 && (isgap(Q3Seq[Col-1]) || isgap(A3Seq[Col-1]) || isgap(B3Seq[Col-1]))) {
+			if (Col > 0 && (isgap(Q3[Col-1]) || isgap(A3[Col-1]) || isgap(B3[Col-1]))) {
 				continue; }
-			if (Col + 1 < ColCount && (isgap(Q3Seq[Col+1]) || isgap(A3Seq[Col+1]) || isgap(B3Seq[Col+1]))) {
+			if (Col + 1 < ColCount && (isgap(Q3[Col+1]) || isgap(A3[Col+1]) || isgap(B3[Col+1]))) {
 				continue; }
 		}
 

@@ -47,7 +47,6 @@ private:
     map<int, long long> longHomoPolymer;
     map<int, long long> numNs;
     
-
     void createThreadsFasta(vector<vector<int>>& fasta,
                                           vector<int>& counts);
     
