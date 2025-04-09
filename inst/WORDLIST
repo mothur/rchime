@@ -2525,6 +2525,7 @@ tempminRPos
 tempNode
 tempNodeIndex
 tempPair
+tempPath
 tempPrimers
 tempQual
 tempRQual

@@ -18,24 +18,14 @@ GlobalAligner::GlobalAligner() {
 /******************************************************************************/
 GlobalAligner::~GlobalAligner() { delete alignParams; }
 /******************************************************************************/
-bool GlobalAligner::globalAlign(const SeqData &Query, const SeqData &Target, string &Path) {
-	PathData PD; 
-	
-	viterbiFast(Query.getSeq(), Query.getSeqLength(),
-				 Target.getSeq(), Target.getSeqLength(), PD);
-
-	Path = string(PD.Start);
-	return true;
-}
-/******************************************************************************/
 bool GlobalAligner::globalAlign(const SeqData &Query, const SeqData &Target, PathData &PD) {
 
-	PD.Clear();
-	string Path;
-	bool Found = globalAlign(Query, Target, Path);
-	if (!Found) {
-		return false;
-	}
+	PathData tempPath; 
+	viterbiFast(Query.getSeq(), Query.getSeqLength(),
+				 Target.getSeq(), Target.getSeqLength(), tempPath);
+
+	string Path = string(tempPath.Start);
+
 	unsigned n = SIZE(Path);
 	PD.Alloc(n+1);
 	memcpy(PD.Front, Path.c_str(), n);

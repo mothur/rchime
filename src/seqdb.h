@@ -11,7 +11,6 @@
  */
 
 #include "uchime.h"
-#include "myutils.h"
 #include "seq.h"
 
 /******************************************************************************/
@@ -45,7 +44,6 @@ public:
 
 	private:
 
-	Utilities* util;
     vector<int> abunds;
 	vector<string> names;
 	vector<string> seqs;

@@ -10,7 +10,7 @@
  *
  */
 
-#include "myutils.h"
+
 #include "chime.h"
 #include "seqdb.h"
 #include "searchchime.h"
@@ -23,8 +23,8 @@ class UchimeMain {
 
 public:
 
-    UchimeMain();   
-    ~UchimeMain();  
+    UchimeMain() = default;  
+    ~UchimeMain() = default;   
 
     // returns list of dataframes with results
     vector<ChimeHit2> runUchime(vector<string> names, vector<string> seqs,
@@ -33,7 +33,6 @@ public:
 
 private:
 
-   Utilities* util;
    bool uchimeDeNovo;
 };
 /******************************************************************************/

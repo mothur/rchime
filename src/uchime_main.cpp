@@ -8,23 +8,11 @@
 
 #include "uchime_main.h"
 #include "options.h"
-#include "myutils.h"
 #include "seqdb.h"
-#include <Rcpp.h>
-#include <RcppThread.h>
 #include <__config>
-#include <cli/progress.h>
 
 /******************************************************************************/
 Options* Options::_uniqueInstance = 0;
-Utilities* Utilities::_uniqueInstance = 0;
-/******************************************************************************/
-UchimeMain::UchimeMain()    { 
-	util = Utilities::getInstance();
-}
-/******************************************************************************/
-UchimeMain::~UchimeMain()   {}
-
 /******************************************************************************/
 // this is the entry point to uchime source code from chimera_findur
 vector<ChimeHit2> UchimeMain::runUchime(vector<string> names,

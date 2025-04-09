@@ -14,7 +14,7 @@ SeqDB::SeqDB() {
 SeqDB::SeqDB(vector<string>& seqNames, vector<string>& sequences,
 			   vector<int>& ab, bool descending) {
 
-	util = Utilities::getInstance();
+	//util = Utilities::getInstance();
 
 	// degap sequences
 	for (int i = 0; i < sequences.size(); i++) {

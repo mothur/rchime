@@ -14,7 +14,6 @@
 #include "seq.h"
 #include "path.h"
 #include "alnparams.h"
-#include "myutils.h"
 
 const Byte TRACEBITS_DM = 0x01;
 const Byte TRACEBITS_IM = 0x02;
@@ -38,7 +37,6 @@ private:
 	AlnParams* alignParams;
     MxByteMatrix* g_TBBit;
 
-    bool globalAlign(const SeqData &Query, const SeqData &Target, string &Path);
     float viterbiFast(string seqA, unsigned alength, string seqB, unsigned blength,
             PathData &PD);
     void traceBackBit(unsigned LA, unsigned LB, char State, PathData &PD);
