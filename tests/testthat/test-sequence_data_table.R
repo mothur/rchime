@@ -382,9 +382,9 @@ test_that("test sequence_data_table count info ", {
 })
 
 # test_that("test sequence_data_table prints ", {
-#   dataset <- sequence_data_table$new(filename = mothur2_example("test.fasta"))
+#   dataset <- sequence_data_table$new(filename = rchime_example("test.fasta"))
 #   dataset <- dataset$set_group_assignments(
-#     filename = mothur2_example("test.count_table")
+#     filename = rchime_example("test.count_table")
 #   )
 #
 #   expect_snapshot(
