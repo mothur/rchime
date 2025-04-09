@@ -14,7 +14,7 @@ FASTA and abundance data. It inherits from 'sequence_dataset'.
 ## ------------------------------------------------
 
   dataset <- sequence_data_table$new(filename =
-    mothur2_example("test.fasta"))
+    rchime_example("test.fasta"))
 
 
 ## ------------------------------------------------
@@ -22,7 +22,7 @@ FASTA and abundance data. It inherits from 'sequence_dataset'.
 ## ------------------------------------------------
 
   dataset <- sequence_data_table$new(filename =
-  mothur2_example("test.fasta"))
+  rchime_example("test.fasta"))
   dataset$print()
 
 ## ------------------------------------------------
@@ -30,7 +30,7 @@ FASTA and abundance data. It inherits from 'sequence_dataset'.
 ## ------------------------------------------------
 
   dataset <- sequence_data_table$new(filename =
-    mothur2_example("test.fasta"))
+    rchime_example("test.fasta"))
   screen_seqs(dataset = dataset, max_length = 275, max_ambig = 0)
   dataset$print_bad_accnos()
 
@@ -39,9 +39,9 @@ FASTA and abundance data. It inherits from 'sequence_dataset'.
 ## ------------------------------------------------
 
   dataset <- sequence_data_table$new(filename =
-   mothur2_example("test.fasta"))
+   rchime_example("test.fasta"))
   dataset$set_group_assignments(filename =
-  mothur2_example("test.count_table"))
+  rchime_example("test.count_table"))
   dataset$print_count_summary()
 
 ## ------------------------------------------------
@@ -61,7 +61,7 @@ FASTA and abundance data. It inherits from 'sequence_dataset'.
 ## ------------------------------------------------
 
   dataset <- sequence_data_table$new(filename =
-  mothur2_example("test.fasta"))
+  rchime_example("test.fasta"))
   dataset$clear()
 
 ## ------------------------------------------------
@@ -69,9 +69,9 @@ FASTA and abundance data. It inherits from 'sequence_dataset'.
 ## ------------------------------------------------
 
   dataset <- sequence_data_table$new(filename =
-  mothur2_example("test.fasta"))
+  rchime_example("test.fasta"))
   dataset <- dataset$set_group_assignments(filename =
-  mothur2_example("test.count_table"))
+  rchime_example("test.count_table"))
   dataset$get_abund(name =
    "M00967_43_000000000-A3JHG_1_1111_8697_7063")
 
@@ -80,9 +80,9 @@ FASTA and abundance data. It inherits from 'sequence_dataset'.
 ## ------------------------------------------------
 
   dataset <- sequence_data_table$new(filename =
-  mothur2_example("test.fasta"))
+  rchime_example("test.fasta"))
   dataset <- dataset$set_group_assignments(filename =
-  mothur2_example("test.count_table"))
+  rchime_example("test.count_table"))
   dataset$get_abunds(name =
    "M00967_43_000000000-A3JHG_1_1111_8697_7063")
 
@@ -91,7 +91,7 @@ FASTA and abundance data. It inherits from 'sequence_dataset'.
 ## ------------------------------------------------
 
  dataset <- sequence_data_table$new(filename =
- mothur2_example("test.fasta"))
+ rchime_example("test.fasta"))
  some_seqs_to_remove <- c("M00967_43_000000000-A3JHG_1_2113_21675_17687",
  "M00967_43_000000000-A3JHG_1_1114_17672_13068")
  reasons <- c("example_removal", "example_removal")
@@ -103,9 +103,9 @@ FASTA and abundance data. It inherits from 'sequence_dataset'.
 ## ------------------------------------------------
 
   dataset <- sequence_data_table$new(filename =
-    mothur2_example("test.fasta"))
+    rchime_example("test.fasta"))
   reference <- sequence_data_table$new(filename =
-    mothur2_example("reference.fasta"))
+    rchime_example("reference.fasta"))
 
   # results$align_report contains complete align report
   # results$accnos will contain the names of any sequences that were
@@ -121,7 +121,7 @@ FASTA and abundance data. It inherits from 'sequence_dataset'.
 ## Method `sequence_data_table$get_contigs_report`
 ## ------------------------------------------------
 
-  files <- make_file(input_dir = mothur2_example(), type = "gz")
+  files <- make_file(input_dir = rchime_example(), type = "gz")
   contigs <- make_contigs(files)
   df <- contigs$dataset$get_contigs_report()
 
@@ -130,9 +130,9 @@ FASTA and abundance data. It inherits from 'sequence_dataset'.
 ## ------------------------------------------------
 
   dataset <- sequence_data_table$new(filename =
-  mothur2_example("test.fasta"))
+  rchime_example("test.fasta"))
   dataset$set_group_assignments(filename =
-  mothur2_example("test.count_table"))
+  rchime_example("test.count_table"))
   count_table <- dataset$get_count_table()
 
 ## ------------------------------------------------
@@ -140,10 +140,10 @@ FASTA and abundance data. It inherits from 'sequence_dataset'.
 ## ------------------------------------------------
 
   dataset <- sequence_data_table$new(
-  filename = mothur2_example('test.fasta'))
+  filename = rchime_example('test.fasta'))
 
   dataset <- dataset$set_group_assignments(filename =
-  mothur2_example("test.count_table"))
+  rchime_example("test.count_table"))
 
   # get names of sequences in your dataset
   names <- dataset$get_names()
@@ -157,7 +157,7 @@ FASTA and abundance data. It inherits from 'sequence_dataset'.
 ## ------------------------------------------------
 
   dataset <- sequence_data_table$new(filename =
-  mothur2_example("test.fasta"))
+  rchime_example("test.fasta"))
   seqs <- dataset$get_seqs_table()
 
 ## ------------------------------------------------
@@ -165,7 +165,7 @@ FASTA and abundance data. It inherits from 'sequence_dataset'.
 ## ------------------------------------------------
 
   dataset <- sequence_data_table$new(filename =
-  mothur2_example("test.fasta"))
+  rchime_example("test.fasta"))
 
   # to get all sequences in dataset
   seqs <- dataset$get_seqs()
@@ -179,10 +179,10 @@ FASTA and abundance data. It inherits from 'sequence_dataset'.
 ## ------------------------------------------------
 
   dataset <- sequence_data_table$new(
-  filename = mothur2_example('test.fasta'))
+  filename = rchime_example('test.fasta'))
 
   dataset <- dataset$set_group_assignments(filename =
-  mothur2_example("test.count_table"))
+  rchime_example("test.count_table"))
 
   # get abundances of all sequences in your dataset
   abunds <- dataset$get_seqs_abunds()
@@ -195,9 +195,9 @@ FASTA and abundance data. It inherits from 'sequence_dataset'.
 ## ------------------------------------------------
 
   dataset <- sequence_data_table$new(filename =
-  mothur2_example("test.fasta"))
+  rchime_example("test.fasta"))
   dataset <- dataset$set_group_assignments(filename =
-  mothur2_example("test.count_table"))
+  rchime_example("test.count_table"))
   df <- dataset$get_summary_report()
 
 ## ------------------------------------------------
@@ -205,9 +205,9 @@ FASTA and abundance data. It inherits from 'sequence_dataset'.
 ## ------------------------------------------------
 
   dataset <- sequence_data_table$new(filename =
-  mothur2_example("test.fasta"))
+  rchime_example("test.fasta"))
   dataset$set_group_assignments(filename =
-  mothur2_example("test.count_table"))
+  rchime_example("test.count_table"))
 
   # Number of Unique seqs: 1000
   # Total number of seqs: 1000
@@ -228,9 +228,9 @@ FASTA and abundance data. It inherits from 'sequence_dataset'.
 ## ------------------------------------------------
 
   dataset <- sequence_data_table$new(filename =
-  mothur2_example("test.fasta"))
+  rchime_example("test.fasta"))
   dataset$set_group_assignments(filename =
-  mothur2_example("test.count_table"))
+  rchime_example("test.count_table"))
 
   # remove sequences with ambiguous bases
   screen_seqs(dataset = dataset, max_ambig = 0)
@@ -243,9 +243,9 @@ FASTA and abundance data. It inherits from 'sequence_dataset'.
 ## ------------------------------------------------
 
   dataset <- sequence_data_table$new(filename =
-                    mothur2_example("test.fasta"))
+                    rchime_example("test.fasta"))
   dataset$set_group_assignments(filename =
-                    mothur2_example("test.count_table"))
+                    rchime_example("test.count_table"))
   dataset
 
 # remove first 10 sequences from the dataset
@@ -399,7 +399,7 @@ A new \code{sequence_data_table} object.
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
 \preformatted{  dataset <- sequence_data_table$new(filename =
-    mothur2_example("test.fasta"))
+    rchime_example("test.fasta"))
 
 }
 \if{html}{\out{</div>}}
@@ -419,7 +419,7 @@ Get summary of sequences data - (summary_seqs output)
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
 \preformatted{  dataset <- sequence_data_table$new(filename =
-  mothur2_example("test.fasta"))
+  rchime_example("test.fasta"))
   dataset$print()
 }
 \if{html}{\out{</div>}}
@@ -441,7 +441,7 @@ removed from the dataset
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
 \preformatted{  dataset <- sequence_data_table$new(filename =
-    mothur2_example("test.fasta"))
+    rchime_example("test.fasta"))
   screen_seqs(dataset = dataset, max_length = 275, max_ambig = 0)
   dataset$print_bad_accnos()
 }
@@ -464,9 +464,9 @@ abundance data
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
 \preformatted{  dataset <- sequence_data_table$new(filename =
-   mothur2_example("test.fasta"))
+   rchime_example("test.fasta"))
   dataset$set_group_assignments(filename =
-  mothur2_example("test.count_table"))
+  rchime_example("test.count_table"))
   dataset$print_count_summary()
 }
 \if{html}{\out{</div>}}
@@ -542,7 +542,7 @@ Remove all sequences from dataset
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
 \preformatted{  dataset <- sequence_data_table$new(filename =
-  mothur2_example("test.fasta"))
+  rchime_example("test.fasta"))
   dataset$clear()
 }
 \if{html}{\out{</div>}}
@@ -575,9 +575,9 @@ An integer
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
 \preformatted{  dataset <- sequence_data_table$new(filename =
-  mothur2_example("test.fasta"))
+  rchime_example("test.fasta"))
   dataset <- dataset$set_group_assignments(filename =
-  mothur2_example("test.count_table"))
+  rchime_example("test.count_table"))
   dataset$get_abund(name =
    "M00967_43_000000000-A3JHG_1_1111_8697_7063")
 }
@@ -609,9 +609,9 @@ returned by dataset$get_groups().
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
 \preformatted{  dataset <- sequence_data_table$new(filename =
-  mothur2_example("test.fasta"))
+  rchime_example("test.fasta"))
   dataset <- dataset$set_group_assignments(filename =
-  mothur2_example("test.count_table"))
+  rchime_example("test.count_table"))
   dataset$get_abunds(name =
    "M00967_43_000000000-A3JHG_1_1111_8697_7063")
 }
@@ -632,7 +632,7 @@ Get data.table containing a report of sequences removed
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
 \preformatted{ dataset <- sequence_data_table$new(filename =
- mothur2_example("test.fasta"))
+ rchime_example("test.fasta"))
  some_seqs_to_remove <- c("M00967_43_000000000-A3JHG_1_2113_21675_17687",
  "M00967_43_000000000-A3JHG_1_1114_17672_13068")
  reasons <- c("example_removal", "example_removal")
@@ -656,9 +656,9 @@ Get data.table containing align report data used for screening
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
 \preformatted{  dataset <- sequence_data_table$new(filename =
-    mothur2_example("test.fasta"))
+    rchime_example("test.fasta"))
   reference <- sequence_data_table$new(filename =
-    mothur2_example("reference.fasta"))
+    rchime_example("reference.fasta"))
 
   # results$align_report contains complete align report
   # results$accnos will contain the names of any sequences that were
@@ -686,7 +686,7 @@ Get data.table containing contigs report data
 
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
-\preformatted{  files <- make_file(input_dir = mothur2_example(), type = "gz")
+\preformatted{  files <- make_file(input_dir = rchime_example(), type = "gz")
   contigs <- make_contigs(files)
   df <- contigs$dataset$get_contigs_report()
 }
@@ -710,9 +710,9 @@ a data.table containing the count table data
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
 \preformatted{  dataset <- sequence_data_table$new(filename =
-  mothur2_example("test.fasta"))
+  rchime_example("test.fasta"))
   dataset$set_group_assignments(filename =
-  mothur2_example("test.count_table"))
+  rchime_example("test.count_table"))
   count_table <- dataset$get_count_table()
 }
 \if{html}{\out{</div>}}
@@ -779,10 +779,10 @@ Get names of sequences in the dataset
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
 \preformatted{  dataset <- sequence_data_table$new(
-  filename = mothur2_example('test.fasta'))
+  filename = rchime_example('test.fasta'))
 
   dataset <- dataset$set_group_assignments(filename =
-  mothur2_example("test.count_table"))
+  rchime_example("test.count_table"))
 
   # get names of sequences in your dataset
   names <- dataset$get_names()
@@ -858,7 +858,7 @@ data.table
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
 \preformatted{  dataset <- sequence_data_table$new(filename =
-  mothur2_example("test.fasta"))
+  rchime_example("test.fasta"))
   seqs <- dataset$get_seqs_table()
 }
 \if{html}{\out{</div>}}
@@ -888,7 +888,7 @@ data.table
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
 \preformatted{  dataset <- sequence_data_table$new(filename =
-  mothur2_example("test.fasta"))
+  rchime_example("test.fasta"))
 
   # to get all sequences in dataset
   seqs <- dataset$get_seqs()
@@ -925,10 +925,10 @@ returned by dataset$get_names().
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
 \preformatted{  dataset <- sequence_data_table$new(
-  filename = mothur2_example('test.fasta'))
+  filename = rchime_example('test.fasta'))
 
   dataset <- dataset$set_group_assignments(filename =
-  mothur2_example("test.count_table"))
+  rchime_example("test.count_table"))
 
   # get abundances of all sequences in your dataset
   abunds <- dataset$get_seqs_abunds()
@@ -953,9 +953,9 @@ Get data.table containing summary report data
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
 \preformatted{  dataset <- sequence_data_table$new(filename =
-  mothur2_example("test.fasta"))
+  rchime_example("test.fasta"))
   dataset <- dataset$set_group_assignments(filename =
-  mothur2_example("test.count_table"))
+  rchime_example("test.count_table"))
   df <- dataset$get_summary_report()
 }
 \if{html}{\out{</div>}}
@@ -1067,9 +1067,9 @@ will be merged (optional)}
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
 \preformatted{  dataset <- sequence_data_table$new(filename =
-  mothur2_example("test.fasta"))
+  rchime_example("test.fasta"))
   dataset$set_group_assignments(filename =
-  mothur2_example("test.count_table"))
+  rchime_example("test.count_table"))
 
   # Number of Unique seqs: 1000
   # Total number of seqs: 1000
@@ -1109,9 +1109,9 @@ Reinstates sequences removed for the reasons in trash_codes
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
 \preformatted{  dataset <- sequence_data_table$new(filename =
-  mothur2_example("test.fasta"))
+  rchime_example("test.fasta"))
   dataset$set_group_assignments(filename =
-  mothur2_example("test.count_table"))
+  rchime_example("test.count_table"))
 
   # remove sequences with ambiguous bases
   screen_seqs(dataset = dataset, max_ambig = 0)
@@ -1145,9 +1145,9 @@ Remove sequences from dataset for cause
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
 \preformatted{  dataset <- sequence_data_table$new(filename =
-                    mothur2_example("test.fasta"))
+                    rchime_example("test.fasta"))
   dataset$set_group_assignments(filename =
-                    mothur2_example("test.count_table"))
+                    rchime_example("test.count_table"))
   dataset
 
 # remove first 10 sequences from the dataset

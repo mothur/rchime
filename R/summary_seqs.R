@@ -16,10 +16,10 @@
 #' # Let's create a dataset to summarize
 #'
 #' dataset <- sequence_data_table$new(
-#'   filename = mothur2_example("test.fasta")
+#'   filename = rchime_example("test.fasta")
 #' )
 #' dataset$set_group_assignments(
-#'   filename = mothur2_example("test.count_table")
+#'   filename = rchime_example("test.count_table")
 #' )
 #'
 #' # To summarize the dataset, run the following:

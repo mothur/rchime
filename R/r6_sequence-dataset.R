@@ -1,9 +1,6 @@
 #' @title sequence_dataset
 #' @description 'sequence_dataset' is an R6 class that represents sequence FASTA
-#'  and abundance data. It is a parent class for the 'sequence_data_table' and
-#'   'SequenceDuckDB' classes whose data can be sourced from mothur formatted
-#'    FASTA and count tables, XXXXX duckDB database XXXX, or created by
-#'    mothur2's make_contigs function.
+#'  and abundance data.
 #'
 #' @author Sarah Westcott, \email{swestcot@@umich.edu}
 #'
@@ -129,10 +126,10 @@ sequence_dataset <- R6Class("sequence_dataset",
     #' @examples
     #'   dataset <- sequence_dataset$new()
     #'   fasta_data <- dataset$read_fasta_file(filename =
-    #'     mothur2_example("test.fasta"))
+    #'     rchime_example("test.fasta"))
     #'   fasta_names <- fasta_data$names
     #'   count_data <- dataset$read_count_file(names = fasta_names,
-    #'    filename = mothur2_example("test.count_table"))
+    #'    filename = rchime_example("test.count_table"))
     #' @return A data.frame containing the sequence abundance data
     read_count_file = function(names, filename, path = NULL) {
       directory <- dirname(filename)
@@ -171,7 +168,7 @@ sequence_dataset <- R6Class("sequence_dataset",
     #' @examples
     #'   dataset <- sequence_dataset$new()
     #'   fasta_data <- dataset$read_fasta_file(filename =
-    #'   mothur2_example("test.fasta"))
+    #'   rchime_example("test.fasta"))
     #' @return A data.frame containing the FASTA sequence data and summary
     read_fasta_file = function(filename, path = NULL) {
       directory <- dirname(filename)
@@ -267,10 +264,10 @@ sequence_dataset <- R6Class("sequence_dataset",
     #' @examples
     #'   dataset <- sequence_dataset$new()
     #'   fasta_data <- dataset$read_fasta_file(filename =
-    #'   mothur2_example("test.fasta"))
+    #'   rchime_example("test.fasta"))
     #'   fasta_names <- fasta_data$names
     #'   count_data <- dataset$read_count_file(names = fasta_names,
-    #'    filename = mothur2_example("test.count_table"))
+    #'    filename = rchime_example("test.count_table"))
     #'   dataset$write_count_file(count_data,
     #'    filename = "output.count")
     #'   remove_file("output.count")
@@ -321,7 +318,7 @@ sequence_dataset <- R6Class("sequence_dataset",
     #' @examples
     #'   dataset <- sequence_dataset$new()
     #'   fasta_data <- dataset$read_fasta_file(filename =
-    #'   mothur2_example("test.fasta"))
+    #'   rchime_example("test.fasta"))
     #'  dataset$write_fasta_file(fasta_data$names,
     #'   fasta_data$sequences, filename = "output.fasta")
     #'  remove_file("output.fasta")

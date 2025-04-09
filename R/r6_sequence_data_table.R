@@ -21,7 +21,7 @@ sequence_data_table <- R6Class("sequence_data_table",
     #' @param path Path to file containing FASTA reads
     #' @examples
     #'   dataset <- sequence_data_table$new(filename =
-    #'     mothur2_example("test.fasta"))
+    #'     rchime_example("test.fasta"))
     #'
     #' @return A new `sequence_data_table` object.
     initialize = function(filename = NULL, path = NULL) {
@@ -54,7 +54,7 @@ sequence_data_table <- R6Class("sequence_data_table",
     #' Get summary of sequences data - (summary_seqs output)
     #' @examples
     #'   dataset <- sequence_data_table$new(filename =
-    #'   mothur2_example("test.fasta"))
+    #'   rchime_example("test.fasta"))
     #'   dataset$print()
     print = function() {
       self$print_bad_accnos()
@@ -70,7 +70,7 @@ sequence_data_table <- R6Class("sequence_data_table",
     #'  removed from the dataset
     #' @examples
     #'   dataset <- sequence_data_table$new(filename =
-    #'     mothur2_example("test.fasta"))
+    #'     rchime_example("test.fasta"))
     #'   screen_seqs(dataset = dataset, max_length = 275, max_ambig = 0)
     #'   dataset$print_bad_accnos()
     print_bad_accnos = function() {
@@ -94,9 +94,9 @@ sequence_data_table <- R6Class("sequence_data_table",
     #'  abundance data
     #' @examples
     #'   dataset <- sequence_data_table$new(filename =
-    #'    mothur2_example("test.fasta"))
+    #'    rchime_example("test.fasta"))
     #'   dataset$set_group_assignments(filename =
-    #'   mothur2_example("test.count_table"))
+    #'   rchime_example("test.count_table"))
     #'   dataset$print_count_summary()
     print_count_summary = function() {
       if (private$has_group_data) {
@@ -225,7 +225,7 @@ sequence_data_table <- R6Class("sequence_data_table",
     #' Remove all sequences from dataset
     #' @examples
     #'   dataset <- sequence_data_table$new(filename =
-    #'   mothur2_example("test.fasta"))
+    #'   rchime_example("test.fasta"))
     #'   dataset$clear()
     clear = function() {
       # fasta data
@@ -267,9 +267,9 @@ sequence_data_table <- R6Class("sequence_data_table",
     #'   if not provided the total abundance for the sequence is returned
     #' @examples
     #'   dataset <- sequence_data_table$new(filename =
-    #'   mothur2_example("test.fasta"))
+    #'   rchime_example("test.fasta"))
     #'   dataset <- dataset$set_group_assignments(filename =
-    #'   mothur2_example("test.count_table"))
+    #'   rchime_example("test.count_table"))
     #'   dataset$get_abund(name =
     #'    "M00967_43_000000000-A3JHG_1_1111_8697_7063")
     #' @return An integer
@@ -309,9 +309,9 @@ sequence_data_table <- R6Class("sequence_data_table",
     #' @param name String, Name of sequence
     #' @examples
     #'   dataset <- sequence_data_table$new(filename =
-    #'   mothur2_example("test.fasta"))
+    #'   rchime_example("test.fasta"))
     #'   dataset <- dataset$set_group_assignments(filename =
-    #'   mothur2_example("test.count_table"))
+    #'   rchime_example("test.count_table"))
     #'   dataset$get_abunds(name =
     #'    "M00967_43_000000000-A3JHG_1_1111_8697_7063")
     #' @return Vector of abundances, in the same order as the groups
@@ -344,7 +344,7 @@ sequence_data_table <- R6Class("sequence_data_table",
     #' Get data.table containing a report of sequences removed
     #' @examples
     #'  dataset <- sequence_data_table$new(filename =
-    #'  mothur2_example("test.fasta"))
+    #'  rchime_example("test.fasta"))
     #'  some_seqs_to_remove <- c("M00967_43_000000000-A3JHG_1_2113_21675_17687",
     #'  "M00967_43_000000000-A3JHG_1_1114_17672_13068")
     #'  reasons <- c("example_removal", "example_removal")
@@ -380,9 +380,9 @@ sequence_data_table <- R6Class("sequence_data_table",
     #' Get data.table containing align report data used for screening
     #' @examples
     #'   dataset <- sequence_data_table$new(filename =
-    #'     mothur2_example("test.fasta"))
+    #'     rchime_example("test.fasta"))
     #'   reference <- sequence_data_table$new(filename =
-    #'     mothur2_example("reference.fasta"))
+    #'     rchime_example("reference.fasta"))
     #'
     #'   # results$align_report contains complete align report
     #'   # results$accnos will contain the names of any sequences that were
@@ -413,7 +413,7 @@ sequence_data_table <- R6Class("sequence_data_table",
     #' @description
     #' Get data.table containing contigs report data
     #' @examples
-    #'   files <- make_file(input_dir = mothur2_example(), type = "gz")
+    #'   files <- make_file(input_dir = rchime_example(), type = "gz")
     #'   contigs <- make_contigs(files)
     #'   df <- contigs$dataset$get_contigs_report()
     get_contigs_report = function() {
@@ -445,9 +445,9 @@ sequence_data_table <- R6Class("sequence_data_table",
     #' Get count table data
     #' @examples
     #'   dataset <- sequence_data_table$new(filename =
-    #'   mothur2_example("test.fasta"))
+    #'   rchime_example("test.fasta"))
     #'   dataset$set_group_assignments(filename =
-    #'   mothur2_example("test.count_table"))
+    #'   rchime_example("test.count_table"))
     #'   count_table <- dataset$get_count_table()
     #' @return a data.table containing the count table data
     get_count_table = function() {
@@ -526,10 +526,10 @@ sequence_data_table <- R6Class("sequence_data_table",
     #' @param group String, name of sample
     #' @examples
     #'   dataset <- sequence_data_table$new(
-    #'   filename = mothur2_example('test.fasta'))
+    #'   filename = rchime_example('test.fasta'))
     #'
     #'   dataset <- dataset$set_group_assignments(filename =
-    #'   mothur2_example("test.count_table"))
+    #'   rchime_example("test.count_table"))
     #'
     #'   # get names of sequences in your dataset
     #'   names <- dataset$get_names()
@@ -587,7 +587,7 @@ sequence_data_table <- R6Class("sequence_data_table",
     #' Get data.table containing FASTA data
     #' @examples
     #'   dataset <- sequence_data_table$new(filename =
-    #'   mothur2_example("test.fasta"))
+    #'   rchime_example("test.fasta"))
     #'   seqs <- dataset$get_seqs_table()
     #' @return data.table
     get_seqs_table = function() {
@@ -599,7 +599,7 @@ sequence_data_table <- R6Class("sequence_data_table",
     #' @param group String, name of sample
     #' @examples
     #'   dataset <- sequence_data_table$new(filename =
-    #'   mothur2_example("test.fasta"))
+    #'   rchime_example("test.fasta"))
     #'
     #'   # to get all sequences in dataset
     #'   seqs <- dataset$get_seqs()
@@ -628,10 +628,10 @@ sequence_data_table <- R6Class("sequence_data_table",
     #' @param group String, name of sample
     #' @examples
     #'   dataset <- sequence_data_table$new(
-    #'   filename = mothur2_example('test.fasta'))
+    #'   filename = rchime_example('test.fasta'))
     #'
     #'   dataset <- dataset$set_group_assignments(filename =
-    #'   mothur2_example("test.count_table"))
+    #'   rchime_example("test.count_table"))
     #'
     #'   # get abundances of all sequences in your dataset
     #'   abunds <- dataset$get_seqs_abunds()
@@ -666,9 +666,9 @@ sequence_data_table <- R6Class("sequence_data_table",
     #' Get data.table containing summary report data
     #' @examples
     #'   dataset <- sequence_data_table$new(filename =
-    #'   mothur2_example("test.fasta"))
+    #'   rchime_example("test.fasta"))
     #'   dataset <- dataset$set_group_assignments(filename =
-    #'   mothur2_example("test.count_table"))
+    #'   rchime_example("test.count_table"))
     #'   df <- dataset$get_summary_report()
     get_summary_report = function() {
       lengths <- private$seq_data$lengths[private$table_seqs]
@@ -764,9 +764,9 @@ sequence_data_table <- R6Class("sequence_data_table",
     #' @param reason String, reason for merging sequence
     #' @examples
     #'   dataset <- sequence_data_table$new(filename =
-    #'   mothur2_example("test.fasta"))
+    #'   rchime_example("test.fasta"))
     #'   dataset$set_group_assignments(filename =
-    #'   mothur2_example("test.count_table"))
+    #'   rchime_example("test.count_table"))
     #'
     #'   # Number of Unique seqs: 1000
     #'   # Total number of seqs: 1000
@@ -796,9 +796,9 @@ sequence_data_table <- R6Class("sequence_data_table",
     #' @param trash_codes vector containing reasons for sequences removal
     #' @examples
     #'   dataset <- sequence_data_table$new(filename =
-    #'   mothur2_example("test.fasta"))
+    #'   rchime_example("test.fasta"))
     #'   dataset$set_group_assignments(filename =
-    #'   mothur2_example("test.count_table"))
+    #'   rchime_example("test.count_table"))
     #'
     #'   # remove sequences with ambiguous bases
     #'   screen_seqs(dataset = dataset, max_ambig = 0)
@@ -882,9 +882,9 @@ sequence_data_table <- R6Class("sequence_data_table",
     #' @param trash_codes vector containing reasons for sequences removal
     #' @examples
     #'   dataset <- sequence_data_table$new(filename =
-    #'                     mothur2_example("test.fasta"))
+    #'                     rchime_example("test.fasta"))
     #'   dataset$set_group_assignments(filename =
-    #'                     mothur2_example("test.count_table"))
+    #'                     rchime_example("test.count_table"))
     #'   dataset
     #'
     #' # remove first 10 sequences from the dataset

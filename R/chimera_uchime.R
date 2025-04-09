@@ -84,10 +84,10 @@
 #' # Let's create a dataset from the example files
 #'
 #' dataset <- sequence_data_table$new(
-#'   filename = mothur2_example("test.fasta")
+#'   filename = rchime_example("test.fasta")
 #' )
 #' dataset$set_group_assignments(
-#'   filename = mothur2_example("test.count_table")
+#'   filename = rchime_example("test.count_table")
 #' )
 #'
 #' # detect and remove chimeras from the dataset using denovo approach
@@ -98,13 +98,13 @@
 #' # or detect and remove chimeras using a reference
 #'
 #' dataset <- sequence_data_table$new(
-#'   filename = mothur2_example("test.fasta")
+#'   filename = rchime_example("test.fasta")
 #' )
 #' dataset$set_group_assignments(
-#'   filename = mothur2_example("test.count_table")
+#'   filename = rchime_example("test.count_table")
 #' )
 #' reference <- sequence_data_table$new(
-#'   filename = mothur2_example("reference.fasta")
+#'   filename = rchime_example("reference.fasta")
 #' )
 #'
 #' chimera_report <- chimera_uchime(dataset, reference = reference)

@@ -5,10 +5,7 @@
 \title{sequence_dataset}
 \description{
 'sequence_dataset' is an R6 class that represents sequence FASTA
-and abundance data. It is a parent class for the 'sequence_data_table' and
-'SequenceDuckDB' classes whose data can be sourced from mothur formatted
-FASTA and count tables, XXXXX duckDB database XXXX, or created by
-mothur2's make_contigs function.
+and abundance data.
 }
 \examples{
 
@@ -24,10 +21,10 @@ mothur2's make_contigs function.
 
   dataset <- sequence_dataset$new()
   fasta_data <- dataset$read_fasta_file(filename =
-    mothur2_example("test.fasta"))
+    rchime_example("test.fasta"))
   fasta_names <- fasta_data$names
   count_data <- dataset$read_count_file(names = fasta_names,
-   filename = mothur2_example("test.count_table"))
+   filename = rchime_example("test.count_table"))
 
 ## ------------------------------------------------
 ## Method `sequence_dataset$read_fasta_file`
@@ -35,7 +32,7 @@ mothur2's make_contigs function.
 
   dataset <- sequence_dataset$new()
   fasta_data <- dataset$read_fasta_file(filename =
-  mothur2_example("test.fasta"))
+  rchime_example("test.fasta"))
 
 ## ------------------------------------------------
 ## Method `sequence_dataset$write_count_file`
@@ -43,10 +40,10 @@ mothur2's make_contigs function.
 
   dataset <- sequence_dataset$new()
   fasta_data <- dataset$read_fasta_file(filename =
-  mothur2_example("test.fasta"))
+  rchime_example("test.fasta"))
   fasta_names <- fasta_data$names
   count_data <- dataset$read_count_file(names = fasta_names,
-   filename = mothur2_example("test.count_table"))
+   filename = rchime_example("test.count_table"))
   dataset$write_count_file(count_data,
    filename = "output.count")
   remove_file("output.count")
@@ -57,7 +54,7 @@ mothur2's make_contigs function.
 
   dataset <- sequence_dataset$new()
   fasta_data <- dataset$read_fasta_file(filename =
-  mothur2_example("test.fasta"))
+  rchime_example("test.fasta"))
  dataset$write_fasta_file(fasta_data$names,
   fasta_data$sequences, filename = "output.fasta")
  remove_file("output.fasta")
@@ -313,10 +310,10 @@ A data.frame containing the sequence abundance data
 \if{html}{\out{<div class="r example copy">}}
 \preformatted{  dataset <- sequence_dataset$new()
   fasta_data <- dataset$read_fasta_file(filename =
-    mothur2_example("test.fasta"))
+    rchime_example("test.fasta"))
   fasta_names <- fasta_data$names
   count_data <- dataset$read_count_file(names = fasta_names,
-   filename = mothur2_example("test.count_table"))
+   filename = rchime_example("test.count_table"))
 }
 \if{html}{\out{</div>}}
 
@@ -348,7 +345,7 @@ A data.frame containing the FASTA sequence data and summary
 \if{html}{\out{<div class="r example copy">}}
 \preformatted{  dataset <- sequence_dataset$new()
   fasta_data <- dataset$read_fasta_file(filename =
-  mothur2_example("test.fasta"))
+  rchime_example("test.fasta"))
 }
 \if{html}{\out{</div>}}
 
@@ -379,10 +376,10 @@ Write count table data to mothur formatted count file
 \if{html}{\out{<div class="r example copy">}}
 \preformatted{  dataset <- sequence_dataset$new()
   fasta_data <- dataset$read_fasta_file(filename =
-  mothur2_example("test.fasta"))
+  rchime_example("test.fasta"))
   fasta_names <- fasta_data$names
   count_data <- dataset$read_count_file(names = fasta_names,
-   filename = mothur2_example("test.count_table"))
+   filename = rchime_example("test.count_table"))
   dataset$write_count_file(count_data,
    filename = "output.count")
   remove_file("output.count")
@@ -417,7 +414,7 @@ sequences to}
 \if{html}{\out{<div class="r example copy">}}
 \preformatted{  dataset <- sequence_dataset$new()
   fasta_data <- dataset$read_fasta_file(filename =
-  mothur2_example("test.fasta"))
+  rchime_example("test.fasta"))
  dataset$write_fasta_file(fasta_data$names,
   fasta_data$sequences, filename = "output.fasta")
  remove_file("output.fasta")
