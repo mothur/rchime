@@ -24,7 +24,7 @@
 #'
 #' # To summarize the dataset, run the following:
 #'
-#' summary <- summary_seqs(dataset = dataset$dataset)
+#' summary <- summary_seqs(dataset)
 #'
 #' @export
 summary_seqs <- function(dataset = NULL,

@@ -1,4 +1,7 @@
+.lintr
+.pre-commit-config.yaml
 ^.*\.Rproj$
 ^\.Rproj\.user$
+^\.github$
 ^\.vscode$
 ^debug$

@@ -36,7 +36,7 @@ dataset$set_group_assignments(
 
 # To summarize the dataset, run the following:
 
-summary <- summary_seqs(dataset = dataset$dataset)
+summary <- summary_seqs(dataset)
 
 }
 \author{

@@ -151,11 +151,10 @@ dataset <- sequence_data_table$new(
 dataset$set_group_assignments(
   filename = rchime_example("test.count_table")
 )
-reference <- sequence_data_table$new(
-  filename = rchime_example("reference.fasta")
-)
 
-chimera_report <- chimera_uchime(dataset, reference = reference)
+chimera_report <- chimera_uchime(dataset,
+  reference = rchime_example("reference.fasta")
+)
 
 }
 \seealso{

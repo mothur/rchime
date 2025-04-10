@@ -31,7 +31,13 @@ FASTA and abundance data. It inherits from 'sequence_dataset'.
 
   dataset <- sequence_data_table$new(filename =
     rchime_example("test.fasta"))
-  screen_seqs(dataset = dataset, max_length = 275, max_ambig = 0)
+
+  # flag 10 'bad' sequences
+  names <- dataset$get_names()[c(1:10)]
+  trash_codes <- rep("first_ten", 10)
+
+  dataset$remove_seqs(names, trash_codes)
+
   dataset$print_bad_accnos()
 
 ## ------------------------------------------------
@@ -110,7 +116,8 @@ FASTA and abundance data. It inherits from 'sequence_dataset'.
   # results$align_report contains complete align report
   # results$accnos will contain the names of any sequences that were
   #   flipped
-  results <- align_seqs(dataset, reference)
+
+  # results <- align_seqs(dataset, reference)
 
   # report contains partial align report used for screening:
   # search_score, sim_score and longest_insert
@@ -121,9 +128,14 @@ FASTA and abundance data. It inherits from 'sequence_dataset'.
 ## Method `sequence_data_table$get_contigs_report`
 ## ------------------------------------------------
 
-  files <- make_file(input_dir = rchime_example(), type = "gz")
-  contigs <- make_contigs(files)
-  df <- contigs$dataset$get_contigs_report()
+  # You can use the mothur2 package to assemble your
+  # paired reads and create a dataset with contigs data
+
+  # files <- make_file(input_dir = rchime_example(), type = "gz")
+  # contigs <- make_contigs(files)
+
+  # df <- contigs$dataset$get_contigs_report()
+
 
 ## ------------------------------------------------
 ## Method `sequence_data_table$get_count_table`
@@ -212,11 +224,11 @@ FASTA and abundance data. It inherits from 'sequence_dataset'.
   # Number of Unique seqs: 1000
   # Total number of seqs: 1000
 
-  seqs_to_merge <- list(c("M00967_43_000000000-A3JHG_1_1111_8697_7063",
-  "M00967_43_000000000-A3JHG_1_1107_13334_19316",
-  "M00967_43_000000000-A3JHG_1_2103_15942_24856"),
-  c("M00967_43_000000000-A3JHG_1_2110_12430_18520",
-  "M00967_43_000000000-A3JHG_1_1107_22778_21712"))
+  seqs_to_merge <- list(c("M00967_43_000000000-A3JHG_1_1112_15471_15261",
+  "M00967_43_000000000-A3JHG_1_2114_21028_11825",
+  "M00967_43_000000000-A3JHG_1_2106_5820_9300"),
+  c("M00967_43_000000000-A3JHG_1_1111_26505_10426",
+  "M00967_43_000000000-A3JHG_1_1111_23613_8947"))
 
   dataset$merge_seqs(seqs_to_merge)
 
@@ -232,11 +244,14 @@ FASTA and abundance data. It inherits from 'sequence_dataset'.
   dataset$set_group_assignments(filename =
   rchime_example("test.count_table"))
 
-  # remove sequences with ambiguous bases
-  screen_seqs(dataset = dataset, max_ambig = 0)
+  # flag 10 sequences for removal
+  names <- dataset$get_names()[c(1:10)]
+  trash_codes <- rep("first_ten", 10)
 
-  # reinclude sequences with ambiguous bases
-  dataset$reinstate_seqs(trash_codes = c("ambig"))
+  dataset$remove_seqs(names, trash_codes)
+
+  # reinclude sequences you removed
+  dataset$reinstate_seqs(trash_codes = c("first_ten"))
 
 ## ------------------------------------------------
 ## Method `sequence_data_table$remove_seqs`
@@ -442,7 +457,13 @@ removed from the dataset
 \if{html}{\out{<div class="r example copy">}}
 \preformatted{  dataset <- sequence_data_table$new(filename =
     rchime_example("test.fasta"))
-  screen_seqs(dataset = dataset, max_length = 275, max_ambig = 0)
+
+  # flag 10 'bad' sequences
+  names <- dataset$get_names()[c(1:10)]
+  trash_codes <- rep("first_ten", 10)
+
+  dataset$remove_seqs(names, trash_codes)
+
   dataset$print_bad_accnos()
 }
 \if{html}{\out{</div>}}
@@ -663,7 +684,8 @@ Get data.table containing align report data used for screening
   # results$align_report contains complete align report
   # results$accnos will contain the names of any sequences that were
   #   flipped
-  results <- align_seqs(dataset, reference)
+
+  # results <- align_seqs(dataset, reference)
 
   # report contains partial align report used for screening:
   # search_score, sim_score and longest_insert
@@ -686,9 +708,14 @@ Get data.table containing contigs report data
 
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
-\preformatted{  files <- make_file(input_dir = rchime_example(), type = "gz")
-  contigs <- make_contigs(files)
-  df <- contigs$dataset$get_contigs_report()
+\preformatted{  # You can use the mothur2 package to assemble your
+  # paired reads and create a dataset with contigs data
+
+  # files <- make_file(input_dir = rchime_example(), type = "gz")
+  # contigs <- make_contigs(files)
+
+  # df <- contigs$dataset$get_contigs_report()
+
 }
 \if{html}{\out{</div>}}
 
@@ -1074,11 +1101,11 @@ will be merged (optional)}
   # Number of Unique seqs: 1000
   # Total number of seqs: 1000
 
-  seqs_to_merge <- list(c("M00967_43_000000000-A3JHG_1_1111_8697_7063",
-  "M00967_43_000000000-A3JHG_1_1107_13334_19316",
-  "M00967_43_000000000-A3JHG_1_2103_15942_24856"),
-  c("M00967_43_000000000-A3JHG_1_2110_12430_18520",
-  "M00967_43_000000000-A3JHG_1_1107_22778_21712"))
+  seqs_to_merge <- list(c("M00967_43_000000000-A3JHG_1_1112_15471_15261",
+  "M00967_43_000000000-A3JHG_1_2114_21028_11825",
+  "M00967_43_000000000-A3JHG_1_2106_5820_9300"),
+  c("M00967_43_000000000-A3JHG_1_1111_26505_10426",
+  "M00967_43_000000000-A3JHG_1_1111_23613_8947"))
 
   dataset$merge_seqs(seqs_to_merge)
 
@@ -1113,11 +1140,14 @@ Reinstates sequences removed for the reasons in trash_codes
   dataset$set_group_assignments(filename =
   rchime_example("test.count_table"))
 
-  # remove sequences with ambiguous bases
-  screen_seqs(dataset = dataset, max_ambig = 0)
+  # flag 10 sequences for removal
+  names <- dataset$get_names()[c(1:10)]
+  trash_codes <- rep("first_ten", 10)
 
-  # reinclude sequences with ambiguous bases
-  dataset$reinstate_seqs(trash_codes = c("ambig"))
+  dataset$remove_seqs(names, trash_codes)
+
+  # reinclude sequences you removed
+  dataset$reinstate_seqs(trash_codes = c("first_ten"))
 }
 \if{html}{\out{</div>}}
 
