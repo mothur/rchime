@@ -30,7 +30,7 @@ uchimeout_help <- function() {
     "18	YN	Y, N or ?, indicating whether the query was classified as", "\n",
     "chimeric (Y), not chimeric (N) or borderline case (?).", "\n",
     "The query is classified as chimeric if h >= threshold specified by", "\n",
-    "-minh, Div > minimum divergence specified by ‑mindiv and the number", "\n",
+    "minh, Div > minimum divergence specified by mindiv and the number", "\n",
     "of diffs ( (Y+N+A) in each segment (L and R) is greater than the", "\n",
     " minimum specified by -mindiffs. A query is unclassified if the", "\n",
     "maxh > h > minh, i.e. maxh is the maximum score for a non-chimera,", "\n",

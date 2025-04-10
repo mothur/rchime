@@ -7,7 +7,7 @@
  */
 
 #include "uchime_main.h"
-#include <__config>
+//#include <__config>
 
 /******************************************************************************/
 // this is the entry point to uchime source code from chimera_findur
