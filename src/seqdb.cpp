@@ -1,7 +1,6 @@
 
 #include "seqdb.h"
 #include "alpha.h"
-#include <__config>
 
 /******************************************************************************/
 SeqDB::SeqDB() {
