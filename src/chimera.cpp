@@ -17,7 +17,7 @@ Chimera::Chimera(bool derep, int proc, bool si, bool hg, Rcpp::List options) {
     silent = si;
     hasGroupData = hg;
 
-    opts = Options::getInstance();
+    opts = new Options();
 
     Rcpp::CharacterVector optionsNames = options.names();
     Rcpp_Utils utils;

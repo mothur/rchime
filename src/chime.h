@@ -48,14 +48,9 @@ struct ChimeHit2 {
 		H = -1.0;
 		Score = -1.0;
 		AbQ = AbA = AbB = -1.0f;
-
-	    Options* opt = Options::getInstance();
-	    minh = opt->getMinh();
-	    mindiv = opt->getMindiv();
-	    mindiffs = opt->getMindiffs();
 	}
 
-	bool Accept() const {
+	bool Accept(double minh, double mindiv, int mindiffs) const {
 		return Score >= minh && Div >= mindiv && CS_LY >= mindiffs && CS_RY >= mindiffs;
 	}
 

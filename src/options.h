@@ -18,7 +18,8 @@ class Options {
 
 public:
 
-    static Options* getInstance();
+    Options();
+    ~Options() = default;
 
     // set individual options
     void setAbskew(double abs = 2.0);
@@ -59,34 +60,6 @@ public:
     double getXn() const         { return xn;            }
 
 private:
-
-    static Options* _uniqueInstance;
-    Options( const Options& ); // Disable copy constructor
-    void operator=( const Options& ); // Disable assignment operator
-
-    // set to default options
-    Options() {
-        setAbskew();
-        setMinh();
-        setMindiv();
-        setChimealns();
-        setChunks();
-        setDn();
-        setIdsmoothwindow();
-        setMinchunk();
-        setMindiffs();
-        setMindiv();
-        setMinh();
-        setMinlen();
-        setMaxlen();
-        setMaxp();
-        setQueryfract();
-        setSkipgaps();
-        setSkipgaps2();
-        setXa();
-        setXn();
-    }
-    ~Options() = default;
 
     double abskew, minh, mindiv, xn, dn, xa, queryfract;
     int chunks, minchunk, idsmoothwindow, maxp, minlen, maxlen,

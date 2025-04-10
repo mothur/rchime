@@ -30,14 +30,19 @@ struct chimeraData {
     vector< vector<int> > abunds;
     vector<set<string> > chimeras;
 
+    // options
+    Options options;
+
     // outputs - one for each sample
     vector<vector<ChimeHit2> > uchimeResults;
     bool silent;
 
     // denovo
-    chimeraData(Rcpp::Environment& d, vector<string> g, bool s = true) {
+    chimeraData(Rcpp::Environment& d, vector<string> g, Options o,
+         bool s = true) {
         groups = g;
         silent = s;
+        options = o;
 
         if (groups.size() != 0) {
             for (int i = 0; i < groups.size(); i++) {
@@ -51,10 +56,11 @@ struct chimeraData {
     }
 
     // reference
-    chimeraData(Rcpp::Environment& d, Rcpp::Environment& reference) {
+    chimeraData(Rcpp::Environment& d, Rcpp::Environment& reference, Options o) {
         fillData(d, "", "dataset");
         fillData(reference, "", "reference");
         chimeras.resize(1);
+        options = o;
     }
     ~chimeraData() {}
 
@@ -91,7 +97,7 @@ public:
     // dereplicate, processors, silent, hasGroups, uchime options
     Chimera(bool derep, int proc, bool si, bool hg, Rcpp::List options);
 
-    virtual ~Chimera(){};
+    virtual ~Chimera(){ delete opts; };
 
     virtual Rcpp::List removeChimeras(Rcpp::Environment& dataset) = 0;
     virtual Rcpp::List removeChimeras(Rcpp::Environment& dataset,

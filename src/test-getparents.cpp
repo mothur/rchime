@@ -5,7 +5,8 @@ context("GetParents class C++ unit tests") {
 
     test_that("test getChunkInfo") {
 
-        GetParents parentFinder;
+        Options opt;
+        GetParents parentFinder(&opt);
 
         unsigned ChunkLength;
 	    vector<unsigned> ChunkLos = parentFinder.getChunkInfo(252, ChunkLength);
@@ -26,7 +27,8 @@ context("GetParents class C++ unit tests") {
     }
 
     test_that("test getWord") {
-        GetParents parentFinder;
+        Options opt;
+        GetParents parentFinder(&opt);
 
         string sequence = "ATGGCATGTTACC";
 

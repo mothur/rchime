@@ -9,9 +9,18 @@
 #include "alignchime.h"
 
 /******************************************************************************/
+AlignChimes::AlignChimes(double opt_xn, double opt_dn, double opt_xa,
+						 bool opt_skipgaps, bool opt_skipgaps2) {
+	xn = opt_xn;
+	dn = opt_dn;
+	xa = opt_xa;
+	skipgaps = opt_skipgaps;
+	skipgaps2 = opt_skipgaps2;
+}
+/******************************************************************************/
 // dn = 1.4, xn = 8, xa = 1
 double AlignChimes::GetScore2(double Y, double N, double A) {
-	double denominator = (opt->getXn()*(N + opt->getDn()) + opt->getXa()*A);
+	double denominator = (xn*(N + dn) + xa*A);
 	return (Y/denominator);
 }
 /******************************************************************************/
@@ -242,14 +251,14 @@ ChimeHit2 AlignChimes::alignChime(const SeqData &QSD, const SeqData &ASD, const 
 		if (isgap(a)) { ++ngaps; }
 		if (isgap(b)) { ++ngaps; }
 
-		if (opt->getSkipgaps()) { if (ngaps == 3) { continue; } }
+		if (skipgaps) { if (ngaps == 3) { continue; } }
 		else                    { if (ngaps == 2) { continue; } }
 
 		if (!FirstA) {
 			swap(a, b);
 		}
 
-		if (opt->getSkipgaps2()) {
+		if (skipgaps2) {
 			if (Col > 0 && (isgap(Q3[Col-1]) || isgap(A3[Col-1]) || isgap(B3[Col-1]))) {
 				continue; }
 			if (Col + 1 < ColCount && (isgap(Q3[Col+1]) || isgap(A3[Col+1]) || isgap(B3[Col+1]))) {

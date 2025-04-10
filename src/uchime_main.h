@@ -15,6 +15,7 @@
 #include "seqdb.h"
 #include "searchchime.h"
 #include "mothur-r.h"
+#include "options.h"
 
 
 /* This class is the access point to the uchime source */
@@ -29,7 +30,8 @@ public:
     // returns list of dataframes with results
     vector<ChimeHit2> runUchime(vector<string> names, vector<string> seqs,
                          vector<string> refNames, vector<string> refSeqs,
-                         vector<int> abunds, set<string>& chims);
+                         vector<int> abunds, set<string>& chims,
+                         Options* opts);
 
 private:
 

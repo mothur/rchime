@@ -20,7 +20,7 @@ class AlignChimes {
 
     public:
 
-    AlignChimes() { opt = Options::getInstance(); }
+    AlignChimes(double, double, double, bool, bool); 
     ~AlignChimes() = default;
 
     ChimeHit2 alignChime(const SeqData &QSD, const SeqData &ASD, const SeqData &B_SD,
@@ -28,7 +28,8 @@ class AlignChimes {
 
     private:
 
-    Options* opt;
+    double xn, dn, xa;
+    bool skipgaps, skipgaps2;
 
     double GetScore2(double Y, double N, double A);
     void make3Way(const SeqData &QSD, const SeqData &ASD, const SeqData &B_SD,

@@ -30,7 +30,7 @@ class SearchChime {
 
 public:
 
-    SearchChime(); 
+    SearchChime(Options*); 
     ~SearchChime();  
 
     // database, query, results
@@ -40,7 +40,7 @@ private:
 
     Options* opt;
     GlobalAligner aligner;
-    AlignChimes chimeAlign;
+    AlignChimes* chimeAlign;
 
     double getFractIdGivenPath(string A, string B, const char *Path);
     static vector<unsigned> getSmoothedIdVec(const SeqData &queryData, const SeqData &parentData,

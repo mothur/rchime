@@ -7,12 +7,8 @@
  */
 
 #include "uchime_main.h"
-#include "options.h"
-#include "seqdb.h"
 #include <__config>
 
-/******************************************************************************/
-Options* Options::_uniqueInstance = 0;
 /******************************************************************************/
 // this is the entry point to uchime source code from chimera_findur
 vector<ChimeHit2> UchimeMain::runUchime(vector<string> names,
@@ -20,7 +16,8 @@ vector<ChimeHit2> UchimeMain::runUchime(vector<string> names,
                                  vector<string> refNames,
                                  vector<string> refSeqs,
                                  vector<int> abunds,
-								 set<string>& namesOfChimeras) {
+								 set<string>& namesOfChimeras,
+								 Options* opts) {
 
 	// loading SeqDB with data from R, sort descending order by abundace
 	SeqDB data(names, seqs, abunds, true);
@@ -38,7 +35,7 @@ vector<ChimeHit2> UchimeMain::runUchime(vector<string> names,
 
 	vector<ChimeHit2> Hits;
 	unsigned numQuerySeqs = data.getSeqCount();
-	SearchChime search;
+	SearchChime search(opts);
 	for (unsigned i = 0; i < numQuerySeqs; ++i) {
 
 		SeqData queryData = data.getSeqData(i);

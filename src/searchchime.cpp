@@ -4,11 +4,13 @@
 #include "globalalign2.h"
 
 /******************************************************************************/
-SearchChime::SearchChime() {
-	opt = Options::getInstance();
+SearchChime::SearchChime(Options* o) { 
+	opt = o; 
+	chimeAlign = new AlignChimes(opt->getXn(), opt->getDn(), opt->getXa(),
+								 opt->getSkipgaps(), opt->getSkipgaps2());
 }
 /******************************************************************************/
-SearchChime::~SearchChime() {}
+SearchChime::~SearchChime() { delete chimeAlign; }
 /******************************************************************************/
 vector<unsigned> SearchChime::getSmoothedIdVec(const SeqData &queryData, const SeqData &parentData,
  									const string &Path, unsigned d) {
@@ -79,7 +81,7 @@ bool SearchChime::searchChime(SeqDB* database, const SeqData & queryData,
 	Hit.QLabel = queryData.getName();
 	Hit.AbQ = queryData.getAbund();
 
-	GetParents parentFinder;
+	GetParents parentFinder(opt);
 	vector<unsigned> Parents = parentFinder.getCandidateParents(database, queryData);
 
 	unsigned ParentCount = SIZE(Parents);
@@ -190,10 +192,10 @@ bool SearchChime::searchChime(SeqDB* database, const SeqData & queryData,
 			const SeqData &PSD2 = PSDs[i2];
 			const string &Path2 = Paths[i2];
 
-			ChimeHit2 Hit2 = chimeAlign.alignChime(queryData, PSD1, PSD2, Path1, Path2);
+			ChimeHit2 Hit2 = chimeAlign->alignChime(queryData, PSD1, PSD2, Path1, Path2);
 			Hit2.PctIdQT = TopPctId;
 
-			if (Hit2.Accept()) {
+			if (Hit2.Accept(opt->getMinh(), opt->getMindiv(), opt->getMindiffs())) {
 				chimeric = true;
 			}
 			if (Hit2.Score > Hit.Score) {

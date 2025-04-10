@@ -5,7 +5,7 @@ context("Options class C++ unit tests") {
 
     test_that("test defaults") {
 
-        Options* opts = Options::getInstance();
+        Options* opts = new Options();
 
         expect_true(opts->getAbskew() == 2.0);
         expect_false(opts->getChimealns());
@@ -27,5 +27,6 @@ context("Options class C++ unit tests") {
         expect_true(opts->getXa() == 1.0);
         expect_true(opts->getXn() == 8.0);
 
+        delete opts;
     }
 }

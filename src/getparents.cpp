@@ -9,8 +9,8 @@
 
 // default - minchuck 64 chunk 4
 /******************************************************************************/
-GetParents::GetParents() {
-	Options* opt = Options::getInstance(); 
+GetParents::GetParents(Options* o) {
+	Options* opt = o; 
 	minChunk = opt->getMinchunk();
 	numChunks = opt->getChunks();
 	abskew = opt->getAbskew();

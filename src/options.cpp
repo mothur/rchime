@@ -13,11 +13,28 @@
 #include "options.h"
 
 /******************************************************************************/
-Options* Options::getInstance() {
-    if( _uniqueInstance == 0) {
-        _uniqueInstance = new Options();
-    }
-    return _uniqueInstance;
+Options::Options() {
+    
+    // set to default options
+    setAbskew();
+    setMinh();
+    setMindiv();
+    setChimealns();
+    setChunks();
+    setDn();
+    setIdsmoothwindow();
+    setMinchunk();
+    setMindiffs();
+    setMindiv();
+    setMinh();
+    setMinlen();
+    setMaxlen();
+    setMaxp();
+    setQueryfract();
+    setSkipgaps();
+    setSkipgaps2();
+    setXa();
+    setXn();
 }
 /******************************************************************************/
 void Options::setAbskew(double abs)  {
