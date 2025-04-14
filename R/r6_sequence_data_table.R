@@ -6,7 +6,6 @@
 #'
 #' @importFrom R6 R6Class
 #' @importFrom methods new
-#' @importFrom waldo compare
 #' @import cli
 #' @import r2r
 #' @import data.table

@@ -17,7 +17,6 @@ repos:
         -    R6
         -    r2r
         -    stringi
-        -    waldo
         -    Rcpp
         -    data.table
         -    testthat

@@ -201,13 +201,6 @@ test_that("test sequence_data_table count info ", {
   expect_equal(dataset$get_num_groups(), 3)
 
   remove_file("test_write.count_table")
-  expect_snapshot(
-    waldo::compare(
-      dataset$print_count_summary(),
-      dataset$print_count_summary()
-    )
-  )
-
 
   input <- c(
     "#Compressed Format: ...",
@@ -374,14 +367,3 @@ test_that("test sequence_data_table count info ", {
   groups_totals <- dataset$get_group_totals()
   expect_equal(groups_totals[1], 30)
 })
-
-# test_that("test sequence_data_table prints ", {
-#   dataset <- sequence_data_table$new(filename = rchime_example("test.fasta"))
-#   dataset <- dataset$set_group_assignments(
-#     filename = rchime_example("test.count_table")
-#   )
-#
-#   expect_snapshot(
-#     waldo::compare(dataset$print(), dataset$print())
-#   )
-# })
