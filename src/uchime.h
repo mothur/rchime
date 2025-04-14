@@ -28,20 +28,20 @@
 #include <limits.h>
 
 
-#ifdef _MSC_VER
-#include <crtdbg.h>
-#include <process.h>
-#include <windows.h>
-#include <psapi.h>
-#include <io.h>
-#include <inttypes.h>
-#else
+#if defined (__APPLE__) || (__MACH__) || (linux) || (__linux) || (__linux__) || (__unix__) || (__unix)
 #include <sys/time.h>
 #include <sys/resource.h>
 #include <unistd.h>
 #include <errno.h>
 #include <fcntl.h>
 #include <stdlib.h>
+#else
+#include <crtdbg.h>
+#include <process.h>
+#include <windows.h>
+#include <psapi.h>
+#include <io.h>
+#include <inttypes.h>
 #endif
 
 #ifdef __MACH__
