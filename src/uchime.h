@@ -35,7 +35,9 @@
 #include <errno.h>
 #include <fcntl.h>
 #include <stdlib.h>
-#else
+#endif
+
+#ifdef _MSC_VER
 #include <crtdbg.h>
 #include <process.h>
 #include <windows.h>
