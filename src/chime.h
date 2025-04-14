@@ -56,8 +56,6 @@ struct ChimeHit2 {
 
 private:
 
-    double minh, mindiv, mindiffs;
-
     bool operator<(const ChimeHit2 &rhs) const {
         if (Score == rhs.Score) {
             return Div > rhs.Div;

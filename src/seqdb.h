@@ -18,12 +18,14 @@ class SeqDB {
 
 public:
 
-	SeqDB();
+    // for denovo
+	SeqDB(bool denovo);
+	// for by reference 
 	SeqDB(vector<string>& seqNames, vector<string>& seqs,
-		  vector<int>& abunds, bool descending = true);
+		  vector<int>& abunds, bool denovo);
 	~SeqDB();
 
-	void addSeq(string, string, int a = 1, bool degap = true);
+	void addSeq(string, string, int a = 1);
 
 	SeqData getSeqData(unsigned Id) const;
 
@@ -36,11 +38,10 @@ public:
 	// sequence abundance 
 	int getAbundance(unsigned SeqIndex) const;
 
-	// sequence length //GetSeqLength
-	unsigned getSeqLength(unsigned SeqIndex) const;
-
 	// number of sequences in SeqDB GetSeqCount
 	unsigned getSeqCount() const; 
+
+	bool isDenovo() { return IsDenovo; }
 
 	private:
 
@@ -49,7 +50,7 @@ public:
 	vector<string> seqs;
 
 	unsigned numSeqs;
-	bool isAligned; //m_isAligned
+	bool IsDenovo; 
 
 	void sortDescending();
 };

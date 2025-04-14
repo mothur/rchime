@@ -26,7 +26,7 @@ vector<ChimeHit2> UchimeMain::runUchime(vector<string> names,
 
 	SeqDB* reference = nullptr;
 	if (uchimeDeNovo) {
-		reference = new SeqDB();
+		reference = new SeqDB(true);
 	}else{
 		vector<int> refAbunds(refNames.size(), 1);
 		reference = new SeqDB(refNames, refSeqs, refAbunds, false);
@@ -44,7 +44,7 @@ vector<ChimeHit2> UchimeMain::runUchime(vector<string> names,
 		if (!chimeric) {
 			// add more abundant query sequences as potential parents
 			if (uchimeDeNovo) {
-				reference->addSeq(queryData.getName(), queryData.getSeq(), queryData.getAbund(), false);
+				reference->addSeq(queryData.getName(), queryData.getSeq(), queryData.getAbund());
 			}
 		}
 

@@ -120,6 +120,8 @@ chimera_uchime <- function(dataset = NULL, fasta = NULL, count = NULL,
                            dn = 1.4, xa = 1.0, chunks = 4, minchunk = 64,
                            idsmoothwindow = 32, maxp = 2, skipgaps = TRUE,
                            skipgaps2 = TRUE, minlen = 10, maxlen = 10000) {
+  created_dataset <- FALSE
+
   # no inputs provided
   if (is.null(dataset) && is.null(fasta)) {
     message <- paste(
@@ -140,14 +142,8 @@ chimera_uchime <- function(dataset = NULL, fasta = NULL, count = NULL,
     if (!is.null(count)) {
       dataset$set_group_assignments(filename = count)
     }
-    if (dataset$get_num_seqs() == 0) {
-      message <- paste(
-        "[ERROR]: empty dataset created from",
-        "{.var {fasta}}, please correct."
-      )
-      cli::cli_abort(message)
-    }
-    # check dataset is not empty
+
+    created_dataset <- TRUE
   } else {
     if (dataset$get_num_seqs() == 0) {
       message <- paste("[ERROR]: your dataset is empty, please correct.")
@@ -225,6 +221,10 @@ chimera_uchime <- function(dataset = NULL, fasta = NULL, count = NULL,
     chimera_report <- chimeraUchimeReference(dataset, reference, parameters)
   } else {
     chimera_report <- chimeraUchime(dataset, parameters)
+  }
+
+  if (created_dataset) {
+    chimera_report[["dataset"]] <- dataset
   }
 
   if (!silent) {

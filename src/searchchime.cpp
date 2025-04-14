@@ -21,7 +21,6 @@ vector<unsigned> SearchChime::getSmoothedIdVec(const SeqData &queryData, const S
 	string parent = parentData.getSeq();
 
 	const unsigned QL = query.length();
-	const unsigned PL = parent.length();
 
 	if (QL <= d) {
 		IdVec.resize(QL, 0);
@@ -76,7 +75,7 @@ vector<unsigned> SearchChime::getSmoothedIdVec(const SeqData &queryData, const S
 bool SearchChime::searchChime(SeqDB* database, const SeqData & queryData, 
   								ChimeHit2 &Hit) {
 
-	float MinFractId = 0.95f;	
+	//float MinFractId = 0.95f;	
 
 	Hit.QLabel = queryData.getName();
 	Hit.AbQ = queryData.getAbund();
@@ -100,7 +99,6 @@ bool SearchChime::searchChime(SeqDB* database, const SeqData & queryData,
 	vector<SeqData> PSDs;
 	vector<string> Paths;
 	double TopPctId = 0.0;
-	unsigned TopParentIndex = UINT_MAX;
 	unsigned QL = queryData.getSeqLength();
 	vector<unsigned> MaxIdVec(QL, 0);
 	for (unsigned ParentIndex = 0; ParentIndex < ParentCount; ++ParentIndex) {
@@ -120,10 +118,7 @@ bool SearchChime::searchChime(SeqDB* database, const SeqData & queryData,
 
 		double PctId = 100.0*getFractIdGivenPath(queryData.getSeq(), parentData.getSeq(), PD.Start);
 		
-		if (PctId > TopPctId) {
-			TopParentIndex = ParentIndex;
-			TopPctId = PctId;
-		}
+		if (PctId > TopPctId) { TopPctId = PctId; }
 
 		string Path = PD.Start;
 		Paths.push_back(Path);

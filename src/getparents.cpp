@@ -69,9 +69,15 @@ vector<unsigned> GetParents::getCandidateParents(SeqDB* data, const SeqData & qu
 
 		string targetName = data->getName(ParentIndex);
 		float targetAbund = data->getAbundance(ParentIndex);
-		if (!(targetAbund < cutoff)) {
+
+		if (data->isDenovo()) {
+			if (!(targetAbund < cutoff)) {
+				parents.push_back(ParentIndex);
+			}
+		}else {
 			parents.push_back(ParentIndex);
 		}
+		
 	}
 
 	return parents;
@@ -88,7 +94,6 @@ void GetParents::addParents(SeqDB* DB, const string &Query,
 	vector<float> WordCounts;
 	vector<unsigned> Order = RankParents(Query, DB, WordCounts);
 
-	unsigned TopSeqIndex = Order[0];
 	float TopWordCount = WordCounts[0];
 	for (unsigned i = 0; i < SeqCount; ++i) {
 		unsigned SeqIndex = Order[i];

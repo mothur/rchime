@@ -3,17 +3,15 @@
 #include "alpha.h"
 
 /******************************************************************************/
-SeqDB::SeqDB() {
+SeqDB::SeqDB(bool denovo) {
 	numSeqs = 0;
-	isAligned = false;
-	//isNucleotide = false;
-	//isNucleoSet = false;
+	IsDenovo = denovo;
 }
 /******************************************************************************/
 SeqDB::SeqDB(vector<string>& seqNames, vector<string>& sequences,
-			   vector<int>& ab, bool descending) {
+			   vector<int>& ab, bool denovo) {
 
-	//util = Utilities::getInstance();
+	IsDenovo = denovo;
 
 	// degap sequences
 	for (int i = 0; i < sequences.size(); i++) {
@@ -29,30 +27,12 @@ SeqDB::SeqDB(vector<string>& seqNames, vector<string>& sequences,
 	abunds = ab;
 	numSeqs = seqNames.size();
 
-	isAligned = false;
-	//isNucleotide = false;
-	//isNucleoSet = false;
-
-	//SetIsNucleo();
-
-	if (descending) {
-		sortDescending();
-	}
+	sortDescending();
 }
 /******************************************************************************/
 SeqDB::~SeqDB() {}
 /******************************************************************************/
-void SeqDB::addSeq(string name, string seq, int abund, bool degap) {
-	// degap sequences
-
-	if (degap) {
-		string temp = seq;
-		seq = "";
-		for(int j = 0; j < temp.length(); j++) {
-			if(isalpha(temp[j]))	{	seq += temp[j];	}
-		}
-	}
-
+void SeqDB::addSeq(string name, string seq, int abund) {
 	names.push_back(name);
 	seqs.push_back(seq);
 	abunds.push_back(abund);
@@ -71,11 +51,6 @@ string SeqDB::getName(unsigned id) const {
 /******************************************************************************/
 int SeqDB::getAbundance(unsigned id) const {
 	return abunds[id];
-}
-/******************************************************************************/
-// sequence length //GetSeqLength
-unsigned SeqDB::getSeqLength(unsigned id) const {
-	return seqs[id].length();
 }
 /******************************************************************************/
 // number of sequences in SeqDB GetSeqCount

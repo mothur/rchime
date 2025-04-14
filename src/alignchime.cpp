@@ -54,9 +54,6 @@ ChimeHit2 AlignChimes::alignChime(const SeqData &QSD, const SeqData &ASD, const 
 	if (ColLo == UINT_MAX) { return Hit; }
 
 	unsigned QPos = 0;
-	unsigned APos = 0;
-	unsigned BPos = 0;
-
 	vector<unsigned> ColToQPos(ColLo, UINT_MAX);
 	vector<unsigned> AccumCount(ColLo, UINT_MAX);
 	vector<unsigned> AccumSameA(ColLo, UINT_MAX);
@@ -101,8 +98,6 @@ ChimeHit2 AlignChimes::alignChime(const SeqData &QSD, const SeqData &ASD, const 
 		AccumAgainst.push_back(SumAgainst);
 
 		if (q != '-') { ++QPos; }
-		if (a != '-') { ++APos; }
-		if (b != '-') { ++BPos; }
 	}
 
 	double IdQA = double(SumSameA)/Sum;
@@ -296,8 +291,8 @@ void AlignChimes::make3Way(const SeqData &QSD, const SeqData &ASD,
     string parentBSeq = B_SD.getSeq();
 
     unsigned LQ = QSD.getSeqLength();
-    unsigned LA = ASD.getSeqLength();
-    unsigned LB = B_SD.getSeqLength();
+    //unsigned LA = ASD.getSeqLength();
+   // unsigned LB = B_SD.getSeqLength();
 
     vector<unsigned> InsertCountsA(LQ+1, 0);
     unsigned QPos = 0;
@@ -345,7 +340,6 @@ void AlignChimes::make3Way(const SeqData &QSD, const SeqData &ASD,
 
         char c = PathQA[i];
         if (c == 'M' || c == 'D') {
-            unsigned isq = InsertCounts[QPos];
             for (unsigned i = 0; i < InsertCounts[QPos]-is; ++i) {
                 A3.push_back('-');
             }
