@@ -1,5 +1,5 @@
-#' @title sequence_data_table
-#' @description 'sequence_data_table' is an R6 class that represents sequence
+#' @title sequence_data_vector
+#' @description 'sequence_data_vector' is an R6 class that represents sequence
 #'  FASTA and abundance data. It inherits from 'sequence_dataset'.
 #'
 #' @author Sarah Westcott, \email{swestcot@@umich.edu}
@@ -9,9 +9,8 @@
 #' @import cli
 #' @import r2r
 #' @import data.table
-#' @import stringi
 #' @export
-sequence_data_table <- R6Class("sequence_data_table",
+sequence_data_vector <- R6Class("sequence_data_vector",
   inherit = sequence_dataset,
   public = list(
     #' @description
@@ -19,32 +18,42 @@ sequence_data_table <- R6Class("sequence_data_table",
     #' @param filename Name of file containing FASTA reads
     #' @param path Path to file containing FASTA reads
     #' @examples
-    #'   dataset <- sequence_data_table$new(filename =
+    #'   dataset <- sequence_data_vector$new(filename =
     #'     rchime_example("test.fasta"))
     #'
-    #' @return A new `sequence_data_table` object.
+    #' @return A new `sequence_data_vector` object.
     initialize = function(filename = NULL, path = NULL) {
       super$initialize()
+      private$count_table <- sequence_abundance_data$new()
       self$clear()
       if (!is.null(filename)) {
-        private$seq_data <- setDT(super$read_fasta_file(filename, path))
+        df <- super$read_fasta_file(filename, path)
+        private$names <- df$names
+        private$sequences <- df$sequences
+        private$comments <- df$comments
+        private$trash_codes <- df$trash_codes
+        private$starts <- df$starts
+        private$ends <- df$ends
+        private$lengths <- df$lengths
+        private$ambigs <- df$ambigs
+        private$polymers <- df$polymers
+        private$numns <- df$numns
 
         num_table_rows <- 1
-        all_names <- private$seq_data$names
+        all_names <- private$names
         for (i in seq_along(all_names)) {
           private$seq2row[all_names[i]] <- num_table_rows
           num_table_rows <- num_table_rows + 1
         }
 
         # all seqs are assummed 'good'
-        rows <- length(private$seq_data$names)
+        rows <- length(private$names)
         private$table_seqs <- rep(TRUE, rows)
 
         abunds <- rep(1, rows)
 
         # add names with abundance 1
-        private$add_seqs_abunds(names = private$seq_data$names, abunds = abunds)
-        private$total <- nrow(private$seq_data)
+        private$count_table$add_seqs(names = private$names)
       }
       invisible(self)
     },
@@ -52,14 +61,14 @@ sequence_data_table <- R6Class("sequence_data_table",
     #' @description
     #' Get summary of sequences data - (summary_seqs output)
     #' @examples
-    #'   dataset <- sequence_data_table$new(filename =
+    #'   dataset <- sequence_data_vector$new(filename =
     #'   rchime_example("test.fasta"))
     #'   dataset$print()
     print = function() {
       self$print_bad_accnos()
       summary <- summary_seqs(dataset = self, silent = TRUE)
       print(summary)
-      self$print_count_summary()
+      private$count_table$print()
       cat(paste("\nNumber of unique seqs:", self$get_num_unique_seqs()), "\n")
       cat(paste("Total number of seqs:", self$get_num_seqs(), "\n"), "\n")
     },
@@ -68,7 +77,7 @@ sequence_data_table <- R6Class("sequence_data_table",
     #' 'print_bad_accnos()' outputs a summary of the reasons sequences were
     #'  removed from the dataset
     #' @examples
-    #'   dataset <- sequence_data_table$new(filename =
+    #'   dataset <- sequence_data_vector$new(filename =
     #'     rchime_example("test.fasta"))
     #'
     #'   # flag 10 'bad' sequences
@@ -94,26 +103,6 @@ sequence_data_table <- R6Class("sequence_data_table",
       )
     },
 
-    #' @description View summary of count table data
-    #' 'print_count_summary()' outputs a summary of the sequence
-    #'  abundance data
-    #' @examples
-    #'   dataset <- sequence_data_table$new(filename =
-    #'    rchime_example("test.fasta"))
-    #'   dataset$set_group_assignments(filename =
-    #'   rchime_example("test.count_table"))
-    #'   dataset$print_count_summary()
-    print_count_summary = function() {
-      if (private$has_group_data) {
-        cat("Group   Total:\n")
-        group_names <- self$get_groups()
-        group_totals <- self$get_group_totals()
-        for (i in seq_along(group_names)) {
-          cat(paste(group_names[i], group_totals[i], sep = "\t"), "\n")
-        }
-      }
-    },
-
     #' @description
     #' Add new sequence data
     #' @param names a vector of sequence names
@@ -128,7 +117,7 @@ sequence_data_table <- R6Class("sequence_data_table",
     #' @param ee a vector containing the sequences expected errors, optional
     #' @examples
     #'
-    #'   dataset <- sequence_data_table$new()
+    #'   dataset <- sequence_data_vector$new()
     #'   names <- c("seq1", "seq2", "seq3")
     #'   sequences <- c("ATGGGCT", "..TG--ACCGT..", "..GGuatgc..")
     #'   comments <- c("", "myComment", "")
@@ -150,7 +139,7 @@ sequence_data_table <- R6Class("sequence_data_table",
         # calc numNs
         numns <- unlist(lapply(
           sequences,
-          (function(x) stri_count(x, regex = "[N]"))
+          (function(x) length(gregexpr("[N]", x)[[1]]))
         ))
         # calc numBases
         lengths <- unlist(lapply(
@@ -171,18 +160,17 @@ sequence_data_table <- R6Class("sequence_data_table",
           (function(x) super$calc_longest_polymer(x))
         ))
 
-        data <- data.table(
-          names = names, sequences = sequences,
-          comments = comments, trash_codes = trash_codes,
-          starts = starts, ends = ends, lengths = lengths,
-          ambigs = ambigs, polymers = polymers, numns = numns
-        )
-
-        # all rows and name, sequence and comments columns
-        new_row <- data[c(1:rows), ]
-
-        # add new rows to dataset and set new seqs status to "good"
-        private$seq_data <- rbind(private$seq_data, new_row)
+        # # add new rows to dataset and set new seqs status to "good"
+        private$names <- c(private$names, names)
+        private$sequences <- c(private$sequences, sequences)
+        private$comments <- c(private$comments, comments)
+        private$trash_codes <- c(private$trash_codes, trash_codes)
+        private$starts <- c(private$starts, starts)
+        private$ends <- c(private$ends, ends)
+        private$lengths <- c(private$lengths, lengths)
+        private$ambigs <- c(private$ambigs, ambigs)
+        private$polymers <- c(private$polymers, polymers)
+        private$numns <- c(private$numns, numns)
         private$table_seqs <- c(private$table_seqs, rep(TRUE, rows))
 
         num_table_rows <- 1
@@ -201,66 +189,70 @@ sequence_data_table <- R6Class("sequence_data_table",
 
           # if they are all the same length, then add
           if (length(unique(all_lengths)) == 1) {
-            data <- data.table(
-              olengths = olengths, ostarts = ostarts, oends = oends,
-              mismatches = mismatches, ee = ee
-            )
-
-            # all rows and name, sequence and comments columns
-            new_row <- data[c(1:rows), ]
-
-            # add new rows to dataset
-            private$contigs_data <- rbind(private$contigs_data, new_row)
+            private$olengths <- c(private$olengths, olengths)
+            private$ostarts <- c(private$ostarts, ostarts)
+            private$oends <- c(private$oends, oends)
+            private$mismatches <- c(private$mismatches, mismatches)
+            private$ee <- c(private$ee, ee)
           } else {
             cli::cli_alert("The contigs data length is mismatched, removing.")
           }
         }
 
-        abunds <- rep(1, rows)
-
         # add names with abundance 1
-        private$add_seqs_abunds(names = names, abunds = abunds)
-
-        private$total <- sum(nrow(private$seq_data))
+        private$count_table$add_seqs(names = names)
       }
+
       invisible(self)
     },
 
     #' @description
     #' Remove all sequences from dataset
     #' @examples
-    #'   dataset <- sequence_data_table$new(filename =
+    #'   dataset <- sequence_data_vector$new(filename =
     #'   rchime_example("test.fasta"))
     #'   dataset$clear()
     clear = function() {
       # fasta data
-      private$seq_data <- data.table()
+      private$names <- c()
+      private$sequences <- c()
+      private$comments <- c()
+      private$trash_codes <- c()
+      private$starts <- c()
+      private$ends <- c()
+      private$lengths <- c()
+      private$ambigs <- c()
+      private$polymers <- c()
+      private$numns <- c()
+
       # contigs data
-      private$contigs_data <- data.table()
+      private$olengths <- c()
+      private$ostarts <- c()
+      private$oends <- c()
+      private$mismatches <- c()
+      private$ee <- c()
+      # private$contigs_data <- data.table()
+
       # align data
-      private$align_data <- data.table()
+      private$search_score <- c()
+      private$sim_score <- c()
+      private$longest_insert <- c()
+
       # abundance data
-      private$counts <- hashmap()
+      private$count_table$clear()
       # map to quick reference sequence data
       private$seq2row <- hashmap()
-      # group names mapped to column in counts
-      private$groups <- hashmap()
       # map of reasons for removal
       private$accnos <- hashmap()
-      # map of pre-calculated group totals
-      private$group_totals <- hashmap()
+
 
       # sequence counts
       private$total_bad <- 0
       private$unique_bad <- 0
-      private$total <- 0
+      # private$total <- 0
 
-      # include groups and sequences
-      private$table_groups <- c()
+      # included sequences
       private$table_seqs <- c()
-
-      # is abundance data parsed by sample
-      private$has_group_data <- FALSE
 
       invisible(self)
     },
@@ -271,7 +263,7 @@ sequence_data_table <- R6Class("sequence_data_table",
     #' @param group (optional) Name of group to get abundance for,
     #'   if not provided the total abundance for the sequence is returned
     #' @examples
-    #'   dataset <- sequence_data_table$new(filename =
+    #'   dataset <- sequence_data_vector$new(filename =
     #'   rchime_example("test.fasta"))
     #'   dataset <- dataset$set_group_assignments(filename =
     #'   rchime_example("test.count_table"))
@@ -289,20 +281,7 @@ sequence_data_table <- R6Class("sequence_data_table",
 
       # is sequence 'active'
       if (private$table_seqs[seq_index]) {
-        if (is.null(group)) {
-          if (private$has_group_data) {
-            return(sum(self$get_abunds(name)))
-          } else {
-            return(private$counts[[name]][[1]][1])
-          }
-        } else if (self$has_group(group)) {
-          group_index <- private$groups[[group]]
-          group_abund_data <- private$counts[[name]]
-          seqs_inc_index <- which(group_abund_data[[1]] %in% group_index)
-          if (length(seqs_inc_index) != 0) {
-            return(group_abund_data[[2]][seqs_inc_index])
-          }
-        }
+        return(private$count_table$get_abund(name, group))
       } else {
         super$alert_eliminated_name(name, 0)
       }
@@ -313,7 +292,7 @@ sequence_data_table <- R6Class("sequence_data_table",
     #' Get abundances for sequence by group
     #' @param name String, Name of sequence
     #' @examples
-    #'   dataset <- sequence_data_table$new(filename =
+    #'   dataset <- sequence_data_vector$new(filename =
     #'   rchime_example("test.fasta"))
     #'   dataset <- dataset$set_group_assignments(filename =
     #'   rchime_example("test.count_table"))
@@ -322,33 +301,13 @@ sequence_data_table <- R6Class("sequence_data_table",
     #' @return Vector of abundances, in the same order as the groups
     #'             returned by dataset$get_groups().
     get_abunds = function(name) {
-      seq_info <- self$in_table(name)
-      if (seq_info$include) {
-        if (private$has_group_data) {
-          # c(3,2) c(100, 45)
-          group_abund_data <- private$counts[[name]]
-          abunds <- rep(0, length(private$groups))
-          # group_abund_data[[1]] -> c(3,2)
-          for (i in seq_along(group_abund_data[[1]])) {
-            # group_abund_data[[2]] -> c(100,45)
-            # i -> 1, abunds[3] <- 100
-            # i -> 2, abunds[2] <- 45
-            abunds[group_abund_data[[1]][i]] <- group_abund_data[[2]][i]
-          }
-          return(abunds[private$table_groups])
-        } else {
-          return(private$counts[[name]][[1]])
-        }
-      } else {
-        super$alert_missing_name(name, c())
-        return(c())
-      }
+      return(private$count_table$get_abunds(name))
     },
 
     #' @description
     #' Get data.table containing a report of sequences removed
     #' @examples
-    #'  dataset <- sequence_data_table$new(filename =
+    #'  dataset <- sequence_data_vector$new(filename =
     #'  rchime_example("test.fasta"))
     #'  some_seqs_to_remove <- c("M00967_43_000000000-A3JHG_1_2113_21675_17687",
     #'  "M00967_43_000000000-A3JHG_1_1114_17672_13068")
@@ -384,9 +343,9 @@ sequence_data_table <- R6Class("sequence_data_table",
     #' @description
     #' Get data.table containing align report data used for screening
     #' @examples
-    #'   dataset <- sequence_data_table$new(filename =
+    #'   dataset <- sequence_data_vector$new(filename =
     #'     rchime_example("test.fasta"))
-    #'   reference <- sequence_data_table$new(filename =
+    #'   reference <- sequence_data_vector$new(filename =
     #'     rchime_example("reference.fasta"))
     #'
     #'   # results$align_report contains complete align report
@@ -401,9 +360,9 @@ sequence_data_table <- R6Class("sequence_data_table",
     #'
     get_align_report = function() {
       if (self$has_align_report()) {
-        searches <- private$align_data$search_scores[private$table_seqs]
-        sims <- private$align_data$sim_scores[private$table_seqs]
-        inserts <- private$align_data$longest_inserts[private$table_seqs]
+        searches <- private$search_score[private$table_seqs]
+        sims <- private$sim_score[private$table_seqs]
+        inserts <- private$longest_insert[private$table_seqs]
 
         align_report <- data.table(
           search_scores = searches,
@@ -429,13 +388,13 @@ sequence_data_table <- R6Class("sequence_data_table",
     #'
     get_contigs_report = function() {
       if (self$has_contigs_report()) {
-        lengths <- private$seq_data$lengths[private$table_seqs]
-        olengths <- private$contigs_data$olengths[private$table_seqs]
-        ostarts <- private$contigs_data$ostarts[private$table_seqs]
-        oends <- private$contigs_data$oends[private$table_seqs]
-        mismatches <- private$contigs_data$mismatches[private$table_seqs]
-        numns <- private$seq_data$numns[private$table_seqs]
-        ee <- private$contigs_data$ee[private$table_seqs]
+        lengths <- private$lengths[private$table_seqs]
+        olengths <- private$olengths[private$table_seqs]
+        ostarts <- private$ostarts[private$table_seqs]
+        oends <- private$oends[private$table_seqs]
+        mismatches <- private$mismatches[private$table_seqs]
+        numns <- private$numns[private$table_seqs]
+        ee <- private$ee[private$table_seqs]
 
         contigs_report <- data.table(
           lengths = lengths,
@@ -455,7 +414,7 @@ sequence_data_table <- R6Class("sequence_data_table",
     #' @description
     #' Get count table data
     #' @examples
-    #'   dataset <- sequence_data_table$new(filename =
+    #'   dataset <- sequence_data_vector$new(filename =
     #'   rchime_example("test.fasta"))
     #'   dataset$set_group_assignments(filename =
     #'   rchime_example("test.count_table"))
@@ -464,7 +423,7 @@ sequence_data_table <- R6Class("sequence_data_table",
     get_count_table = function() {
       df <- data.table(names = self$get_names())
       groups <- c()
-      if (private$has_group_data) {
+      if (private$count_table$has_groups()) {
         # add group columns
         groups <- self$get_groups()
         for (i in seq_along(groups)) {
@@ -482,7 +441,7 @@ sequence_data_table <- R6Class("sequence_data_table",
         }
         names(df) <- c("names", groups)
       } else {
-        df <- cbind(df, self$get_seqs_abunds())
+        df <- cbind(df, self$get_seqs_abunds(self$get_names()))
         names(df) <- c("names", "total")
       }
       return(df)
@@ -493,20 +452,7 @@ sequence_data_table <- R6Class("sequence_data_table",
     #' @param name The name of the sequence you want groups for, optional
     #' @return A character vector
     get_groups = function(name = NULL) {
-      if (is.null(name)) {
-        return(private$get_included_groups())
-      } else {
-        seq_info <- self$in_table(name)
-        if (seq_info$include && private$has_group_data) {
-          inc_groups <- private$get_included_groups()
-          group_abund_data <- private$counts[[name]]
-          included_indexes <- private$get_included_groups_indexes()
-          seqs_group_inds <- which(group_abund_data[[1]] %in% included_indexes)
-          # returns groups that are included in dataset and present in seq
-          return(inc_groups[group_abund_data[[1]][seqs_group_inds]])
-        }
-        return(c())
-      }
+      return(private$count_table$get_groups(name))
     },
 
     #' @description
@@ -514,29 +460,14 @@ sequence_data_table <- R6Class("sequence_data_table",
     #' @param group String, name of sample
     #' @return A vector of integers
     get_group_totals = function(group = NULL) {
-      if (!is.null(group)) {
-        group_total <- private$group_totals[[group]]
-        if (!is.null(group_total)) {
-          return(group_total)
-        }
-      } else if (private$has_group_data) {
-        groups <- self$get_groups()
-        totals <- rep(0, length(groups))
-
-        for (i in seq_along(groups)) {
-          totals[i] <- private$group_totals[[groups[i]]]
-        }
-
-        return(totals)
-      }
-      return(0)
+      return(private$count_table$get_group_totals(group))
     },
 
     #' @description
     #' Get names of sequences in the dataset
     #' @param group String, name of sample
     #' @examples
-    #'   dataset <- sequence_data_table$new(
+    #'   dataset <- sequence_data_vector$new(
     #'   filename = rchime_example('test.fasta'))
     #'
     #'   dataset <- dataset$set_group_assignments(filename =
@@ -549,28 +480,27 @@ sequence_data_table <- R6Class("sequence_data_table",
     #'   names <- dataset$get_names(group = 'F3D0')
     #'
     get_names = function(group = NULL) {
-      # invalid groups will produce null index
-      group_index <- private$groups[[group]]
+      names <- private$names[private$table_seqs]
 
-      if (!is.null(group_index)) {
-        return(private$select_group(
-          private$seq_data$names,
-          group_index
-        ))
-      } else if (!is.null(group)) {
-        cli::cli_alert("{.var {group}} is invalid, ignoring.")
+      if (!is.null(group)) {
+        if (private$count_table$has_group(group)) {
+          names_in_group <- c()
+          for (name in names) {
+            if (private$count_table$has_group(group, name)) {
+              names_in_group <- c(names_in_group, name)
+            }
+          }
+          return(names_in_group)
+        }
       }
-      return(private$seq_data$names[private$table_seqs])
+      return(names)
     },
 
     #' @description
     #' Get number of groups in the dataset
     #' @return An integer
     get_num_groups = function() {
-      if (private$has_group_data) {
-        return(sum(private$table_groups, na.rm = TRUE))
-      }
-      return(0)
+      return(private$count_table$get_num_groups())
     },
 
     #' @description
@@ -580,7 +510,7 @@ sequence_data_table <- R6Class("sequence_data_table",
     #' @return An integer
     get_num_seqs = function(group = NULL) {
       if (is.null(group)) {
-        return(private$total)
+        return(private$count_table$get_total())
       } else {
         return(self$get_group_totals(group))
       }
@@ -597,19 +527,31 @@ sequence_data_table <- R6Class("sequence_data_table",
     #' @description
     #' Get data.table containing FASTA data
     #' @examples
-    #'   dataset <- sequence_data_table$new(filename =
+    #'   dataset <- sequence_data_vector$new(filename =
     #'   rchime_example("test.fasta"))
     #'   seqs <- dataset$get_seqs_table()
     #' @return data.table
     get_seqs_table = function() {
-      return(private$get_good())
+      data <- data.table(
+        names = private$names[private$table_seqs],
+        sequences = private$sequences[private$table_seqs],
+        comments = private$comments[private$table_seqs],
+        trash_codes = private$trash_codes[private$table_seqs],
+        starts = private$starts[private$table_seqs],
+        ends = private$ends[private$table_seqs],
+        lengths = private$lengths[private$table_seqs],
+        ambigs = private$ambigs[private$table_seqs],
+        polymers = private$polymers[private$table_seqs],
+        numns = private$numns[private$table_seqs]
+      )
+      return(data)
     },
 
     #' @description
     #' Get vector containing FASTA nucleotide strings
     #' @param group String, name of sample
     #' @examples
-    #'   dataset <- sequence_data_table$new(filename =
+    #'   dataset <- sequence_data_vector$new(filename =
     #'   rchime_example("test.fasta"))
     #'
     #'   # to get all sequences in dataset
@@ -620,25 +562,32 @@ sequence_data_table <- R6Class("sequence_data_table",
     #'
     #' @return data.table
     get_seqs = function(group = NULL) {
-      # invalid groups will produce null index
-      group_index <- private$groups[[group]]
+      if (!is.null(group)) {
+        if (private$count_table$has_group(group)) {
+          # names and sequences in table
+          names <- self$get_names()
+          seqs <- private$sequences[private$table_seqs]
 
-      if (!is.null(group_index)) {
-        return(private$select_group(
-          private$seq_data$sequences,
-          group_index
-        ))
-      } else if (!is.null(group)) {
-        cli::cli_alert("{.var {group}} is invalid, ignoring.")
+          seqs_in_group <- c()
+          for (i in seq_along(names)) {
+            if (private$count_table$has_group(group, names[i])) {
+              seqs_in_group <- c(seqs_in_group, seqs[i])
+            }
+          }
+          return(seqs_in_group)
+        }
       }
-      return(private$seq_data$sequences[private$table_seqs])
+
+      return(private$sequences[private$table_seqs])
     },
 
     #' @description
     #' Get abundances for sequences in dataset
-    #' @param group String, name of sample
+    #' @param names vector of Strings for which you want abundances for
+    #' @param bysample Boolean, if true then abundance broken down by sample,
+    #'                 if false, then total abundance is returned
     #' @examples
-    #'   dataset <- sequence_data_table$new(
+    #'   dataset <- sequence_data_vector$new(
     #'   filename = rchime_example('test.fasta'))
     #'
     #'   dataset <- dataset$set_group_assignments(filename =
@@ -647,47 +596,30 @@ sequence_data_table <- R6Class("sequence_data_table",
     #'   # get abundances of all sequences in your dataset
     #'   abunds <- dataset$get_seqs_abunds()
     #'
-    #'   # get abundances of sequences in sample 'F3D0'
-    #'   abunds <- dataset$get_seqs_abunds(group = 'F3D0')
-
+    #'   # get abundances of sequences divided by sample
+    #'   abunds <- dataset$get_seqs_abunds(bysample = TRUE)
     #' @return Vector of abundances, in the same order as the sequences
     #'             returned by dataset$get_names().
-    get_seqs_abunds = function(group = NULL) {
-      abunds <- c()
-      if (private$has_count()) {
-        # gave us an invalid group
-        if (!is.null(group)) {
-          if (is.null(private$groups[[group]])) {
-            cli::cli_alert("{.var {group}} is invalid, ignoring.")
-            group <- NULL
-          }
-        }
-        names <- self$get_names(group)
-        for (i in seq_along(names)) {
-          abunds[i] <- self$get_abund(names[i], group)
-        }
-      } else {
-        abunds <- rep(1, self$get_num_unique_seqs())
-      }
-
-      return(abunds)
+    get_seqs_abunds = function(bysample = FALSE) {
+      names <- self$get_names()
+      return(private$count_table$get_seqs_abunds(names, bysample))
     },
 
     #' @description
     #' Get data.table containing summary report data
     #' @examples
-    #'   dataset <- sequence_data_table$new(filename =
+    #'   dataset <- sequence_data_vector$new(filename =
     #'   rchime_example("test.fasta"))
     #'   dataset <- dataset$set_group_assignments(filename =
     #'   rchime_example("test.count_table"))
     #'   df <- dataset$get_summary_report()
     get_summary_report = function() {
-      lengths <- private$seq_data$lengths[private$table_seqs]
-      ambigs <- private$seq_data$ambigs[private$table_seqs]
-      polymers <- private$seq_data$polymers[private$table_seqs]
-      numns <- private$seq_data$numns[private$table_seqs]
-      starts <- private$seq_data$starts[private$table_seqs]
-      ends <- private$seq_data$ends[private$table_seqs]
+      lengths <- private$lengths[private$table_seqs]
+      ambigs <- private$ambigs[private$table_seqs]
+      polymers <- private$polymers[private$table_seqs]
+      numns <- private$numns[private$table_seqs]
+      starts <- private$starts[private$table_seqs]
+      ends <- private$ends[private$table_seqs]
 
       summary_report <- data.table(
         lengths = lengths,
@@ -705,7 +637,7 @@ sequence_data_table <- R6Class("sequence_data_table",
     #' Determine if the dataset contains align report data
     #' @return Boolean
     has_align_report = function() {
-      if (nrow(private$align_data) == 0) {
+      if (length(private$search_score) == 0) {
         return(FALSE)
       }
       return(TRUE)
@@ -715,7 +647,7 @@ sequence_data_table <- R6Class("sequence_data_table",
     #' Determine if the dataset contains contigs report data
     #' @return Boolean
     has_contigs_report = function() {
-      if (nrow(private$contigs_data) == 0) {
+      if (length(private$olengths) == 0) {
         return(FALSE)
       }
       return(TRUE)
@@ -726,13 +658,8 @@ sequence_data_table <- R6Class("sequence_data_table",
     #' @param group String, Name of sample
     #' @return Boolean
     has_group = function(group) {
-      if (private$has_group_data) {
-        group_index <- private$groups[[group]]
-
-        # in case the group is not in table
-        if (!is.null(group_index)) {
-          return(private$table_groups[group_index])
-        }
+      if (private$count_table$has_group(group)) {
+        return(TRUE)
       }
       return(FALSE)
     },
@@ -774,7 +701,7 @@ sequence_data_table <- R6Class("sequence_data_table",
     #'                       will be merged (optional)
     #' @param reason String, reason for merging sequence
     #' @examples
-    #'   dataset <- sequence_data_table$new(filename =
+    #'   dataset <- sequence_data_vector$new(filename =
     #'   rchime_example("test.fasta"))
     #'   dataset$set_group_assignments(filename =
     #'   rchime_example("test.count_table"))
@@ -806,7 +733,7 @@ sequence_data_table <- R6Class("sequence_data_table",
     #' Reinstates sequences removed for the reasons in trash_codes
     #' @param trash_codes vector containing reasons for sequences removal
     #' @examples
-    #'   dataset <- sequence_data_table$new(filename =
+    #'   dataset <- sequence_data_vector$new(filename =
     #'   rchime_example("test.fasta"))
     #'   dataset$set_group_assignments(filename =
     #'   rchime_example("test.count_table"))
@@ -825,50 +752,31 @@ sequence_data_table <- R6Class("sequence_data_table",
         for (i in seq_along(trash_codes)) {
           trash_code <- trash_codes[i]
           # find sequences with that trash code
-          seqs_with_trashcode <- stri_detect_fixed(
-            private$seq_data$trash_codes,
-            trash_code
+          seqs_with_trashcode <- grepl(
+            trash_code,
+            private$trash_codes
           )
 
           # not all seqs with this trash code will be reinstated. The
           # sequence may have more than one trashcode
           names_2add <- private$get_seqs_for_reinstate(trash_code)
 
-          accnos_names <- private$seq_data$names[seqs_with_trashcode]
-
-          groups <- self$get_groups()
-
-          groups_to_re_add <- c()
+          accnos_names <- private$names[seqs_with_trashcode]
 
           for (j in seq_along(names_2add)) {
             seq_row <- private$seq2row[[names_2add[j]]]
 
             # set include seq flags
             private$table_seqs[seq_row] <- TRUE
-            private$seq_data$trash_codes[seq_row] <- ""
+            private$trash_codes[seq_row] <- ""
 
-            # check if this seq re-adds a group
-            this_seqs_groups <- private$get_groups_for_reinstate(names_2add[j])
+            # update groups and abunds in count_table
+            private$count_table$reinstate_seq(names_2add[j])
 
-            groups_to_re_add <- setdiff(this_seqs_groups, groups)
-
-            if (length(groups_to_re_add) != 0) {
-              for (k in seq_along(groups_to_re_add)) {
-                group_index <- private$groups[[groups_to_re_add[k]]]
-                private$table_groups[group_index] <- TRUE
-              }
-              groups <- self$get_groups()
-            }
-
-            abunds <- self$get_abunds(names_2add[j])
-            if (private$has_group_data) {
-              diff_abunds <- abunds * -1L
-              private$update_group_totals(diff_abunds)
-            }
-            abund <- sum(abunds)
+            abund <- self$get_abund(names_2add[j])
 
             # update totals
-            private$total <- private$total + abund
+            # private$total <- private$total + abund
             private$unique_bad <- private$unique_bad - 1
             private$total_bad <- private$total_bad - abund
           }
@@ -895,7 +803,7 @@ sequence_data_table <- R6Class("sequence_data_table",
     #' @param names vector containing names of sequences to remove
     #' @param trash_codes vector containing reasons for sequences removal
     #' @examples
-    #'   dataset <- sequence_data_table$new(filename =
+    #'   dataset <- sequence_data_vector$new(filename =
     #'                     rchime_example("test.fasta"))
     #'   dataset$set_group_assignments(filename =
     #'                     rchime_example("test.count_table"))
@@ -917,33 +825,19 @@ sequence_data_table <- R6Class("sequence_data_table",
         )
       } else {
         if (length(names) != 0) {
-          groups <- self$get_groups()
-
           for (i in seq_along(names)) {
             row_to_remove <- private$seq2row[[names[i]]]
             if (!is.null(row_to_remove)) {
               private$remove_seq(names[i], trash_codes[i], TRUE)
             }
           }
-        }
 
-        # are their samples to remove now? This can happen if the seqs
-        # removed eliminate a group
-        new_totals <- self$get_group_totals()
-
-        # are there groups in the dataset with no sequences
-        if (0 %in% new_totals) {
-          groups <- self$get_groups()
-          for (i in seq_along(groups)) {
-            if (new_totals[i] == 0) {
-              group_index <- private$groups[[groups[i]]]
-              private$table_groups[group_index] <- FALSE
-            }
-          }
+          # private$total <- private$count_table$get_total()
         }
       }
       invisible(self)
     },
+
     #' @description
     #' Add group assignment data
     #' @param names a vector of sequence names
@@ -952,7 +846,7 @@ sequence_data_table <- R6Class("sequence_data_table",
     #' @param path String, Path to mothur formatted count file
     #' @examples
     #'
-    #'   dataset <- sequence_data_table$new()
+    #'   dataset <- sequence_data_vector$new()
     #'   names <- c("seq1", "seq2", "seq3")
     #'   sequences <- c("ATGGGCT", "..TG--ACCGT..", "..GGuatgc..")
     #'   groups <- c("sample1", "sample2", "sample3")
@@ -961,24 +855,11 @@ sequence_data_table <- R6Class("sequence_data_table",
     #'
     set_group_assignments = function(names = NULL, groups = NULL,
                                      filename = NULL, path = NULL) {
-      # clear old assignments, if any
-      private$counts <- hashmap()
-      private$table_groups <- c()
-      private$has_group_data <- FALSE
-      private$group_totals <- hashmap()
-      private$groups <- hashmap()
-
       if (!is.null(names) && !is.null(groups)) {
-        if (length(names) != length(groups)) {
+        if (length(names) != length(private$names)) {
           super$abort_length_mismatch(
             "names", "groups", length(names),
-            length(groups)
-          )
-        }
-        if (length(names) != length(private$seq_data$names)) {
-          super$abort_length_mismatch(
-            "names", "groups", length(names),
-            length(private$seq_data$names)
+            length(private$names)
           )
         }
 
@@ -989,82 +870,13 @@ sequence_data_table <- R6Class("sequence_data_table",
           }
         }
 
-        # add groups
-        unique_groups <- unique(groups)
-
-        # are all the sequence assigned to "NA"
-        if (length(unique_groups) > 1) {
-          private$add_groups(unique_groups)
-        } else if ((length(unique_groups) == 1) && unique_groups[1] != "NA") {
-          private$add_groups(unique_groups)
-        } else {
-          private$has_group_data <- FALSE
-        }
-
-        num_groups <- length(unique_groups)
-
-        if (num_groups != 0) {
-          for (i in seq_along(groups)) {
-            group_index <- private$groups[[groups[i]]]
-            private$counts[[names[i]]] <- list(c(group_index), c(1))
-          }
-        }
+        private$count_table$set_group_assignments(names, groups)
       } else if (!is.null(filename)) {
-        df <- super$read_count_file(self$get_names(), filename, path)
-        group_names <- names(df)[2:ncol(df)]
-        private$has_group_data <- TRUE
-
-        if (nrow(df) != self$get_num_unique_seqs()) {
-          super$abort_length_mismatch(
-            "names", "count table rows", length(self$get_num_unique_seqs()),
-            nrow(df)
-          )
-        }
-
-        if (group_names[1] == "total") {
-          group_names <- NULL
-          private$has_group_data <- FALSE
-          # add flag for "total"
-          private$table_groups <- c(TRUE)
-        } else {
-          private$add_groups(group_names)
-        }
-
-        ncols <- ncol(df)
-        for (i in seq_len(nrow(df))) {
-          counts <- as.numeric(df[i, 2:ncols])
-          group_indexes <- which(counts != 0)
-          name <- as.character(df[i, 1])
-          if (private$has_group_data) {
-            private$counts[[name]] <-
-              list(group_indexes, counts[group_indexes])
-          } else {
-            private$counts[[name]] <- list(counts[group_indexes])
-          }
-        }
+        private$count_table$set_group_assignments(
+          self$get_names(), NULL,
+          filename, path
+        )
       }
-
-      # this count file has groups
-      if (private$has_group_data) {
-        sums <- rep(0, self$get_num_groups())
-        names <- self$get_names()
-        for (i in seq_along(names)) {
-          counts <- self$get_abunds(names[i])
-          for (i in seq_along(counts)) {
-            sums[i] <- sums[i] + counts[i]
-          }
-        }
-
-        # include all groups
-        groups <- self$get_groups()
-        private$table_groups <- c(rep(TRUE, length(groups)))
-
-        for (i in seq_along(groups)) {
-          private$group_totals[groups[i]] <- sums[i]
-        }
-      }
-
-      private$calc_total()
 
       invisible(self)
     },
@@ -1076,7 +888,7 @@ sequence_data_table <- R6Class("sequence_data_table",
     #' @param reason, String (optional) reason for setting sequences to
     #'  zero abundance
     #' @examples
-    #'   dataset <- sequence_data_table$new()
+    #'   dataset <- sequence_data_vector$new()
     #'   names <- c("seq1", "seq2", "seq3")
     #'   sequences <- c("ATGGGCT", "..TG--ACCGT..", "..GGuatgc..")
     #'
@@ -1118,26 +930,12 @@ sequence_data_table <- R6Class("sequence_data_table",
             if (sum(abunds[[i]]) == 0) {
               private$remove_seq(names[i], reason, TRUE)
             } else {
-              # save old abunds if you have groups so we can update group_totals
-              orig_abunds <- c()
-              if (private$has_group_data) {
-                orig_abunds <- self$get_abunds(names[i])
-              }
-
-              # update counts
-              private$counts[[names[i]]] <- private$convert_to_sparse(abunds[i])
-
-              if (private$has_group_data) {
-                diff_abunds <- orig_abunds - abunds[[i]]
-
-                # update group_totals
-                private$update_group_totals(diff_abunds)
-              }
+              private$count_table$set_abundance(names[i], abunds[i])
             }
           }
         }
 
-        if (private$has_group_data) {
+        if (private$count_table$has_groups()) {
           # remove groups that are now zeroed out
           new_totals <- self$get_group_totals()
 
@@ -1147,14 +945,13 @@ sequence_data_table <- R6Class("sequence_data_table",
 
             for (i in seq_along(groups)) {
               if (new_totals[i] == 0) {
-                group_index <- private$groups[[groups[i]]]
-                private$table_groups[group_index] <- FALSE
+                private$count_table$remove_group(groups[i])
               }
             }
           }
         }
 
-        private$calc_total()
+        # private$total <- private$count_table$get_total()
       } else {
         cli::cli_abort("You must provide both names and abunds.")
       }
@@ -1175,7 +972,7 @@ sequence_data_table <- R6Class("sequence_data_table",
     #'  (optional, used by align_seqs)
     #'
     #' @examples
-    #'   dataset <- sequence_data_table$new()
+    #'   dataset <- sequence_data_vector$new()
     #'   names <- c("seq1", "seq2", "seq3")
     #'   sequences <- c("ATGGGCT", "..TG--ACCGT..", "..GGuatgc..")
     #'   dataset$add_seqs(names, sequences)
@@ -1192,7 +989,7 @@ sequence_data_table <- R6Class("sequence_data_table",
         # calc numNs
         numns <- unlist(lapply(
           sequences,
-          (function(x) stri_count(x, regex = "[N]"))
+          (function(x) length(gregexpr("[N]", x)[[1]]))
         ))
 
         # calc numBases
@@ -1231,16 +1028,16 @@ sequence_data_table <- R6Class("sequence_data_table",
 
           cli_progress_update()
 
-          private$seq_data[indexes[i], 2] <- sequences[i]
-          private$seq_data[indexes[i], 5] <- starts[i]
-          private$seq_data[indexes[i], 6] <- ends[i]
-          private$seq_data[indexes[i], 7] <- lengths[i]
-          private$seq_data[indexes[i], 8] <- ambigs[i]
-          private$seq_data[indexes[i], 9] <- polymers[i]
-          private$seq_data[indexes[i], 10] <- numns[i]
+          private$sequences[indexes[i]] <- sequences[i]
+          private$starts[indexes[i]] <- starts[i]
+          private$ends[indexes[i]] <- ends[i]
+          private$lengths[indexes[i]] <- lengths[i]
+          private$ambigs[indexes[i]] <- ambigs[i]
+          private$polymers[indexes[i]] <- polymers[i]
+          private$numns[indexes[i]] <- numns[i]
 
           if (length(comments) != 0) {
-            private$seq_data[indexes[i], 3] <- comments[i]
+            private$comments[indexes[i]] <- comments[i]
           }
         }
         cli_progress_done()
@@ -1263,26 +1060,18 @@ sequence_data_table <- R6Class("sequence_data_table",
             if (!self$has_align_report()) {
               num_all_seqs <- length(private$table_seqs)
 
-              data <- data.table(
-                search_scores = rep(0, num_all_seqs),
-                sim_scores = rep(0, num_all_seqs),
-                longest_inserts = rep(0, num_all_seqs)
-              )
-
-              # all rows and name, sequence and comments columns
-              new_row <- data[c(1:num_all_seqs), ]
-
-              # add new rows to dataset
-              private$align_data <- rbind(private$align_data, new_row)
+              private$search_score <- rep(0, num_all_seqs)
+              private$sim_score <- rep(0, num_all_seqs)
+              private$longest_insert <- rep(0, num_all_seqs)
             }
 
             # fill in "good" seqs align data
             for (i in seq_along(indexes)) {
               cli_progress_update()
 
-              private$align_data[indexes[i], 1] <- search_scores[i]
-              private$align_data[indexes[i], 2] <- sim_scores[i]
-              private$align_data[indexes[i], 3] <- longest_inserts[i]
+              private$search_score[indexes[i]] <- search_scores[i]
+              private$sim_score[indexes[i]] <- sim_scores[i]
+              private$longest_insert[indexes[i]] <- longest_inserts[i]
             }
             cli_progress_done()
           } else {
@@ -1291,6 +1080,14 @@ sequence_data_table <- R6Class("sequence_data_table",
         }
       }
       invisible(self)
+    },
+
+    #' @description
+    #' Write count table data to mothur formatted count file
+    #' @param filename String, name of file you want to write to
+    #' @param path path to count file (optional)
+    write_count_file = function(filename, path = NULL) {
+      private$count_table$write_count_file(filename, path, self$get_names())
     }
   ),
   private = list(
@@ -1299,39 +1096,24 @@ sequence_data_table <- R6Class("sequence_data_table",
     # names = c(), sequences = c(), comments = c(),
     # trash_codes = c(), starts = c(), ends = c(),
     # lengths = c(), ambigs = c(), polymers = c(), numns = c(),
-    seq_data = data.table(),
+    names = c(), sequences = c(), comments = c(),
+    trash_codes = c(), starts = c(), ends = c(),
+    lengths = c(), ambigs = c(), polymers = c(), numns = c(),
+    count_table = NULL,
 
     # contigs report data
     # olengths = c(), ostarts = c(), oends = c(),
     # mismatches = c(), ee = c() same order as seq_data
-    contigs_data = data.table(),
+    olengths = c(), ostarts = c(), oends = c(),
+    mismatches = c(), ee = c(),
 
     # align report data
     # search_score, sim_score and longest_insert
-    align_data = data.table(),
-
-    # count table data - sparse
-    # sequence name -> list of group indexes and abundances.
-    # data.table -> groups is a vector of integers representing the
-    # .                            groups the sequence is included in
-    #               abunds is a vector of integers representing the abundances
-    # .                        of the groups the sequence is included in
-    # groups['F3D2'] -> 1, groups['F3D78'] -> 2, groups['F3DN'] -> 3
-    # groups['F3D1'] -> 4,  groups['F3D6'] -> 5,  groups['F3D12'] -> 6
-    # seq1 -> list(c(4, 2, 6), c(2, 5, 3)) seq1 has a total abundance of 10,
-    # 2 from 'F3D1', 5 from 'F3D78', 3 from 'F3D1'
-    counts = hashmap(),
-
-    # groupName -> index in private$table_groups
-    groups = hashmap(),
+    search_score = c(), sim_score = c(), longest_insert = c(),
 
     # sequence name -> row in seq_data
     # seq2row["seq1"] will return row in seq_data where seq1's info is
     seq2row = hashmap(),
-
-    # vector of booleans indicating whether sample is present in 'current'
-    # table.
-    table_groups = c(),
 
     # vector of booleans indicating whether sequence is present in 'current'
     # table.
@@ -1343,126 +1125,34 @@ sequence_data_table <- R6Class("sequence_data_table",
     unique_bad = 0,
     total = 0,
 
-    # is abundance data parsed by sample
-    has_group_data = FALSE,
-
-    # groupName -> total abundance for group
-    # sample4 -> 250 means sample4 contains 250 sequences
-    group_totals = hashmap(),
-    add_seqs_abunds = function(names, abunds) {
-      if (private$has_group_data) {
-        cli::cli_abort("[ERROR]: The 'sequence_data_table' contains group
-                      information, you must provide by sample data.")
-      } else {
-        for (i in seq_along(names)) {
-          private$counts[[names[i]]] <- list(abunds[i])
-        }
-        private$table_groups <- c(TRUE)
-      }
-      invisible(self)
-    },
-    add_groups = function(groups) {
-      groups <- sort(groups)
-      private$table_groups <- c(rep(TRUE, length(groups)))
-
-      for (i in seq_along(groups)) {
-        private$groups[groups[i]] <- i
-      }
-      private$has_group_data <- TRUE
-
-      invisible(self)
-    },
-    calc_total = function() {
-      # dataset with abundance data parsed by sample
-      if (private$has_group_data) {
-        private$total <- sum(self$get_group_totals())
-      } else if (private$has_count()) {
-        # dataset with abundance data, no samples
-        private$total <- sum(self$get_seqs_abunds())
-      } else {
-        # dataset without abundance data
-        private$total <- self$get_num_unique_seqs()
-      }
-
-      invisible(self)
-    },
-
-    # abunds a vector of abundances in full format, convert to sparse format
-    # seq1 -> c(0, 5, 0, 2, 0, 3) becomes
-    # seq1 -> list(c(4, 2, 6), c(2, 5, 3))
-    # 2 from 'sample4', 5 from 'sample2', 3 from 'sample6'
-    convert_to_sparse = function(abunds) {
-      if (private$has_group_data) {
-        if (length(abunds[[1]]) != self$get_num_groups()) {
-          cli::cli_abort("When setting abunds on a dataset with groups you
-                             must provide an abundance for each sample.")
-        }
-        indexes <- which(abunds[[1]] != 0)
-        groups <- self$get_groups()[indexes]
-        group_indexes <- c()
-        for (i in seq_along(groups)) {
-          group_indexes <- c(group_indexes, private$groups[[groups[i]]])
-        }
-
-        return(list(group_indexes, abunds[[1]][indexes]))
-      }
-      return(abunds)
-    },
-
     # Clear sequences from dataset
     finalize = function() {
       self$clear()
     },
-
-    # Get names of groups in the dataset
-    get_included_groups = function() {
-      return(sort(unlist(keys(private$groups))[private$table_groups]))
-    },
-    get_included_groups_indexes = function() {
-      return(which(private$table_groups))
-    },
-    get_good = function() {
-      return(private$seq_data[private$seq_data$trash_codes == "", ])
-    },
-    get_groups_for_reinstate = function(name) {
-      all_groups <- sort(unlist(keys(private$groups)))
-      indexes <- private$counts[[name]][[1]]
-      return(all_groups[indexes])
-    },
     get_seqs_lengths = function() {
       return(unlist(lapply(
-        private$seq_data$sequences,
-        (function(x) stri_length(x))
+        private$sequences,
+        (function(x) nchar(x))
       )))
     },
 
     # returns vector of names to add back into active state
     get_seqs_for_reinstate = function(trash_code) {
       # remove trash code from that sequences list of trash codes
-      private$seq_data$trash_codes <-
-        stri_replace_all_fixed(
-          private$seq_data$trash_codes,
-          trash_code, ""
+      private$trash_codes <-
+        gsub(
+          trash_code, "",
+          private$trash_codes
         )
 
       # remove double comma
-      private$seq_data$trash_codes <-
-        stri_replace_all_fixed(private$seq_data$trash_codes, ",,", ",")
+      private$trash_codes <- gsub(",,", ",", private$trash_codes)
 
       # if it's now good, add the seq back in
-      seqs_to_re_add <- (private$seq_data$trash_codes == ",")
+      seqs_to_re_add <- (private$trash_codes == ",")
 
       # get the names
-      reinstated_names <- private$seq_data$names[seqs_to_re_add]
-    },
-
-    # Determine if the dataset contains abundance data
-    # return Boolean
-    has_count = function() {
-      if (length(private$counts) == 0) {
-        return(FALSE)
-      }
-      return(TRUE)
+      reinstated_names <- private$names[seqs_to_re_add]
     },
     merge_seq = function(names, reason, group = NULL) {
       # make sure seqs are in the dataset
@@ -1473,39 +1163,24 @@ sequence_data_table <- R6Class("sequence_data_table",
         }
       }
 
-      group_index <- private$groups[[group]]
-      reason <- paste(reason, ",", sep = "")
-
       if (length(names) != 1) {
-        keeper_name <- names[1]
+        reason <- paste(reason, ",", sep = "")
+
+        private$count_table$merge_seqs(names, group)
         names <- names[-c(1)]
-        k_abunds <- self$get_abunds(keeper_name)
 
-        for (i in seq_along(names)) {
-          dup_name <- names[i]
-          dup_abunds <- self$get_abunds(dup_name)
-
-          if (is.null(group_index)) {
-            # merge all counts
-            k_abunds <- k_abunds + dup_abunds
-            private$remove_seq(dup_name, reason, FALSE)
-          } else {
-            # merge counts for this group
-            k_abunds[group_index] <- k_abunds[group_index] +
-              dup_abunds[group_index]
-            dup_abunds[group_index] <- 0
-            if (sum(dup_abunds) == 0) {
-              private$remove_seq(dup_name, "duplicate,", FALSE)
-            } else {
-              d <- list(dup_abunds)
-              private$counts[[dup_name]] <- private$convert_to_sparse(d)
+        if (is.null(group)) {
+          # remove duplicate names from "in table" status
+          for (i in seq_along(names)) {
+            private$remove_seq(names[i], reason, FALSE)
+          }
+        } else {
+          for (i in seq_along(names)) {
+            if (self$get_abund(names[i]) == 0) {
+              private$remove_seq(names[i], reason, FALSE)
             }
           }
         }
-
-        # add dups groups and abunds to keeper
-        k_abunds <- list(k_abunds)
-        private$counts[[keeper_name]] <- private$convert_to_sparse(k_abunds)
       }
 
       invisible(self)
@@ -1515,13 +1190,9 @@ sequence_data_table <- R6Class("sequence_data_table",
       abunds <- self$get_abunds(name)
       abund <- sum(abunds)
 
-      # we are merging seqs, so don't update group totals, or numSeqs
+      # if we are merging seqs, don't update group totals, or numSeqs
       if (update_totals) {
-        # remove seq from group totals
-        if (private$has_group_data) {
-          private$update_group_totals(abunds)
-        }
-        private$total <- private$total - abund
+        private$count_table$remove_seq(name)
       }
 
       # add reason for removal
@@ -1544,48 +1215,10 @@ sequence_data_table <- R6Class("sequence_data_table",
 
       # trash_code column = 4
       row_to_remove <- private$seq2row[[name]]
-      private$seq_data[row_to_remove, 4] <- trash_code
+      private$trash_codes[row_to_remove] <- trash_code
       private$table_seqs[row_to_remove] <- FALSE
 
       invisible(self)
-    },
-
-    # passed seq names or sequences and returns items in table and in group
-    select_group = function(table_column, group_index) {
-      column_entries_in_group <- c()
-
-      if (private$table_groups[group_index]) {
-        all_entries <- table_column[private$table_seqs]
-        names <- private$seq_data$names[private$table_seqs]
-
-        for (i in seq_along(names)) {
-          group_abunds <- private$counts[[names[i]]]
-          if (group_index %in% group_abunds[[1]]) {
-            column_entries_in_group <- c(
-              column_entries_in_group,
-              all_entries[i]
-            )
-          }
-        }
-      }
-      return(column_entries_in_group)
-    },
-
-    # diff_abunds -> difference between old abunds and new abunds
-    # seq_old_abunds c(20, 10, 40)
-    # seq_new_abunds c(0, 20, 35)
-    # diff_abunds.   c(20, -10, 5)
-    update_group_totals = function(diff_abunds) {
-      if (sum(diff_abunds) != 0) {
-        # remove seq from group totals
-        if (private$has_group_data) {
-          groups <- self$get_groups()
-          for (j in seq_along(groups)) {
-            private$group_totals[[groups[j]]] <-
-              private$group_totals[[groups[j]]] - diff_abunds[j]
-          }
-        }
-      }
     }
   )
 )

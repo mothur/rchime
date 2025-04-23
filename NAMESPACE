@@ -10,7 +10,6 @@ importFrom(Rcpp, evalCpp)
 # R6 classes
 importFrom(R6, R6Class)
 importFrom(methods, new)
-import(stringi)
 import(r2r)
 import(data.table)
 

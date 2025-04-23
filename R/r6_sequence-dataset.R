@@ -7,7 +7,6 @@
 #' @importFrom R6 R6Class
 #' @importFrom methods new
 #' @import cli
-#' @import stringi
 #' @export
 sequence_dataset <- R6Class("sequence_dataset",
   public = list(
@@ -15,8 +14,8 @@ sequence_dataset <- R6Class("sequence_dataset",
     #' @description
     #' Create a new FASTA sequence dataset parent object
     #' @examples
-    #'   dataset <- sequence_data_table$new()
-    #' @return A new `sequence_data_table` object which inherits
+    #'   dataset <- sequence_data_vector$new()
+    #' @return A new `sequence_data_vector` object which inherits
     #'  from sequence_dataset
     initialize = function() {},
 
@@ -63,8 +62,8 @@ sequence_dataset <- R6Class("sequence_dataset",
     #' @param seq String, containing nucleotides
     #' @return An Integer
     calc_ambigs = function(seq) {
-      length <- stri_length(seq)
-      num_non_ambig <- stri_count(seq, regex = "[*.*-ATGC]")
+      length <- nchar(seq)
+      num_non_ambig <- length(gregexpr("[*.*-ATGC]", seq)[[1]])
       return(length - num_non_ambig)
     },
 
@@ -80,7 +79,7 @@ sequence_dataset <- R6Class("sequence_dataset",
       homops <- private$get_homop(size)
 
       # while you can still find homopolymers of this size
-      while (any(stri_detect_fixed(seq, homops))) {
+      while (private$contains_homops(seq, homops)) {
         longest_homop <- size
         size <- size + 1
 
@@ -96,9 +95,7 @@ sequence_dataset <- R6Class("sequence_dataset",
     #' @return An Integer
     calc_numbases = function(seq) {
       copy <- seq
-      return(stringi::stri_length(
-        stringi::stri_replace_all_regex(copy, "[.-]", "")
-      ))
+      return(nchar(gsub("[.-]", "", copy)))
     },
 
     #' @description
@@ -106,7 +103,7 @@ sequence_dataset <- R6Class("sequence_dataset",
     #' @param seq String, containing nucleotides
     #' @return An Integer
     calc_start = function(seq) {
-      return(stringi::stri_locate_first_regex(seq, "[A-Z]")[1])
+      return(regexpr("[A-Z]", seq)[1])
     },
 
     #' @description
@@ -114,51 +111,8 @@ sequence_dataset <- R6Class("sequence_dataset",
     #' @param seq String, containing nucleotides
     #' @return An Integer
     calc_end = function(seq) {
-      return(stringi::stri_locate_last_regex(seq, "[A-Z]")[1])
-    },
-
-    #' @description
-    #' Read a mothur formatted count file
-    #' @param names names of sequence in dataset (for matching sanity checks
-    #'  between fasta and count files)
-    #' @param filename Count file name (required)
-    #' @param path path to count file (optional)
-    #' @examples
-    #'   dataset <- sequence_dataset$new()
-    #'   fasta_data <- dataset$read_fasta_file(filename =
-    #'     rchime_example("test.fasta"))
-    #'   fasta_names <- fasta_data$names
-    #'   count_data <- dataset$read_count_file(names = fasta_names,
-    #'    filename = rchime_example("test.count_table"))
-    #' @return A data.frame containing the sequence abundance data
-    read_count_file = function(names, filename, path = NULL) {
-      directory <- dirname(filename)
-      filename <- basename(filename)
-
-      # if path not set, make directory of filename
-      if (is.null(path)) {
-        path <- directory
-      }
-
-      count_file <- file.path(file.path(path), filename)
-      file_conn <- file(count_file)
-      file_data <- readLines(file_conn)
-      num_lines <- length(file_data)
-      close(file_conn)
-      df <- data.frame()
-
-      # check for group info in header
-      if (num_lines > 1) {
-        comment <- stri_locate_first_fixed(file_data[2], "#")
-
-        # is this file compressed
-        if (!is.na(comment[1])) {
-          df <- private$fill_from_compressed_format(file_data, names)
-        } else {
-          df <- private$fill_from_uncompressed_format(file_data, names)
-        }
-      }
-      return(df)
+      out <- gregexpr("[A-Z]", seq)[[1]]
+      return(out[length(out)])
     },
 
     #' @description
@@ -195,9 +149,7 @@ sequence_dataset <- R6Class("sequence_dataset",
       numns <- unlist(lapply(
         df$Sequence,
         (function(x) {
-          stri_count(x,
-            regex = "[N]"
-          )
+            length(gregexpr("[N]", x)[[1]])
         })
       ))
 
@@ -213,9 +165,7 @@ sequence_dataset <- R6Class("sequence_dataset",
       starts <- unlist(lapply(
         df$Sequence,
         (function(x) {
-          stri_locate_first_regex(
-            x, "[A-Z]"
-          )[1]
+          self$calc_start(x)
         })
       ))
 
@@ -223,9 +173,7 @@ sequence_dataset <- R6Class("sequence_dataset",
       ends <- unlist(lapply(
         df$Sequence,
         (function(x) {
-          stri_locate_last_regex(
-            x, "[A-Z]"
-          )[1]
+          self$calc_end(x)
         })
       ))
 
@@ -254,59 +202,6 @@ sequence_dataset <- R6Class("sequence_dataset",
       )
 
       return(data)
-    },
-
-    #' @description
-    #' Write count table data to mothur formatted count file
-    #' @param df a data.table containing the count table data
-    #' @param filename String, name of file you want to write to
-    #' @param path path to count file (optional)
-    #' @examples
-    #'   dataset <- sequence_dataset$new()
-    #'   fasta_data <- dataset$read_fasta_file(filename =
-    #'   rchime_example("test.fasta"))
-    #'   fasta_names <- fasta_data$names
-    #'   count_data <- dataset$read_count_file(names = fasta_names,
-    #'    filename = rchime_example("test.count_table"))
-    #'   dataset$write_count_file(count_data,
-    #'    filename = "output.count")
-    #'   remove_file("output.count")
-    write_count_file = function(df, filename, path = NULL) {
-      if (file.exists(filename)) {
-        file.remove(filename)
-      }
-
-      file_conn <- file(filename, open = "a")
-      group_names <- names(df)[2:ncol(df)]
-      has_group_data <- TRUE
-
-      if (group_names[1] == "total") {
-        group_names <- NULL
-        has_group_data <- FALSE
-      }
-      writeLines(private$get_header(group_names), file_conn)
-
-      ncols <- ncol(df)
-      nrows <- nrow(df)
-      if (has_group_data) {
-        for (i in seq_len(nrows)) {
-          # seq1.  10.  1,6 2,10 ....
-          counts <- df[i, 2:ncols]
-          counts <- c(sum(counts), counts)
-          output <- paste(counts, collapse = "\t")
-          output <- paste(df[i, 1], output, sep = "\t")
-          writeLines(output, file_conn)
-        }
-      } else {
-        for (i in seq_len(nrows)) {
-          counts <- df[i, 2:ncols]
-          total <- sum(counts)
-          output <- paste(df[i, 1], total, sep = "\t")
-          writeLines(output, file_conn)
-        }
-      }
-
-      close(file_conn)
     },
 
     #' @description
@@ -347,6 +242,7 @@ sequence_dataset <- R6Class("sequence_dataset",
       close(file_conn)
     }
   ),
+
   private = list(
 
     # extract name from line
@@ -361,19 +257,6 @@ sequence_dataset <- R6Class("sequence_dataset",
       return(name)
     },
 
-    # Create header for mothur formatted count file
-    get_header = function(groups = NULL) {
-      if (!is.null(groups)) {
-        output <- paste("Representative_Sequence     total   ")
-        for (i in seq_along(groups)) {
-          output <- paste(output, groups[i], sep = "\t")
-        }
-        return(output)
-      } else {
-        return("Representative_Sequence     total")
-      }
-    },
-
     # create homopolymer of length size
     get_homop = function(size = 2) {
       as <- paste(rep("A", size), collapse = "")
@@ -385,125 +268,13 @@ sequence_dataset <- R6Class("sequence_dataset",
       return(c(as, ts, cs, gs, ns))
     },
 
-    # Compressed Format: groupIndex,abundance. 1,6 means an ...
-    # 	2,sample2	3,sample3	1,sample4
-    # Representative_Sequence     total  sample2	sample3	sample4
-    # returns data.frame contain count tables abundance data
-    fill_from_compressed_format = function(file_data, fasta_names) {
-      # extract group names
-      # line 2 looks like: "#2,sample2	3,sample3	1,sample4"
-      # remove first '#'
-      comment <- stri_locate_first_fixed(file_data[2], "#")
-      file_data[2] <- stri_sub(file_data[2], from = comment[1] + 1)
-      words <- split_white_space(file_data[2])
-      num_seqs <- length(fasta_names)
-
-      has_group_data <- TRUE
-      groups <- c()
-      count_names <- rep("", num_seqs)
-      df <- data.frame(names = count_names)
-
-      for (i in seq_along(words)) {
-        # parse group name
-        file_index <- split_at_char(words[i], ",")
-
-        # save group names
-        groups <- c(groups, file_index[2])
-
-        # prefill with 0
-        samplei <- rep(0, num_seqs)
-        df <- cbind(df, samplei)
-      }
-      names(df) <- c("names", groups)
-
-      row <- 1
-      # read compressed data lines
-      for (i in 4:length(file_data)) {
-        words <- split_white_space(file_data[i])
-
-        name <- words[1]
-
-        if (name %in% fasta_names) {
-          # set name
-          df[row, 1] <- name
-
-          for (j in 3:length(words)) {
-            data <- split_at_char(words[j], ",")
-            # add all samples
-            df[row, as.integer(data[1]) + 1] <- as.integer(data[2])
-          }
-          row <- row + 1
-        } else {
-          cli::cli_abort("[ERROR]: The sequence {.var {name}} is in
-                    your count file and not in your dataset.")
-        }
-      }
-
-      return(df)
-    },
-
-    # returns data.frame contain count tables abundance data
-    fill_from_uncompressed_format = function(file_data, fasta_names) {
-      # uncompressed format
-      # Representative_Sequence  total  sample2	sample3	sample4
-      words <- split_white_space(file_data[1])
-      num_seqs <- length(fasta_names)
-      has_group_data <- TRUE
-
-      # no groups in file
-      groups <- c()
-      names <- rep("", num_seqs)
-      df <- data.frame(names = names)
-
-      if (length(words) == 2) {
-        samplei <- rep(0, num_seqs)
-        df <- cbind(df, samplei)
-        groups <- c(groups, "total")
-        has_group_data <- FALSE
-      } else {
-        for (i in 3:length(words)) {
-          # save group names
-          groups <- c(groups, words[i])
-
-          # prefill with 0
-          samplei <- rep(0, num_seqs)
-          df <- cbind(df, samplei)
-        }
-      }
-      names(df) <- c("names", groups)
-
-      # read uncompressed data
-      row <- 1
-      for (i in 2:length(file_data)) {
-        words <- split_white_space(file_data[i])
-
-        if (length(words) >= 2) {
-          name <- words[1]
-          seq_total <- as.integer(words[2])
-
-          if (name %in% fasta_names) {
-            # set name
-            df[row, 1] <- name
-
-            if (has_group_data) {
-              col <- 2
-              for (j in 3:length(words)) {
-                # add all samples
-                df[row, col] <-
-                  as.integer(words[j])
-                col <- col + 1
-              }
-            } else {
-              df[row, 2] <- as.integer(seq_total)
+    contains_homops = function(seq, homops) {
+        for (homop in homops) {
+            if (grepl(homop, seq)) {
+                return(TRUE)
             }
-            row <- row + 1
-          } else {
-            cli::cli_abort("[ERROR]: The sequence {.var {name}} is
-                        in your count file and not in your dataset.")
-          }
         }
-      }
-      return(df)
+        return(FALSE)
     }
   )
 )

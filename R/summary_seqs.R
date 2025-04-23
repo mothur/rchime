@@ -15,7 +15,7 @@
 #'
 #' # Let's create a dataset to summarize
 #'
-#' dataset <- sequence_data_table$new(
+#' dataset <- sequence_data_vector$new(
 #'   filename = rchime_example("test.fasta")
 #' )
 #' dataset$set_group_assignments(

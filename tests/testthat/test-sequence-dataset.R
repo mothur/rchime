@@ -1,9 +1,9 @@
 # test sequence_dataset R6 Class
 
 test_that("test sequence_dataset R6 class", {
-  expect_error(dataset <- sequence_data_table$new(sequences = "seq1"))
+  expect_error(dataset <- sequence_data_vector$new(sequences = "seq1"))
 
-  dataset <- sequence_data_table$new()
+  dataset <- sequence_data_vector$new()
   df <- dataset$read_fasta_file(filename = rchime_example("test.fasta"))
 
   expect_equal(nrow(df), 323)
@@ -18,7 +18,7 @@ test_that("test sequence_dataset R6 class", {
   )
 
   # test initialization with file
-  dataset <- sequence_data_table$new(
+  dataset <- sequence_data_vector$new(
     filename = "test_dataset_sequences.fasta",
     path = "."
   )

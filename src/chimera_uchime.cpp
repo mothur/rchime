@@ -12,28 +12,6 @@
 #include "mothur.h"
 #include "uchime_main.h"
 
-// create a data.frame with the chimera report data
-    // Rcpp::DataFrame uchime_results = DataFrame::create(
-    //     Named("Score") = scores,
-    //     _("Query") = queries,
-    //     _("A") = Aparents,
-    //     _("B") = Bparents,
-    //     _("IdQM") = IdQMs,
-    //     _("IdQA") = IdQAs,
-    //     _("IdQB") = IdQBs,
-    //     _("IdAB") = IdABs,
-    //     _("IdQT") = IdQTs,
-    //     _("LY") = LYs,
-    //     _("LN") = LNs,
-    //     _("LA") = LAs,
-    //     _("RY") = RYs,
-    //     _("RN") = RNs,
-    //     _("RA") = RAs,
-    //     _("Div") = Divs,
-    //     _("Y") = chimericStatus);
-
-
-
 /******************************************************************************/
 ChimeraUchime::ChimeraUchime(bool derep, int proc, bool si, bool hg, Rcpp::List options) :
     Chimera(derep, proc, si, hg, options) {

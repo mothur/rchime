@@ -131,7 +131,7 @@ Bioinformatics 27:2194.
 
 # Let's create a dataset from the example files
 
-dataset <- sequence_data_table$new(
+dataset <- sequence_data_vector$new(
   filename = rchime_example("test.fasta")
 )
 dataset$set_group_assignments(
@@ -145,7 +145,7 @@ chimera_report <- chimera_uchime(dataset, dereplicate = TRUE)
 
 # or detect and remove chimeras using a reference
 
-dataset <- sequence_data_table$new(
+dataset <- sequence_data_vector$new(
   filename = rchime_example("test.fasta")
 )
 dataset$set_group_assignments(

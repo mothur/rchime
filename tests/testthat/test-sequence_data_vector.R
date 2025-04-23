@@ -1,7 +1,7 @@
-# test sequence_data_table R6 Class
+# test sequence_data_vector R6 Class
 
-test_that("test sequence_data_table R6 class", {
-  expect_error(dataset <- sequence_data_table$new(sequences = "seq1"))
+test_that("test sequence_data_vector R6 class", {
+  expect_error(dataset <- sequence_data_vector$new(sequences = "seq1"))
 
   sequences <- c(
     "NACGGAGGATGCGAGCGTTATCCGGATTTATTGGGTTTAAAGGGTGCGT",
@@ -16,9 +16,9 @@ test_that("test sequence_data_table R6 class", {
     comments = comments
   )
 
-  expect_error(dataset <- sequence_data_table$new(sequences = bad_data))
+  expect_error(dataset <- sequence_data_vector$new(sequences = bad_data))
 
-  dataset <- sequence_data_table$new()
+  dataset <- sequence_data_vector$new()
   dataset$add_seqs(names, sequences, comments)
   seqs <- dataset$get_seqs_table()
   expect_equal(dataset$get_num_seqs(), 3)
@@ -35,7 +35,7 @@ test_that("test sequence_data_table R6 class", {
   )
 
   # test initialization with file
-  dataset <- sequence_data_table$new(
+  dataset <- sequence_data_vector$new(
     filename = "test_dataset_sequences.fasta",
     path = "."
   )
@@ -61,9 +61,12 @@ test_that("test sequence_data_table R6 class", {
   expect_equal(dataset$get_num_seqs(), 3)
 
   remove_file("test_dataset_sequences.fasta")
+
+  expect_equal(dataset$get_align_report(), data.table())
+  expect_equal(dataset$get_contigs_report(), data.table())
 })
 
-test_that("test sequence_data_table count info ", {
+test_that("test sequence_data_vector count info ", {
   sequences <- c(
     "NACGGAGGATGCGAGCGTTATCCGGATTTATTGGGTTTAAAGGGTGCGT",
     "TACGGAGGATGCGAGCGTTATCCGGATTTATTGGGTTTAAAGGGTGCGT",
@@ -73,7 +76,7 @@ test_that("test sequence_data_table count info ", {
   names <- c("seq1", "seq2", "seq3", "seq4")
   groups <- c("sample1", "sample2", "sample1", "sample2")
 
-  dataset <- sequence_data_table$new()
+  dataset <- sequence_data_vector$new()
   dataset$add_seqs(names, sequences)
   expect_equal(dataset$get_num_seqs(), 4)
   expect_equal(dataset$get_group_totals(), 0)
@@ -95,12 +98,12 @@ test_that("test sequence_data_table count info ", {
     "TACGGAGGATGCGAGCGTTATCCGGATTTATTGGGTTTAAAGGGTGCGT",
     "...NNNGAGC-TTATCCGGATT-ATTG-GTT-AAA-GU-"
   )
+
   expect_equal(dataset$get_seqs(group = "sample1"), sample1_seqs)
   expect_equal(dataset$get_seqs(group = "sample2"), sample2_seqs)
   expect_equal(dataset$get_seqs(group = "invalid_sample"), sequences)
-  expect_equal(dataset$get_seqs_abunds(group = "sample1"), c(1, 1))
-  expect_equal(dataset$get_seqs_abunds(group = "sample2"), c(1, 1))
-  expect_equal(dataset$get_seqs_abunds(group = "invalid_sample"), c(1, 1, 1, 1))
+  expect_equal(dataset$get_seqs_abunds(bysample = TRUE)[[3]], c(1, 0))
+  expect_equal(dataset$get_seqs_abunds(), c(1, 1, 1, 1))
   expect_equal(dataset$get_groups("seq1"), c("sample1"))
   expect_equal(dataset$get_num_seqs("sample1"), 2)
   expect_equal(dataset$get_num_seqs("sampleNotInDataset"), 0)
@@ -130,8 +133,10 @@ test_that("test sequence_data_table count info ", {
   abunds <- list(c(1150), c(115), c(50), c(4))
   dataset$clear()
   dataset$add_seqs(names, sequences)
+  expect_equal(dataset$get_num_seqs(), 4)
   dataset$set_abundances(names, abunds)
   expect_equal(dataset$get_abund("seq2"), 115)
+  expect_equal(dataset$get_num_seqs(), 1319)
 
   # dataset with no groups
   input <- c(
@@ -141,17 +146,16 @@ test_that("test sequence_data_table count info ", {
 
   create_dummy_file("test_no_groups.count_table", input)
 
-  dataset <- sequence_data_table$new()
+  dataset <- sequence_data_vector$new()
   dataset$add_seqs(names, sequences)
+
   dataset$set_group_assignments(filename = "test_no_groups.count_table")
 
   remove_file("test_no_groups.count_table")
 
   expect_equal(dataset$get_num_seqs(), 1319)
   expect_equal(dataset$get_num_groups(), 0)
-  df <- dataset$get_count_table()
   dataset$write_count_file(
-    df,
     "test_write_no_group.count_table"
   )
 
@@ -185,9 +189,7 @@ test_that("test sequence_data_table count info ", {
 
   remove_file("test_small_abund.count_table")
 
-  df <- dataset$get_count_table()
   dataset$write_count_file(
-    df,
     "test_write.count_table"
   )
 
@@ -317,6 +319,7 @@ test_that("test sequence_data_table count info ", {
   expect_equal(groups_totals[2], 35)
   expect_equal(groups_totals[3], 125)
   expect_equal(groups_totals[4], 225)
+  expect_equal(dataset$get_num_seqs(), 386)
   expect_equal(dataset$get_groups()[3], "F3D142")
 
   # set seq1 and seq2 abundances
@@ -339,6 +342,10 @@ test_that("test sequence_data_table count info ", {
   expect_equal(groups_totals[2], 29)
   expect_equal(groups_totals[3], 60)
   expect_equal(groups_totals[4], 31)
+
+  count_table <- dataset$get_count_table()
+  expect_equal(count_table$F3D142[1], 30)
+  expect_equal(count_table$F3D142[3], 25)
 
   seqs <- c("ATGCTGGG", "ATGGGGGG", "ATGATTTAG", "ATGGCCTCTA")
   dataset$set_seqs(dataset$get_names(), seqs)

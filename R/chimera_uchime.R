@@ -83,7 +83,7 @@
 #'
 #' # Let's create a dataset from the example files
 #'
-#' dataset <- sequence_data_table$new(
+#' dataset <- sequence_data_vector$new(
 #'   filename = rchime_example("test.fasta")
 #' )
 #' dataset$set_group_assignments(
@@ -97,7 +97,7 @@
 #'
 #' # or detect and remove chimeras using a reference
 #'
-#' dataset <- sequence_data_table$new(
+#' dataset <- sequence_data_vector$new(
 #'   filename = rchime_example("test.fasta")
 #' )
 #' dataset$set_group_assignments(
@@ -121,6 +121,7 @@ chimera_uchime <- function(dataset = NULL, fasta = NULL, count = NULL,
                            idsmoothwindow = 32, maxp = 2, skipgaps = TRUE,
                            skipgaps2 = TRUE, minlen = 10, maxlen = 10000) {
   created_dataset <- FALSE
+  startTime = Sys.time()
 
   # no inputs provided
   if (is.null(dataset) && is.null(fasta)) {
@@ -138,7 +139,7 @@ chimera_uchime <- function(dataset = NULL, fasta = NULL, count = NULL,
     cli::cli_abort(message)
     # create dataset from fasta file and count file if provided
   } else if (is.null(dataset) && !is.null(fasta)) {
-    dataset <- sequence_data_table$new(filename = fasta)
+    dataset <- sequence_data_vector$new(filename = fasta)
     if (!is.null(count)) {
       dataset$set_group_assignments(filename = count)
     }
@@ -217,7 +218,7 @@ chimera_uchime <- function(dataset = NULL, fasta = NULL, count = NULL,
   # build reference dataset if provided
   chimera_report <- NULL
   if (!is.null(reference)) {
-    reference <- sequence_data_table$new(filename = reference)
+    reference <- sequence_data_vector$new(filename = reference)
     chimera_report <- chimeraUchimeReference(dataset, reference, parameters)
   } else {
     chimera_report <- chimeraUchime(dataset, parameters)
@@ -237,6 +238,9 @@ chimera_uchime <- function(dataset = NULL, fasta = NULL, count = NULL,
     } else if (after_count == num_seqs) {
       message <- ("chimera_uchime complete, no chimeras found")
     }
+    cli::cli_alert(message)
+    message <- paste("It took {.var {Sys.time() - startTime}}",
+                      "minutes to remove the chimeras")
     cli::cli_alert(message)
   }
 

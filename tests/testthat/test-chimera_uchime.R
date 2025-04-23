@@ -60,7 +60,7 @@ test_that("test chimera_uchime errors ", {
   # no inputs
   expect_error(chimera_uchime())
 
-  dataset <- sequence_data_table$new(rchime_example("test.chimera.fasta"))
+  dataset <- sequence_data_vector$new(rchime_example("test.chimera.fasta"))
 
   # too many inputs
   expect_error(chimera_uchime(
@@ -146,8 +146,8 @@ test_that("test chimera_uchime denovo - no groups", {
   )
 })
 
-test_that("test chimera_uchime denovo - groups, dereplicate = TRUE", {
-  dataset <- sequence_data_table$new(rchime_example("test.chimera.fasta"))
+test_that("test chimera_uchime denovo - groups, dereplicate = TRUE / FALSE", {
+  dataset <- sequence_data_vector$new(rchime_example("test.chimera.fasta"))
   dataset$set_group_assignments(
     filename =
       rchime_example("test.chimera.count_table")
@@ -214,10 +214,23 @@ test_that("test chimera_uchime denovo - groups, dereplicate = TRUE", {
     "BBBBBBBBBBBBBBBBBBBBBBBB",
     sep = ""
   )
-})
 
-test_that("test chimera_uchime denovo - groups, dereplicate = FALSE", {
-  # TODO
+  dataset <- sequence_data_vector$new(rchime_example("test.chimera.fasta"))
+  dataset$set_group_assignments(
+      filename =
+          rchime_example("test.chimera.count_table")
+  )
+
+  expect_equal(dataset$get_num_unique_seqs(), 6)
+  expect_equal(dataset$get_num_seqs(), 295696)
+
+  results <- chimera_uchime(dataset, dereplicate = FALSE, silent = TRUE)
+
+  expect_equal(dataset$get_num_unique_seqs(), 5)
+  expect_equal(dataset$get_num_seqs(), 290923)
+
+  # results$accnos results
+  expect_equal(results$accnos[[1]], "chimera1")
 })
 
 
@@ -244,7 +257,7 @@ test_that("test chimera_uchime reference ", {
 
   seqs <- c(chimera1_seq, non_chimera2_seq)
 
-  dataset <- sequence_data_table$new()
+  dataset <- sequence_data_vector$new()
   dataset$add_seqs(names, seqs)
 
   expect_equal(dataset$get_num_unique_seqs(), 2)

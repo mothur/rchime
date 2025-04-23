@@ -13,7 +13,7 @@ and abundance data.
 ## Method `sequence_dataset$new`
 ## ------------------------------------------------
 
-  dataset <- sequence_data_table$new()
+  dataset <- sequence_data_vector$new()
 
 ## ------------------------------------------------
 ## Method `sequence_dataset$read_count_file`
@@ -92,12 +92,12 @@ Create a new FASTA sequence dataset parent object
 }
 
 \subsection{Returns}{
-A new \code{sequence_data_table} object which inherits
+A new \code{sequence_data_vector} object which inherits
 from sequence_dataset
 }
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
-\preformatted{  dataset <- sequence_data_table$new()
+\preformatted{  dataset <- sequence_data_vector$new()
 }
 \if{html}{\out{</div>}}
 

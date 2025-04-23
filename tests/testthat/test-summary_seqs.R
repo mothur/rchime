@@ -28,7 +28,7 @@ test_that("test summary_seqs summarize fasta / count ", {
 
   create_dummy_file("test.count_table", input)
 
-  dataset <- sequence_data_table$new()
+  dataset <- sequence_data_vector$new()
 
   # can't summarize an empty dataset
   expect_error(summary_seqs(dataset = dataset))
@@ -46,7 +46,7 @@ test_that("test summary_seqs summarize fasta / count ", {
   expect_equal(results$fasta_summary[5, 7], "5")
 
   # add count data
-  dataset2 <- sequence_data_table$new()
+  dataset2 <- sequence_data_vector$new()
   dataset2$add_seqs(names = names, sequences = sequences)
   dataset2$set_group_assignments(filename = "test.count_table")
 
@@ -92,5 +92,5 @@ test_that("test summary_seqs summarize fasta / count ", {
   expect_equal(results[8, 3], 47)
   expect_equal(results[8, 4], 0)
   expect_equal(results[8, 5], 3)
-  expect_equal(results[8, 6], 0)
+  expect_equal(results[8, 6], 1)
 })

@@ -12,17 +12,14 @@ remove_file <- function(filename) {
 #' @description Split string at white space
 #' @param line, String containing data to split
 #'
-#' @import stringi
-#'
 #' @examples
 #' (split_white_space("This is my string to split."))
 #'
 #' @returns A vector of Strings
 split_white_space <- function(line) {
-  words <- stringi::stri_split_charclass(line, "\\p{WHITE_SPACE}",
-    omit_empty = TRUE
-  )
-  return(unlist(words))
+  words <- strsplit(line, "\\s") [[1]]
+  words <- words[nzchar(x=words)]
+  return(words)
 }
 # =========================================================================== #
 #' @title split_at_char
