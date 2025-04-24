@@ -1,6 +1,14 @@
 #ifndef chime_h
 #define chime_h
 
+/*
+ *  The ChimeHit2 struct stores the results for each sequences chimeric detection.
+ *
+ *  Modified by Sarah Westcott on 2/26/25.
+ *  Copyright 2025 SchlossLab. All rights reserved.
+ *
+ */
+
 #include "seq.h"
 #include "options.h"
 

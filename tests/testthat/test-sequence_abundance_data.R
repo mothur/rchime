@@ -21,6 +21,13 @@ test_that("test sequence_abdundance_data R6 class", {
   groups <- c("sample1", "sample1", "sample2")
   abunds$set_group_assignments(names, groups)
 
+  expect_error(abunds$add_seqs(names))
+  expect_error(abunds$get_abund("bad_name"))
+
+  abunds <- sequence_abundance_data$new()
+  groups <- c("sample1", "sample1", "sample2")
+  abunds$set_group_assignments(names, groups)
+
   expect_equal(abunds$get_total(), 3)
   expect_equal(abunds$get_group_totals(), c(2,1))
 
@@ -61,6 +68,13 @@ test_that("test sequence_abdundance_data R6 class", {
   expect_true(abunds$has_groups())
   expect_false(abunds$has_group("bad_group"))
   expect_false(abunds$has_group("sample2", "seq2"))
+
+  # merge sample1
+  abunds$merge_seqs(c("seq1", "seq2"), group = "sample1")
+  expect_equal(abunds$get_total(), 231)
+  expect_equal(abunds$get_group_totals(), c(226,5))
+  # seq1 now represent seq1 and seq2
+  expect_equal(abunds$get_abunds("seq1"), c(151,0))
 
   abunds$merge_seqs(c("seq1", "seq2"))
   expect_equal(abunds$get_total(), 231)

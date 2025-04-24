@@ -97,8 +97,7 @@ sequence_abundance_data <- R6Class("sequence_abundance_data",
 
       # if the name is NOT in the table
       if (is.null(data)) {
-        # TODO ERROR
-        return(0)
+        cli::cli_abort("{.var{name}} is not present in your dataset, aborting.")
       }
 
       if (is.null(group)) {

@@ -1,6 +1,6 @@
 //
 //  sequenceparser.cpp
-//  
+//
 //
 //  Created by Sarah Westcott on 4/23/25.
 //  Copyright (c) 2012 Schloss Lab. All rights reserved.
@@ -32,14 +32,14 @@ SequenceParser::SequenceParser(Rcpp::Environment& dataset, bool bysample) {
         for (int i = 0; i < groups.size(); i++) {
             groupToIndex[groups[i]] = i;
         }
-        
+
         abunds = Rcpp::as<vector<vector<int>> >(getAbunds(true));
     }else {
         vector<int> temp = Rcpp::as<vector<int> >(getAbunds());
         abunds.push_back(temp);
     }
-    
-}	
+
+}
 /************************************************************/
 // get names of sequence in groups
 vector<vector<string> > SequenceParser::getNames(vector<string> g) {

@@ -3,6 +3,7 @@
 
 /*
  *  The options class is based on myopts.h from Robert Edgar.
+ * It stores the uchime options set by rchime_options() function.
  *
  *  Modified by Sarah Westcott on 2/24/25.
  *  Copyright 2025 SchlossLab. All rights reserved.

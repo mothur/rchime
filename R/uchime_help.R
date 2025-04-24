@@ -7,7 +7,7 @@
 #' @author Sarah Westcott, \email{swestcot@@umich.edu}
 #'
 uchimeout_help <- function() {
-  message <- cat(paste0(
+  message <- paste0(
     "Output description from uchime's manual:", "\n",
     "1	Score	Higher score means more strongly chimeric alignment.", "\n",
     "2	Q	Query Name.", "\n",
@@ -36,8 +36,8 @@ uchimeout_help <- function() {
     " minimum specified by -mindiffs. A query is unclassified if the", "\n",
     "maxh > h > minh, i.e. maxh is the maximum score for a non-chimera,", "\n",
     "and minh is the minimum score for a chimera; in between is", "\n",
-    "unclassified.",
-    sep = ""
-  ))
-  return(message)
+    "unclassified.", "\n",
+    collapse = ""
+  )
+  cat(message)
 }

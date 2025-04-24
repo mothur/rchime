@@ -12,7 +12,6 @@
 #include "uchime.h"
 #include "seqdb.h"
 #include "chime.h"
-//#include "make3way.h"
 
 /******************************************************************************/
 

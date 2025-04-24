@@ -2,7 +2,7 @@
 #define GLOBAL_ALIGNER
 
 /*
- *  The GlobalAligner class is based on globalalign2.cpp from Robert Edgar.
+ *  The GlobalAligner class aligns the potential parents to the query.
  *
  *  Modified by Sarah Westcott on 3/10/25.
  *  Copyright 2025 SchlossLab. All rights reserved.

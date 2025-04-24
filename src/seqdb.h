@@ -2,7 +2,10 @@
 #define seqdb_h
 
 /*
- *  The SeqDB class is based on seqdb.h, seqdb.cpp from Robert Edgar.
+ * The SeqDB class is based on seqdb.h, seqdb.cpp from Robert Edgar.
+ *
+ * It is used to store the reference sequences. In denovo mode the reference
+ * is filled with more abundant sequences than the query. 
  *
  *  Created by Sarah Westcott on 2/27/25.
  *  Copyright 2025 SchlossLab. All rights reserved.

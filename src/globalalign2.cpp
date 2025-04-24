@@ -26,12 +26,9 @@ bool GlobalAligner::globalAlign(const SeqData &Query, const SeqData &Target, Pat
 
 	string Path = string(tempPath.Start);
 
-	//unsigned n = SIZE(Path);
-	//PD.Alloc(n+1);
-	//memcpy(PD.Front, Path.c_str(), n);
 	PD.Front = Path;
 	PD.Start = PD.Front;
-	//PD.Start[n] = 0;
+	
 	return true;
 }
 /******************************************************************************/
@@ -167,22 +164,16 @@ float GlobalAligner::viterbiFast(string seqA, unsigned alength,
 /******************************************************************************/
 void GlobalAligner::traceBackBit(unsigned alength, unsigned blength, char State, PathData &PD) {
 
-	//PD.Alloc(alength+blength);
-
-	//char *PathPtr = PD.Back;
-	//*PathPtr = 0;
 	string PathPtr = "";
-
 	size_t i = alength;
 	size_t j = blength;
+
 	for (;;) {
 
 		if (i == 0 && j == 0) {
 			break;
 		}
 
-		//--PathPtr;
-		//*PathPtr = State;
 		PathPtr += State;
 
 		Byte t;

@@ -12,7 +12,7 @@ test_that("test uchime parameters ", {
   results <- rchime(
     fasta = rchime_example("test.chimera.fasta"),
     count = rchime_example("test_nogroups.count_table"),
-    dereplicate = TRUE,
+    dereplicate = TRUE, silent = TRUE,
     rchime_options = options
   )
 
@@ -87,7 +87,7 @@ test_that("test rchime denovo - no groups", {
   results <- rchime(
     fasta = rchime_example("test.chimera.fasta"),
     count = rchime_example("test_nogroups.count_table"),
-    dereplicate = TRUE, chimealns = TRUE
+    dereplicate = TRUE, chimealns = TRUE, silent = TRUE
   )
 
   expect_equal(results$dataset$get_num_unique_seqs(), 5)
