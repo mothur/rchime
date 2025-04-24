@@ -20,7 +20,6 @@
 #include "chime.h"
 #include "getparents.h"
 #include "options.h"
-#include "path.h"
 #include "globalalign2.h"
 #include "alignchime.h"
 #include "alpha.h"
@@ -30,7 +29,7 @@ class SearchChime {
 
 public:
 
-    SearchChime(Options*); 
+    SearchChime(Options); 
     ~SearchChime();  
 
     // database, query, results
@@ -38,7 +37,7 @@ public:
 
 private:
 
-    Options* opt;
+    Options opt;
     GlobalAligner aligner;
     AlignChimes* chimeAlign;
 

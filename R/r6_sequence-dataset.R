@@ -149,7 +149,7 @@ sequence_dataset <- R6Class("sequence_dataset",
       numns <- unlist(lapply(
         df$Sequence,
         (function(x) {
-            length(gregexpr("[N]", x)[[1]])
+          length(gregexpr("[N]", x)[[1]])
         })
       ))
 
@@ -242,7 +242,6 @@ sequence_dataset <- R6Class("sequence_dataset",
       close(file_conn)
     }
   ),
-
   private = list(
 
     # extract name from line
@@ -267,14 +266,13 @@ sequence_dataset <- R6Class("sequence_dataset",
 
       return(c(as, ts, cs, gs, ns))
     },
-
     contains_homops = function(seq, homops) {
-        for (homop in homops) {
-            if (grepl(homop, seq)) {
-                return(TRUE)
-            }
+      for (homop in homops) {
+        if (grepl(homop, seq)) {
+          return(TRUE)
         }
-        return(FALSE)
+      }
+      return(FALSE)
     }
   )
 )

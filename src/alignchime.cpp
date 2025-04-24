@@ -291,9 +291,7 @@ void AlignChimes::make3Way(const SeqData &QSD, const SeqData &ASD,
     string parentBSeq = B_SD.getSeq();
 
     unsigned LQ = QSD.getSeqLength();
-    //unsigned LA = ASD.getSeqLength();
-   // unsigned LB = B_SD.getSeqLength();
-
+ 
     vector<unsigned> InsertCountsA(LQ+1, 0);
     unsigned QPos = 0;
     for (unsigned i = 0; i < SIZE(PathQA); ++i) {

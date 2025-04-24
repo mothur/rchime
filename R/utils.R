@@ -17,8 +17,8 @@ remove_file <- function(filename) {
 #'
 #' @returns A vector of Strings
 split_white_space <- function(line) {
-  words <- strsplit(line, "\\s") [[1]]
-  words <- words[nzchar(x=words)]
+  words <- strsplit(line, "\\s")[[1]]
+  words <- words[nzchar(x = words)]
   return(words)
 }
 # =========================================================================== #

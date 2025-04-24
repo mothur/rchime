@@ -12,7 +12,6 @@
 
 #include "uchime.h"
 #include "seq.h"
-#include "path.h"
 #include "alnparams.h"
 
 const Byte TRACEBITS_DM = 0x01;

@@ -217,8 +217,8 @@ test_that("test chimera_uchime denovo - groups, dereplicate = TRUE / FALSE", {
 
   dataset <- sequence_data_vector$new(rchime_example("test.chimera.fasta"))
   dataset$set_group_assignments(
-      filename =
-          rchime_example("test.chimera.count_table")
+    filename =
+      rchime_example("test.chimera.count_table")
   )
 
   expect_equal(dataset$get_num_unique_seqs(), 6)

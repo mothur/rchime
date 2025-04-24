@@ -9,11 +9,10 @@
 
 // default - minchuck 64 chunk 4
 /******************************************************************************/
-GetParents::GetParents(Options* o) {
-	Options* opt = o; 
-	minChunk = opt->getMinchunk();
-	numChunks = opt->getChunks();
-	abskew = opt->getAbskew();
+GetParents::GetParents(Options o) {
+	minChunk = o.getMinchunk();
+	numChunks = o.getChunks();
+	abskew = o.getAbskew();
 }
 /******************************************************************************/
 vector<unsigned> GetParents::getChunkInfo(unsigned L, unsigned &Length) {

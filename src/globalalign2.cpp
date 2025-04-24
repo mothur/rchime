@@ -16,7 +16,7 @@ GlobalAligner::GlobalAligner() {
 	g_TBBit = new MxByteMatrix();
 }
 /******************************************************************************/
-GlobalAligner::~GlobalAligner() { delete alignParams; }
+GlobalAligner::~GlobalAligner() { delete alignParams; delete g_TBBit; }
 /******************************************************************************/
 bool GlobalAligner::globalAlign(const SeqData &Query, const SeqData &Target, PathData &PD) {
 
@@ -26,11 +26,12 @@ bool GlobalAligner::globalAlign(const SeqData &Query, const SeqData &Target, Pat
 
 	string Path = string(tempPath.Start);
 
-	unsigned n = SIZE(Path);
-	PD.Alloc(n+1);
-	memcpy(PD.Front, Path.c_str(), n);
+	//unsigned n = SIZE(Path);
+	//PD.Alloc(n+1);
+	//memcpy(PD.Front, Path.c_str(), n);
+	PD.Front = Path;
 	PD.Start = PD.Front;
-	PD.Start[n] = 0;
+	//PD.Start[n] = 0;
 	return true;
 }
 /******************************************************************************/
@@ -39,13 +40,12 @@ float GlobalAligner::viterbiFast(string seqA, unsigned alength,
 
 	if (alength*blength > 100*1000*1000) { return -1.0; }
 
-	//allocBit(alength, blength);
 	g_TBBit->resize(alength+1, blength+1);
 	unsigned g_CacheLB = blength + 128;
 	vector<float> Mrow(g_CacheLB+3, MINUS_INFINITY);
     vector<float> Drow(g_CacheLB+3, MINUS_INFINITY);
 
-	MxFloatMatrix* Mx = alignParams->SubstMx;
+	MxFloatMatrix Mx = alignParams->SubstMx;
 	float OpenA = alignParams->LOpenA;
 	float ExtA = alignParams->LExtA;
 
@@ -54,7 +54,7 @@ float GlobalAligner::viterbiFast(string seqA, unsigned alength,
 	for (unsigned i = 0; i < alength; ++i) {
 
 		Byte a = seqA[i];
-		vector<float> MxRow = Mx->matrix[a];
+		vector<float> MxRow = Mx.matrix[a];
 		float OpenB = alignParams->LOpenB;
 		float ExtB = alignParams->LExtB;
 		float I0 = MINUS_INFINITY;
@@ -167,10 +167,11 @@ float GlobalAligner::viterbiFast(string seqA, unsigned alength,
 /******************************************************************************/
 void GlobalAligner::traceBackBit(unsigned alength, unsigned blength, char State, PathData &PD) {
 
-	PD.Alloc(alength+blength);
+	//PD.Alloc(alength+blength);
 
-	char *PathPtr = PD.Back;
-	*PathPtr = 0;
+	//char *PathPtr = PD.Back;
+	//*PathPtr = 0;
+	string PathPtr = "";
 
 	size_t i = alength;
 	size_t j = blength;
@@ -180,8 +181,9 @@ void GlobalAligner::traceBackBit(unsigned alength, unsigned blength, char State,
 			break;
 		}
 
-		--PathPtr;
-		*PathPtr = State;
+		//--PathPtr;
+		//*PathPtr = State;
+		PathPtr += State;
 
 		Byte t;
 		switch (State) {

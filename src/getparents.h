@@ -17,7 +17,7 @@
 class GetParents {
     public:
 
-    GetParents(Options*); 
+    GetParents(Options); 
     ~GetParents() = default;
 
     vector<unsigned> getCandidateParents(SeqDB* data, const SeqData& query);

@@ -215,21 +215,20 @@ sequence_abundance_data <- R6Class("sequence_abundance_data",
     #' @return Vector of abundances, in the same order as the sequences
     #'             in names.
     get_seqs_abunds = function(names, bysample = FALSE) {
-    
       if (bysample) {
-        abunds <- list( length(names) )
-        for ( i in seq_along(names) ){
+        abunds <- list(length(names))
+        for (i in seq_along(names)) {
           abunds[[i]] <- self$get_abunds(names[i])
         }
         return(abunds)
-      }else {
+      } else {
         abunds <- rep(0, length(names))
         for (i in seq_along(names)) {
           abunds[i] <- self$get_abund(names[i])
         }
         return(abunds)
       }
-      return (c())
+      return(c())
     },
 
     #' @description
@@ -588,7 +587,7 @@ sequence_abundance_data <- R6Class("sequence_abundance_data",
       # remove first '#'
       pieces <- strsplit(file_data[2], "#")[[1]]
       file_data[2] <- pieces[nzchar(pieces)]
-      #file_data[2] <- stri_sub(file_data[2], from = comment[1] + 1)
+      # file_data[2] <- stri_sub(file_data[2], from = comment[1] + 1)
       words <- split_white_space(file_data[2])
       num_seqs <- length(file_data) - 3
 

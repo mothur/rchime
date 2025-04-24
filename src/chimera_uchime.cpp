@@ -11,6 +11,7 @@
 #include "chime.h"
 #include "mothur.h"
 #include "uchime_main.h"
+#include "sequenceparser.h"
 
 /******************************************************************************/
 ChimeraUchime::ChimeraUchime(bool derep, int proc, bool si, bool hg, Rcpp::List options) :
@@ -46,7 +47,7 @@ void processUchime(chimeraData* params) {
             // call uchime source code
             params->uchimeResults.push_back(uchime->runUchime(params->names[k], params->seqs[k],
                                                 params->refNames, params->refSeqs,
-                                                params->abunds[k], params->chimeras[k], &params->options));
+                                                params->abunds[k], params->chimeras[k], params->options));
         }
 
         // terminate progress bar
@@ -58,7 +59,7 @@ void processUchime(chimeraData* params) {
     }else {
         params->uchimeResults.push_back(uchime->runUchime(params->names[0], params->seqs[0],
                                         params->refNames, params->refSeqs,
-                                        params->abunds[0], params->chimeras[0], &params->options));
+                                        params->abunds[0], params->chimeras[0], params->options));
     }
 
     delete uchime;
@@ -72,14 +73,18 @@ Rcpp::List ChimeraUchime::removeChimeras(Rcpp::Environment& dataset) {
 
     if (hasGroupData) {
 
-        Rcpp::Function getGroups = dataset["get_groups"];
-        groups = Rcpp::as<vector<string>>(getGroups());
-
         // run uchime on each sample individually
         uchimeOutputs = createProcesses(dataset);
 
     } else {
-        chimeraData* dataBundle = new chimeraData(dataset, groups, *opts);
+        SequenceParser* parser = new SequenceParser(dataset, false);
+
+        chimeraData* dataBundle = new chimeraData(parser->getNames(nullVector),
+                                                  parser->getSeqs(nullVector),
+                                                  parser->getAbunds(nullVector),
+                                                  groups, opts);
+        delete parser;
+
         // run as one sample
         processUchime(dataBundle);
 
@@ -98,6 +103,9 @@ Rcpp::List ChimeraUchime::removeChimeras(Rcpp::Environment& dataset) {
 vector<ChimeHit2> ChimeraUchime::createProcesses(Rcpp::Environment& dataset) {
     vector<ChimeHit2> results;
 
+    SequenceParser* parser = new SequenceParser(dataset);
+    groups = parser->getNamesOfGroups();
+
     Utils util;
     vector<pieceOfWork> indexes = util.divideWork(groups.size(), processors);
 
@@ -111,7 +119,11 @@ vector<ChimeHit2> ChimeraUchime::createProcesses(Rcpp::Environment& dataset) {
         for (int j = indexes[i+1].start; j < indexes[i+1].end; j++) {
             theseGroups.push_back(groups[j]);
         }
-        chimeraData* dataBundle = new chimeraData(dataset, theseGroups, *opts);
+
+        chimeraData* dataBundle = new chimeraData(parser->getNames(theseGroups),
+                                                  parser->getSeqs(theseGroups),
+                                                  parser->getAbunds(theseGroups),
+                                                  theseGroups, opts);
         data.push_back(dataBundle);
         workerThreads.push_back(new RcppThread::Thread(processUchime,
                                                        dataBundle));
@@ -124,7 +136,11 @@ vector<ChimeHit2> ChimeraUchime::createProcesses(Rcpp::Environment& dataset) {
     }
 
     // only the main thread reports progress if silent is false
-    chimeraData* dataBundle = new chimeraData(dataset, theseGroups, *opts, silent);
+    chimeraData* dataBundle = new chimeraData(parser->getNames(theseGroups),
+                                              parser->getSeqs(theseGroups),
+                                              parser->getAbunds(theseGroups),
+                                              theseGroups, opts, silent);
+    delete parser;
     processUchime(dataBundle);
 
     map<string, uchimeAbunds > seqAbunds = combineResults(dataBundle, data,
@@ -157,7 +173,21 @@ vector<ChimeHit2> ChimeraUchime::createProcesses(Rcpp::Environment& dataset) {
 Rcpp::List ChimeraUchime::removeChimeras(Rcpp::Environment& dataset,
                                          Rcpp::Environment& reference) {
 
-    chimeraData* dataBundle = new chimeraData(dataset, reference, *opts);
+    SequenceParser* parser = new SequenceParser(dataset, false);
+
+    Rcpp::Function getNames = reference["get_names"];
+    vector<string> refNames = Rcpp::as<vector<string> >(getNames());
+
+    // get seqs
+    Rcpp::Function getSeqs = reference["get_seqs"];
+    vector<string> refSeqs = Rcpp::as<vector<string> >(getSeqs());
+
+
+    chimeraData* dataBundle = new chimeraData(parser->getNames(nullVector),
+                                              parser->getSeqs(nullVector),
+                                              parser->getAbunds(nullVector), 
+                                              refNames, refSeqs, opts);
+    delete parser;
 
     // run as one sample
     processUchime(dataBundle);
@@ -289,9 +319,9 @@ map<string, uchimeAbunds > ChimeraUchime::combineResults(chimeraData*& dataBundl
     // if all samples find the query to be chimeric, choose first chimeric result
     // else pick first non-chimeric result.
 
-    double minh = opts->getMinh();
-	double mindiv = opts->getMindiv();
-	int mindiffs = opts->getMindiffs();
+    double minh = opts.getMinh();
+	double mindiv = opts.getMindiv();
+	int mindiffs = opts.getMindiffs();
     set<string> resolved;
     for (int i = 0; i < uchimeOut.size(); i++) {
 
@@ -389,9 +419,9 @@ Rcpp::List ChimeraUchime::createUchimeResults(vector<ChimeHit2> hits) {
     Rcpp::List uchimeAlns;
     vector<string> chimeras;
 
-    double minh = opts->getMinh();
-	double mindiv = opts->getMindiv();
-	int mindiffs = opts->getMindiffs();
+    double minh = opts.getMinh();
+	double mindiv = opts.getMindiv();
+	int mindiffs = opts.getMindiffs();
 
     // create a uchimeout
     for (int i = 0; i < hits.size(); i++) {
@@ -402,7 +432,7 @@ Rcpp::List ChimeraUchime::createUchimeResults(vector<ChimeHit2> hits) {
             chimeras.push_back(hits[i].QLabel);
 
             //create uchimealns record
-            if (opts->getChimealns()) {
+            if (opts.getChimealns()) {
 
                 string query = hits[i].Q3;
                 string parentA = hits[i].A3;
@@ -602,7 +632,7 @@ Rcpp::List ChimeraUchime::createUchimeResults(vector<ChimeHit2> hits) {
     results.push_back(chimeras);
     resultsNames.push_back("accnos");
 
-    if (opts->getChimealns()) {
+    if (opts.getChimealns()) {
         resultsNames.push_back("uchimealns");
         results.push_back(uchimeAlns);
     }

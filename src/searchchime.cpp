@@ -4,10 +4,10 @@
 #include "globalalign2.h"
 
 /******************************************************************************/
-SearchChime::SearchChime(Options* o) { 
+SearchChime::SearchChime(Options o) { 
 	opt = o; 
-	chimeAlign = new AlignChimes(opt->getXn(), opt->getDn(), opt->getXa(),
-								 opt->getSkipgaps(), opt->getSkipgaps2());
+	chimeAlign = new AlignChimes(opt.getXn(), opt.getDn(), opt.getXa(),
+								 opt.getSkipgaps(), opt.getSkipgaps2());
 }
 /******************************************************************************/
 SearchChime::~SearchChime() { delete chimeAlign; }
@@ -75,8 +75,6 @@ vector<unsigned> SearchChime::getSmoothedIdVec(const SeqData &queryData, const S
 bool SearchChime::searchChime(SeqDB* database, const SeqData & queryData, 
   								ChimeHit2 &Hit) {
 
-	//float MinFractId = 0.95f;	
-
 	Hit.QLabel = queryData.getName();
 	Hit.AbQ = queryData.getAbund();
 
@@ -116,14 +114,14 @@ bool SearchChime::searchChime(SeqDB* database, const SeqData & queryData,
 			continue;
 		}
 
-		double PctId = 100.0*getFractIdGivenPath(queryData.getSeq(), parentData.getSeq(), PD.Start);
+		double PctId = 100.0*getFractIdGivenPath(queryData.getSeq(), parentData.getSeq(), PD.Start.c_str());
 		
 		if (PctId > TopPctId) { TopPctId = PctId; }
 
 		string Path = PD.Start;
 		Paths.push_back(Path);
 
-		vector<unsigned> IdVec = getSmoothedIdVec(queryData, parentData, Path, opt->getIdsmoothwindow());
+		vector<unsigned> IdVec = getSmoothedIdVec(queryData, parentData, Path, opt.getIdsmoothwindow());
 
 		for (unsigned QPos = 0; QPos < QL; ++QPos) {
 			if (IdVec[QPos] > MaxIdVec[QPos]) {
@@ -133,7 +131,7 @@ bool SearchChime::searchChime(SeqDB* database, const SeqData & queryData,
 	}
 
 	vector<unsigned> BestParents;
-	for (unsigned k = 0; k < opt->getMaxp(); ++k)
+	for (unsigned k = 0; k < opt.getMaxp(); ++k)
 		{
 		unsigned BestParent = UINT_MAX;
 		unsigned BestCov = 0;
@@ -145,7 +143,7 @@ bool SearchChime::searchChime(SeqDB* database, const SeqData & queryData,
 				continue;
 
 			vector<unsigned> IdVec = getSmoothedIdVec(queryData, parentData, Path, 
-											opt->getIdsmoothwindow());
+											opt.getIdsmoothwindow());
 			unsigned Cov = 0;
 			for (unsigned QPos = 0; QPos < QL; ++QPos)
 				if (IdVec[QPos] == MaxIdVec[QPos])
@@ -166,7 +164,7 @@ bool SearchChime::searchChime(SeqDB* database, const SeqData & queryData,
 		const SeqData &parentData = PSDs[BestParent];
 		const string &Path = Paths[BestParent];
 		vector<unsigned> IdVec = getSmoothedIdVec(queryData, parentData, Path,
-								  opt->getIdsmoothwindow());
+								  opt.getIdsmoothwindow());
 		for (unsigned QPos = 0; QPos < QL; ++QPos)
 			if (IdVec[QPos] == MaxIdVec[QPos])
 				MaxIdVec[QPos] = UINT_MAX;
@@ -190,7 +188,7 @@ bool SearchChime::searchChime(SeqDB* database, const SeqData & queryData,
 			ChimeHit2 Hit2 = chimeAlign->alignChime(queryData, PSD1, PSD2, Path1, Path2);
 			Hit2.PctIdQT = TopPctId;
 
-			if (Hit2.Accept(opt->getMinh(), opt->getMindiv(), opt->getMindiffs())) {
+			if (Hit2.Accept(opt.getMinh(), opt.getMindiv(), opt.getMindiffs())) {
 				chimeric = true;
 			}
 			if (Hit2.Score > Hit.Score) {
@@ -202,7 +200,7 @@ bool SearchChime::searchChime(SeqDB* database, const SeqData & queryData,
 	return chimeric;
 }
 /******************************************************************************/
-double SearchChime::getFractIdGivenPath(string A,  string B, const char *Path) {
+double SearchChime::getFractIdGivenPath(string A, string B, const char *Path) {
 	
 	unsigned PosA = 0;
 	unsigned PosB = 0;

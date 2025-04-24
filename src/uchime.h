@@ -81,6 +81,20 @@ static inline char yon(bool x)		{ return x ? 'Y' : 'N';	}
 const double epsilon = 0.01;
 const unsigned wordCount = 65536;
 
+struct PathData {
+   
+    PathData() {
+        Start = "";
+        Front = "";
+        Back = "";
+    }
+    ~PathData() = default;
+        
+    string Start;
+    string Front;
+    string Back;
+};
+    
 struct orderAbundance {
     int abund;
     unsigned index;

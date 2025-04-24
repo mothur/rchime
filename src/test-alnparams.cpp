@@ -22,6 +22,6 @@ context("AlnParams class C++ unit tests") {
         expect_true(alignParameters.RExtA == -0.5);
         expect_true(alignParameters.RExtB == -0.5);
 
-        expect_true(alignParameters.SubstMx->matrix.size() == 272);
+        expect_true(alignParameters.SubstMx.matrix.size() == 272);
     }
 }

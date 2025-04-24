@@ -16,7 +16,7 @@ vector<ChimeHit2> UchimeMain::runUchime(vector<string> names,
                                  vector<string> refSeqs,
                                  vector<int> abunds,
 								 set<string>& namesOfChimeras,
-								 Options* opts) {
+								 Options opts) {
 
 	// loading SeqDB with data from R, sort descending order by abundace
 	SeqDB data(names, seqs, abunds, true);

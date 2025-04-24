@@ -121,7 +121,7 @@ chimera_uchime <- function(dataset = NULL, fasta = NULL, count = NULL,
                            idsmoothwindow = 32, maxp = 2, skipgaps = TRUE,
                            skipgaps2 = TRUE, minlen = 10, maxlen = 10000) {
   created_dataset <- FALSE
-  startTime = Sys.time()
+  start_time <- Sys.time()
 
   # no inputs provided
   if (is.null(dataset) && is.null(fasta)) {
@@ -239,8 +239,10 @@ chimera_uchime <- function(dataset = NULL, fasta = NULL, count = NULL,
       message <- ("chimera_uchime complete, no chimeras found")
     }
     cli::cli_alert(message)
-    message <- paste("It took {.var {Sys.time() - startTime}}",
-                      "minutes to remove the chimeras")
+    message <- paste(
+      "It took {.var {Sys.time() - start_time}}",
+      "seconds to remove the chimeras"
+    )
     cli::cli_alert(message)
   }
 

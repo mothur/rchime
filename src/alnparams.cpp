@@ -21,7 +21,7 @@ void AlnParams::setNucSubstMx(double Match, double Mismatch) {
 	
 	unsigned N = unsigned(strlen(Alphabet));
 
-	SubstMx = new MxFloatMatrix(256, 256, 0);
+	SubstMx.resize(256, 256);
 	
 	for (unsigned i = 0; i < N; ++i) {
 		for (unsigned j = 0; j < N; ++j) {
@@ -34,17 +34,17 @@ void AlnParams::setNucSubstMx(double Match, double Mismatch) {
 			ui = (Byte) toupper(ui);
 			uj = (Byte) toupper(uj);
 
-			SubstMx->matrix[ui][uj] = v;
-			SubstMx->matrix[uj][ui] = v;
+			SubstMx.matrix[ui][uj] = v;
+			SubstMx.matrix[uj][ui] = v;
 
-			SubstMx->matrix[ui][lj] = v;
-			SubstMx->matrix[uj][li] = v;
+			SubstMx.matrix[ui][lj] = v;
+			SubstMx.matrix[uj][li] = v;
 
-			SubstMx->matrix[li][uj] = v;
-			SubstMx->matrix[lj][ui] = v;
+			SubstMx.matrix[li][uj] = v;
+			SubstMx.matrix[lj][ui] = v;
 
-			SubstMx->matrix[li][lj] = v;
-			SubstMx->matrix[lj][li] = v;
+			SubstMx.matrix[li][lj] = v;
+			SubstMx.matrix[lj][li] = v;
 		}
 	}
 
@@ -58,17 +58,17 @@ void AlnParams::setNucSubstMx(double Match, double Mismatch) {
 		ui = (Byte) toupper(ui);
 		uj = (Byte) toupper(uj);
 
-		SubstMx->matrix[ui][uj] = v;
-		SubstMx->matrix[uj][ui] = v;
+		SubstMx.matrix[ui][uj] = v;
+		SubstMx.matrix[uj][ui] = v;
 
-		SubstMx->matrix[ui][lj] = v;
-		SubstMx->matrix[uj][li] = v;
+		SubstMx.matrix[ui][lj] = v;
+		SubstMx.matrix[uj][li] = v;
 
-		SubstMx->matrix[li][uj] = v;
-		SubstMx->matrix[lj][ui] = v;
+		SubstMx.matrix[li][uj] = v;
+		SubstMx.matrix[lj][ui] = v;
 
-		SubstMx->matrix[li][lj] = v;
-		SubstMx->matrix[lj][li] = v;
+		SubstMx.matrix[li][lj] = v;
+		SubstMx.matrix[lj][li] = v;
 	}
 }
 /******************************************************************************/

@@ -23,7 +23,7 @@ public:
 	AlnParams();
 	~AlnParams(){}
 
-	MxFloatMatrix* SubstMx; 
+	MxFloatMatrix SubstMx; 
 
 // Global internal gaps
 	float OpenA;
