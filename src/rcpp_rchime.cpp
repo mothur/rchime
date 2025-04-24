@@ -2,17 +2,17 @@
 #include "chimera.h"
 
 // ============================================================================
-//' @title chimeraUchimeReference
-//' @name chimeraUchimeReference
-//' @rdname chimeraUchimeReference
+//' @title rchimeReference
+//' @name rchimeReference
+//' @rdname rchimeReference
 //' @param dataset R6 'sequence_dataset' object containing sequence data
 //' @param reference R6 'sequence_dataset' object containing sequence data
 //' @param options list containing parameter options
-//' @seealso [chimera_uchime()]
+//' @seealso [rchime()]
 //' @description detects and removes chimeras from your data using a reference
 //'  dataset.
 //[[Rcpp::export]]
-Rcpp::List chimeraUchimeReference(Rcpp::Environment& dataset,
+Rcpp::List rchimeReference(Rcpp::Environment& dataset,
                        Rcpp::Environment& reference,
                        Rcpp::List options) {
 
@@ -39,16 +39,16 @@ Rcpp::List chimeraUchimeReference(Rcpp::Environment& dataset,
  }
 
 // ============================================================================
-//' @title chimeraUchime
-//' @name chimeraUchime
-//' @rdname chimeraUchime
+//' @title rchimeDenovo
+//' @name rchimeDenovo
+//' @rdname rchimeDenovo
 //' @param dataset R6 'sequence_dataset' object containing sequence data
 //' @param options list containing parameter options
-//' @seealso [chimera_uchime()]
+//' @seealso [rchime()]
 //' @description detects and removes chimeras from your data using a denovo
 //' approach.
 //[[Rcpp::export]]
-Rcpp::List chimeraUchime(Rcpp::Environment& dataset,
+Rcpp::List rchimeDenovo(Rcpp::Environment& dataset,
                        Rcpp::List options) {
 
      bool dereplicate = Rcpp::as<bool>(options["dereplicate"]);

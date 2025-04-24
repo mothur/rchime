@@ -7,7 +7,8 @@
 uchimeout_help()
 }
 \description{
-Description of 'uchimeout' DataFrame
+Description of 'uchimeout' data.frame returned by the
+[\code{\link[=rchime]{rchime()}}] function.
 }
 \author{
 Sarah Westcott, \email{swestcot@umich.edu}

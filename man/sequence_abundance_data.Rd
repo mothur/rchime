@@ -17,7 +17,6 @@ abundance data of sequences by sample.
   names <- c("seq1", "seq2", "seq3")
   groups <- c("sample1", "sample2", "sample1")
   counts$set_group_assignments(names, groups)
-  counts$add_seqs(names)
   counts$print()
 
 ## ------------------------------------------------
@@ -66,17 +65,18 @@ abundance data of sequences by sample.
   dataset$set_abundance("seq2", abunds[2])
   dataset$set_abundance("seq2", abunds[3])
 
-  # add group data
+  # or with group data
+  dataset <- sequence_abundance_data$new()
   groups <- c("sample1", "sample1", "sample2")
   dataset$set_group_assignments(names, groups)
 
   # set the abundance of 'seq1' in 'sample1' to 150,
   #                      'seq1' in 'sample2' to 0
-  dataset$set_abundance("seq1", c(150, 0))
+  dataset$set_abundance("seq1", list(c(150, 0)))
 
   # set the abundance of 'seq3' in 'sample1' to 75,
   #                      'seq3' in 'sample2' to 5
-  dataset$set_abundance("seq3", c(75, 5))
+  dataset$set_abundance("seq3", list(c(75, 5)))
   dataset
 }
 \author{
@@ -103,7 +103,6 @@ Sarah Westcott, \email{swestcot@umich.edu}
 \item \href{#method-sequence_abundance_data-has_group}{\code{sequence_abundance_data$has_group()}}
 \item \href{#method-sequence_abundance_data-merge_seqs}{\code{sequence_abundance_data$merge_seqs()}}
 \item \href{#method-sequence_abundance_data-reinstate_seq}{\code{sequence_abundance_data$reinstate_seq()}}
-\item \href{#method-sequence_abundance_data-remove_group}{\code{sequence_abundance_data$remove_group()}}
 \item \href{#method-sequence_abundance_data-remove_seq}{\code{sequence_abundance_data$remove_seq()}}
 \item \href{#method-sequence_abundance_data-set_abundance}{\code{sequence_abundance_data$set_abundance()}}
 \item \href{#method-sequence_abundance_data-set_group_assignments}{\code{sequence_abundance_data$set_group_assignments()}}
@@ -123,7 +122,6 @@ Sarah Westcott, \email{swestcot@umich.edu}
 <li><span class="pkg-link" data-pkg="rchime" data-topic="sequence_dataset" data-id="calc_longest_polymer"><a href='../../rchime/html/sequence_dataset.html#method-sequence_dataset-calc_longest_polymer'><code>rchime::sequence_dataset$calc_longest_polymer()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="rchime" data-topic="sequence_dataset" data-id="calc_numbases"><a href='../../rchime/html/sequence_dataset.html#method-sequence_dataset-calc_numbases'><code>rchime::sequence_dataset$calc_numbases()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="rchime" data-topic="sequence_dataset" data-id="calc_start"><a href='../../rchime/html/sequence_dataset.html#method-sequence_dataset-calc_start'><code>rchime::sequence_dataset$calc_start()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="rchime" data-topic="sequence_dataset" data-id="read_count_file"><a href='../../rchime/html/sequence_dataset.html#method-sequence_dataset-read_count_file'><code>rchime::sequence_dataset$read_count_file()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="rchime" data-topic="sequence_dataset" data-id="read_fasta_file"><a href='../../rchime/html/sequence_dataset.html#method-sequence_dataset-read_fasta_file'><code>rchime::sequence_dataset$read_fasta_file()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="rchime" data-topic="sequence_dataset" data-id="write_fasta_file"><a href='../../rchime/html/sequence_dataset.html#method-sequence_dataset-write_fasta_file'><code>rchime::sequence_dataset$write_fasta_file()</code></a></span></li>
 </ul>
@@ -158,7 +156,6 @@ View summary of count table data
   names <- c("seq1", "seq2", "seq3")
   groups <- c("sample1", "sample2", "sample1")
   counts$set_group_assignments(names, groups)
-  counts$add_seqs(names)
   counts$print()
 }
 \if{html}{\out{</div>}}
@@ -334,7 +331,7 @@ An integer
 \subsection{Method \code{get_seqs_abunds()}}{
 Get abundances for sequences in dataset
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{sequence_abundance_data$get_seqs_abunds(names, group = NULL)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{sequence_abundance_data$get_seqs_abunds(names, bysample = FALSE)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
@@ -342,7 +339,8 @@ Get abundances for sequences in dataset
 \describe{
 \item{\code{names}}{vector of Strings for which you want abundances for}
 
-\item{\code{group}}{String, name of sample}
+\item{\code{bysample}}{Boolean, if true then abundance broken down by sample,
+if false, then total abundance is returned}
 }
 \if{html}{\out{</div>}}
 }
@@ -440,23 +438,6 @@ Reinstates sequence in active table
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-sequence_abundance_data-remove_group"></a>}}
-\if{latex}{\out{\hypertarget{method-sequence_abundance_data-remove_group}{}}}
-\subsection{Method \code{remove_group()}}{
-Remove group from dataset
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{sequence_abundance_data$remove_group(group)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{group}}{String, name of sample to remove}
-}
-\if{html}{\out{</div>}}
-}
-}
-\if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-sequence_abundance_data-remove_seq"></a>}}
 \if{latex}{\out{\hypertarget{method-sequence_abundance_data-remove_seq}{}}}
 \subsection{Method \code{remove_seq()}}{
@@ -503,17 +484,18 @@ Set abundance data for sequence
   dataset$set_abundance("seq2", abunds[2])
   dataset$set_abundance("seq2", abunds[3])
 
-  # add group data
+  # or with group data
+  dataset <- sequence_abundance_data$new()
   groups <- c("sample1", "sample1", "sample2")
   dataset$set_group_assignments(names, groups)
 
   # set the abundance of 'seq1' in 'sample1' to 150,
   #                      'seq1' in 'sample2' to 0
-  dataset$set_abundance("seq1", c(150, 0))
+  dataset$set_abundance("seq1", list(c(150, 0)))
 
   # set the abundance of 'seq3' in 'sample1' to 75,
   #                      'seq3' in 'sample2' to 5
-  dataset$set_abundance("seq3", c(75, 5))
+  dataset$set_abundance("seq3", list(c(75, 5)))
   dataset
 }
 \if{html}{\out{</div>}}

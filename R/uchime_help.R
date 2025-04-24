@@ -1,6 +1,7 @@
 #' @title uchimeout_help
 #'
-#' @description Description of 'uchimeout' DataFrame
+#' @description Description of 'uchimeout' data.frame returned by the
+#' [[rchime()]] function.
 #'
 #' @export
 #' @author Sarah Westcott, \email{swestcot@@umich.edu}

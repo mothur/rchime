@@ -26,7 +26,6 @@ sequence_abundance_data <- R6Class("sequence_abundance_data",
     #'   names <- c("seq1", "seq2", "seq3")
     #'   groups <- c("sample1", "sample2", "sample1")
     #'   counts$set_group_assignments(names, groups)
-    #'   counts$add_seqs(names)
     #'   counts$print()
     print = function() {
       if (private$has_group_data) {
@@ -167,6 +166,7 @@ sequence_abundance_data <- R6Class("sequence_abundance_data",
         return(c())
       }
     },
+
     #' @description
     #' Get the number of sequences represented in samples
     #' @param group String, name of sample
@@ -329,16 +329,6 @@ sequence_abundance_data <- R6Class("sequence_abundance_data",
     },
 
     #' @description
-    #' Remove group from dataset
-    #' @param group String, name of sample to remove
-    remove_group = function(group) {
-      group_index <- private$groups[[group]]
-      if (!is.null(group_index)) {
-        private$table_groups[group_index] <- FALSE
-      }
-    },
-
-    #' @description
     #' Remove sequences from dataset
     #' @param name String, name of sequence to remove
     remove_seq = function(name) {
@@ -361,7 +351,7 @@ sequence_abundance_data <- R6Class("sequence_abundance_data",
         groups <- self$get_groups()
         for (i in seq_along(groups)) {
           if (new_totals[i] == 0) {
-            self$remove_group(groups[i])
+            private$remove_group(groups[i])
           }
         }
       }
@@ -384,17 +374,18 @@ sequence_abundance_data <- R6Class("sequence_abundance_data",
     #'   dataset$set_abundance("seq2", abunds[2])
     #'   dataset$set_abundance("seq2", abunds[3])
     #'
-    #'   # add group data
+    #'   # or with group data
+    #'   dataset <- sequence_abundance_data$new()
     #'   groups <- c("sample1", "sample1", "sample2")
     #'   dataset$set_group_assignments(names, groups)
     #'
     #'   # set the abundance of 'seq1' in 'sample1' to 150,
     #'   #                      'seq1' in 'sample2' to 0
-    #'   dataset$set_abundance("seq1", c(150, 0))
+    #'   dataset$set_abundance("seq1", list(c(150, 0)))
     #'
     #'   # set the abundance of 'seq3' in 'sample1' to 75,
     #'   #                      'seq3' in 'sample2' to 5
-    #'   dataset$set_abundance("seq3", c(75, 5))
+    #'   dataset$set_abundance("seq3", list(c(75, 5)))
     #'   dataset
     set_abundance = function(name, abundance) {
       # save old abunds if you have groups so we can update group_totals
@@ -446,6 +437,7 @@ sequence_abundance_data <- R6Class("sequence_abundance_data",
         num_groups <- length(unique_groups)
 
         sums <- rep(0, num_groups)
+
         if (num_groups != 0) {
           for (i in seq_along(groups)) {
             group_index <- private$groups[[groups[i]]]
@@ -453,7 +445,7 @@ sequence_abundance_data <- R6Class("sequence_abundance_data",
             sums[group_index] <- sums[group_index] + 1
           }
           for (i in seq_along(unique_groups)) {
-            private$group_totals[[groups[i]]] <- sums[i]
+            private$group_totals[[unique_groups[i]]] <- sums[i]
           }
           private$total <- sum(sums)
         }
@@ -499,6 +491,7 @@ sequence_abundance_data <- R6Class("sequence_abundance_data",
       close(file_conn)
     }
   ),
+
   private = list(
 
     # count table data - sparse
@@ -767,6 +760,16 @@ sequence_abundance_data <- R6Class("sequence_abundance_data",
         }
       }
       invisible(self)
+    },
+
+
+    # Remove group from dataset
+    # @param group String, name of sample to remove
+    remove_group = function(group) {
+        group_index <- private$groups[[group]]
+        if (!is.null(group_index)) {
+            private$table_groups[group_index] <- FALSE
+        }
     },
 
     # diff_abunds -> difference between old abunds and new abunds

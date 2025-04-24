@@ -16,37 +16,12 @@ and abundance data.
   dataset <- sequence_data_vector$new()
 
 ## ------------------------------------------------
-## Method `sequence_dataset$read_count_file`
-## ------------------------------------------------
-
-  dataset <- sequence_dataset$new()
-  fasta_data <- dataset$read_fasta_file(filename =
-    rchime_example("test.fasta"))
-  fasta_names <- fasta_data$names
-  count_data <- dataset$read_count_file(names = fasta_names,
-   filename = rchime_example("test.count_table"))
-
-## ------------------------------------------------
 ## Method `sequence_dataset$read_fasta_file`
 ## ------------------------------------------------
 
   dataset <- sequence_dataset$new()
   fasta_data <- dataset$read_fasta_file(filename =
   rchime_example("test.fasta"))
-
-## ------------------------------------------------
-## Method `sequence_dataset$write_count_file`
-## ------------------------------------------------
-
-  dataset <- sequence_dataset$new()
-  fasta_data <- dataset$read_fasta_file(filename =
-  rchime_example("test.fasta"))
-  fasta_names <- fasta_data$names
-  count_data <- dataset$read_count_file(names = fasta_names,
-   filename = rchime_example("test.count_table"))
-  dataset$write_count_file(count_data,
-   filename = "output.count")
-  remove_file("output.count")
 
 ## ------------------------------------------------
 ## Method `sequence_dataset$write_fasta_file`
@@ -75,9 +50,7 @@ Sarah Westcott, \email{swestcot@umich.edu}
 \item \href{#method-sequence_dataset-calc_numbases}{\code{sequence_dataset$calc_numbases()}}
 \item \href{#method-sequence_dataset-calc_start}{\code{sequence_dataset$calc_start()}}
 \item \href{#method-sequence_dataset-calc_end}{\code{sequence_dataset$calc_end()}}
-\item \href{#method-sequence_dataset-read_count_file}{\code{sequence_dataset$read_count_file()}}
 \item \href{#method-sequence_dataset-read_fasta_file}{\code{sequence_dataset$read_fasta_file()}}
-\item \href{#method-sequence_dataset-write_count_file}{\code{sequence_dataset$write_count_file()}}
 \item \href{#method-sequence_dataset-write_fasta_file}{\code{sequence_dataset$write_fasta_file()}}
 \item \href{#method-sequence_dataset-clone}{\code{sequence_dataset$clone()}}
 }
@@ -283,44 +256,6 @@ An Integer
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-sequence_dataset-read_count_file"></a>}}
-\if{latex}{\out{\hypertarget{method-sequence_dataset-read_count_file}{}}}
-\subsection{Method \code{read_count_file()}}{
-Read a mothur formatted count file
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{sequence_dataset$read_count_file(names, filename, path = NULL)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{names}}{names of sequence in dataset (for matching sanity checks
-between fasta and count files)}
-
-\item{\code{filename}}{Count file name (required)}
-
-\item{\code{path}}{path to count file (optional)}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-A data.frame containing the sequence abundance data
-}
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{  dataset <- sequence_dataset$new()
-  fasta_data <- dataset$read_fasta_file(filename =
-    rchime_example("test.fasta"))
-  fasta_names <- fasta_data$names
-  count_data <- dataset$read_count_file(names = fasta_names,
-   filename = rchime_example("test.count_table"))
-}
-\if{html}{\out{</div>}}
-
-}
-
-}
-\if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-sequence_dataset-read_fasta_file"></a>}}
 \if{latex}{\out{\hypertarget{method-sequence_dataset-read_fasta_file}{}}}
 \subsection{Method \code{read_fasta_file()}}{
@@ -346,43 +281,6 @@ A data.frame containing the FASTA sequence data and summary
 \preformatted{  dataset <- sequence_dataset$new()
   fasta_data <- dataset$read_fasta_file(filename =
   rchime_example("test.fasta"))
-}
-\if{html}{\out{</div>}}
-
-}
-
-}
-\if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-sequence_dataset-write_count_file"></a>}}
-\if{latex}{\out{\hypertarget{method-sequence_dataset-write_count_file}{}}}
-\subsection{Method \code{write_count_file()}}{
-Write count table data to mothur formatted count file
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{sequence_dataset$write_count_file(df, filename, path = NULL)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{df}}{a data.table containing the count table data}
-
-\item{\code{filename}}{String, name of file you want to write to}
-
-\item{\code{path}}{path to count file (optional)}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{  dataset <- sequence_dataset$new()
-  fasta_data <- dataset$read_fasta_file(filename =
-  rchime_example("test.fasta"))
-  fasta_names <- fasta_data$names
-  count_data <- dataset$read_count_file(names = fasta_names,
-   filename = rchime_example("test.count_table"))
-  dataset$write_count_file(count_data,
-   filename = "output.count")
-  remove_file("output.count")
 }
 \if{html}{\out{</div>}}
 

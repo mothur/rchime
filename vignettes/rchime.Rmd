@@ -14,10 +14,6 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r setup}
-library(rchime)
-```
-
 Description of rchime package
 
 ## Getting started with `{rchime}`
@@ -36,7 +32,7 @@ library(rchime)
 
 ## Creating a dataset object
 
-```{r}
+```{r, eval = FALSE}
 dataset <- sequence_data_vector(filename = rchime_example("test.fasta"))
 dataset$set_group_assignments(filename = rchime_example("test.count_table"))
 dataset
@@ -45,18 +41,18 @@ dataset
 
 ## Removing chimeras denovo
 
-```{r}
-chimera_uchime(dataset, dereplicate = TRUE)
+```{r, eval = FALSE}
+rchime(dataset, dereplicate = TRUE)
 dataset
 ```
 
 ## Removing chimeras by reference
 
-```{r}
+```{r, eval = FALSE}
 dataset <- sequence_data_vector(filename = rchime_example("test.fasta"))
 dataset$set_group_assignments(filename = rchime_example("test.count_table"))
 dataset
-chimera_uchime(dataset, reference = rchime_example("reference.fasta"))
+rchime(dataset, reference = rchime_example("reference.fasta"))
 dataset
 ```
 

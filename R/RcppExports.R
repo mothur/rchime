@@ -13,28 +13,28 @@ summarize_fasta <- function(summary_report, count, processors) {
     .Call(`_rchime_summarize_fasta`, summary_report, count, processors)
 }
 
-#' @title chimeraUchimeReference
-#' @name chimeraUchimeReference
-#' @rdname chimeraUchimeReference
+#' @title rchimeReference
+#' @name rchimeReference
+#' @rdname rchimeReference
 #' @param dataset R6 'sequence_dataset' object containing sequence data
 #' @param reference R6 'sequence_dataset' object containing sequence data
 #' @param options list containing parameter options
-#' @seealso [chimera_uchime()]
+#' @seealso [rchime()]
 #' @description detects and removes chimeras from your data using a reference
 #'  dataset.
-chimeraUchimeReference <- function(dataset, reference, options) {
-    .Call(`_rchime_chimeraUchimeReference`, dataset, reference, options)
+rchimeReference <- function(dataset, reference, options) {
+    .Call(`_rchime_rchimeReference`, dataset, reference, options)
 }
 
-#' @title chimeraUchime
-#' @name chimeraUchime
-#' @rdname chimeraUchime
+#' @title rchimeDenovo
+#' @name rchimeDenovo
+#' @rdname rchimeDenovo
 #' @param dataset R6 'sequence_dataset' object containing sequence data
 #' @param options list containing parameter options
-#' @seealso [chimera_uchime()]
+#' @seealso [rchime()]
 #' @description detects and removes chimeras from your data using a denovo
 #' approach.
-chimeraUchime <- function(dataset, options) {
-    .Call(`_rchime_chimeraUchime`, dataset, options)
+rchimeDenovo <- function(dataset, options) {
+    .Call(`_rchime_rchimeDenovo`, dataset, options)
 }
 

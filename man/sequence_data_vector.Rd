@@ -189,8 +189,8 @@ FASTA and abundance data. It inherits from 'sequence_dataset'.
   # get abundances of all sequences in your dataset
   abunds <- dataset$get_seqs_abunds()
 
-  # get abundances of sequences in sample 'F3D0'
-  abunds <- dataset$get_seqs_abunds(group = 'F3D0')
+  # get abundances of sequences divided by sample
+  abunds <- dataset$get_seqs_abunds(bysample = TRUE)
 
 ## ------------------------------------------------
 ## Method `sequence_data_vector$get_summary_report`
@@ -373,7 +373,6 @@ Sarah Westcott, \email{swestcot@umich.edu}
 <li><span class="pkg-link" data-pkg="rchime" data-topic="sequence_dataset" data-id="calc_longest_polymer"><a href='../../rchime/html/sequence_dataset.html#method-sequence_dataset-calc_longest_polymer'><code>rchime::sequence_dataset$calc_longest_polymer()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="rchime" data-topic="sequence_dataset" data-id="calc_numbases"><a href='../../rchime/html/sequence_dataset.html#method-sequence_dataset-calc_numbases'><code>rchime::sequence_dataset$calc_numbases()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="rchime" data-topic="sequence_dataset" data-id="calc_start"><a href='../../rchime/html/sequence_dataset.html#method-sequence_dataset-calc_start'><code>rchime::sequence_dataset$calc_start()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="rchime" data-topic="sequence_dataset" data-id="read_count_file"><a href='../../rchime/html/sequence_dataset.html#method-sequence_dataset-read_count_file'><code>rchime::sequence_dataset$read_count_file()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="rchime" data-topic="sequence_dataset" data-id="read_fasta_file"><a href='../../rchime/html/sequence_dataset.html#method-sequence_dataset-read_fasta_file'><code>rchime::sequence_dataset$read_fasta_file()</code></a></span></li>
 <li><span class="pkg-link" data-pkg="rchime" data-topic="sequence_dataset" data-id="write_fasta_file"><a href='../../rchime/html/sequence_dataset.html#method-sequence_dataset-write_fasta_file'><code>rchime::sequence_dataset$write_fasta_file()</code></a></span></li>
 </ul>
@@ -900,13 +899,16 @@ data.table
 \subsection{Method \code{get_seqs_abunds()}}{
 Get abundances for sequences in dataset
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{sequence_data_vector$get_seqs_abunds(group = NULL)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{sequence_data_vector$get_seqs_abunds(bysample = FALSE)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{group}}{String, name of sample}
+\item{\code{bysample}}{Boolean, if true then abundance broken down by sample,
+if false, then total abundance is returned}
+
+\item{\code{names}}{vector of Strings for which you want abundances for}
 }
 \if{html}{\out{</div>}}
 }
@@ -925,8 +927,8 @@ returned by dataset$get_names().
   # get abundances of all sequences in your dataset
   abunds <- dataset$get_seqs_abunds()
 
-  # get abundances of sequences in sample 'F3D0'
-  abunds <- dataset$get_seqs_abunds(group = 'F3D0')
+  # get abundances of sequences divided by sample
+  abunds <- dataset$get_seqs_abunds(bysample = TRUE)
 }
 \if{html}{\out{</div>}}
 

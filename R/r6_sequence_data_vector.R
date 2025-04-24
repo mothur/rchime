@@ -934,24 +934,6 @@ sequence_data_vector <- R6Class("sequence_data_vector",
             }
           }
         }
-
-        if (private$count_table$has_groups()) {
-          # remove groups that are now zeroed out
-          new_totals <- self$get_group_totals()
-
-          # are there groups in the dataset with no sequences
-          if (0 %in% new_totals) {
-            groups <- self$get_groups()
-
-            for (i in seq_along(groups)) {
-              if (new_totals[i] == 0) {
-                private$count_table$remove_group(groups[i])
-              }
-            }
-          }
-        }
-
-        # private$total <- private$count_table$get_total()
       } else {
         cli::cli_abort("You must provide both names and abunds.")
       }
