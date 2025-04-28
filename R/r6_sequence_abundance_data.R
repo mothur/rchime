@@ -284,13 +284,13 @@ sequence_abundance_data <- R6Class("sequence_abundance_data",
               dup_abunds[group_index]
             dup_abunds[group_index] <- 0
             d <- list(dup_abunds)
-            private$counts[[dup_name]] <- private$convert_to_sparse(d)
+            private$counts[[dup_name]] <- private$to_sparse(d)
           }
         }
 
         # add dups groups and abunds to keeper
         k_abunds <- list(k_abunds)
-        private$counts[[keeper_name]] <- private$convert_to_sparse(k_abunds)
+        private$counts[[keeper_name]] <- private$to_sparse(k_abunds)
       }
 
       invisible(self)
@@ -391,7 +391,7 @@ sequence_abundance_data <- R6Class("sequence_abundance_data",
       orig_abunds <- self$get_abunds(name)
 
       # update counts
-      private$counts[[name]] <- private$convert_to_sparse(abundance)
+      private$counts[[name]] <- private$to_sparse(abundance)
 
       diff_abunds <- orig_abunds - abundance[[1]]
       private$total <- private$total - sum(diff_abunds)
@@ -404,12 +404,44 @@ sequence_abundance_data <- R6Class("sequence_abundance_data",
     },
 
     #' @description
-    #' Add group assignment data
+    #' Add group assignment data, clears out old sample data
     #' @param names a vector of sequence names
     #' @param groups a vector of group assignments
+    #' @param abundances a vector of sample abundances
     #' @param filename String, Name of mothur formatted count file
     #' @param path String, Path to mothur formatted count file
+    #' @examples
+    #'  # mothur count file
+    #'  # Representative_Sequence     total   sample2	sample3	sample4
+    #'  # seq1	1150	250	400	500
+    #'  # seq2	115	25	40	50
+    #'  # seq3	50	25	25	0
+    #'  # seq4	4	0	0	4
+    #'
+    #' # as a sample table
+    #' names <- c("seq1", "seq1", "seq1",
+    #'           "seq2", "seq2", "seq2",
+    #'           "seq3", "seq3",
+    #'           "seq4")
+    #' groups <- c("sample2", "sample3", "sample4",
+    #'            "sample2", "sample3", "sample4",
+    #'            "sample2", "sample3",
+    #'            "sample4")
+    #' abundances <- c(250, 400, 500,
+    #'                25, 40, 50,
+    #'                25, 25,
+    #'                4)
+    #' abunds <- sequence_abundance_data$new()
+    #' abunds$set_group_assignments(names, groups, abundances)
+    #'
+    #' # or read mothur formatted count file
+    #'
+    #' abunds <- sequence_abundance_data$new()
+    #' abunds$set_group_assignments(filename =
+    #'         rchime_example("test.count_table"))
+    #'
     set_group_assignments = function(names = NULL, groups = NULL,
+                                     abundances = NULL,
                                      filename = NULL, path = NULL) {
       self$clear()
 
@@ -438,13 +470,50 @@ sequence_abundance_data <- R6Class("sequence_abundance_data",
         sums <- rep(0, num_groups)
 
         if (num_groups != 0) {
-          for (i in seq_along(groups)) {
-            group_index <- private$groups[[groups[i]]]
-            private$counts[[names[i]]] <- list(c(group_index), c(1))
-            sums[group_index] <- sums[group_index] + 1
+
+          unique_names <-  unique(names)
+
+          # assume each abundance is 1 if not provided
+          if (is.null(abundances)) {
+              abundances <- rep(1, length(groups))
           }
+
+          # assigning each sequence to a sample - make_contigs
+          if (length(unique_names) == length(groups)) {
+
+            for (i in seq_along(groups)) {
+              group_index <- private$groups[[groups[i]]]
+              private$counts[[names[i]]] <- list(
+                c(group_index),
+                abundances[i]
+              )
+              sums[group_index] <- sums[group_index] + abundances[i]
+            }
+
+          } else {
+            # assigning sequences to multiple groups
+
+            # set all counts entries to long format of abundance
+            long_abundances <- rep(0, num_groups)
+            for (name in unique_names) {
+                private$counts[[name]] <- long_abundances
+            }
+
+            for (i in seq_along(groups)) {
+                group_index <- private$groups[[groups[i]]]
+                private$counts[[names[i]]][group_index] <- abundances[i]
+                sums[group_index] <- sums[group_index] + abundances[i]
+            }
+
+            for (name in unique_names) {
+              private$counts[[name]] <- private$to_sparse(
+                  list(private$counts[[name]]))
+            }
+          }
+
+          # set group totals
           for (i in seq_along(unique_groups)) {
-            private$group_totals[[unique_groups[i]]] <- sums[i]
+              private$group_totals[[unique_groups[i]]] <- sums[i]
           }
           private$total <- sum(sums)
         }
@@ -490,7 +559,6 @@ sequence_abundance_data <- R6Class("sequence_abundance_data",
       close(file_conn)
     }
   ),
-
   private = list(
 
     # count table data - sparse
@@ -536,7 +604,7 @@ sequence_abundance_data <- R6Class("sequence_abundance_data",
     # seq1 -> c(0, 5, 0, 2, 0, 3) becomes
     # seq1 -> list(c(4, 2, 6), c(2, 5, 3))
     # 2 from 'sample4', 5 from 'sample2', 3 from 'sample6'
-    convert_to_sparse = function(abunds) {
+    to_sparse = function(abunds) {
       if (private$has_group_data) {
         if (length(abunds[[1]]) != self$get_num_groups()) {
           cli::cli_abort("When setting abunds on a dataset with groups you
@@ -765,10 +833,10 @@ sequence_abundance_data <- R6Class("sequence_abundance_data",
     # Remove group from dataset
     # @param group String, name of sample to remove
     remove_group = function(group) {
-        group_index <- private$groups[[group]]
-        if (!is.null(group_index)) {
-            private$table_groups[group_index] <- FALSE
-        }
+      group_index <- private$groups[[group]]
+      if (!is.null(group_index)) {
+        private$table_groups[group_index] <- FALSE
+      }
     },
 
     # diff_abunds -> difference between old abunds and new abunds

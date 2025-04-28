@@ -1,7 +1,6 @@
 # test sequence_abdundance_data R6 Class
 
 test_that("test sequence_abdundance_data R6 class", {
-
   abunds <- sequence_abundance_data$new()
   names <- c("seq1", "seq2", "seq3")
   abunds$add_seqs(names)
@@ -29,7 +28,7 @@ test_that("test sequence_abdundance_data R6 class", {
   abunds$set_group_assignments(names, groups)
 
   expect_equal(abunds$get_total(), 3)
-  expect_equal(abunds$get_group_totals(), c(2,1))
+  expect_equal(abunds$get_group_totals(), c(2, 1))
 
   # set the abundance of 'seq1' in 'sample1' to 150,
   #                      'seq1' in 'sample2' to 0
@@ -40,7 +39,7 @@ test_that("test sequence_abdundance_data R6 class", {
   abunds$set_abundance("seq3", list(c(75, 5)))
 
   expect_equal(abunds$get_total(), 231)
-  expect_equal(abunds$get_group_totals(), c(226,5))
+  expect_equal(abunds$get_group_totals(), c(226, 5))
 
   expect_equal(abunds$get_abund("seq1"), 150)
   expect_equal(abunds$get_abund("seq2"), 1)
@@ -72,13 +71,13 @@ test_that("test sequence_abdundance_data R6 class", {
   # merge sample1
   abunds$merge_seqs(c("seq1", "seq2"), group = "sample1")
   expect_equal(abunds$get_total(), 231)
-  expect_equal(abunds$get_group_totals(), c(226,5))
+  expect_equal(abunds$get_group_totals(), c(226, 5))
   # seq1 now represent seq1 and seq2
-  expect_equal(abunds$get_abunds("seq1"), c(151,0))
+  expect_equal(abunds$get_abunds("seq1"), c(151, 0))
 
   abunds$merge_seqs(c("seq1", "seq2"))
   expect_equal(abunds$get_total(), 231)
-  expect_equal(abunds$get_group_totals(), c(226,5))
+  expect_equal(abunds$get_group_totals(), c(226, 5))
   # seq1 now represent seq1 and seq2
   expect_equal(abunds$get_abund("seq1"), 151)
 
@@ -87,9 +86,56 @@ test_that("test sequence_abdundance_data R6 class", {
   expect_equal(abunds$get_groups(), c("sample1", "sample2"))
   expect_equal(abunds$get_num_groups(), 2)
   expect_equal(abunds$get_total(), 80)
-  expect_equal(abunds$get_group_totals(), c(75,5))
+  expect_equal(abunds$get_group_totals(), c(75, 5))
 
   abunds$remove_seq("seq3")
   expect_equal(abunds$get_num_groups(), 0)
   expect_equal(abunds$get_total(), 0)
+})
+
+test_that("test set_group_assignments - names, groups, abundances", {
+
+    # mothur count file
+    # "Representative_Sequence     total   sample2	sample3	sample4",
+    # "seq1	1150	250	400	500", "seq2	115	25	40	50",
+    # "seq3	50	25	25	0", "seq4	4	0	0	4"
+
+    # inputs as sample table
+    names <- c("seq1", "seq1", "seq1",
+              "seq2", "seq2", "seq2",
+              "seq3", "seq3",
+              "seq4")
+    groups <- c("sample2", "sample3", "sample4",
+               "sample2", "sample3", "sample4",
+               "sample2", "sample3",
+               "sample4")
+    abundances <- c(250, 400, 500,
+                    25, 40, 50,
+                    25, 25,
+                    4)
+
+    abunds <- sequence_abundance_data$new()
+    abunds$set_group_assignments(names, groups, abundances)
+
+    expect_equal(abunds$get_total(), 1319)
+    expect_equal(abunds$get_num_groups(), 3)
+
+    group_totals <- abunds$get_group_totals()
+
+    expect_equal(group_totals[1], 300)
+    expect_equal(group_totals[2], 465)
+    expect_equal(group_totals[3], 554)
+
+    abunds <- sequence_abundance_data$new()
+    abunds$set_group_assignments(names, groups)
+
+    expect_equal(abunds$get_total(), 9)
+    expect_equal(abunds$get_num_groups(), 3)
+
+    group_totals <- abunds$get_group_totals()
+
+    expect_equal(group_totals[1], 3)
+    expect_equal(group_totals[2], 3)
+    expect_equal(group_totals[3], 3)
+
 })

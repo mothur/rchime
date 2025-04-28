@@ -82,10 +82,10 @@
 #'
 #' @export
 rchime <- function(dataset = NULL, fasta = NULL, count = NULL,
-                           reference = NULL, dereplicate = FALSE,
-                           processors = parallelly::availableCores(),
-                           silent = FALSE, chimealns = FALSE,
-                           rchime_options = NULL) {
+                   reference = NULL, dereplicate = FALSE,
+                   processors = parallelly::availableCores(),
+                   silent = FALSE, chimealns = FALSE,
+                   rchime_options = NULL) {
   created_dataset <- FALSE
   start_time <- Sys.time()
 
@@ -139,7 +139,6 @@ rchime <- function(dataset = NULL, fasta = NULL, count = NULL,
 
   # if the user sets uchime options then add to parameters
   if (!is.null(rchime_options)) {
-
     if (!is.null(rchime_options$abskew)) {
       parameters <- c(parameters, abskew = rchime_options$abskew)
     }
@@ -147,41 +146,42 @@ rchime <- function(dataset = NULL, fasta = NULL, count = NULL,
       parameters <- c(parameters, minh = rchime_options$minh)
     }
     if (!is.null(rchime_options$mindiv)) {
-        parameters <- c(parameters, mindiv = rchime_options$mindiv)
+      parameters <- c(parameters, mindiv = rchime_options$mindiv)
     }
     if (!is.null(rchime_options$xn)) {
-        parameters <- c(parameters, xn = rchime_options$xn)
+      parameters <- c(parameters, xn = rchime_options$xn)
     }
     if (!is.null(rchime_options$dn)) {
-        parameters <- c(parameters, dn = rchime_options$dn)
+      parameters <- c(parameters, dn = rchime_options$dn)
     }
     if (!is.null(rchime_options$xa)) {
-        parameters <- c(parameters, xa = rchime_options$xa)
+      parameters <- c(parameters, xa = rchime_options$xa)
     }
     if (!is.null(rchime_options$chunks)) {
-        parameters <- c(parameters, chunks = rchime_options$chunks)
+      parameters <- c(parameters, chunks = rchime_options$chunks)
     }
     if (!is.null(rchime_options$minchunk)) {
-        parameters <- c(parameters, minchunk = rchime_options$minchunk)
+      parameters <- c(parameters, minchunk = rchime_options$minchunk)
     }
     if (!is.null(rchime_options$idsmoothwindow)) {
-        parameters <- c(parameters,
-                        idsmoothwindow = rchime_options$idsmoothwindow)
+      parameters <- c(parameters,
+        idsmoothwindow = rchime_options$idsmoothwindow
+      )
     }
     if (!is.null(rchime_options$maxp)) {
-        parameters <- c(parameters, maxp = rchime_options$maxp)
+      parameters <- c(parameters, maxp = rchime_options$maxp)
     }
     if (!is.null(rchime_options$skipgaps)) {
-        parameters <- c(parameters, rchime_options$skipgaps)
+      parameters <- c(parameters, rchime_options$skipgaps)
     }
     if (!is.null(rchime_options$skipgaps2)) {
-        parameters <- c(parameters, rchime_options$skipgaps2)
+      parameters <- c(parameters, rchime_options$skipgaps2)
     }
     if (!is.null(rchime_options$minlen)) {
-        parameters <- c(parameters, minlen = rchime_options$minlen)
+      parameters <- c(parameters, minlen = rchime_options$minlen)
     }
     if (!is.null(rchime_options$maxlen)) {
-        parameters <- c(parameters, maxlen = rchime_options$maxlen)
+      parameters <- c(parameters, maxlen = rchime_options$maxlen)
     }
   }
 

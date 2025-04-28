@@ -842,38 +842,70 @@ sequence_data_vector <- R6Class("sequence_data_vector",
     #' Add group assignment data
     #' @param names a vector of sequence names
     #' @param groups a vector of group assignments
+    #' @param abundances a vector of sample abundances
     #' @param filename String, Name of mothur formatted count file
     #' @param path String, Path to mothur formatted count file
     #' @examples
     #'
-    #'   dataset <- sequence_data_vector$new()
-    #'   names <- c("seq1", "seq2", "seq3")
-    #'   sequences <- c("ATGGGCT", "..TG--ACCGT..", "..GGuatgc..")
-    #'   groups <- c("sample1", "sample2", "sample3")
-    #'   dataset$add_seqs(names, sequences)
-    #'   dataset$set_group_assignments(names, groups)
+    #'  # mothur count file
+    #'  # Representative_Sequence     total   sample2	sample3	sample4
+    #'  # seq1	1150	250	400	500
+    #'  # seq2	115	25	40	50
+    #'  # seq3	50	25	25	0
+    #'  # seq4	4	0	0	4
+    #'
+    #' # inputted as a sample table
+    #' names <- c("seq1", "seq1", "seq1",
+    #'           "seq2", "seq2", "seq2",
+    #'           "seq3", "seq3",
+    #'           "seq4")
+    #' groups <- c("sample2", "sample3", "sample4",
+    #'            "sample2", "sample3", "sample4",
+    #'            "sample2", "sample3",
+    #'            "sample4")
+    #' abundances <- c(250, 400, 500,
+    #'                25, 40, 50,
+    #'                25, 25,
+    #'                4)
+    #'
+    #' dataset <- sequence_data_vector$new()
+    #' unique_names <- unique(names)
+    #' sequences <- c("ATGGGCT", "..TG--ACCGT..", "..GGuatgc..", "..GGTAC-T..")
+    #' dataset$add_seqs(unique_names, sequences)
+    #' dataset$set_group_assignments(names, groups, abundances)
+    #'
+    #' # or read fasta file and mothur formatted count file
+    #'
+    #' dataset <- sequence_data_vector$new(filename =
+    #'         rchime_example("test.fasta"))
+    #' dataset$set_group_assignments(filename =
+    #'         rchime_example("test.count_table"))
     #'
     set_group_assignments = function(names = NULL, groups = NULL,
+                                     abundances = NULL,
                                      filename = NULL, path = NULL) {
       if (!is.null(names) && !is.null(groups)) {
-        if (length(names) != length(private$names)) {
+        # find unique names
+        unique_names <- unique(names)
+
+        if (length(unique_names) != length(private$names)) {
           super$abort_length_mismatch(
-            "names", "groups", length(names),
+            "names", "groups", length(unique_names),
             length(private$names)
           )
         }
 
-        for (i in seq_along(names)) {
-          seq_info <- self$in_table(names[i])
+        for (i in seq_along(unique_names)) {
+          seq_info <- self$in_table(unique_names[i])
           if (!seq_info$include) {
-            super$abort_name_missing(names[i])
+            super$abort_name_missing(unique_names[i])
           }
         }
 
-        private$count_table$set_group_assignments(names, groups)
+        private$count_table$set_group_assignments(names, groups, abundances)
       } else if (!is.null(filename)) {
         private$count_table$set_group_assignments(
-          self$get_names(), NULL,
+          self$get_names(), NULL, NULL,
           filename, path
         )
       }

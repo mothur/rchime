@@ -3,11 +3,13 @@
 test_that("test uchime parameters ", {
   # minh < score == chimeric,
   # setting minh to 0.6 should cause chimera1 to be non_chimeric
-  options <- rchime_options(minh = 0.6, abskew = 1.9, mindiv = 0.505,
+  options <- rchime_options(
+    minh = 0.6, abskew = 1.9, mindiv = 0.505,
     xn = 8.01, dn = 1.401, xa = 1.001,
     minchunk = 63, chunks = 5, idsmoothwindow = 33,
     maxp = 3, minlen = 9, maxlen = 9000,
-    skipgaps = FALSE, skipgaps2 = FALSE)
+    skipgaps = FALSE, skipgaps2 = FALSE
+  )
 
   results <- rchime(
     fasta = rchime_example("test.chimera.fasta"),

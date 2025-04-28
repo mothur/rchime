@@ -78,6 +78,40 @@ abundance data of sequences by sample.
   #                      'seq3' in 'sample2' to 5
   dataset$set_abundance("seq3", list(c(75, 5)))
   dataset
+
+## ------------------------------------------------
+## Method `sequence_abundance_data$set_group_assignments`
+## ------------------------------------------------
+
+ # mothur count file
+ # Representative_Sequence     total   sample2	sample3	sample4
+ # seq1	1150	250	400	500
+ # seq2	115	25	40	50
+ # seq3	50	25	25	0
+ # seq4	4	0	0	4
+
+# as a sample table
+names <- c("seq1", "seq1", "seq1",
+          "seq2", "seq2", "seq2",
+          "seq3", "seq3",
+          "seq4")
+groups <- c("sample2", "sample3", "sample4",
+           "sample2", "sample3", "sample4",
+           "sample2", "sample3",
+           "sample4")
+abundances <- c(250, 400, 500,
+               25, 40, 50,
+               25, 25,
+               4)
+abunds <- sequence_abundance_data$new()
+abunds$set_group_assignments(names, groups, abundances)
+
+# or read mothur formatted count file
+
+abunds <- sequence_abundance_data$new()
+abunds$set_group_assignments(filename =
+        rchime_example("test.count_table"))
+
 }
 \author{
 Sarah Westcott, \email{swestcot@umich.edu}
@@ -507,11 +541,12 @@ Set abundance data for sequence
 \if{html}{\out{<a id="method-sequence_abundance_data-set_group_assignments"></a>}}
 \if{latex}{\out{\hypertarget{method-sequence_abundance_data-set_group_assignments}{}}}
 \subsection{Method \code{set_group_assignments()}}{
-Add group assignment data
+Add group assignment data, clears out old sample data
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{sequence_abundance_data$set_group_assignments(
   names = NULL,
   groups = NULL,
+  abundances = NULL,
   filename = NULL,
   path = NULL
 )}\if{html}{\out{</div>}}
@@ -524,12 +559,50 @@ Add group assignment data
 
 \item{\code{groups}}{a vector of group assignments}
 
+\item{\code{abundances}}{a vector of sample abundances}
+
 \item{\code{filename}}{String, Name of mothur formatted count file}
 
 \item{\code{path}}{String, Path to mothur formatted count file}
 }
 \if{html}{\out{</div>}}
 }
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{ # mothur count file
+ # Representative_Sequence     total   sample2	sample3	sample4
+ # seq1	1150	250	400	500
+ # seq2	115	25	40	50
+ # seq3	50	25	25	0
+ # seq4	4	0	0	4
+
+# as a sample table
+names <- c("seq1", "seq1", "seq1",
+          "seq2", "seq2", "seq2",
+          "seq3", "seq3",
+          "seq4")
+groups <- c("sample2", "sample3", "sample4",
+           "sample2", "sample3", "sample4",
+           "sample2", "sample3",
+           "sample4")
+abundances <- c(250, 400, 500,
+               25, 40, 50,
+               25, 25,
+               4)
+abunds <- sequence_abundance_data$new()
+abunds$set_group_assignments(names, groups, abundances)
+
+# or read mothur formatted count file
+
+abunds <- sequence_abundance_data$new()
+abunds$set_group_assignments(filename =
+        rchime_example("test.count_table"))
+
+}
+\if{html}{\out{</div>}}
+
+}
+
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-sequence_abundance_data-write_count_file"></a>}}

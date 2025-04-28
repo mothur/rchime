@@ -267,12 +267,39 @@ FASTA and abundance data. It inherits from 'sequence_dataset'.
 ## ------------------------------------------------
 
 
-  dataset <- sequence_data_vector$new()
-  names <- c("seq1", "seq2", "seq3")
-  sequences <- c("ATGGGCT", "..TG--ACCGT..", "..GGuatgc..")
-  groups <- c("sample1", "sample2", "sample3")
-  dataset$add_seqs(names, sequences)
-  dataset$set_group_assignments(names, groups)
+ # mothur count file
+ # Representative_Sequence     total   sample2	sample3	sample4
+ # seq1	1150	250	400	500
+ # seq2	115	25	40	50
+ # seq3	50	25	25	0
+ # seq4	4	0	0	4
+
+# inputted as a sample table
+names <- c("seq1", "seq1", "seq1",
+          "seq2", "seq2", "seq2",
+          "seq3", "seq3",
+          "seq4")
+groups <- c("sample2", "sample3", "sample4",
+           "sample2", "sample3", "sample4",
+           "sample2", "sample3",
+           "sample4")
+abundances <- c(250, 400, 500,
+               25, 40, 50,
+               25, 25,
+               4)
+
+dataset <- sequence_data_vector$new()
+unique_names <- unique(names)
+sequences <- c("ATGGGCT", "..TG--ACCGT..", "..GGuatgc..", "..GGTAC-T..")
+dataset$add_seqs(unique_names, sequences)
+dataset$set_group_assignments(names, groups, abundances)
+
+# or read fasta file and mothur formatted count file
+
+dataset <- sequence_data_vector$new(filename =
+        rchime_example("test.fasta"))
+dataset$set_group_assignments(filename =
+        rchime_example("test.count_table"))
 
 
 ## ------------------------------------------------
@@ -1170,6 +1197,7 @@ Add group assignment data
 \if{html}{\out{<div class="r">}}\preformatted{sequence_data_vector$set_group_assignments(
   names = NULL,
   groups = NULL,
+  abundances = NULL,
   filename = NULL,
   path = NULL
 )}\if{html}{\out{</div>}}
@@ -1182,6 +1210,8 @@ Add group assignment data
 
 \item{\code{groups}}{a vector of group assignments}
 
+\item{\code{abundances}}{a vector of sample abundances}
+
 \item{\code{filename}}{String, Name of mothur formatted count file}
 
 \item{\code{path}}{String, Path to mothur formatted count file}
@@ -1191,12 +1221,39 @@ Add group assignment data
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
 \preformatted{
-  dataset <- sequence_data_vector$new()
-  names <- c("seq1", "seq2", "seq3")
-  sequences <- c("ATGGGCT", "..TG--ACCGT..", "..GGuatgc..")
-  groups <- c("sample1", "sample2", "sample3")
-  dataset$add_seqs(names, sequences)
-  dataset$set_group_assignments(names, groups)
+ # mothur count file
+ # Representative_Sequence     total   sample2	sample3	sample4
+ # seq1	1150	250	400	500
+ # seq2	115	25	40	50
+ # seq3	50	25	25	0
+ # seq4	4	0	0	4
+
+# inputted as a sample table
+names <- c("seq1", "seq1", "seq1",
+          "seq2", "seq2", "seq2",
+          "seq3", "seq3",
+          "seq4")
+groups <- c("sample2", "sample3", "sample4",
+           "sample2", "sample3", "sample4",
+           "sample2", "sample3",
+           "sample4")
+abundances <- c(250, 400, 500,
+               25, 40, 50,
+               25, 25,
+               4)
+
+dataset <- sequence_data_vector$new()
+unique_names <- unique(names)
+sequences <- c("ATGGGCT", "..TG--ACCGT..", "..GGuatgc..", "..GGTAC-T..")
+dataset$add_seqs(unique_names, sequences)
+dataset$set_group_assignments(names, groups, abundances)
+
+# or read fasta file and mothur formatted count file
+
+dataset <- sequence_data_vector$new(filename =
+        rchime_example("test.fasta"))
+dataset$set_group_assignments(filename =
+        rchime_example("test.count_table"))
 
 }
 \if{html}{\out{</div>}}

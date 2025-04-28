@@ -60,57 +60,57 @@
 #' @author Sarah Westcott, \email{swestcot@@umich.edu}
 #' @export
 #'
-rchime_options <- function(abskew = 2.0,
-  minh = 0.3, mindiv = 0.5, xn = 8.0,
-  dn = 1.4, xa = 1.0, chunks = 4, minchunk = 64,
-  idsmoothwindow = 32, maxp = 2, skipgaps = TRUE,
-  skipgaps2 = TRUE, minlen = 10, maxlen = 10000) {
-
+rchime_options <- function(
+    abskew = 2.0,
+    minh = 0.3, mindiv = 0.5, xn = 8.0,
+    dn = 1.4, xa = 1.0, chunks = 4, minchunk = 64,
+    idsmoothwindow = 32, maxp = 2, skipgaps = TRUE,
+    skipgaps2 = TRUE, minlen = 10, maxlen = 10000) {
   parameters <- list()
 
   # if the user sets uchime options then add to parameters
   if (abskew != 2.0) {
-      parameters <- c(parameters, abskew = abskew)
+    parameters <- c(parameters, abskew = abskew)
   }
   if (minh != 0.3) {
-      parameters <- c(parameters, minh = minh)
+    parameters <- c(parameters, minh = minh)
   }
   if (mindiv != 0.5) {
-      parameters <- c(parameters, mindiv = mindiv)
+    parameters <- c(parameters, mindiv = mindiv)
   }
   if (xn != 8.0) {
-      parameters <- c(parameters, xn = xn)
+    parameters <- c(parameters, xn = xn)
   }
   if (dn != 1.4) {
-      parameters <- c(parameters, dn = dn)
+    parameters <- c(parameters, dn = dn)
   }
   if (xa != 1.0) {
-      parameters <- c(parameters, xa = xa)
+    parameters <- c(parameters, xa = xa)
   }
   if (chunks != 4) {
-      parameters <- c(parameters, chunks = chunks)
+    parameters <- c(parameters, chunks = chunks)
   }
   if (minchunk != 64) {
-      parameters <- c(parameters, minchunk = minchunk)
+    parameters <- c(parameters, minchunk = minchunk)
   }
   if (idsmoothwindow != 32) {
-      parameters <- c(parameters, idsmoothwindow = idsmoothwindow)
+    parameters <- c(parameters, idsmoothwindow = idsmoothwindow)
   }
   if (maxp != 2) {
-      parameters <- c(parameters, maxp = maxp)
+    parameters <- c(parameters, maxp = maxp)
   }
   if (!skipgaps) {
-      parameters <- c(parameters, skipgaps = FALSE)
+    parameters <- c(parameters, skipgaps = FALSE)
   }
   if (!skipgaps2) {
-      parameters <- c(parameters, skipgaps2 = FALSE)
+    parameters <- c(parameters, skipgaps2 = FALSE)
   }
   if (minlen != 10) {
-      parameters <- c(parameters, minlen = minlen)
+    parameters <- c(parameters, minlen = minlen)
   }
   if (maxlen != 10000) {
-      parameters <- c(parameters, maxlen = maxlen)
+    parameters <- c(parameters, maxlen = maxlen)
   }
-  
-  return (parameters)
+
+  return(parameters)
 }
