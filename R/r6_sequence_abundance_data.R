@@ -242,6 +242,58 @@ sequence_abundance_data <- R6Class("sequence_abundance_data",
     },
 
     #' @description
+    #' Get sample table returns data.table containing the 3 columns: name,
+    #' group and abundance.
+    #' @param names, vector of names to include in table (optional)
+    #' @examples
+    #'   dataset <- sequence_abundance_data$new()
+    #'   dataset$set_group_assignments(filename =
+    #'   rchime_example("test.count_table"))
+    #'
+    #'   sample_table <- dataset$get_sample_table()
+    #'
+    #' @return data.table
+    get_sample_table = function(names = NULL) {
+      # use all names in counts
+      if (is.null(names)) {
+        names <- unlist(keys(private$counts))
+      }
+
+      # if groups, create a row for each seq,sample,abund
+      if (private$has_group_data) {
+        table_names <- c()
+        table_groups <- c()
+        table_abundances <- c()
+
+        groups <- self$get_groups()
+
+        for (name in names) {
+          data <- private$counts[[name]]
+
+          table_names <- c(table_names, rep(name, length(data[[1]])))
+          # add each group name is present in
+          for (i in seq_along(data[[1]])) {
+            table_groups <- c(table_groups, groups[data[[1]][i]])
+          }
+          # add each abundance for each sample name is present in
+          for (i in seq_along(data[[2]])) {
+            table_abundances <- c(table_abundances, data[[2]][i])
+          }
+        }
+        data <- data.table(
+          name = table_names, group = table_groups,
+          abundance = table_abundances
+        )
+        return(data)
+      } else {
+        abunds <- self$get_seqs_abunds(names)
+        data <- data.table(name = names, abundance = abunds)
+        return(data)
+      }
+      return(data.table())
+    },
+
+    #' @description
     #' Get number of sequences in the dataset
     #' @return An integer
     get_total = function() {

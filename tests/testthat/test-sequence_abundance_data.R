@@ -131,6 +131,12 @@ test_that("test set_group_assignments - names, groups, abundances", {
   expect_equal(group_totals[2], 465)
   expect_equal(group_totals[3], 554)
 
+  sample_table <- abunds$get_sample_table()
+
+  expect_equal(sample_table$name, names)
+  expect_equal(sample_table$group, groups)
+  expect_equal(sample_table$abundance, abundances)
+
   abunds <- sequence_abundance_data$new()
   abunds$set_group_assignments(names, groups)
 
@@ -142,6 +148,21 @@ test_that("test set_group_assignments - names, groups, abundances", {
   expect_equal(group_totals[1], 3)
   expect_equal(group_totals[2], 3)
   expect_equal(group_totals[3], 3)
+
+  abunds <- sequence_abundance_data$new()
+  abunds$add_seqs(unique(names))
+  abunds$set_abundance("seq1", list(c(100)))
+  abunds$set_abundance("seq2", list(c(200)))
+  abunds$set_abundance("seq3", list(c(300)))
+  abunds$set_abundance("seq4", list(c(400)))
+
+  expect_equal(abunds$get_total(), 1000)
+  expect_equal(abunds$get_num_groups(), 0)
+
+  sample_table <- abunds$get_sample_table()
+
+  expect_equal(sample_table$name, unique(names))
+  expect_equal(sample_table$abundance, c(100, 200, 300, 400))
 })
 
 test_that("test set_group_assignments - export", {

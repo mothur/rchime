@@ -257,6 +257,59 @@ sequence_data_vector <- R6Class("sequence_data_vector",
     },
 
     #' @description
+    #' Get data.table containing dataset
+    #' @examples
+    #'   dataset <- sequence_data_vector$new(filename =
+    #'   rchime_example("test.fasta"))
+    #'   dataset$set_group_assignments(filename =
+    #'   rchime_example("test.count_table"))
+    #'   data <- dataset$export()
+    #' @return data.table
+    export = function() {
+      data <- data.table(
+        names = private$names,
+        sequences = private$sequences,
+        lengths = private$lengths,
+        starts = private$starts,
+        ends = private$ends,
+        ambigs = private$ambigs,
+        polymers = private$polymers,
+        numns = private$numns
+      )
+
+      if (self$has_contigs_report()) {
+        contigs_report <- data.table(
+          olengths = private$olengths,
+          ostarts = private$ostarts,
+          oends = private$oends,
+          mismatches = private$mismatches,
+          ee = private$ee
+        )
+
+        data <- cbind(data, contigs_report)
+      }
+
+      if (self$has_align_report()) {
+        align_report <- data.table(
+          search_scores = private$search_score,
+          sim_scores = private$sim_score,
+          longest_inserts = private$longest_insert
+        )
+
+        data <- cbind(data, align_report)
+      }
+
+      data <- cbind(data, private$count_table$export())
+
+      data <- cbind(data, data.table(
+        comments = private$comments,
+        trash_codes = private$trash_codes
+      ))
+
+      return(data)
+    },
+
+    #' @description
     #' Get abundance for sequence in the dataset
     #' @param name String, Name of sequence
     #' @param group (optional) Name of group to get abundance for,
@@ -524,57 +577,23 @@ sequence_data_vector <- R6Class("sequence_data_vector",
     },
 
     #' @description
-    #' Get data.table containing dataset
+    #' Get sample table returns data.table containing the 3 columns: name,
+    #' group (optional) and abundance.
+    #'
     #' @examples
-    #'   dataset <- sequence_data_vector$new(filename =
-    #'   rchime_example("test.fasta"))
+    #'   dataset <- sequence_data_vector$new(
+    #'   filename = rchime_example('test.fasta'))
+    #'
     #'   dataset$set_group_assignments(filename =
     #'   rchime_example("test.count_table"))
-    #'   data <- dataset$export()
+    #'
+    #'   sample_table <- dataset$get_sample_table()
+    #'
     #' @return data.table
-    export = function() {
-      data <- data.table(
-        names = private$names,
-        sequences = private$sequences,
-        lengths = private$lengths,
-        starts = private$starts,
-        ends = private$ends,
-        ambigs = private$ambigs,
-        polymers = private$polymers,
-        numns = private$numns
-      )
-
-      if (self$has_contigs_report()) {
-        contigs_report <- data.table(
-          olengths = private$olengths,
-          ostarts = private$ostarts,
-          oends = private$oends,
-          mismatches = private$mismatches,
-          ee = private$ee
-        )
-
-        data <- cbind(data, contigs_report)
-      }
-
-      if (self$has_align_report()) {
-        align_report <- data.table(
-          search_scores = private$search_score,
-          sim_scores = private$sim_score,
-          longest_inserts = private$longest_insert
-        )
-
-        data <- cbind(data, align_report)
-      }
-
-      data <- cbind(data, private$count_table$export())
-
-      data <- cbind(data, data.table(
-        comments = private$comments,
-        trash_codes = private$trash_codes
-      ))
-
-      return(data)
+    get_sample_table = function() {
+      return(private$count_table$get_sample_table(self$get_names()))
     },
+
 
     #' @description
     #' Get vector containing FASTA nucleotide strings

@@ -41,6 +41,17 @@ abundance data of sequences by sample.
   dataset
 
 ## ------------------------------------------------
+## Method `sequence_abundance_data$get_sample_table`
+## ------------------------------------------------
+
+  dataset <- sequence_abundance_data$new()
+  dataset$set_group_assignments(filename =
+  rchime_example("test.count_table"))
+
+  sample_table <- dataset$get_sample_table()
+
+
+## ------------------------------------------------
 ## Method `sequence_abundance_data$merge_seqs`
 ## ------------------------------------------------
 
@@ -132,6 +143,7 @@ Sarah Westcott, \email{swestcot@umich.edu}
 \item \href{#method-sequence_abundance_data-get_groups}{\code{sequence_abundance_data$get_groups()}}
 \item \href{#method-sequence_abundance_data-get_group_totals}{\code{sequence_abundance_data$get_group_totals()}}
 \item \href{#method-sequence_abundance_data-get_num_groups}{\code{sequence_abundance_data$get_num_groups()}}
+\item \href{#method-sequence_abundance_data-get_sample_table}{\code{sequence_abundance_data$get_sample_table()}}
 \item \href{#method-sequence_abundance_data-get_total}{\code{sequence_abundance_data$get_total()}}
 \item \href{#method-sequence_abundance_data-get_seqs_abunds}{\code{sequence_abundance_data$get_seqs_abunds()}}
 \item \href{#method-sequence_abundance_data-has_groups}{\code{sequence_abundance_data$has_groups()}}
@@ -366,6 +378,40 @@ Get number of groups in the dataset
 \subsection{Returns}{
 An integer
 }
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-sequence_abundance_data-get_sample_table"></a>}}
+\if{latex}{\out{\hypertarget{method-sequence_abundance_data-get_sample_table}{}}}
+\subsection{Method \code{get_sample_table()}}{
+Get sample table returns data.table containing the 3 columns: name,
+group and abundance.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{sequence_abundance_data$get_sample_table(names = NULL)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{names, }}{vector of names to include in table (optional)}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+data.table
+}
+\subsection{Examples}{
+\if{html}{\out{<div class="r example copy">}}
+\preformatted{  dataset <- sequence_abundance_data$new()
+  dataset$set_group_assignments(filename =
+  rchime_example("test.count_table"))
+
+  sample_table <- dataset$get_sample_table()
+
+}
+\if{html}{\out{</div>}}
+
+}
+
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-sequence_abundance_data-get_total"></a>}}

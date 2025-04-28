@@ -160,6 +160,10 @@ test_that("test sequence_data_vector count info ", {
 
   remove_file("test_no_groups.count_table")
 
+  sample_table <- dataset$get_sample_table()
+
+  expect_equal(sample_table$name, names)
+  expect_equal(sample_table$abundance, c(1150, 115, 50, 4))
   expect_equal(dataset$get_num_seqs(), 1319)
   expect_equal(dataset$get_num_groups(), 0)
   dataset$write_count_file(
@@ -193,6 +197,27 @@ test_that("test sequence_data_vector count info ", {
   )
   expect_equal(dataset$get_num_seqs(), 1319)
   expect_equal(dataset$get_num_groups(), 3)
+
+  sample_table <- dataset$get_sample_table()
+
+  expect_equal(sample_table$name, c(
+    "seq1", "seq1", "seq1",
+    "seq2", "seq2", "seq2",
+    "seq3", "seq3",
+    "seq4"
+  ))
+  expect_equal(sample_table$group, c(
+    "sample2", "sample3", "sample4",
+    "sample2", "sample3", "sample4",
+    "sample2", "sample3",
+    "sample4"
+  ))
+  expect_equal(sample_table$abundance, c(
+    250, 400, 500,
+    25, 40, 50,
+    25, 25,
+    4
+  ))
 
   remove_file("test_small_abund.count_table")
 
