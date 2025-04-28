@@ -155,12 +155,14 @@ FASTA and abundance data. It inherits from 'sequence_dataset'.
 
 
 ## ------------------------------------------------
-## Method `sequence_data_vector$get_seqs_table`
+## Method `sequence_data_vector$export`
 ## ------------------------------------------------
 
   dataset <- sequence_data_vector$new(filename =
   rchime_example("test.fasta"))
-  seqs <- dataset$get_seqs_table()
+  dataset$set_group_assignments(filename =
+  rchime_example("test.count_table"))
+  data <- dataset$export()
 
 ## ------------------------------------------------
 ## Method `sequence_data_vector$get_seqs`
@@ -369,7 +371,7 @@ Sarah Westcott, \email{swestcot@umich.edu}
 \item \href{#method-sequence_data_vector-get_num_groups}{\code{sequence_data_vector$get_num_groups()}}
 \item \href{#method-sequence_data_vector-get_num_seqs}{\code{sequence_data_vector$get_num_seqs()}}
 \item \href{#method-sequence_data_vector-get_num_unique_seqs}{\code{sequence_data_vector$get_num_unique_seqs()}}
-\item \href{#method-sequence_data_vector-get_seqs_table}{\code{sequence_data_vector$get_seqs_table()}}
+\item \href{#method-sequence_data_vector-export}{\code{sequence_data_vector$export()}}
 \item \href{#method-sequence_data_vector-get_seqs}{\code{sequence_data_vector$get_seqs()}}
 \item \href{#method-sequence_data_vector-get_seqs_abunds}{\code{sequence_data_vector$get_seqs_abunds()}}
 \item \href{#method-sequence_data_vector-get_summary_report}{\code{sequence_data_vector$get_summary_report()}}
@@ -862,12 +864,12 @@ An integer
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-sequence_data_vector-get_seqs_table"></a>}}
-\if{latex}{\out{\hypertarget{method-sequence_data_vector-get_seqs_table}{}}}
-\subsection{Method \code{get_seqs_table()}}{
-Get data.table containing FASTA data
+\if{html}{\out{<a id="method-sequence_data_vector-export"></a>}}
+\if{latex}{\out{\hypertarget{method-sequence_data_vector-export}{}}}
+\subsection{Method \code{export()}}{
+Get data.table containing dataset
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{sequence_data_vector$get_seqs_table()}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{sequence_data_vector$export()}\if{html}{\out{</div>}}
 }
 
 \subsection{Returns}{
@@ -877,7 +879,9 @@ data.table
 \if{html}{\out{<div class="r example copy">}}
 \preformatted{  dataset <- sequence_data_vector$new(filename =
   rchime_example("test.fasta"))
-  seqs <- dataset$get_seqs_table()
+  dataset$set_group_assignments(filename =
+  rchime_example("test.count_table"))
+  data <- dataset$export()
 }
 \if{html}{\out{</div>}}
 

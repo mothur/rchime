@@ -17,6 +17,8 @@ sequence_abundance_data <- R6Class("sequence_abundance_data",
     #' @return A new `sequence_abundance_data` object.
     initialize = function() {
       super$initialize()
+      self$clear()
+      invisible(self)
     },
 
     #' @description View summary of count table data
@@ -72,7 +74,7 @@ sequence_abundance_data <- R6Class("sequence_abundance_data",
     #'   dataset$clear()
     #'   dataset
     clear = function() {
-      counts <- hashmap()
+      private$counts <- hashmap()
 
       # group names mapped to column in counts
       private$groups <- hashmap()
@@ -84,6 +86,46 @@ sequence_abundance_data <- R6Class("sequence_abundance_data",
       private$has_group_data <- FALSE
 
       invisible(self)
+    },
+
+    #' @description
+    #' Get data.table containing abundance data
+    #' @param names vector names to export (optional)
+    #' @return data.table
+    export = function(names = NULL) {
+      # use all names in counts
+      if (is.null(names)) {
+        names <- unlist(keys(private$counts))
+      }
+
+      abunds <- self$get_seqs_abunds(names, private$has_group_data)
+
+      if (private$has_group_data) {
+        groups <- self$get_groups()
+
+        total_abundance <- rep(0, length(abunds))
+        for (i in seq_along(abunds)) {
+          total_abundance[i] <- sum(abunds[[i]])
+        }
+
+        data <- data.table(total_abundance = total_abundance)
+        for (group in groups) {
+          group_index <- private$groups[[group]]
+
+          group_abunds <- rep(0, length(abunds))
+          for (i in seq_along(abunds)) {
+            group_abunds[i] <- abunds[[i]][group_index]
+          }
+          data <- cbind(data, group_abunds)
+        }
+
+        names(data) <- c("total_abundance", groups)
+        return(data)
+      } else {
+        data <- data.table(total_abundance = abunds)
+        return(data)
+      }
+      return(data.table())
     },
 
     #' @description
@@ -470,17 +512,15 @@ sequence_abundance_data <- R6Class("sequence_abundance_data",
         sums <- rep(0, num_groups)
 
         if (num_groups != 0) {
-
-          unique_names <-  unique(names)
+          unique_names <- unique(names)
 
           # assume each abundance is 1 if not provided
           if (is.null(abundances)) {
-              abundances <- rep(1, length(groups))
+            abundances <- rep(1, length(groups))
           }
 
           # assigning each sequence to a sample - make_contigs
           if (length(unique_names) == length(groups)) {
-
             for (i in seq_along(groups)) {
               group_index <- private$groups[[groups[i]]]
               private$counts[[names[i]]] <- list(
@@ -489,31 +529,31 @@ sequence_abundance_data <- R6Class("sequence_abundance_data",
               )
               sums[group_index] <- sums[group_index] + abundances[i]
             }
-
           } else {
             # assigning sequences to multiple groups
 
             # set all counts entries to long format of abundance
             long_abundances <- rep(0, num_groups)
             for (name in unique_names) {
-                private$counts[[name]] <- long_abundances
+              private$counts[[name]] <- long_abundances
             }
 
             for (i in seq_along(groups)) {
-                group_index <- private$groups[[groups[i]]]
-                private$counts[[names[i]]][group_index] <- abundances[i]
-                sums[group_index] <- sums[group_index] + abundances[i]
+              group_index <- private$groups[[groups[i]]]
+              private$counts[[names[i]]][group_index] <- abundances[i]
+              sums[group_index] <- sums[group_index] + abundances[i]
             }
 
             for (name in unique_names) {
               private$counts[[name]] <- private$to_sparse(
-                  list(private$counts[[name]]))
+                list(private$counts[[name]])
+              )
             }
           }
 
           # set group totals
           for (i in seq_along(unique_groups)) {
-              private$group_totals[[unique_groups[i]]] <- sums[i]
+            private$group_totals[[unique_groups[i]]] <- sums[i]
           }
           private$total <- sum(sums)
         }

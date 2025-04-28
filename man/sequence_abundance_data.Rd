@@ -126,6 +126,7 @@ Sarah Westcott, \email{swestcot@umich.edu}
 \item \href{#method-sequence_abundance_data-print}{\code{sequence_abundance_data$print()}}
 \item \href{#method-sequence_abundance_data-add_seqs}{\code{sequence_abundance_data$add_seqs()}}
 \item \href{#method-sequence_abundance_data-clear}{\code{sequence_abundance_data$clear()}}
+\item \href{#method-sequence_abundance_data-export}{\code{sequence_abundance_data$export()}}
 \item \href{#method-sequence_abundance_data-get_abund}{\code{sequence_abundance_data$get_abund()}}
 \item \href{#method-sequence_abundance_data-get_abunds}{\code{sequence_abundance_data$get_abunds()}}
 \item \href{#method-sequence_abundance_data-get_groups}{\code{sequence_abundance_data$get_groups()}}
@@ -248,6 +249,26 @@ Remove all sequences from dataset
 
 }
 
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-sequence_abundance_data-export"></a>}}
+\if{latex}{\out{\hypertarget{method-sequence_abundance_data-export}{}}}
+\subsection{Method \code{export()}}{
+Get data.table containing abundance data
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{sequence_abundance_data$export(names = NULL)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{names}}{vector names to export (optional)}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+data.table
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-sequence_abundance_data-get_abund"></a>}}

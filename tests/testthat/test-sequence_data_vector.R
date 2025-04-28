@@ -20,16 +20,20 @@ test_that("test sequence_data_vector R6 class", {
 
   dataset <- sequence_data_vector$new()
   dataset$add_seqs(names, sequences, comments)
-  seqs <- dataset$get_seqs_table()
-  expect_equal(dataset$get_num_seqs(), 3)
-  expect_equal(seqs$names[[2]], "seq2")
-  expect_equal(dataset$get_names()[[2]], "seq2")
-  expect_equal(
-    seqs$sequences[[2]],
-    "TACGGAGGATGCGAGCGTTATCCGGATTTATTGGGTTTAAAGGGTGCGT"
-  )
 
-  dataset$write_fasta_file(seqs$names, seqs$sequences,
+  df <- dataset$export()
+
+  expect_equal(dataset$get_num_seqs(), 3)
+  expect_equal(df$names, names)
+  expect_equal(df$sequences, sequences)
+  expect_equal(df$comments, comments)
+  expect_equal(df$ends, c(49, 49, 36))
+  expect_equal(df$starts, c(1, 1, 8))
+  expect_equal(df$total_abundance, c(1, 1, 1))
+  expect_equal(dataset$get_names()[[2]], "seq2")
+
+
+  dataset$write_fasta_file(df$names, df$sequences,
     filename =
       "test_dataset_sequences.fasta"
   )
@@ -40,13 +44,6 @@ test_that("test sequence_data_vector R6 class", {
     path = "."
   )
   expect_equal(dataset$get_num_seqs(), 3)
-
-  seqs <- dataset$get_seqs_table()
-  expect_equal(seqs$names[[1]], "mySeq")
-  expect_equal(
-    seqs$sequences[[3]],
-    ".......GAGC-TTATCCGGATT-ATTG-GTT-AAA----"
-  )
 
   # merge seqs without group data
   seqs_to_merge <- list(c("mySeq", "seq2", "seq3"))
@@ -110,6 +107,16 @@ test_that("test sequence_data_vector count info ", {
   expect_equal(dataset$get_group_totals(), c(2, 2))
   expect_equal(dataset$get_num_seqs(), 4)
   expect_equal(dataset$get_num_groups(), 2)
+
+  df <- dataset$export()
+
+  expect_equal(df$names, names)
+  expect_equal(df$sequences, sequences)
+  expect_equal(df$comments, c("", "", "", ""))
+  expect_equal(df$ends, c(49, 49, 36, 38))
+  expect_equal(df$starts, c(1, 1, 8, 4))
+  expect_equal(df$sample1, c(1, 0, 1, 0))
+  expect_equal(df$sample2, c(0, 1, 0, 1))
 
   dataset$clear()
   dataset$add_seqs(names, sequences)

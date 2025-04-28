@@ -239,12 +239,11 @@ sequence_data_vector <- R6Class("sequence_data_vector",
       private$longest_insert <- c()
 
       # abundance data
-      private$count_table$clear()
+      private$count_table <- sequence_abundance_data$new()
       # map to quick reference sequence data
       private$seq2row <- hashmap()
       # map of reasons for removal
       private$accnos <- hashmap()
-
 
       # sequence counts
       private$total_bad <- 0
@@ -525,25 +524,55 @@ sequence_data_vector <- R6Class("sequence_data_vector",
     },
 
     #' @description
-    #' Get data.table containing FASTA data
+    #' Get data.table containing dataset
     #' @examples
     #'   dataset <- sequence_data_vector$new(filename =
     #'   rchime_example("test.fasta"))
-    #'   seqs <- dataset$get_seqs_table()
+    #'   dataset$set_group_assignments(filename =
+    #'   rchime_example("test.count_table"))
+    #'   data <- dataset$export()
     #' @return data.table
-    get_seqs_table = function() {
+    export = function() {
       data <- data.table(
-        names = private$names[private$table_seqs],
-        sequences = private$sequences[private$table_seqs],
-        comments = private$comments[private$table_seqs],
-        trash_codes = private$trash_codes[private$table_seqs],
-        starts = private$starts[private$table_seqs],
-        ends = private$ends[private$table_seqs],
-        lengths = private$lengths[private$table_seqs],
-        ambigs = private$ambigs[private$table_seqs],
-        polymers = private$polymers[private$table_seqs],
-        numns = private$numns[private$table_seqs]
+        names = private$names,
+        sequences = private$sequences,
+        lengths = private$lengths,
+        starts = private$starts,
+        ends = private$ends,
+        ambigs = private$ambigs,
+        polymers = private$polymers,
+        numns = private$numns
       )
+
+      if (self$has_contigs_report()) {
+        contigs_report <- data.table(
+          olengths = private$olengths,
+          ostarts = private$ostarts,
+          oends = private$oends,
+          mismatches = private$mismatches,
+          ee = private$ee
+        )
+
+        data <- cbind(data, contigs_report)
+      }
+
+      if (self$has_align_report()) {
+        align_report <- data.table(
+          search_scores = private$search_score,
+          sim_scores = private$sim_score,
+          longest_inserts = private$longest_insert
+        )
+
+        data <- cbind(data, align_report)
+      }
+
+      data <- cbind(data, private$count_table$export())
+
+      data <- cbind(data, data.table(
+        comments = private$comments,
+        trash_codes = private$trash_codes
+      ))
+
       return(data)
     },
 

@@ -94,48 +94,105 @@ test_that("test sequence_abdundance_data R6 class", {
 })
 
 test_that("test set_group_assignments - names, groups, abundances", {
+  # mothur count file
+  # "Representative_Sequence     total   sample2	sample3	sample4",
+  # "seq1	1150	250	400	500", "seq2	115	25	40	50",
+  # "seq3	50	25	25	0", "seq4	4	0	0	4"
 
-    # mothur count file
-    # "Representative_Sequence     total   sample2	sample3	sample4",
-    # "seq1	1150	250	400	500", "seq2	115	25	40	50",
-    # "seq3	50	25	25	0", "seq4	4	0	0	4"
+  # inputs as sample table
+  names <- c(
+    "seq1", "seq1", "seq1",
+    "seq2", "seq2", "seq2",
+    "seq3", "seq3",
+    "seq4"
+  )
+  groups <- c(
+    "sample2", "sample3", "sample4",
+    "sample2", "sample3", "sample4",
+    "sample2", "sample3",
+    "sample4"
+  )
+  abundances <- c(
+    250, 400, 500,
+    25, 40, 50,
+    25, 25,
+    4
+  )
 
-    # inputs as sample table
-    names <- c("seq1", "seq1", "seq1",
-              "seq2", "seq2", "seq2",
-              "seq3", "seq3",
-              "seq4")
-    groups <- c("sample2", "sample3", "sample4",
-               "sample2", "sample3", "sample4",
-               "sample2", "sample3",
-               "sample4")
-    abundances <- c(250, 400, 500,
-                    25, 40, 50,
-                    25, 25,
-                    4)
+  abunds <- sequence_abundance_data$new()
+  abunds$set_group_assignments(names, groups, abundances)
 
-    abunds <- sequence_abundance_data$new()
-    abunds$set_group_assignments(names, groups, abundances)
+  expect_equal(abunds$get_total(), 1319)
+  expect_equal(abunds$get_num_groups(), 3)
 
-    expect_equal(abunds$get_total(), 1319)
-    expect_equal(abunds$get_num_groups(), 3)
+  group_totals <- abunds$get_group_totals()
 
-    group_totals <- abunds$get_group_totals()
+  expect_equal(group_totals[1], 300)
+  expect_equal(group_totals[2], 465)
+  expect_equal(group_totals[3], 554)
 
-    expect_equal(group_totals[1], 300)
-    expect_equal(group_totals[2], 465)
-    expect_equal(group_totals[3], 554)
+  abunds <- sequence_abundance_data$new()
+  abunds$set_group_assignments(names, groups)
 
-    abunds <- sequence_abundance_data$new()
-    abunds$set_group_assignments(names, groups)
+  expect_equal(abunds$get_total(), 9)
+  expect_equal(abunds$get_num_groups(), 3)
 
-    expect_equal(abunds$get_total(), 9)
-    expect_equal(abunds$get_num_groups(), 3)
+  group_totals <- abunds$get_group_totals()
 
-    group_totals <- abunds$get_group_totals()
+  expect_equal(group_totals[1], 3)
+  expect_equal(group_totals[2], 3)
+  expect_equal(group_totals[3], 3)
+})
 
-    expect_equal(group_totals[1], 3)
-    expect_equal(group_totals[2], 3)
-    expect_equal(group_totals[3], 3)
+test_that("test set_group_assignments - export", {
+  # no groups
+  abunds <- sequence_abundance_data$new()
+  abunds$set_group_assignments(
+    filename =
+      rchime_example("test_nogroups.count_table")
+  )
 
+  df <- abunds$export()
+
+  expect_equal(colnames(df), c("total_abundance"))
+  expect_equal(df[[1]], c(108939, 1734, 4773, 15750, 150122, 14378))
+
+  # groups
+  # inputs as sample table
+  names <- c(
+    "seq1", "seq1", "seq1",
+    "seq2", "seq2", "seq2",
+    "seq3", "seq3",
+    "seq4"
+  )
+  groups <- c(
+    "sample2", "sample3", "sample4",
+    "sample2", "sample3", "sample4",
+    "sample2", "sample3",
+    "sample4"
+  )
+  abundances <- c(
+    250, 400, 500,
+    25, 40, 50,
+    25, 25,
+    4
+  )
+
+  abunds <- sequence_abundance_data$new()
+  abunds$set_group_assignments(names, groups, abundances)
+
+  df <- abunds$export()
+
+  expect_equal(abunds$get_total(), 1319)
+  expect_equal(abunds$get_num_groups(), 3)
+
+  expect_equal(colnames(df), c(
+    "total_abundance", "sample2", "sample3",
+    "sample4"
+  ))
+
+  expect_equal(df[[1]], c(1150, 115, 50, 4))
+  expect_equal(df[[2]], c(250, 25, 25, 0))
+  expect_equal(df[[3]], c(400, 40, 25, 0))
+  expect_equal(df[[4]], c(500, 50, 0, 4))
 })
