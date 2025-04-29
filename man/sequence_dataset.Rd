@@ -48,6 +48,7 @@ Sarah Westcott, \email{swestcot@umich.edu}
 \item \href{#method-sequence_dataset-calc_ambigs}{\code{sequence_dataset$calc_ambigs()}}
 \item \href{#method-sequence_dataset-calc_longest_polymer}{\code{sequence_dataset$calc_longest_polymer()}}
 \item \href{#method-sequence_dataset-calc_numbases}{\code{sequence_dataset$calc_numbases()}}
+\item \href{#method-sequence_dataset-calc_numns}{\code{sequence_dataset$calc_numns()}}
 \item \href{#method-sequence_dataset-calc_start}{\code{sequence_dataset$calc_start()}}
 \item \href{#method-sequence_dataset-calc_end}{\code{sequence_dataset$calc_end()}}
 \item \href{#method-sequence_dataset-read_fasta_file}{\code{sequence_dataset$read_fasta_file()}}
@@ -202,6 +203,26 @@ An Integer
 Get number of bases in sequence
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{sequence_dataset$calc_numbases(seq)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{seq}}{String, containing nucleotides}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+An Integer
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-sequence_dataset-calc_numns"></a>}}
+\if{latex}{\out{\hypertarget{method-sequence_dataset-calc_numns}{}}}
+\subsection{Method \code{calc_numns()}}{
+Get number of 'N' bases
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{sequence_dataset$calc_numns(seq)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{

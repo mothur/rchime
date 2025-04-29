@@ -92,5 +92,5 @@ test_that("test summary_seqs summarize fasta / count ", {
   expect_equal(results[8, 3], 47)
   expect_equal(results[8, 4], 0)
   expect_equal(results[8, 5], 3)
-  expect_equal(results[8, 6], 1)
+  expect_equal(results[8, 6], 0)
 })

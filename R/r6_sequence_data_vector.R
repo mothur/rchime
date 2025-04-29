@@ -139,7 +139,7 @@ sequence_data_vector <- R6Class("sequence_data_vector",
         # calc numNs
         numns <- unlist(lapply(
           sequences,
-          (function(x) length(gregexpr("[N]", x)[[1]]))
+          (function(x) super$calc_numns(x))
         ))
         # calc numBases
         lengths <- unlist(lapply(
@@ -1051,7 +1051,7 @@ sequence_data_vector <- R6Class("sequence_data_vector",
         # calc numNs
         numns <- unlist(lapply(
           sequences,
-          (function(x) length(gregexpr("[N]", x)[[1]]))
+          (function(x) super$calc_numns(x))
         ))
 
         # calc numBases

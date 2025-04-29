@@ -21,6 +21,7 @@ Imports:
   RcppThread,
   R6, 
   r2r,
+  stringi,
   data.table (>= 1.16.0)
 Depends: Rcpp (>= 1.0.12), R (>= 4.4.0)
 Suggests: 

@@ -15,6 +15,7 @@ import(data.table)
 
 # r6_sequence_dataset
 importFrom(microseq, readFasta)
+import(stringi)
 
 # paralellized code
 importFrom(parallelly, availableCores)

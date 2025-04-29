@@ -7,6 +7,7 @@
 #' @importFrom R6 R6Class
 #' @importFrom methods new
 #' @import cli
+#' @import stringi
 #' @export
 sequence_dataset <- R6Class("sequence_dataset",
   public = list(
@@ -62,8 +63,8 @@ sequence_dataset <- R6Class("sequence_dataset",
     #' @param seq String, containing nucleotides
     #' @return An Integer
     calc_ambigs = function(seq) {
-      length <- nchar(seq)
-      num_non_ambig <- length(gregexpr("[*.*-ATGC]", seq)[[1]])
+      length <- stri_length(seq)
+      num_non_ambig <- stringi::stri_count(seq, regex = "[*.*-ATGC]")
       return(length - num_non_ambig)
     },
 
@@ -79,7 +80,7 @@ sequence_dataset <- R6Class("sequence_dataset",
       homops <- private$get_homop(size)
 
       # while you can still find homopolymers of this size
-      while (private$contains_homops(seq, homops)) {
+      while (any(stri_detect_fixed(seq, homops))) {
         longest_homop <- size
         size <- size + 1
 
@@ -95,7 +96,21 @@ sequence_dataset <- R6Class("sequence_dataset",
     #' @return An Integer
     calc_numbases = function(seq) {
       copy <- seq
-      return(nchar(gsub("[.-]", "", copy)))
+      return(stringi::stri_length(
+        stringi::stri_replace_all_regex(copy, "[.-]", "")
+      ))
+    },
+
+    #' @description
+    #' Get number of 'N' bases
+    #' @param seq String, containing nucleotides
+    #' @return An Integer
+    calc_numns = function(seq) {
+      numns <- gregexpr("[N]", seq)[[1]][1]
+      if (numns == -1) {
+        return(0)
+      }
+      return(numns)
     },
 
     #' @description
@@ -111,8 +126,7 @@ sequence_dataset <- R6Class("sequence_dataset",
     #' @param seq String, containing nucleotides
     #' @return An Integer
     calc_end = function(seq) {
-      out <- gregexpr("[A-Z]", seq)[[1]]
-      return(out[length(out)])
+      return(stringi::stri_locate_last_regex(seq, "[A-Z]")[1])
     },
 
     #' @description
@@ -149,7 +163,7 @@ sequence_dataset <- R6Class("sequence_dataset",
       numns <- unlist(lapply(
         df$Sequence,
         (function(x) {
-          length(gregexpr("[N]", x)[[1]])
+          self$calc_numns(x)
         })
       ))
 
@@ -265,14 +279,6 @@ sequence_dataset <- R6Class("sequence_dataset",
       ns <- paste(rep("N", size), collapse = "")
 
       return(c(as, ts, cs, gs, ns))
-    },
-    contains_homops = function(seq, homops) {
-      for (homop in homops) {
-        if (grepl(homop, seq)) {
-          return(TRUE)
-        }
-      }
-      return(FALSE)
     }
   )
 )
