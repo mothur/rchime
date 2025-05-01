@@ -38,7 +38,8 @@ public:
 
     Rcpp::List removeChimeras(Rcpp::Environment& dataset);
     Rcpp::List removeChimeras(Rcpp::Environment& dataset,
-                                      Rcpp::Environment& reference);
+                              Rcpp::CharacterVector& ref_names,
+                              Rcpp::CharacterVector& ref_seqs);
 
 private:
 

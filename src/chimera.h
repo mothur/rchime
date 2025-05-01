@@ -36,6 +36,7 @@ struct chimeraData {
     // outputs - one for each sample
     vector<vector<ChimeHit2> > uchimeResults;
     bool silent;
+    double numSeqs;
 
     // denovo
     chimeraData(vector< vector<string> > n, vector< vector<string> > sq,
@@ -52,19 +53,30 @@ struct chimeraData {
         }else {
             chimeras.resize(1);
         }
+
+        numSeqs = 0;
+        for (int i = 0; i < names.size(); i++) {
+            numSeqs += names[i].size();
+        }
     }
 
     // reference
     chimeraData(vector< vector<string> > n, vector< vector<string> > sq,
-        vector< vector<int> > a, vector<string> rn, vector<string> rs, Options o) {
+        vector< vector<int> > a, vector<string> rn, vector<string> rs, Options o,
+        bool s = true) {
         chimeras.resize(1);
         options = o;
-        silent = true;
+        silent = s;
         names = n;
         seqs = sq;
         abunds = a;
         refSeqs = rs;
         refNames = rn;
+
+        numSeqs = 0;
+        for (int i = 0; i < names.size(); i++) {
+            numSeqs += names[i].size();
+        }
     }
     ~chimeraData() {}
 };
@@ -80,7 +92,8 @@ public:
 
     virtual Rcpp::List removeChimeras(Rcpp::Environment& dataset) = 0;
     virtual Rcpp::List removeChimeras(Rcpp::Environment& dataset,
-                                      Rcpp::Environment& reference) = 0;
+                                      Rcpp::CharacterVector& ref_names,
+                                      Rcpp::CharacterVector& ref_seqs) = 0;
 
 protected:
 

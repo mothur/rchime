@@ -22,48 +22,43 @@ void processUchime(chimeraData* params) {
 
     UchimeMain* uchime = new UchimeMain();
 
+    SEXP* bar = nullptr;
+
+    // main thread will update progress
+    if (!params->silent) {
+        // create progress bar
+        bar = new SEXP(PROTECT(cli_progress_bar(params->numSeqs, NULL)));
+        cli_progress_set_name(*bar, "Checking for chimeric sequences");
+    }
+
     if (params->groups.size() != 0) {
-
-        SEXP* bar = nullptr;
-
-        // main thread will update progress
-        if (!params->silent) {
-            // create progress bar
-            int numGroups = params->groups.size();
-            bar = new SEXP(PROTECT(cli_progress_bar(numGroups, NULL)));
-            cli_progress_set_name(*bar, "Checking for chimeric sequences");
-        }
 
         // for each group in dataset
         for (int k = 0; k < params->groups.size(); k++) {
 
             RcppThread::checkUserInterrupt();
 
-            // main thread updates progress
-            if (!params->silent) {
-                cli_progress_set(*bar, k+1); 
-            }
-
             // call uchime source code
             params->uchimeResults.push_back(uchime->runUchime(params->names[k], params->seqs[k],
                                                 params->refNames, params->refSeqs,
-                                                params->abunds[k], params->chimeras[k], params->options));
-        }
-
-        // terminate progress bar
-        if (!params->silent) {
-            cli_progress_done(*bar);
-            UNPROTECT(1);
-            delete bar;
+                                                params->abunds[k], params->chimeras[k], params->options,
+                                                params->silent, bar));
         }
     }else {
         params->uchimeResults.push_back(uchime->runUchime(params->names[0], params->seqs[0],
                                         params->refNames, params->refSeqs,
-                                        params->abunds[0], params->chimeras[0], params->options));
+                                        params->abunds[0], params->chimeras[0], params->options,
+                                        params->silent, bar));
+    }
+
+    // terminate progress bar
+    if (!params->silent) {
+        cli_progress_done(*bar);
+        UNPROTECT(1);
+        delete bar;
     }
 
     delete uchime;
-
 }
 /******************************************************************************/
 Rcpp::List ChimeraUchime::removeChimeras(Rcpp::Environment& dataset) {
@@ -82,7 +77,7 @@ Rcpp::List ChimeraUchime::removeChimeras(Rcpp::Environment& dataset) {
         chimeraData* dataBundle = new chimeraData(parser->getNames(nullVector),
                                                   parser->getSeqs(nullVector),
                                                   parser->getAbunds(nullVector),
-                                                  groups, opts);
+                                                  groups, opts, silent);
         delete parser;
 
         // run as one sample
@@ -171,17 +166,13 @@ vector<ChimeHit2> ChimeraUchime::createProcesses(Rcpp::Environment& dataset) {
 }
 /******************************************************************************/
 Rcpp::List ChimeraUchime::removeChimeras(Rcpp::Environment& dataset,
-                                         Rcpp::Environment& reference) {
+                                         Rcpp::CharacterVector& ref_names,
+                                         Rcpp::CharacterVector& ref_seqs) {
 
     SequenceParser* parser = new SequenceParser(dataset, false);
 
-    Rcpp::Function getNames = reference["get_names"];
-    vector<string> refNames = Rcpp::as<vector<string> >(getNames());
-
-    // get seqs
-    Rcpp::Function getSeqs = reference["get_seqs"];
-    vector<string> refSeqs = Rcpp::as<vector<string> >(getSeqs());
-
+    vector<string> refNames = Rcpp::as<vector<string> >(ref_names);
+    vector<string> refSeqs = Rcpp::as<vector<string> >(ref_seqs);
 
     chimeraData* dataBundle = new chimeraData(parser->getNames(nullVector),
                                               parser->getSeqs(nullVector),

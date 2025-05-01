@@ -188,8 +188,20 @@ rchime <- function(dataset = NULL, fasta = NULL, count = NULL,
   # build reference dataset if provided
   chimera_report <- NULL
   if (!is.null(reference)) {
-    reference <- sequence_data_vector$new(filename = reference)
-    chimera_report <- rchimeReference(dataset, reference, parameters)
+    directory <- dirname(reference)
+    filename <- basename(reference)
+
+    reference_file <- file.path(file.path(directory), reference)
+    df <- microseq::readFasta(reference_file)
+
+    names <- unlist(lapply(
+      df$Header,
+      (function(x) {
+        extract_name(x)
+      })
+    ))
+
+    chimera_report <- rchimeReference(dataset, names, df$Sequence, parameters)
   } else {
     chimera_report <- rchimeDenovo(dataset, parameters)
   }

@@ -6,15 +6,17 @@
 //' @name rchimeReference
 //' @rdname rchimeReference
 //' @param dataset R6 'sequence_dataset' object containing sequence data
-//' @param reference R6 'sequence_dataset' object containing sequence data
+//' @param ref_names reference sequences names
+//' @param ref_seqs reference sequences 
 //' @param options list containing parameter options
 //' @seealso [rchime()]
 //' @description detects and removes chimeras from your data using a reference
 //'  dataset.
 //[[Rcpp::export]]
 Rcpp::List rchimeReference(Rcpp::Environment& dataset,
-                       Rcpp::Environment& reference,
-                       Rcpp::List options) {
+                           Rcpp::CharacterVector& ref_names,
+                           Rcpp::CharacterVector& ref_seqs,
+                           Rcpp::List options) {
 
      bool dereplicate = Rcpp::as<bool>(options["dereplicate"]);
      bool silent = Rcpp::as<bool>(options["silent"]);
@@ -31,7 +33,7 @@ Rcpp::List rchimeReference(Rcpp::Environment& dataset,
      Chimera* chimera = new ChimeraUchime(dereplicate, processors, silent,
                                             hasGroupData, options);
 
-     Rcpp::List chimera_report = chimera->removeChimeras(dataset, reference);
+     Rcpp::List chimera_report = chimera->removeChimeras(dataset, ref_names, ref_seqs);
 
      delete chimera;
 

@@ -22,7 +22,6 @@
 #include "options.h"
 #include "globalalign2.h"
 #include "alignchime.h"
-#include "alpha.h"
 
 /******************************************************************************/
 class SearchChime {

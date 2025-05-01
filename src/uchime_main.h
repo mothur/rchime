@@ -31,7 +31,7 @@ public:
     vector<ChimeHit2> runUchime(vector<string> names, vector<string> seqs,
                          vector<string> refNames, vector<string> refSeqs,
                          vector<int> abunds, set<string>& chims,
-                         Options opts);
+                         Options opts, bool silent, SEXP* bar);
 
 private:
 

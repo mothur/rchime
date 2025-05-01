@@ -11,7 +11,7 @@
 #include "mxmatrix.h"
 
 /******************************************************************************/
-GlobalAligner::GlobalAligner() { 
+GlobalAligner::GlobalAligner() {
 	alignParams = new AlnParams();
 	g_TBBit = new MxByteMatrix();
 }
@@ -20,7 +20,7 @@ GlobalAligner::~GlobalAligner() { delete alignParams; delete g_TBBit; }
 /******************************************************************************/
 bool GlobalAligner::globalAlign(const SeqData &Query, const SeqData &Target, PathData &PD) {
 
-	PathData tempPath; 
+	PathData tempPath;
 	viterbiFast(Query.getSeq(), Query.getSeqLength(),
 				 Target.getSeq(), Target.getSeqLength(), tempPath);
 
@@ -28,7 +28,7 @@ bool GlobalAligner::globalAlign(const SeqData &Query, const SeqData &Target, Pat
 
 	PD.Front = Path;
 	PD.Start = PD.Front;
-	
+
 	return true;
 }
 /******************************************************************************/
@@ -65,7 +65,7 @@ float GlobalAligner::viterbiFast(string seqA, unsigned alength,
 			{
 
 			float xM = M0;
-			
+
 			if (Drow[j] > xM) {
 				xM = Drow[j];
 				TraceBits = TRACEBITS_DM;
@@ -84,7 +84,7 @@ float GlobalAligner::viterbiFast(string seqA, unsigned alength,
 			{
 			float md = SavedM0 + OpenB;
 			Drow[j] += ExtB;
-			
+
 			if (md >= Drow[j]) {
 				Drow[j] = md;
 				TraceBits |= TRACEBITS_MD;
@@ -95,7 +95,7 @@ float GlobalAligner::viterbiFast(string seqA, unsigned alength,
 			{
 			float mi = SavedM0 + OpenA;
 			I0 += ExtA;
-			
+
 			if (mi >= I0) {
 				I0 = mi;
 				TraceBits |= TRACEBITS_MI;
@@ -113,7 +113,7 @@ float GlobalAligner::viterbiFast(string seqA, unsigned alength,
 		g_TBBit->matrix[i][blength] = 0;
 		float md = M0 + alignParams->ROpenB;
 		Drow[blength] += alignParams->RExtB;
-		
+
 		if (md >= Drow[blength]) {
 			Drow[blength] = md;
 			g_TBBit->matrix[i][blength] = TRACEBITS_MD;
@@ -134,12 +134,12 @@ float GlobalAligner::viterbiFast(string seqA, unsigned alength,
 		g_TBBit->matrix[alength][j] = 0;
 		float mi = Mrow[int(j)-1] + alignParams->ROpenA;
 		I1 += alignParams->RExtA;
-		
+
 		if (mi > I1) {
 			I1 = mi;
 			g_TBBit->matrix[alength][j] = TRACEBITS_MI;
 		}
-		
+
 	}
 
 	float FinalM = Mrow[blength-1];
@@ -174,7 +174,7 @@ void GlobalAligner::traceBackBit(unsigned alength, unsigned blength, char State,
 			break;
 		}
 
-		PathPtr += State;
+		PathPtr = State + PathPtr;
 
 		Byte t;
 		switch (State) {
@@ -191,7 +191,7 @@ void GlobalAligner::traceBackBit(unsigned alength, unsigned blength, char State,
 			--j;
 			break;
 		case 'D':
-			
+
 			t = g_TBBit->matrix[i-1][j];
 			if (t & TRACEBITS_MD) {
 				State = 'M';

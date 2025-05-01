@@ -4,8 +4,8 @@
 #include "globalalign2.h"
 
 /******************************************************************************/
-SearchChime::SearchChime(Options o) { 
-	opt = o; 
+SearchChime::SearchChime(Options o) {
+	opt = o;
 	chimeAlign = new AlignChimes(opt.getXn(), opt.getDn(), opt.getXa(),
 								 opt.getSkipgaps(), opt.getSkipgaps2());
 }
@@ -72,7 +72,7 @@ vector<unsigned> SearchChime::getSmoothedIdVec(const SeqData &queryData, const S
 	return IdVec;
 }
 /******************************************************************************/
-bool SearchChime::searchChime(SeqDB* database, const SeqData & queryData, 
+bool SearchChime::searchChime(SeqDB* database, const SeqData & queryData,
   								ChimeHit2 &Hit) {
 
 	Hit.QLabel = queryData.getName();
@@ -115,7 +115,7 @@ bool SearchChime::searchChime(SeqDB* database, const SeqData & queryData,
 		}
 
 		double PctId = 100.0*getFractIdGivenPath(queryData.getSeq(), parentData.getSeq(), PD.Start.c_str());
-		
+
 		if (PctId > TopPctId) { TopPctId = PctId; }
 
 		string Path = PD.Start;
@@ -142,7 +142,7 @@ bool SearchChime::searchChime(SeqDB* database, const SeqData & queryData,
 			if (Path == "")
 				continue;
 
-			vector<unsigned> IdVec = getSmoothedIdVec(queryData, parentData, Path, 
+			vector<unsigned> IdVec = getSmoothedIdVec(queryData, parentData, Path,
 											opt.getIdsmoothwindow());
 			unsigned Cov = 0;
 			for (unsigned QPos = 0; QPos < QL; ++QPos)
@@ -201,7 +201,7 @@ bool SearchChime::searchChime(SeqDB* database, const SeqData & queryData,
 }
 /******************************************************************************/
 double SearchChime::getFractIdGivenPath(string A, string B, const char *Path) {
-	
+
 	unsigned PosA = 0;
 	unsigned PosB = 0;
 	unsigned Ids = 0;
@@ -218,7 +218,7 @@ double SearchChime::getFractIdGivenPath(string A, string B, const char *Path) {
 		if (c == 'M') {
 			Byte a = toupper(A[PosA]);
 			Byte b = toupper(B[PosB]);
-			if (g_IsACGTU[a] && g_IsACGTU[b]) {
+			if (isacgt(toupper(A[PosA])) && isacgt(toupper(B[PosB]))) {
 				if (a == b) {
 					++Ids;
 				}
@@ -234,7 +234,7 @@ double SearchChime::getFractIdGivenPath(string A, string B, const char *Path) {
 
 	unsigned MinLen = min(PosA, PosB) - Wilds;
 	double FractId = (MinLen == 0 ? 0.0 : double(Ids)/double(MinLen));
-	
+
 	return FractId;
 }
 /******************************************************************************/

@@ -25,15 +25,16 @@ BEGIN_RCPP
 END_RCPP
 }
 // rchimeReference
-Rcpp::List rchimeReference(Rcpp::Environment& dataset, Rcpp::Environment& reference, Rcpp::List options);
-RcppExport SEXP _rchime_rchimeReference(SEXP datasetSEXP, SEXP referenceSEXP, SEXP optionsSEXP) {
+Rcpp::List rchimeReference(Rcpp::Environment& dataset, Rcpp::CharacterVector& ref_names, Rcpp::CharacterVector& ref_seqs, Rcpp::List options);
+RcppExport SEXP _rchime_rchimeReference(SEXP datasetSEXP, SEXP ref_namesSEXP, SEXP ref_seqsSEXP, SEXP optionsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< Rcpp::Environment& >::type dataset(datasetSEXP);
-    Rcpp::traits::input_parameter< Rcpp::Environment& >::type reference(referenceSEXP);
+    Rcpp::traits::input_parameter< Rcpp::CharacterVector& >::type ref_names(ref_namesSEXP);
+    Rcpp::traits::input_parameter< Rcpp::CharacterVector& >::type ref_seqs(ref_seqsSEXP);
     Rcpp::traits::input_parameter< Rcpp::List >::type options(optionsSEXP);
-    rcpp_result_gen = Rcpp::wrap(rchimeReference(dataset, reference, options));
+    rcpp_result_gen = Rcpp::wrap(rchimeReference(dataset, ref_names, ref_seqs, options));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -54,7 +55,7 @@ RcppExport SEXP run_testthat_tests(SEXP);
 
 static const R_CallMethodDef CallEntries[] = {
     {"_rchime_summarize_fasta", (DL_FUNC) &_rchime_summarize_fasta, 3},
-    {"_rchime_rchimeReference", (DL_FUNC) &_rchime_rchimeReference, 3},
+    {"_rchime_rchimeReference", (DL_FUNC) &_rchime_rchimeReference, 4},
     {"_rchime_rchimeDenovo", (DL_FUNC) &_rchime_rchimeDenovo, 2},
     {"run_testthat_tests", (DL_FUNC) &run_testthat_tests, 1},
     {NULL, NULL, 0}

@@ -16,26 +16,31 @@ vector<ChimeHit2> UchimeMain::runUchime(vector<string> names,
                                  vector<string> refSeqs,
                                  vector<int> abunds,
 								 set<string>& namesOfChimeras,
-								 Options opts) {
+								 Options opts, bool silent, SEXP* bar) {
 
 	// loading SeqDB with data from R, sort descending order by abundace
-	SeqDB data(names, seqs, abunds, true);
+	SeqDB data(names, seqs, abunds, true, false);
 
 	// are we running with a reference, or denovo
 	uchimeDeNovo = (refNames.size() == 0);
 
 	SeqDB* reference = nullptr;
 	if (uchimeDeNovo) {
-		reference = new SeqDB(true);
+		reference = new SeqDB(true, true);
 	}else{
 		vector<int> refAbunds(refNames.size(), 1);
-		reference = new SeqDB(refNames, refSeqs, refAbunds, false);
+		reference = new SeqDB(refNames, refSeqs, refAbunds, false, true);
 	}
 
 	vector<ChimeHit2> Hits;
 	unsigned numQuerySeqs = data.getSeqCount();
 	SearchChime search(opts);
 	for (unsigned i = 0; i < numQuerySeqs; ++i) {
+
+		// main thread updates progress
+		if (!silent && (i % 500 == 0)) {
+			cli_progress_set(*bar, i+1);
+		}
 
 		SeqData queryData = data.getSeqData(i);
 

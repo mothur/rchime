@@ -17,13 +17,14 @@ summarize_fasta <- function(summary_report, count, processors) {
 #' @name rchimeReference
 #' @rdname rchimeReference
 #' @param dataset R6 'sequence_dataset' object containing sequence data
-#' @param reference R6 'sequence_dataset' object containing sequence data
+#' @param ref_names reference sequences names
+#' @param ref_seqs reference sequences 
 #' @param options list containing parameter options
 #' @seealso [rchime()]
 #' @description detects and removes chimeras from your data using a reference
 #'  dataset.
-rchimeReference <- function(dataset, reference, options) {
-    .Call(`_rchime_rchimeReference`, dataset, reference, options)
+rchimeReference <- function(dataset, ref_names, ref_seqs, options) {
+    .Call(`_rchime_rchimeReference`, dataset, ref_names, ref_seqs, options)
 }
 
 #' @title rchimeDenovo

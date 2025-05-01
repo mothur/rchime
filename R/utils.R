@@ -35,3 +35,23 @@ split_at_char <- function(line, delim) {
   words <- strsplit(line, delim)
   return(unlist(words))
 }
+
+# =========================================================================== #
+#' @title extract_name
+#' @description extracts name from fasta file entry
+#' @param line, String containing name data
+#' @examples
+#' (extract_name("mySeq This is my comment"))
+#'
+#' @returns A string
+extract_name = function(line) {
+  # name. comment
+  # mySeq This is my comment
+  val <- regexpr("\\s", line)
+  if (val != -1) {
+    name_comment <- substring(line, c(1, val + 1), c(val - 1, nchar(line)))
+    return(name_comment[1])
+  }
+  return(line)
+}
+# =========================================================================== #
