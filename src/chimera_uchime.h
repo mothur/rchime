@@ -44,8 +44,8 @@ public:
 private:
 
     vector<ChimeHit2> createProcesses(Rcpp::Environment& dataset);
-    Rcpp::List createUchimeResults(vector<ChimeHit2>);
 
+    Rcpp::List createUchimeResults(vector<ChimeHit2>);
     map<string, uchimeAbunds > combineResults(chimeraData*& dataBundle,
                                     vector<chimeraData*>& data,
                                     vector<RcppThread::Thread*>& workerThreads,

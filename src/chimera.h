@@ -61,22 +61,19 @@ struct chimeraData {
     }
 
     // reference
-    chimeraData(vector< vector<string> > n, vector< vector<string> > sq,
-        vector< vector<int> > a, vector<string> rn, vector<string> rs, Options o,
+    chimeraData(vector<string> n, vector<string> sq,
+        vector<int> a, vector<string> rn, vector<string> rs, Options o,
         bool s = true) {
         chimeras.resize(1);
         options = o;
         silent = s;
-        names = n;
-        seqs = sq;
-        abunds = a;
+        names.push_back(n);
+        seqs.push_back(sq);
+        abunds.push_back(a);
         refSeqs = rs;
         refNames = rn;
 
-        numSeqs = 0;
-        for (int i = 0; i < names.size(); i++) {
-            numSeqs += names[i].size();
-        }
+        numSeqs = names.size();
     }
     ~chimeraData() {}
 };

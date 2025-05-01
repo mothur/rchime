@@ -425,7 +425,7 @@ test_that("test rchime compare mothur ", {
     )
 
     expect_equal(sort(results$accnos), mothur_accnos_deplicate_true)
-  
+
     mothur_accnos_deplicate_false <- c(
       "M00967_43_000000000-A3JHG_1_2106_26339_22698",
       "M00967_43_000000000-A3JHG_1_2112_5637_20821",
@@ -501,7 +501,7 @@ test_that("test rchime compare mothur ", {
       "M00967_43_000000000-A3JHG_1_2112_28591_10042",
       "M00967_43_000000000-A3JHG_1_1104_4485_14998",
       "M00967_43_000000000-A3JHG_1_1105_19777_15422")
-    
+
       mothur_accnos_deplicate_false <- sort(mothur_accnos_deplicate_false)
 
       results <- rchime(

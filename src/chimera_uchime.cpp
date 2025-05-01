@@ -171,21 +171,62 @@ Rcpp::List ChimeraUchime::removeChimeras(Rcpp::Environment& dataset,
 
     SequenceParser* parser = new SequenceParser(dataset, false);
 
+    vector<vector<string> > names = parser->getNames(nullVector);
+    vector<vector<string> > seqs = parser->getSeqs(nullVector);
+    vector<vector<int> > abunds = parser->getAbunds(nullVector);
+
+    delete parser;
+
     vector<string> refNames = Rcpp::as<vector<string> >(ref_names);
     vector<string> refSeqs = Rcpp::as<vector<string> >(ref_seqs);
 
-    chimeraData* dataBundle = new chimeraData(parser->getNames(nullVector),
-                                              parser->getSeqs(nullVector),
-                                              parser->getAbunds(nullVector), 
-                                              refNames, refSeqs, opts);
-    delete parser;
+    Utils util;
+    vector<pieceOfWork> indexes = util.divideWork(names[0].size(), processors);
 
-    // run as one sample
+    vector<RcppThread::Thread*> workerThreads;
+    vector<chimeraData*> data;
+
+    //Launch worker threads
+    for (int i = 0; i < processors-1; i++) {
+
+        chimeraData* dataBundle = new chimeraData(
+                    slicing(names[0], indexes[i+1].start, indexes[i+1].end),
+                    slicing(seqs[0], indexes[i+1].start, indexes[i+1].end),
+                    slicing(abunds[0], indexes[i+1].start, indexes[i+1].end),
+                    refNames, refSeqs, opts);
+
+        data.push_back(dataBundle);
+        workerThreads.push_back(new RcppThread::Thread(processUchime,
+                                                        dataBundle));
+
+    }
+
+    chimeraData* dataBundle = new chimeraData(
+                slicing(names[0], indexes[0].start, indexes[0].end),
+                slicing(seqs[0], indexes[0].start, indexes[0].end),
+                slicing(abunds[0], indexes[0].start, indexes[0].end),
+                refNames, refSeqs, opts);
+
+    names.clear(); seqs.clear(); abunds.clear();
     processUchime(dataBundle);
 
     vector<ChimeHit2> hits = (dataBundle->uchimeResults[0]);
     vector<string> chimeras = toVector(dataBundle->chimeras[0]);
     delete dataBundle;
+
+    for (int i = 0; i < processors-1; i++) {
+        workerThreads[i]->join();
+
+        hits.insert(hits.end(),
+                    data[i]->uchimeResults[0].begin(),
+                    data[i]->uchimeResults[0].end());
+
+        vector<string> theseChimeras = toVector(data[i]->chimeras[0]);
+        chimeras.insert(chimeras.end(), theseChimeras.begin(), theseChimeras.end());
+
+        delete data[i];
+        delete workerThreads[i];
+    }
 
     removeChimerasFromDataset(dataset, chimeras, "chimera_uchime");
 
@@ -218,12 +259,12 @@ map<string, uchimeAbunds > ChimeraUchime::combineResults(chimeraData*& dataBundl
 
             // create new abunds vector and fill this groups abunds
             if (it == seqAbunds.end()) {
-                
+
                 vector<int> abunds(groups.size(), 0);
                 uchimeAbunds abundFlag(abunds, dereplicate);
 
                 if (dereplicate) {
-                    
+
                     // if not chimeric in this sample, then add abundance
                     if (dataBundle->chimeras[i].count(seqName) == 0){
                         abundFlag.abundances[groupIndex] = dataBundle->abunds[i][j];
@@ -236,7 +277,7 @@ map<string, uchimeAbunds > ChimeraUchime::combineResults(chimeraData*& dataBundl
                        abundFlag.chimeric = true;
                        seqAbunds[seqName] = abundFlag;
                     }
-                } 
+                }
             }else{
                 if (dereplicate) {
                     // if not chimeric in this sample, then add abundance
@@ -268,12 +309,12 @@ map<string, uchimeAbunds > ChimeraUchime::combineResults(chimeraData*& dataBundl
 
                 // create new abunds vector and fill this groups abunds
                 if (it == seqAbunds.end()) {
-                
+
                     vector<int> abunds(groups.size(), 0);
                     uchimeAbunds abundFlag(abunds, dereplicate);
 
                     if (dereplicate) {
-                        
+
                         // if not chimeric in this sample, then add abundance
                         if (data[i]->chimeras[j].count(seqName) == 0){
                             abundFlag.abundances[groupIndex] = data[i]->abunds[j][k];
@@ -352,7 +393,7 @@ map<string, uchimeAbunds > ChimeraUchime::combineResults(chimeraData*& dataBundl
                             results.push_back(uchimeOut[i][j]);
                             resolved.insert(seqName);
                         }
-                    }  
+                    }
                 }
             }
         }
@@ -569,7 +610,7 @@ Rcpp::List ChimeraUchime::createUchimeResults(vector<ChimeHit2> hits) {
         }
 
         chimericStatus.push_back(status);
-        
+
         // uchimeout
         if (hits[i].Div <= 0.0) {
             scores.push_back(0.0000);
