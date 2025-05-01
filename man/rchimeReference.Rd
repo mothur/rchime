@@ -4,12 +4,14 @@
 \alias{rchimeReference}
 \title{rchimeReference}
 \usage{
-rchimeReference(dataset, reference, options)
+rchimeReference(dataset, ref_names, ref_seqs, options)
 }
 \arguments{
 \item{dataset}{R6 'sequence_dataset' object containing sequence data}
 
-\item{reference}{R6 'sequence_dataset' object containing sequence data}
+\item{ref_names}{reference sequences names}
+
+\item{ref_seqs}{reference sequences}
 
 \item{options}{list containing parameter options}
 }

@@ -191,7 +191,7 @@ rchime <- function(dataset = NULL, fasta = NULL, count = NULL,
     directory <- dirname(reference)
     filename <- basename(reference)
 
-    reference_file <- file.path(file.path(directory), reference)
+    reference_file <- file.path(file.path(directory), filename)
     df <- microseq::readFasta(reference_file)
 
     names <- unlist(lapply(
