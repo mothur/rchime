@@ -23,7 +23,7 @@ Imports:
   r2r,
   stringi,
   data.table (>= 1.16.0)
-Depends: Rcpp (>= 1.0.12), R (>= 4.4.0)
+Depends: Rcpp (>= 1.0.12), R (>= 4.5.0)
 Suggests: 
     knitr,
     rmarkdown,

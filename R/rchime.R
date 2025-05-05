@@ -221,8 +221,9 @@ rchime <- function(dataset = NULL, fasta = NULL, count = NULL,
       message <- ("rchime complete, no chimeras found")
     }
     cli::cli_alert(message)
+    timing <- difftime(Sys.time(), start_time, units = "secs")[[1]]
     message <- paste(
-      "It took {.var {Sys.time() - start_time}}",
+      "It took {.var {timing}}",
       "seconds to remove the chimeras"
     )
     cli::cli_alert(message)
