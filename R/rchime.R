@@ -177,12 +177,6 @@ rchime <- function(dataset = NULL, fasta = NULL, count = NULL,
     if (!is.null(rchime_options$skipgaps2)) {
       parameters <- c(parameters, rchime_options$skipgaps2)
     }
-    if (!is.null(rchime_options$minlen)) {
-      parameters <- c(parameters, minlen = rchime_options$minlen)
-    }
-    if (!is.null(rchime_options$maxlen)) {
-      parameters <- c(parameters, maxlen = rchime_options$maxlen)
-    }
   }
 
   # build reference dataset if provided

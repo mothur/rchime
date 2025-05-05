@@ -32,8 +32,6 @@ public:
     void setMindiffs(int md = 3);
     void setMindiv(double md = 0.5);
     void setMinh(double mh = 0.3);
-    void setMinlen(int ml = 10);
-    void setMaxlen(int ml = 10000);
     void setMaxp(int mp = 2);
     void setQueryfract(double qf = 0.5);
     void setSkipgaps(bool sg = true);
@@ -51,8 +49,6 @@ public:
     int getMinchunk() const      { return minchunk;      }
     int getMindiffs() const      { return mindiffs;      }
     double getMindiv() const     { return mindiv;        }
-    int getMinlen() const        { return minlen;        }
-    int getMaxlen() const        { return maxlen;        }
     double getMinh() const       { return minh;          }
     double getQueryfract() const { return queryfract;    }
     bool getSkipgaps() const     { return skipgaps;      }
@@ -63,8 +59,7 @@ public:
 private:
 
     double abskew, minh, mindiv, xn, dn, xa, queryfract;
-    int chunks, minchunk, idsmoothwindow, maxp, minlen, maxlen,
-        mindiffs;
+    int chunks, minchunk, idsmoothwindow, maxp, mindiffs;
     bool chimealns, skipgaps, skipgaps2;
 };
 

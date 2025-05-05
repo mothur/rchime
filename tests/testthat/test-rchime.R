@@ -7,7 +7,7 @@ test_that("test uchime parameters ", {
     minh = 0.6, abskew = 1.9, mindiv = 0.505,
     xn = 8.01, dn = 1.401, xa = 1.001,
     minchunk = 63, chunks = 5, idsmoothwindow = 33,
-    maxp = 3, minlen = 9, maxlen = 9000,
+    maxp = 3,
     skipgaps = FALSE, skipgaps2 = FALSE
   )
 

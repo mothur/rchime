@@ -52,8 +52,6 @@
 #' @param skipgaps2 bool, If skipgaps2 is specified, if column is immediately
 #'  adjacent to a column containing a gap, it is not counted as a diff.
 #'  Default = TRUE.
-#' @param minlen Integer, Minimum sequence length. Default = 10.
-#' @param maxlen Integer, Maximum sequence length. Default = 10000.
 #'
 #' @return List containing selected rchime parameters and their values.
 #'
@@ -65,7 +63,7 @@ rchime_options <- function(
     minh = 0.3, mindiv = 0.5, xn = 8.0,
     dn = 1.4, xa = 1.0, chunks = 4, minchunk = 64,
     idsmoothwindow = 32, maxp = 2, skipgaps = TRUE,
-    skipgaps2 = TRUE, minlen = 10, maxlen = 10000) {
+    skipgaps2 = TRUE) {
   parameters <- list()
 
   # if the user sets uchime options then add to parameters
@@ -105,12 +103,5 @@ rchime_options <- function(
   if (!skipgaps2) {
     parameters <- c(parameters, skipgaps2 = FALSE)
   }
-  if (minlen != 10) {
-    parameters <- c(parameters, minlen = minlen)
-  }
-  if (maxlen != 10000) {
-    parameters <- c(parameters, maxlen = maxlen)
-  }
-
   return(parameters)
 }

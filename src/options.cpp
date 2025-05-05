@@ -27,8 +27,6 @@ Options::Options() {
     setMindiffs();
     setMindiv();
     setMinh();
-    setMinlen();
-    setMaxlen();
     setMaxp();
     setQueryfract();
     setSkipgaps();
@@ -71,14 +69,6 @@ void Options::setMindiffs(int md) {
 /******************************************************************************/
 void Options::setMindiv(double md) {
     mindiv = md;
-}
-/******************************************************************************/
-void Options::setMinlen(int ml) {
-    minlen = ml;
-}
-/******************************************************************************/
-void Options::setMaxlen(int ml) {
-    maxlen = ml;
 }
 /******************************************************************************/
 void Options::setMaxp(int mp) {

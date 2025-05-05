@@ -19,8 +19,6 @@ context("Options class C++ unit tests") {
         expect_true(opts.getSkipgaps2());
         expect_true(opts.getMindiv() == 0.5);
         expect_true(opts.getMinh() == 0.3);
-        expect_true(opts.getMinlen() == 10);
-        expect_true(opts.getMaxlen() == 10000);
 
         expect_true(opts.getMaxp() == 2);
         expect_true(opts.getQueryfract() == 0.5);

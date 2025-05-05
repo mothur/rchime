@@ -16,9 +16,7 @@ rchime_options(
   idsmoothwindow = 32,
   maxp = 2,
   skipgaps = TRUE,
-  skipgaps2 = TRUE,
-  minlen = 10,
-  maxlen = 10000
+  skipgaps2 = TRUE
 )
 }
 \arguments{
@@ -69,10 +67,6 @@ not count as diffs. Default = TRUE.}
 \item{skipgaps2}{bool, If skipgaps2 is specified, if column is immediately
 adjacent to a column containing a gap, it is not counted as a diff.
 Default = TRUE.}
-
-\item{minlen}{Integer, Minimum sequence length. Default = 10.}
-
-\item{maxlen}{Integer, Maximum sequence length. Default = 10000.}
 }
 \value{
 List containing selected rchime parameters and their values.

@@ -47,11 +47,6 @@ Chimera::Chimera(bool derep, int proc, bool si, bool hg, Rcpp::List options) {
          opts.setSkipgaps(Rcpp::as<bool>(options["skipgaps"]));   }
      if (utils.contains("skipgaps2", optionsNames))   {
          opts.setSkipgaps2(Rcpp::as<bool>(options["skipgaps2"]));   }
-     if (utils.contains("minlen", optionsNames))   {
-         opts.setMinlen(Rcpp::as<int>(options["minlen"]));   }
-     if (utils.contains("maxlen", optionsNames))   {
-         opts.setMaxlen(Rcpp::as<int>(options["maxlen"]));   }
-
 }
 /******************************************************************************/
 void Chimera::removeChimerasFromDataset(Rcpp::Environment& dataset, vector<string>& seqsToRemove,
