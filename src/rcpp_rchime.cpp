@@ -1,77 +1,102 @@
-#include "chimera_uchime.h"
-#include "chimera.h"
+#include "chimera_vsearch.h"
 
 // ============================================================================
 //' @title rchimeReference
 //' @name rchimeReference
 //' @rdname rchimeReference
-//' @param dataset R6 'sequence_dataset' object containing sequence data
-//' @param ref_names reference sequences names
-//' @param ref_seqs reference sequences 
+//' @param sequence_names, vector of strings containing sequence names
+//' @param sequences, vector of strings containing sequence nucleotide data
+//' @param abundances, vector of sequence abundances
+//' @param reference_names, vector of strings containing reference sequences names
+//' @param reference_sequences, vector of strings containing reference sequences
 //' @param options list containing parameter options
 //' @seealso [rchime()]
-//' @description detects and removes chimeras from your data using a reference
-//'  dataset.
+//' @description detects chimeras from your data using a reference dataset.
 //[[Rcpp::export]]
-Rcpp::List rchimeReference(Rcpp::Environment& dataset,
-                           Rcpp::CharacterVector& ref_names,
-                           Rcpp::CharacterVector& ref_seqs,
+Rcpp::List rchimeReference(std::vector<std::string> sequence_names,
+                           std::vector<std::string> sequences,
+                           std::vector<float> abundances,
+                           std::vector<std::string> reference_names,
+                           std::vector<std::string> reference_sequences,
                            Rcpp::List options) {
 
-     bool dereplicate = Rcpp::as<bool>(options["dereplicate"]);
-     bool silent = Rcpp::as<bool>(options["silent"]);
-     int processors = Rcpp::as<int>(options["processors"]);
+    std::vector<std::vector<std::string>> seqNames;
+    seqNames.push_back(sequence_names);
+    std::vector<std::vector<std::string>> seqs;
+    seqs.push_back(sequences);
+    std::vector<std::vector<float>> abunds;
+    abunds.push_back(abundances);
 
-     Rcpp::Function getNumGroups = dataset["get_num_groups"];
+    ChimeraVsearch* chimera = new ChimeraVsearch(seqNames, seqs, abunds,
+                                                 options);
 
-     int numGroups = Rcpp::as<int>(getNumGroups());
-     bool hasGroupData = true;
-     if (numGroups == 0) {
-         hasGroupData = false;
-     }
+    // results contains chimera_report (data.frame) and chimeras (vector of names)
+    Rcpp::List results = chimera->removeChimeras(reference_names,
+                                                 reference_sequences);
 
-     Chimera* chimera = new ChimeraUchime(dereplicate, processors, silent,
-                                            hasGroupData, options);
+    delete chimera;
 
-     Rcpp::List chimera_report = chimera->removeChimeras(dataset, ref_names, ref_seqs);
-
-     delete chimera;
-
-     return chimera_report;
- }
-
+    return results;
+}
 // ============================================================================
+//' @title rchimeDenovoSingleSample
+//' @name rchimeDenovoSingleSample
+//' @rdname rchimeDenovoSingleSample
+//' @param sequence_names, vector of strings containing sequence names
+//' @param sequences, vector of strings containing sequence nucleotide data
+//' @param abundances, vector of sequence abundances
+//' @param options list containing parameter options
+//' @seealso [rchime()]
+//' @description detects chimeras from your data using a denovo method.
+//[[Rcpp::export]]
+Rcpp::List rchimeDenovoSingleSample(std::vector<std::string> sequence_names,
+                        std::vector<std::string> sequences,
+                        std::vector<float> abundances,
+                        Rcpp::List options) {
+
+
+    std::vector<std::vector<std::string>> seqNames;
+    seqNames.push_back(sequence_names);
+    std::vector<std::vector<std::string>> seqs;
+    seqs.push_back(sequences);
+    std::vector<std::vector<float>> abunds;
+    abunds.push_back(abundances);
+
+    ChimeraVsearch* chimera = new ChimeraVsearch(seqNames, seqs, abunds,
+                                                 options);
+
+    Rcpp::List results = chimera->removeChimeras();
+
+    delete chimera;
+
+    return results;
+}
 //' @title rchimeDenovo
 //' @name rchimeDenovo
 //' @rdname rchimeDenovo
-//' @param dataset R6 'sequence_dataset' object containing sequence data
+//' @param sequence_names, 2D vector of strings containing sequence names parsed by sample
+//' @param sequences, 2D vector of strings containing sequence nucleotide data  parsed by sample
+//' @param abundances, 2D vector of sequence abundances parsed by sample
 //' @param options list containing parameter options
 //' @seealso [rchime()]
-//' @description detects and removes chimeras from your data using a denovo
-//' approach.
+//' @description detects chimeras from your data using a denovo method processing by sample.
 //[[Rcpp::export]]
-Rcpp::List rchimeDenovo(Rcpp::Environment& dataset,
-                       Rcpp::List options) {
+Rcpp::List rchimeDenovo(std::vector<std::vector<std::string>> sequence_names,
+                         std::vector<std::vector<std::string>> sequences,
+                         std::vector<std::vector<float>> abundances,
+                         Rcpp::List options) {
 
-     bool dereplicate = Rcpp::as<bool>(options["dereplicate"]);
-     bool silent = Rcpp::as<bool>(options["silent"]);
-     int processors = Rcpp::as<int>(options["processors"]);
 
-     Rcpp::Function getNumGroups = dataset["get_num_groups"];
+     ChimeraVsearch* chimera = new ChimeraVsearch(sequence_names,
+                                                  sequences,
+                                                  abundances,
+                                                  options);
 
-     int numGroups = Rcpp::as<int>(getNumGroups());
-     bool hasGroupData = true;
-     if (numGroups == 0) {
-         hasGroupData = false;
-     }
-
-     Chimera* chimera = new ChimeraUchime(dereplicate, processors, silent,
-                                            hasGroupData, options);
-
-     Rcpp::List chimera_report = chimera->removeChimeras(dataset);
+     Rcpp::List results = chimera->removeChimeras();
 
      delete chimera;
 
-     return chimera_report;
+     return results;
 }
 // ============================================================================
+

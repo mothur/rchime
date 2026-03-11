@@ -44,7 +44,7 @@ split_at_char <- function(line, delim) {
 #' (extract_name("mySeq This is my comment"))
 #'
 #' @returns A string
-extract_name = function(line) {
+extract_name <- function(line) {
   # name. comment
   # mySeq This is my comment
   val <- regexpr("\\s", line)

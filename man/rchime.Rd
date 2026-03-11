@@ -5,48 +5,43 @@
 \title{rchime}
 \usage{
 rchime(
-  dataset = NULL,
-  fasta = NULL,
-  count = NULL,
+  data,
   reference = NULL,
   dereplicate = FALSE,
   processors = parallelly::availableCores(),
   silent = FALSE,
-  chimealns = FALSE,
+  remove_chimeras = TRUE,
   rchime_options = NULL
 )
 }
 \arguments{
-\item{dataset}{R6 'sequence_dataset' object containing sequence data}
+\item{data}{a \href{https://mothur.org/strollur/}{strollur} dataset object
+containing your sequence data.}
 
-\item{fasta}{String, name of file containing FASTA reads}
-
-\item{count}{String, name of mothur formatted
-\href{https://mothur.org/wiki/count_file/}{count} file.}
-
-\item{reference}{String, name of optional FASTA reference file.}
+\item{reference}{a \href{https://mothur.org/strollur/}{strollur} dataset
+object containing reference sequence data.}
 
 \item{dereplicate, }{Boolean, The dereplicate option allows you to remove
-chimeras by sample. For example, if dereplicate parameter is false, then if
+chimeras by sample. For example, if dereplicate parameter is FALSE, then if
 one group finds the sequence to be chimeric, it will be removed from all
-groups. If dereplicate is set to true, sequences found to be chimeric are
+groups. If dereplicate is set to TRUE, sequences found to be chimeric are
 only removed from the sample they are found to be chimeric in.
 Default = FALSE.}
 
 \item{processors}{Integer, number of cores to use. Default = all available}
 
-\item{silent}{Boolean, suppress progress updates and console output}
+\item{silent}{Boolean, suppress concole outputs. Default = FALSE.}
 
-\item{chimealns}{bool, Default = FALSE. When TRUE a DataFrame is returned
-containing multiple alignments of query sequences to parents
-in human-readable format. Alignments show columns with
-differences that support or contradict a chimeric model.}
+\item{remove_chimeras}{Boolean, remove chimeras from dataset. Default = TRUE.}
 
-\item{rchime_options}{List, You can fine tune the uchime specific options
+\item{rchime_options}{List, You can fine tune the vsearch specific options
 using  the [\code{\link[=rchime_options]{rchime_options()}}] function. Default = NULL.}
 }
 \value{
-List containing accnos, uchimeout and optional chimealns.
+data.frame() containing chimera report.
+The \href{https://mothur.org/strollur/}{strollur} dataset object will also be
+updated. The sequences flagged as chimeric are removed and the chimera report
+is added.
 }
 \description{
 The rchime function allows you to remove chimeras from your data
@@ -61,49 +56,69 @@ the most abundant sequence in another sample. For a more conservative
 approach, set (dereplicate=TRUE) which will only remove sequences
 from the samples in which they are flagged as chimeric.
 
-This function relies on a rewrite of Robert C. Edgar's
-\href{http://drive5.com/usearch/manual/uchime_algo.html}{uchime} source code
-which was donated to the public domain.
+This function uses code from the
+\href{https://github.com/torognes/vsearch}{vsearch} tools.
 }
 \examples{
 
-# Let's create a dataset from the example files
+# Let's create a dataset named rchime example
 
-dataset <- sequence_data_vector$new(
-  filename = rchime_example("test.fasta")
-)
-dataset$set_group_assignments(
-  filename = rchime_example("test.count_table")
+data_denovo <- strollur::new_dataset("rchime denovo example")
+
+# Read a FASTA file and a mothur formatted count file
+
+fasta_data <- strollur::read_fasta(rchime_example("miseq.ng.fasta"))
+abundance_data <- strollur::read_mothur_count(
+  rchime_example("miseq.count_table")
 )
 
-# detect and remove chimeras from the dataset using denovo approach
+# Add the sequence and abundance data to the dataset
+
+strollur::add(data_denovo, table = fasta_data, type = "sequences")
+strollur::assign(data_denovo,
+  table = abundance_data,
+  type = "sequence_abundance"
+)
+
+# Detect and remove chimeras from the dataset using denovo approach
 # (recommended)
 
-chimera_report <- rchime(dataset, dereplicate = TRUE)
+chimera_report <- rchime(data_denovo, dereplicate = TRUE)
+data_denovo
 
-# or detect and remove chimeras using a reference
+# Alternatively you can detect and remove chimeras using a reference
 
-dataset <- sequence_data_vector$new(
-  filename = rchime_example("test.fasta")
-)
-dataset$set_group_assignments(
-  filename = rchime_example("test.count_table")
+data_reference <- strollur::new_dataset("rchime reference example")
+
+strollur::add(data_reference, table = fasta_data, type = "sequences")
+strollur::assign(data_reference,
+  table = abundance_data,
+  type = "sequence_abundance"
 )
 
-chimera_report <- rchime(dataset,
-  reference = rchime_example("reference.fasta")
-)
+reference <- new_dataset("Silva V4 Region")
+
+reference_data <- strollur::read_fasta(rchime_example(
+  "silva.v4.ng.fasta.gz"
+))
+
+strollur::add(reference, table = reference_data, type = "sequences")
+
+chimera_report <- rchime(data_reference, reference = reference)
+data_reference
 
 }
 \references{
+Rognes T, Flouri T, Nichols B, Quince C, Mahé F. (2016) VSEARCH: a
+versatile open source tool for metagenomics. PeerJ 4:e2584.
+doi: 10.7717/peerj.2584
+
 Edgar,R.C., Haas,B.J., Clemente,J.C., Quince,C. and Knight,R. (2011),
 UCHIME improves sensitivity and speed of chimera detection.
 Bioinformatics 27:2194.
 }
 \seealso{
-\code{\link[=uchimeout_help]{uchimeout_help()}} for a description of 'uchimeout'
-
-\code{\link[=rchime_options]{rchime_options()}} to set uchime specific parameters.
+\code{\link[=rchime_options]{rchime_options()}} to set vsearch specific parameters.
 }
 \author{
 Sarah Westcott, \email{swestcot@umich.edu}

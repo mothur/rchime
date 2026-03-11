@@ -4,16 +4,19 @@
 \alias{rchimeDenovo}
 \title{rchimeDenovo}
 \usage{
-rchimeDenovo(dataset, options)
+rchimeDenovo(sequence_names, sequences, abundances, options)
 }
 \arguments{
-\item{dataset}{R6 'sequence_dataset' object containing sequence data}
+\item{sequence_names, }{2D vector of strings containing sequence names parsed by sample}
+
+\item{sequences, }{2D vector of strings containing sequence nucleotide data  parsed by sample}
+
+\item{abundances, }{2D vector of sequence abundances parsed by sample}
 
 \item{options}{list containing parameter options}
 }
 \description{
-detects and removes chimeras from your data using a denovo
-approach.
+detects chimeras from your data using a denovo method processing by sample.
 }
 \seealso{
 \code{\link[=rchime]{rchime()}}

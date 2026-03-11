@@ -10,6 +10,3 @@ create_dummy_file <- function(filename, lines = c("test")) {
   close(file_conn)
 }
 # =========================================================================== #
-
-test_file <- function(fname) testthat::test_path("ref", fname)
-# =========================================================================== #
