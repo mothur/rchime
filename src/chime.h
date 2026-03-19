@@ -1,76 +1,223 @@
-#ifndef chime_h
-#define chime_h
+#ifndef SRC_CHIM_H_
+#define SRC_CHIM_H_
 
-/*
- *  The ChimeHit2 struct stores the results for each sequences chimeric detection.
- *
- *  Modified by Sarah Westcott on 2/26/25.
- *  Copyright 2025 SchlossLab. All rights reserved.
- *
- */
 
-#include "seq.h"
-#include "options.h"
+// containers
+#include <vector>
+#include <map>
+#include <set>
+#include <string>
 
-struct ChimeHit2 {
+// io
+#include <string.h>
+#include <iostream>
+#include <fstream>
+#include <sstream>
 
-	string QLabel;
-    string ALabel;
-    string BLabel;
-    string Q3;
-    string A3;
-    string B3;
+using namespace std;
 
-	double PctIdQT, PctIdQA, PctIdQB, PctIdQM, PctIdAB;
+/**********************************************************************/
 
-	unsigned ColLo;
-	unsigned ColXLo;
-	unsigned ColXHi;
-	unsigned ColHi;
-	unsigned QXLo;
-	unsigned QXHi;
+#if defined (__APPLE__) || (__MACH__) || (linux) || (__linux) || (__linux__) || (__unix__) || (__unix)
 
-	double Div;
-	double Score;
-	double H;
+#define NON_WINDOWS
+#undef WINDOWS
 
-	unsigned CS_LY, CS_LN, CS_LA, CS_RY, CS_RN, CS_RA;
+#if defined (__APPLE__) || (__MACH__)
+#define OSX
+#else
+#undef OSX
+#endif
 
-	float AbQ;
-	float AbA;
-	float AbB;
+#else
 
-	ChimeHit2() {
-		Q3.clear();
-		A3.clear();
-		B3.clear();
-		QLabel.clear();
-		ALabel.clear();
-		BLabel.clear();
+#define WINDOWS
+#undef NON_WINDOWS
 
-		
-		ColLo = ColHi = QXLo = QXHi = ColXLo = ColXHi = UINT_MAX;
-		CS_LY = CS_LN = CS_LA = CS_RY = CS_RN = CS_RA = UINT_MAX;
-		PctIdQT = PctIdQA = PctIdQB = PctIdQM = PctIdAB = -1.0;
-		Div = -1.0;
-		H = -1.0;
-		Score = -1.0;
-		AbQ = AbA = AbB = -1.0f;
-	}
+#endif
 
-	bool Accept(double minh, double mindiv, int mindiffs) const {
-		return Score >= minh && Div >= mindiv && CS_LY >= mindiffs && CS_RY >= mindiffs;
-	}
+/**********************************************************************/
+const vector<string> nullVector;  // used to pass blank vector
+const vector<int> nullIntVector;  // used to pass blank vector
+const vector<float> nullFloatVector;  // used to pass blank vector
+/**********************************************************************/
+template<typename T>
+bool isEqual(const T& num1, const T& num2) {
+    bool equal = false;
 
-private:
+    if (fabs(num1-num2) <= fabs(num1 * 0.001)) { equal = true; }
 
-    bool operator<(const ChimeHit2 &rhs) const {
-        if (Score == rhs.Score) {
-            return Div > rhs.Div;
-		}
-        return Score > rhs.Score;
+    return equal;
+}
+/**********************************************************************/
+inline string toString(const set<string>& x, char delim) {
+    string result = "";
+
+    if (x.size() == 0) { return result; }
+
+    for (auto it = x.begin(); it != x.end(); it++) {
+        result += delim + *it;
+    }
+    result = result.substr(1);
+
+    return result;
+}
+/**********************************************************************/
+inline string toString(const bool& x) {
+    if (x) {
+        return "TRUE";
+    }else{
+        return "FALSE";
+    }
+}
+/**********************************************************************/
+inline string toString(const set<string>& x, string delim) {
+    string result = "";
+
+    if (x.size() == 0) { return result; }
+
+    for (auto it = x.begin(); it != x.end(); it++) {
+        result += delim + *it;
+    }
+    result = result.substr(delim.length());
+
+    return result;
+}
+/**********************************************************************/
+template<typename T>
+string toString(const T&x) {
+  stringstream output;
+  output << x;
+  return output.str();
+}
+/**********************************************************************/
+template<typename T>
+string toString(const T&x, int i) {
+  stringstream output;
+
+  output.precision(i);
+  output << std::fixed << x;
+
+  return output.str();
+}
+/**********************************************************************/
+template<typename T>
+string toString(const vector<T>& x, char delim) {
+    string result = "";
+
+    if (x.size() == 0) { return result; }
+
+    result = toString(x[0]);
+
+    for (int i = 1; i < x.size(); i++) {
+        result += delim + toString(x[i]);
     }
 
+    return result;
+}
+/**********************************************************************/
+template<typename T>
+set<T> toSet(const vector<T>& x) {
+    set<T> results;
+
+    if (x.size() == 0) { return results; }
+
+    for (int i = 0; i < x.size(); i++ ) {
+        results.insert(x[i]);
+    }
+
+    return results;
+}
+/**********************************************************************/
+template<typename T>
+vector<T> toVector(const set<T>& x) {
+    vector<T> results;
+
+    if (x.size() == 0) { return results; }
+
+    for (auto it = x.begin(); it != x.end(); it++) {
+        results.push_back(*it);
+    }
+
+    return results;
+}
+/**********************************************************************/
+template<typename T, typename T2>
+vector<T> getKeys(const map<T, T2>& x) {
+    vector<T> results(x.size());
+
+    if (x.size() == 0) { return results; }
+
+    int index = 0;
+    for (auto it = x.begin(); it != x.end(); it++) {
+        results[index] = (it->first);
+        index++;
+    }
+
+    return results;
+}
+/**********************************************************************/
+template<typename T>
+void applyOrder(T& x, const std::vector<unsigned>& order) {
+    T copy = x;
+
+    for (int i = 0; i < order.size(); i++) {
+        x[i] = copy[order[i]];
+    }
+}
+/**********************************************************************/
+struct pieceOfWork {
+  double start;
+  double end;
+  pieceOfWork(double i, double j) : start(i), end(j) {}
+  pieceOfWork() { start = 0; end = 0; }
+  ~pieceOfWork() {}
 };
 
-#endif // chime_h
+inline vector<pieceOfWork> divideWork(double numItems, int& numProcessors) {
+    // divide work between processors
+    vector<pieceOfWork> work;
+
+    if (numItems < numProcessors) { numProcessors = numItems; }
+    size_t startIndex = 0;
+
+    for (size_t remainingProcessors = numProcessors; remainingProcessors > 0;
+    remainingProcessors--) {
+
+        //case for last processor
+        size_t numToProcess = numItems;
+        if (remainingProcessors != 1) {
+            numToProcess = ceil(numItems / remainingProcessors);
+        }
+        work.push_back(pieceOfWork(startIndex, (startIndex+numToProcess)));
+        startIndex += numToProcess;
+        numItems -= numToProcess;
+    }
+    return work;
+}
+/******************************************************************************/
+struct ChimeHit2 {
+
+    ChimeHit2() {
+        QLabel = ""; ALabel = "*"; BLabel = "*"; CLabel = "*"; status = "N";
+        QM = 0.0; QA = 0.0; QB = 0.0; QC = 0.0; QT = 0.0;
+        LY = 0.0; LN = 0.0; LA = 0.0; RY = 0.0; RN = 0.0; RA = 0.0;
+        Div = 0.0; Score = 0.0; H = 0.0;
+    }
+
+    std::string QLabel;
+    std::string ALabel;
+    std::string BLabel;
+    std::string CLabel;
+    std::string status;
+
+    double QM, QA, QB, QC, QT;
+    double LY, LN, LA, RY, RN, RA;
+
+    double Div;
+    double Score;
+    double H;
+};
+/**********************************************************************/
+
+#endif  // SRC_CHIM_H_

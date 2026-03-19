@@ -12,23 +12,17 @@ BugReports: https://github.com/SchlossLab/rchime/issues
 License: GPL (>= 2)
 Roxygen: list(markdown = TRUE)              
 Config/testthat/edition: 3
-RoxygenNote: 7.3.2
+RoxygenNote: 7.3.3
 Imports:
   cli,
-  methods,
-  microseq,
   parallelly,
-  RcppThread,
-  R6, 
-  r2r,
-  stringi,
-  data.table (>= 1.16.0)
-Depends: Rcpp (>= 1.0.12), R (>= 4.5.0)
+  RcppThread
+Depends: Rcpp (>= 1.0.12), R (>= 4.5.0), strollur
 Suggests: 
     knitr,
     rmarkdown,
-    testthat (>= 3.0.0),
-    xml2
-LinkingTo: Rcpp, RcppThread, cli, testthat
+    xml2,
+    testthat (>= 3.0.0)
+LinkingTo: Rcpp, RcppThread, cli
 Encoding: UTF-8
 VignetteBuilder: knitr

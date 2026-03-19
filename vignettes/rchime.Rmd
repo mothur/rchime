@@ -1,8 +1,8 @@
 ---
-title: "rchime"
+title: "Getting Started"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{rchime}
+  %\VignetteIndexEntry{Getting Started}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -14,45 +14,27 @@ knitr::opts_chunk$set(
 )
 ```
 
-Description of rchime package
+The *rchime* package allows you to detect and remove chimeras from your dataset using a denovo approach or alternatively a reference model. This package uses 
+code from the [vsearch](https://github.com/torognes/vsearch) tools.
 
-## Getting started with `{rchime}`
-To get started you'll need to install `{rchime}` using either of these commands:
+## Installing rchime
 
-```{r, eval = FALSE}
-# devtools::install_github("mothur/rchime") #install development version
-# install.packages("rchime") # install stable version from CRAN
-```
-
-To get access to the packages function and a demonstration version of the sequence data, you'll need to run the `library()` function. 
-
-```{r setup}
-library(rchime)
-```
-
-## Creating a dataset object
+You can install the CRAN version with:
 
 ```{r, eval = FALSE}
-dataset <- sequence_data_vector(filename = rchime_example("test.fasta"))
-dataset$set_group_assignments(filename = rchime_example("test.count_table"))
-dataset
+install.packages("rchime")
 ```
 
-
-## Removing chimeras denovo
+You can install the development version of *rchime* from [GitHub](https://github.com/mothur/rchime) with:
 
 ```{r, eval = FALSE}
-rchime(dataset, dereplicate = TRUE)
-dataset
+# install.packages("devtools")
+devtools::install_github("mothur/rchime")
 ```
 
-## Removing chimeras by reference
 
-```{r, eval = FALSE}
-dataset <- sequence_data_vector(filename = rchime_example("test.fasta"))
-dataset$set_group_assignments(filename = rchime_example("test.count_table"))
-dataset
-rchime(dataset, reference = rchime_example("reference.fasta"))
-dataset
-```
+## Tutorials to help you get started
+
+* [Reference based chimera detection](vignettes/Reference_Detection.html)
+* [Denovo based chimera detection](vignettes/Denovo_Detection.html)
 
