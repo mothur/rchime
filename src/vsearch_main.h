@@ -208,21 +208,10 @@ private:
     auto realloc_arrays(struct chimera_info_s * chimera_info) -> void;
     auto reset_matches(struct chimera_info_s * a_chimera_info) -> void;
     auto find_matches(struct chimera_info_s * chimera_info) -> void;
-    auto compare_positions(const void * a, const void * b) -> int;
     auto find_best_parents(struct chimera_info_s * ci) -> int;
     auto find_total_alignment_length(struct chimera_info_s const * chimera_info) -> int;
     auto fill_max_alignment_length(struct chimera_info_s * chimera_info) -> void;
     auto fill_alignment_parents(struct chimera_info_s * ci) -> void;
-    auto fill_in_alignment_string_for_query(struct chimera_info_s * chimera_info) -> void;
-    auto fill_in_model_string_for_query(struct chimera_info_s * chimera_info) -> void;
-    auto count_matches_with_parents(struct chimera_info_s const * chimera_info,
-                                    int const alignment_length) -> std::array<int, maxparents>;
-    auto compute_global_similarities_with_parents(
-            std::array<int, maxparents> const & match_counts,
-            int const alignment_length) -> std::array<double, maxparents>;
-    auto compute_diffs(struct chimera_info_s const * ci,
-                       std::vector<unsigned char> const & psym,
-                       unsigned char const qsym) -> char;
     auto eval_parents(struct chimera_info_s * ci) -> Status;
     auto query_init(struct searchinfo_s * search_info) -> void;
     auto query_exit(struct searchinfo_s * search_info) -> void;

@@ -175,8 +175,6 @@ public:
 
     auto map_4bit(char nucleotide) -> unsigned char;
 
-    auto map_mask_ambig(char nucleotide) -> unsigned int;
-
     auto map_mask_lower(char nucleotide) -> unsigned int;
 
     auto is_equivalent_4bit(char lhs, char rhs) -> bool;
@@ -184,10 +182,6 @@ public:
     auto is_ambiguous_4bit(unsigned char nucleotide) -> bool;
 
 private:
-
-    auto map_complement(char nucleotide) -> char;
-    auto is_equivalent_4bit_rhs(char lhs, char rhs) -> bool;
-    auto is_same_4bit(char lhs, char rhs) -> bool;
 
     auto to_uchar(char const nucleotide) -> unsigned char {
         assert(nucleotide >= 0);

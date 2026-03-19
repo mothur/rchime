@@ -59,7 +59,6 @@
 */
 
 #include "vsearch.h"
-#include "city.h"
 #include "unique.h"
 #include <algorithm>  // std::min
 #include <cstdint> // uint64_t
@@ -73,10 +72,6 @@
   Earlier it was defined as those words occuring exactly once, but
   that caused a problem when searching for sequences with many repeats.
 */
-
-
-//using Hash = decltype(&Vsearch_CityHash::CityHash64)
-//Hash hash_function = &Vsearch_CityHash::CityHash64;
 
 /******************************************************************************/
 struct bucket_s
@@ -96,23 +91,6 @@ struct uhandle_s
   uint64_t bitmap_size;
   uint64_t * bitmap;
 };
-/******************************************************************************/
-auto unique_compare(const void * a, const void * b) -> int
-{
-    auto * lhs = (unsigned int *) a;
-    auto * rhs = (unsigned int *) b;
-
-    if (lhs < rhs)
-    {
-        return -1;
-    }
-    if (lhs > rhs)
-    {
-        return +1;
-    }
-    return 0;
-}
-
 /******************************************************************************/
 // refactoring: 2025-07-22 failed attempt to eliminate malloc/free,
 // requires major refactoring, see attempt in unique_struct.hpp
@@ -235,97 +213,6 @@ auto Vsearch_Unique::unique_count_bitmap(struct uhandle_s * unique_handle,
   *listlen = unique;
   *list = unique_handle->list;
 }
-
-/******************************************************************************/
-auto Vsearch_Unique::unique_count_hash(struct uhandle_s * unique_handle,
-                       int const wordlength,
-                       int const seqlen,
-                       char const * seq,
-                       unsigned int * listlen,
-                       unsigned int const * * list,
-                       int const seqmask) -> void
-{
-  /* if necessary, reallocate hash table and list of unique kmers */
-
-  if (unique_handle->alloc < 2 * seqlen)
-    {
-      while (unique_handle->alloc < 2 * seqlen)
-        {
-          unique_handle->alloc *= 2;
-        }
-      unique_handle->hash = (struct bucket_s *)
-        util.xrealloc(unique_handle->hash, sizeof(struct bucket_s) * unique_handle->alloc);
-      unique_handle->list = (unsigned int *)
-        util.xrealloc(unique_handle->list, sizeof(unsigned int) * unique_handle->alloc);
-    }
-
-  /* hashtable variant */
-
-  unique_handle->size = 1;
-  while (unique_handle->size < 2 * seqlen)
-    {
-      unique_handle->size *= 2;
-    }
-  unique_handle->hash_mask = unique_handle->size - 1;
-
-  std::memset(unique_handle->hash, 0, sizeof(struct bucket_s) * unique_handle->size);
-
-  uint64_t bad = 0;
-  uint64_t j = 0;
-  auto kmer = 0U;
-  unsigned int const mask = (1ULL << (2ULL * wordlength)) - 1ULL;
-  auto const * s = seq;
-  auto const * e1 = s + wordlength - 1;
-  auto const * e2 = s + seqlen;
-  e1 = std::min(e2, e1);
-
-  while (s < e1)
-    {
-      bad <<= 2ULL;
-      bad |= maps.map_mask_lower(*s);
-
-      kmer <<= 2ULL;
-      kmer |= maps.map_2bit(*s);
-      ++s;
-    }
-
-  uint64_t unique = 0;
-
-  while (s < e2)
-    {
-      bad <<= 2ULL;
-      bad |= maps.map_mask_lower(*s);
-      bad &= mask;
-
-      kmer <<= 2ULL;
-      kmer |= maps.map_2bit(*s);
-      ++s;
-      kmer &= mask;
-
-      if (bad == 0U)
-        {
-          /* find free appropriate bucket in hash */
-          j = hash.CityHash64((char *) &kmer, (wordlength + 3) / 4) & unique_handle->hash_mask;
-          while ((unique_handle->hash[j].count != 0U) && (unique_handle->hash[j].kmer != kmer))
-            {
-              j = (j + 1) & unique_handle->hash_mask;
-            }
-
-          if (unique_handle->hash[j].count == 0U)
-            {
-              /* not seen before */
-              unique_handle->list[unique] = kmer;
-              ++unique;
-              unique_handle->hash[j].kmer = kmer;
-              unique_handle->hash[j].count = 1;
-            }
-        }
-    }
-
-  *listlen = unique;
-  *list = unique_handle->list;
-}
-
 /******************************************************************************/
 auto Vsearch_Unique::count(struct uhandle_s * unique_handle,
                   int const wordlength,
@@ -335,14 +222,9 @@ auto Vsearch_Unique::count(struct uhandle_s * unique_handle,
                   unsigned int const * * list,
                   int const seqmask) -> void
 {
-  if (wordlength < 10)
-    {
-      unique_count_bitmap(unique_handle, wordlength, seqlen, seq, listlen, list, seqmask);
-    }
-  else
-    {
-      unique_count_hash(unique_handle, wordlength, seqlen, seq, listlen, list, seqmask);
-    }
+
+    unique_count_bitmap(unique_handle, wordlength, seqlen, seq,
+                        listlen, list, seqmask);
 }
 /******************************************************************************/
 

@@ -203,9 +203,6 @@ private:
                    Vsearch_DBIndex* dbindex,
                    Vsearch_Minheap* minheap) -> void;
 
-    auto enough_kmers(struct searchinfo_s const & searchinfo,
-                             unsigned int count) -> bool;
-
     auto align_trim(struct hit * hit) -> void;
     auto align_delayed(struct searchinfo_s * searchinfo,
                        Vsearch_Database* db,

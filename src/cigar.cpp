@@ -94,22 +94,6 @@ auto Vsearch_Cigar::convert_to_operation(char const operation) -> Operation {
     return Operation::match;
 }
 /******************************************************************************/
-auto Vsearch_Cigar::convert_from_operation(Operation const operation) -> char {
-    switch (operation) {
-    case Operation::match:
-        return 'M';
-        break;
-    case Operation::deletion:
-        return 'D';
-        break;
-    case Operation::insertion:
-        return 'I';
-        break;
-    }
-    // C++23 refactoring: default: std::unreachable();
-    __builtin_unreachable();
-}
-/******************************************************************************/
 // duplicate: msa.cc
 auto Vsearch_Cigar::find_runlength_of_leftmost_operation(char const * first_character,
                                           char ** first_non_digit) -> long long {
@@ -155,18 +139,4 @@ auto Vsearch_Cigar::parse_cigar_string(Span<char> const cigar_string) -> std::ve
     }
   return parsed_cigar;
 }
-
-/******************************************************************************/
-auto Vsearch_Cigar::print_uncompressed_cigar(std::FILE * output_handle, Span<char> const cigar_string) -> void {
-  auto const cigar_pairs = parse_cigar_string(cigar_string);
-  for (auto const & a_pair: cigar_pairs) {
-    auto const operation = convert_from_operation(a_pair.first);
-    auto const runlength = a_pair.second;
-    // refactoring? std::fprintf("%s", std::string(runlength, operation).c_str());
-    for (auto i = 0LL; i < runlength; ++i) {
-      static_cast<void>(std::fprintf(output_handle, "%c", operation));
-    }
-  }
-}
-
 /******************************************************************************/

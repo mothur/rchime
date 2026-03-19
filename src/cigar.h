@@ -84,13 +84,9 @@ public:
 
     auto parse_cigar_string(Span<char> cigar_string) -> std::vector<std::pair<Operation, long long>>;
 
-    auto print_uncompressed_cigar(std::FILE * output_handle, Span<char> cigar_string) -> void;
-
 private:
 
     auto convert_to_operation(char const operation) -> Operation;
-
-    auto convert_from_operation(Operation const operation) -> char;
 
 };
 /******************************************************************************/

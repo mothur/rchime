@@ -1,6 +1,6 @@
-# test rchime function
+# test rchime options function
 
-test_that("test uchime parameters ", {
+test_that("test rchime parameters ", {
   options <- rchime_options(
     minh = 0.6, abskew = 1.9, mindiv = 0.505,
     xn = 8.01, dn = 1.401, maxp = 4

@@ -49,7 +49,7 @@ ChimeraVsearch::ChimeraVsearch(std::vector<std::vector<string>>& sequenceNames,
     opts->opt_gap_open_target_right -= opts->opt_gap_extension_target_right;
 
     if (opts->opt_minwordmatches < 0) {
-        opts->opt_minwordmatches = minwordmatches_defaults[opts->opt_wordlength];
+        opts->opt_minwordmatches = minwordmatches_defaults[8];
     }
 
 }
@@ -71,41 +71,20 @@ void ChimeraVsearch::sortDescending(std::vector<std::string>& sequenceNames,
 
     for (int i = 0; i < (abunds).size(); i++) {
         sortedVector[i].index = i;
-        sortedVector[i].abund = (abunds)[i];
+        sortedVector[i].abund = abunds[i];
+        sortedVector[i].name = sequenceNames[i];
     }
+
     sort(sortedVector.begin(), sortedVector.end(), compareAbundance);
 
     vector<unsigned> order((abunds).size(), 0);
     for (int i = 0; i < (abunds).size(); i++) {
         order[i] = sortedVector[i].index;
-        (abunds)[i] = sortedVector[i].abund;
+        abunds[i] = sortedVector[i].abund;
+        sequenceNames[i] = sortedVector[i].name;
     }
 
-    applyOrder(sequenceNames, order);
     applyOrder(sequences, order);
-    applyOrder(abunds, order);
-}
-/******************************************************************************/
-void processDenovoVsearch(chimeraData* params) {
-
-    std::vector<std::string> pRefNames;
-    std::vector<std::string> pRefSequences;
-
-    // denovo by sample
-    for (int k = params->start; k < params->stop; k++) {
-
-        RcppThread::checkUserInterrupt();
-
-        Vsearch_Main vsearch;
-
-        // call vsearch source code
-        params->results[k] = vsearch.vmain(params->pNames->at(k),
-                                            params->pSequences->at(k),
-                                            pRefNames, pRefSequences,
-                                            params->pAbundances->at(k), 0, 0);
-
-        params->chimeras.push_back(vsearch.chimeraNames);
-    }
 }
 /******************************************************************************/
 void processReferenceVsearch(chimeraData* params) {
@@ -123,11 +102,13 @@ void processReferenceVsearch(chimeraData* params) {
 /******************************************************************************/
 Rcpp::List ChimeraVsearch::removeChimeras() {
 
+    // blank reference
+    std::vector<std::string> refNames;
+    std::vector<std::string> refSeqs;
+    Rcpp::List denovoResults;
+
     // denovo single sample
     if (!bySample) {
-        // blank reference
-        std::vector<std::string> refNames;
-        std::vector<std::string> refSeqs;
 
         Vsearch_Main vsearch;
 
@@ -135,74 +116,160 @@ Rcpp::List ChimeraVsearch::removeChimeras() {
                        pSequences->at(0),
                        pAbundances->at(0));
 
-        vector<ChimeHit2> vsearchOutput = vsearch.vmain(pNames->at(0),
-                                                         pSequences->at(0),
-                                                         refNames, refSeqs,
-                                                         pAbundances->at(0),
-                                                         0, 0);
+        vector<ChimeHit2> results = vsearch.vmain(pNames->at(0),
+                                pSequences->at(0),
+                                refNames, refSeqs,
+                                pAbundances->at(0), 0, 0);
 
-        return createVsearchResults(vsearchOutput);
-    }
+        denovoResults = createVsearchResults(results);
+    }else{
 
-    // denovo - run vsearch on each sample individually
-    return createDenovoProcesses();
-}
-/******************************************************************************/
-Rcpp::List ChimeraVsearch::createDenovoProcesses() {
+        // outputs
+        vector<vector<ChimeHit2>> vsearchOut(pNames->size());
+        map<string, vsearchAbunds > seqAbunds;
 
-    vector<RcppThread::Thread*> workerThreads;
-    vector<chimeraData*> data;
+        // denovo by sample
+        for (int k = 0; k < pNames->size(); k++) {
 
-    // divides samples between processors
-    vector<int> starts, ends;
-    vector<pieceOfWork> indexes = divideWork(pNames->size(), processors);
+            RcppThread::checkUserInterrupt();
 
-    //Launch worker threads
-    for (int i = 0; i < processors-1; i++) {
+            sortDescending(pNames->at(k),
+                           pSequences->at(k),
+                           pAbundances->at(k));
 
-        chimeraData* dataBundle = new chimeraData(pNames, pSequences, pAbundances,
-                                                  indexes[i+1].start,
-                                                  indexes[i+1].end);
-        data.push_back(dataBundle);
-        workerThreads.push_back(new RcppThread::Thread(processDenovoVsearch,
-                                                       dataBundle));
-    }
+            Vsearch_Main vsearch;
 
-    chimeraData* dataBundle = new chimeraData(pNames, pSequences, pAbundances,
-                                              indexes[0].start,
-                                              indexes[0].end);
-    processDenovoVsearch(dataBundle);
+            // call vsearch source code
+            vsearchOut[k] = vsearch.vmain(pNames->at(k),
+                                        pSequences->at(k),
+                                        refNames, refSeqs,
+                                        pAbundances->at(k), 0, 0);
 
-    vector<ChimeHit2> vsearchResults;
-    map<string, vsearchAbunds> seqAbunds = combineResults(dataBundle,
-                                                           data,
-                                                           workerThreads,
-                                                           vsearchResults);
+            set<string> chimeras = vsearch.chimeraNames;
 
-    Rcpp::List results = createVsearchResults(vsearchResults);
+            // combining results
+            for (int j = 0; j < pNames->at(k).size(); j++) {
 
-    if (dereplicate) {
-        // add seqAbunds results to results so the sequences can be removed
-        // by sample in rchime function
-        Rcpp::List newAbundances(seqAbunds.size());
+                string seqName = pNames->at(k)[j];
+                auto it = seqAbunds.find(seqName);
 
-        int i = 0;
-        for (const auto& pair : seqAbunds) {
-            newAbundances[i] = pair.second.abundances;
-            i++;
+                // create new abunds vector and fill this groups abunds
+                if (it == seqAbunds.end()) {
+
+                    // abunds(numSamples, 0)
+                    vector<float> abunds((pNames->size()), 0);
+                    vsearchAbunds abundFlag(abunds, dereplicate);
+
+                    if (dereplicate) {
+
+                        // if not chimeric in this sample, then add abundance
+                        if (chimeras.count(seqName) == 0){
+                            abundFlag.abundances[k] = pAbundances->at(k)[j];
+                            abundFlag.chimeric = false;
+                        }
+                        seqAbunds[seqName] = abundFlag;
+                    }else {
+                        // if chimeric in this sample, then remove from dataset
+                        if (chimeras.count(seqName) != 0){
+                            abundFlag.chimeric = true;
+                            seqAbunds[seqName] = abundFlag;
+                        }
+                    }
+                }else{
+                    if (dereplicate) {
+                        // if not chimeric in this sample, then add abundance
+                        if (chimeras.count(seqName) == 0) {
+                            it->second.abundances[k] = pAbundances->at(k)[j];
+                            it->second.chimeric = false;
+                        }
+                    }
+                }
+            }
+
+            pNames->at(k).clear();
+            pSequences->at(k).clear();
+            pAbundances->at(k).clear();
         }
 
-        newAbundances.names() = getKeys(seqAbunds);
+        // merge vsearch results using flagged chimeras
+        // the result will have 1 entry in hits for each sequence in dataset
 
-        vector<string> resultsNames = results.names();
-        resultsNames.push_back("set_abundance_values");
+        // if all samples find the query to be chimeric, choose first chimeric result
+        // else pick first non-chimeric result.
+        set<string> resolved;
+        vector<ChimeHit2> results;
+        for (int i = 0; i < vsearchOut.size(); i++) {
 
-        // add map to results
-        results.push_back(newAbundances);
-        results.attr("names") = resultsNames;
+            for (int j = 0; j < vsearchOut[i].size(); j++) {
+
+                string seqName = vsearchOut[i][j].QLabel;
+                auto it = resolved.find(seqName);
+
+                // if we haven't recorded this sequence
+                if (it == resolved.end()) {
+
+                    // dereplicate == true all seqs are in seqAbunds
+                    // dereplicate == false only chimeric seqs are in seqAbunds
+                    if (dereplicate) {
+
+                        // sequence was found to be chimeric in all samples
+                        if (seqAbunds[seqName].chimeric) {
+                            results.push_back(vsearchOut[i][j]);
+                            resolved.insert(seqName);
+                        }else {
+                            // pick first non-chimeric results
+                            if (vsearchOut[i][j].status != "Y") {
+                                results.push_back(vsearchOut[i][j]);
+                                resolved.insert(seqName);
+                            }
+                        }
+                    }else {
+                        // if chimeric, then save
+                        if (vsearchOut[i][j].status == "Y") {
+                            results.push_back(vsearchOut[i][j]);
+                            resolved.insert(seqName);
+                        }else {
+                            auto itChime = seqAbunds.find(seqName);
+
+                            // non chimera
+                            if (itChime == seqAbunds.end()) {
+                                results.push_back(vsearchOut[i][j]);
+                                resolved.insert(seqName);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        denovoResults = createVsearchResults(results);
+
+        if (dereplicate) {
+            // add seqAbunds results to results so the sequences can be removed
+            // by sample in rchime function
+            Rcpp::List newAbundances(seqAbunds.size());
+
+            int i = 0;
+            for (auto it = seqAbunds.begin(); it != seqAbunds.end(); it++) {
+                newAbundances[i] = it->second.abundances;
+                i++;
+            }
+
+            vector<string> resultsNames = denovoResults.names();
+            resultsNames.push_back("set_abundance_values");
+
+            Rcpp::List abundance_values = Rcpp::List::create(
+                Rcpp::Named("names") = getKeys(seqAbunds),
+                Rcpp::_("abundances") = newAbundances);
+
+            // add map to results
+            denovoResults.push_back(abundance_values);
+            denovoResults.attr("names") = resultsNames;
+        }
+
     }
 
-    return results;
+    return denovoResults;
 }
 /******************************************************************************/
 Rcpp::List ChimeraVsearch::removeChimeras(std::vector<std::string>& refNames,
@@ -251,169 +318,6 @@ Rcpp::List ChimeraVsearch::removeChimeras(std::vector<std::string>& refNames,
 
     Rcpp::List results = createVsearchResults(hits);
     return results;
-}
-/******************************************************************************/
-// this is called when dereplicate = TRUE, meaning sequence are only removed
-// from the samples they are flagged as chimeric in
-map<string, vsearchAbunds > ChimeraVsearch::combineResults(chimeraData*& dataBundle,
-                                         vector<chimeraData*>& data,
-                                         vector<RcppThread::Thread*>& workerThreads,
-                                         vector<ChimeHit2>& results) {
-
-    map<string, vsearchAbunds > seqAbunds;
-    int groupIndex = dataBundle->start;
-    vector<vector<ChimeHit2> > vsearchOut = dataBundle->results;
-
-    // dereplicate = TRUE, guilty until proven innocent (all samples must find it to be chimeric)
-    // dereplicate = FALSE, innocent until proven guilty (any sample can find it to be chimeric)
-
-    // collect main threads results
-    for (int i = dataBundle->start; i < dataBundle->stop; i++) {
-
-        for (int j = 0; j < dataBundle->pNames->at(i).size(); j++) {
-
-            string seqName = dataBundle->pNames->at(i)[j];
-            auto it = seqAbunds.find(seqName);
-
-            // create new abunds vector and fill this groups abunds
-            if (it == seqAbunds.end()) {
-
-                vector<float> abunds((dataBundle->pNames->size()), 0);
-                vsearchAbunds abundFlag(abunds, dereplicate);
-
-                if (dereplicate) {
-
-                    // if not chimeric in this sample, then add abundance
-                    if (dataBundle->chimeras[i].count(seqName) == 0){
-                        abundFlag.abundances[groupIndex] = dataBundle->pAbundances->at(i)[j];
-                        abundFlag.chimeric = false;
-                    }
-                    seqAbunds[seqName] = abundFlag;
-                }else {
-                    // if chimeric in this sample, then remove from dataset
-                    if (dataBundle->chimeras[i].count(seqName) != 0){
-                       abundFlag.chimeric = true;
-                       seqAbunds[seqName] = abundFlag;
-                    }
-                }
-            }else{
-                if (dereplicate) {
-                    // if not chimeric in this sample, then add abundance
-                    if (dataBundle->chimeras[i].count(seqName) == 0) {
-                        it->second.abundances[groupIndex] = dataBundle->pAbundances->at(i)[j];
-                        it->second.chimeric = false;
-                    }
-                }
-            }
-        }
-        groupIndex++;
-    }
-
-    delete dataBundle;
-
-    // collect child thread results and join
-    for (int i = 0; i < processors-1; i++) {
-
-        workerThreads[i]->join();
-
-        for (int j = data[i]->start; j < data[i]->stop; j++) {
-
-            vsearchOut.push_back(data[i]->results[j]);
-
-            for (int k = 0; k < data[i]->pNames->at(j).size(); k++) {
-
-                string seqName = data[i]->pNames->at(j)[k];
-                auto it = seqAbunds.find(seqName);
-
-                // create new abunds vector and fill this groups abunds
-                if (it == seqAbunds.end()) {
-
-                    vector<float> abunds((dataBundle->pNames->size()), 0);
-                    vsearchAbunds abundFlag(abunds, dereplicate);
-
-                    if (dereplicate) {
-
-                        // if not chimeric in this sample, then add abundance
-                        if (data[i]->chimeras[j].count(seqName) == 0){
-                            abundFlag.abundances[groupIndex] = data[i]->pAbundances->at(j)[k];
-                            abundFlag.chimeric = false;
-                        }
-                        seqAbunds[seqName] = abundFlag;
-                    }else {
-                        // if chimeric in this sample, then remove from dataset
-                        if (data[i]->chimeras[j].count(seqName) != 0){
-                            abundFlag.chimeric = true;
-                            seqAbunds[seqName] = abundFlag;
-                        }
-                    }
-                }else{
-                    if (dereplicate) {
-                        // if not chimeric in this sample, then add abundance
-                        if (data[i]->chimeras[j].count(seqName) == 0) {
-                            it->second.abundances[groupIndex] = data[i]->pAbundances->at(j)[k];
-                            it->second.chimeric = false;
-                        }
-                    }
-                }
-            }
-            groupIndex++;
-        }
-
-        delete data[i];
-        delete workerThreads[i];
-    }
-
-    // merge vsearch results using flagged chimeras
-    // the result will have 1 entry in hits for each sequence in dataset
-
-    // if all samples find the query to be chimeric, choose first chimeric result
-    // else pick first non-chimeric result.
-    set<string> resolved;
-    for (int i = 0; i < vsearchOut.size(); i++) {
-
-        for (int j = 0; j < vsearchOut[i].size(); j++) {
-
-            string seqName = vsearchOut[i][j].QLabel;
-            auto it = resolved.find(seqName);
-
-            // if we haven't recorded this sequence
-            if (it == resolved.end()) {
-
-                // dereplicate == true all seqs are in seqAbunds
-                // dereplicate == false only chimeric seqs are in seqAbunds
-                if (dereplicate) {
-
-                    // sequence was found to be chimeric in all samples
-                    if (seqAbunds[seqName].chimeric) {
-                        results.push_back(vsearchOut[i][j]);
-                        resolved.insert(seqName);
-                    }else {
-                        // pick first non-chimeric results
-                        if (vsearchOut[i][j].status == "N") {
-                            results.push_back(vsearchOut[i][j]);
-                            resolved.insert(seqName);
-                        }
-                    }
-                }else {
-                    // if chimeric, then save
-                    if (vsearchOut[i][j].status == "Y") {
-                        results.push_back(vsearchOut[i][j]);
-                        resolved.insert(seqName);
-                    }else {
-                        auto itChime = seqAbunds.find(seqName);
-
-                        // non chimera
-                        if (itChime == seqAbunds.end()) {
-                            results.push_back(vsearchOut[i][j]);
-                            resolved.insert(seqName);
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    return seqAbunds;
 }
 /******************************************************************************/
 Rcpp::List ChimeraVsearch::createVsearchResults(vector<ChimeHit2> hits) {
@@ -483,7 +387,7 @@ Rcpp::List ChimeraVsearch::createVsearchResults(vector<ChimeHit2> hits) {
         }
     }
 
-    Rcpp::DataFrame uchimeOut = Rcpp::DataFrame::create(
+    Rcpp::DataFrame rchime_report = Rcpp::DataFrame::create(
         Rcpp::Named("Score") = scores,
         Rcpp::_("Query") = queries,
         Rcpp::_("ParentA") = Aparents,
@@ -495,8 +399,8 @@ Rcpp::List ChimeraVsearch::createVsearchResults(vector<ChimeHit2> hits) {
         Rcpp::_("RY") = RYs, Rcpp::_("RN") = RNs, Rcpp::_("RA") = RAs,
         Rcpp::_("Div") = Divs, Rcpp::_("Chimeric_Status") = chimericStatus);
 
-    results.push_back(uchimeOut);
-    resultsNames.push_back("uchimeout");
+    results.push_back(rchime_report);
+    resultsNames.push_back("rchime_report");
 
     results.push_back(chimeras);
     resultsNames.push_back("accnos");

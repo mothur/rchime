@@ -80,8 +80,6 @@ public:
 
     auto init(unsigned int size) -> struct bitmap_s *;
 
-    auto get(struct bitmap_s * a_bitmap, unsigned int seed_value) -> unsigned char;
-
     auto reset_all(struct bitmap_s * a_bitmap) -> void;
 
     auto set(struct bitmap_s * a_bitmap, unsigned int seed_value) -> void;

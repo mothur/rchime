@@ -108,7 +108,7 @@ auto Vsearch_DBIndex::addsequence(unsigned int seqno) -> void
 
   unsigned int uniquecount = 0;
   unsigned int const * uniquelist = nullptr;
-  unique->count(dbindex_uh, opt_wordlength,
+  unique->count(dbindex_uh, 8,
                db->getsequencelen(seqno), db->getsequence(seqno),
                &uniquecount, &uniquelist, 1);
   dbindex_map[dbindex_count] = seqno;
@@ -145,7 +145,7 @@ auto Vsearch_DBIndex::prepare() -> void
   dbindex_uh = unique->init();
 
   unsigned int const seqcount = db->getsequencecount();
-  kmerhashsize = 1U << (2 * opt_wordlength);
+  kmerhashsize = 1U << (2 * 8);
 
   /* allocate memory for kmer count array */
   kmercount = (unsigned int *) util.xmalloc(kmerhashsize * sizeof(unsigned int));
@@ -157,7 +157,7 @@ auto Vsearch_DBIndex::prepare() -> void
     {
       unsigned int uniquecount = 0;
       unsigned int const * uniquelist = nullptr;
-      unique->count(dbindex_uh, opt_wordlength,
+      unique->count(dbindex_uh, 8,
                    db->getsequencelen(seqno), db->getsequence(seqno),
                    &uniquecount, &uniquelist, 1);
       for (auto i = 0U; i < uniquecount; i++)

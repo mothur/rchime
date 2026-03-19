@@ -837,8 +837,7 @@ auto Vsearch_AlignSimd::backtrack16(s16info_s * s,
                  unsigned short * paligned,
                  unsigned short * pmatches,
                  unsigned short * pmismatches,
-                 unsigned short * pgaps,
-                 bool opt_n_mismatch) -> void
+                 unsigned short * pgaps) -> void
 {
   unsigned short * dirbuffer = s->dir;
   uint64_t const dirbuffersize = s->qlen * s->maxdlen * 4;
@@ -909,15 +908,9 @@ auto Vsearch_AlignSimd::backtrack16(s16info_s * s,
         {
           if (maps.is_equivalent_4bit(qseq[i], dseq[j]))
             {
-              if (opt_n_mismatch and ((maps.map_4bit(qseq[i]) == 15) or
-                                     (maps.map_4bit(dseq[j]) == 15)))
-                {
-                  ++mismatches;
-                }
-              else
-                {
-                  ++matches;
-                }
+
+                ++matches;
+
             }
           else
             {
@@ -1004,11 +997,7 @@ auto Vsearch_AlignSimd::search16_init(CELL score_match,
       for (auto j = 0U; j < matrix_size; ++j)
         {
           CELL value = 0;
-          if (opts->opt_n_mismatch and ((i == 15U) or (j == 15U)))
-            {
-              value = opts->opt_mismatch;
-            }
-          else if (maps.is_ambiguous_4bit(i) or maps.is_ambiguous_4bit(j))
+          if (maps.is_ambiguous_4bit(i) or maps.is_ambiguous_4bit(j))
             {
               value = 0;
             }
@@ -1143,57 +1132,57 @@ auto Vsearch_AlignSimd::search16(s16info_s * s,
               unsigned short * pmismatches,
               unsigned short * pgaps,
               char ** pcigar,
-              Vsearch_Database* db,
-              bool opt_n_mismatch) -> void
+              Vsearch_Database* db) -> void
 {
   CELL ** q_start = (CELL **) s->qtable;
   CELL * dprofile = (CELL *) s->dprofile;
   CELL * hearray = (CELL *) s->hearray;
   uint64_t const qlen = s->qlen;
 
-  if (qlen == 0)
-    {
-      for (auto cand_id = 0U; cand_id < sequences; cand_id++)
-        {
-          auto const seqno = seqnos[cand_id];
-          int64_t const length = db->getsequencelen(seqno);
-
-          paligned[cand_id] = length;
-          pmatches[cand_id] = 0;
-          pmismatches[cand_id] = 0;
-          pgaps[cand_id] = length;
-
-          if (length == 0)
-            {
-              pscores[cand_id] = 0;
-            }
-          else
-            {
-              pscores[cand_id] =
-                std::max(- s->penalty_gap_open_target_left -
-                    (length * s->penalty_gap_extension_target_left),
-                    - s->penalty_gap_open_target_right -
-                    (length * s->penalty_gap_extension_target_right));
-            }
-
-          char * cigar = nullptr;
-          if (length > 0)
-            {
-              auto const ret = util.xsprintf(&cigar, "%ldI", length);
-              if ((ret < 2) or (cigar == nullptr))
-                {
-                  throw Rcpp::exception("Unable to allocate enough memory.");
-                }
-            }
-          else
-            {
-              cigar = (char *) util.xmalloc(1);
-              cigar[0] = 0;
-            }
-          pcigar[cand_id] = cigar;
-        }
-      return;
-    }
+  // there should not be blank sequences
+  // if (qlen == 0)
+  //   {
+  //     for (auto cand_id = 0U; cand_id < sequences; cand_id++)
+  //       {
+  //         auto const seqno = seqnos[cand_id];
+  //         int64_t const length = db->getsequencelen(seqno);
+  //
+  //         paligned[cand_id] = length;
+  //         pmatches[cand_id] = 0;
+  //         pmismatches[cand_id] = 0;
+  //         pgaps[cand_id] = length;
+  //
+  //         if (length == 0)
+  //           {
+  //             pscores[cand_id] = 0;
+  //           }
+  //         else
+  //           {
+  //             pscores[cand_id] =
+  //               std::max(- s->penalty_gap_open_target_left -
+  //                   (length * s->penalty_gap_extension_target_left),
+  //                   - s->penalty_gap_open_target_right -
+  //                   (length * s->penalty_gap_extension_target_right));
+  //           }
+  //
+  //         char * cigar = nullptr;
+  //         if (length > 0)
+  //           {
+  //             auto const ret = util.xsprintf(&cigar, "%ldI", length);
+  //             if ((ret < 2) or (cigar == nullptr))
+  //               {
+  //                 throw Rcpp::exception("Unable to allocate enough memory.");
+  //               }
+  //           }
+  //         else
+  //           {
+  //             cigar = (char *) util.xmalloc(1);
+  //             cigar[0] = 0;
+  //           }
+  //         pcigar[cand_id] = cigar;
+  //       }
+  //     return;
+  //   }
 
   /* find longest target sequence and reallocate direction buffer */
   uint64_t maxdlen = 0;
@@ -1504,7 +1493,7 @@ auto Vsearch_AlignSimd::search16(s16info_s * s,
                                       paligned + cand_id,
                                       pmatches + cand_id,
                                       pmismatches + cand_id,
-                                      pgaps + cand_id, opt_n_mismatch);
+                                      pgaps + cand_id);
                           pcigar[cand_id] =
                             (char *) util.xmalloc(std::strlen(s->cigar)+1);
                           strcpy(pcigar[cand_id], s->cigar);

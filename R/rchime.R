@@ -145,9 +145,7 @@ rchime <- function(data, reference = NULL, dereplicate = FALSE,
   # inputs needed ->
   ## reference -> names, seqs abunds, refnames, refseqs
   ## denovo no groups -> names, seqs, abunds
-
   ## denovo with groups -> names, seqs and abunds parsed by sample
-
 
   results <- NULL
 
@@ -166,8 +164,6 @@ rchime <- function(data, reference = NULL, dereplicate = FALSE,
       parameters
     )
   } else {
-    # chimera_report <- rchimeDenovo(dataset, parameters)
-
     if (num_samples == 0) {
       # denovo no groups -> names, seqs, abunds
       results <- rchimeDenovoSingleSample(
@@ -182,7 +178,7 @@ rchime <- function(data, reference = NULL, dereplicate = FALSE,
         strollur::xdev_get_by_sample(data),
         strollur::xdev_get_by_sample(
           data,
-          type == "sequences"
+          type = "sequences"
         ),
         strollur::xdev_get_abundances_by_sample(data),
         parameters
@@ -197,8 +193,8 @@ rchime <- function(data, reference = NULL, dereplicate = FALSE,
       # set abundances parsed by sample
       strollur::xdev_set_abundances(
         data,
-        names(results$set_abundance_values),
-        unname(results$set_abundance_values),
+        results$set_abundance_values$names,
+        results$set_abundance_values$abundances,
         "chimeras_rchime"
       )
     } else {
@@ -229,8 +225,10 @@ rchime <- function(data, reference = NULL, dereplicate = FALSE,
       }
       cli::cli_alert(message)
       timing <- difftime(Sys.time(), start_time, units = "secs")[[1]]
-      cli::cli_alert(paste0("It took {.var {timing}} seconds to detect and ",
-                            "remove the chimeras."))
+      cli::cli_alert(paste0(
+        "It took {.var {timing}} seconds to detect and ",
+        "remove the chimeras."
+      ))
     } else {
       timing <- difftime(Sys.time(), start_time, units = "secs")[[1]]
       cli::cli_alert("It took {.var {timing}} seconds to detect the chimeras.")

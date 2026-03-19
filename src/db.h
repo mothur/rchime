@@ -128,13 +128,6 @@ public:
                  std::vector<std::string>& seqs,
                  std::vector<std::int64_t>& abundances) -> void;
 
-    auto setinfo(bool new_is_fastq,
-                 uint64_t new_sequences,
-                 uint64_t new_nucleotides,
-                 uint64_t new_longest,
-                 uint64_t new_shortest,
-                 uint64_t new_longestheader) -> void;
-
 private:
 
     Vsearch_Util util;

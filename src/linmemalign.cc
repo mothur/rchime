@@ -94,7 +94,7 @@
 constexpr auto minimal_length = int64_t{64};
 
 
-LinearMemoryAligner::LinearMemoryAligner(struct Scoring const & scoring, bool opt)
+LinearMemoryAligner::LinearMemoryAligner(struct Scoring const & scoring)
     : go_q_l(scoring.gap_open_query_left),
       go_t_l(scoring.gap_open_target_left),
       go_q_i(scoring.gap_open_query_interior),
@@ -108,7 +108,6 @@ LinearMemoryAligner::LinearMemoryAligner(struct Scoring const & scoring, bool op
       ge_q_r(scoring.gap_extension_query_right),
       ge_t_r(scoring.gap_extension_target_right)
 {
-  opt_n_mismatch = opt;
   scorematrix_fill(scoring);
 }
 
@@ -176,16 +175,16 @@ auto LinearMemoryAligner::scorematrix_fill(struct Scoring const & scoring) -> vo
     }
   }
 
-  // if alignment with N is set to be a mismatch
-  if (opt_n_mismatch) {
-    // last column
-    for (auto & row : scorematrix) {
-      row.back() = scoring.mismatch;
-    }
-    // last row
-    auto & last_row = scorematrix.back();
-    std::fill(last_row.begin(), last_row.end(), scoring.mismatch);
-  }
+  // // if alignment with N is set to be a mismatch
+  // if (opt_n_mismatch) {
+  //   // last column
+  //   for (auto & row : scorematrix) {
+  //     row.back() = scoring.mismatch;
+  //   }
+  //   // last row
+  //   auto & last_row = scorematrix.back();
+  //   std::fill(last_row.begin(), last_row.end(), scoring.mismatch);
+  // }
 }
 
 
@@ -682,7 +681,7 @@ auto LinearMemoryAligner::alignstats(char * cigar,
                                      int64_t * _nwmismatches,
                                      int64_t * _nwgaps) -> void
 {
-  static constexpr auto is_N = 15;  // 4-bit code for 'N' or 'n'
+  //static constexpr auto is_N = 15;  // 4-bit code for 'N' or 'n'
   a_seq = _a_seq;
   b_seq = _b_seq;
 
@@ -715,12 +714,12 @@ auto LinearMemoryAligner::alignstats(char * cigar,
               auto const b_nuc = b_seq[b_pos];
               nwscore += subst_score(a_nuc, b_nuc);
 
-              if (opt_n_mismatch and ((maps.map_4bit(a_nuc) == is_N) or
-                                     (maps.map_4bit(b_nuc) == is_N)))
-                {
-                  ++nwmismatches;
-                }
-              else if ((maps.map_4bit(a_nuc) &
+              // if (opt_n_mismatch and ((maps.map_4bit(a_nuc) == is_N) or
+              //                        (maps.map_4bit(b_nuc) == is_N)))
+              //   {
+              //     ++nwmismatches;
+              //   }else
+              if ((maps.map_4bit(a_nuc) &
                        maps.map_4bit(b_nuc)) != 0U)
                 {
                   ++nwmatches;

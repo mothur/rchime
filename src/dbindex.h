@@ -101,8 +101,6 @@ public:
 
     auto getcount() -> unsigned int;
 
-    auto setWordLength(int64_t opt_wl) -> void { opt_wordlength = opt_wl; }
-
 private:
 
     unsigned int * kmercount; /* number of matching seqnos for each kmer */
@@ -115,7 +113,6 @@ private:
     uint64_t kmerindexsize;
     uhandle_s * dbindex_uh;
     unsigned int bitmap_mincount;
-    int opt_wordlength;
 
     Vsearch_Database* db;
     Vsearch_Bitmap* bitmap;

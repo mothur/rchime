@@ -74,15 +74,6 @@ auto Vsearch_Bitmap::init(unsigned int const size) -> struct bitmap_s *
   return a_bitmap;
 }
 /******************************************************************************/
-
-auto Vsearch_Bitmap::get(struct bitmap_s * a_bitmap, unsigned int const seed_value) -> unsigned char
-{
-  constexpr auto mask_111 = 7U;
-  constexpr auto divider = 3U;  // divide by 8
-  return (a_bitmap->bitmap[seed_value >> divider] >> (seed_value & mask_111)) & 1U;
-}
-
-/******************************************************************************/
 auto Vsearch_Bitmap::reset_all(struct bitmap_s * a_bitmap) -> void
 {
   constexpr auto n_bits_in_a_byte = 8U;

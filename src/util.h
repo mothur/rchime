@@ -62,7 +62,6 @@
 
 #include <cstdint> // uint64_t
 #include <cstdio>  // std::FILE, std::size_t
-#include "city.h"
 
 #ifdef _WIN32
 using xstat_t = struct __stat64;
@@ -79,8 +78,6 @@ public:
 
     auto xstrdup(char const * src) -> char *;
     auto xsprintf(char * * ret, char const * format, ...) -> int;
-    auto hash_cityhash64(char const * sequence, uint64_t length) -> uint64_t;
-    auto string_normalize(char * normalized, char const * raw_seq, unsigned int len) -> void;
 
     // from arch.h
     auto xmalloc(std::size_t size) -> void *;
@@ -89,7 +86,6 @@ public:
 
 private:
 
-    Vsearch_CityHash hash;
 };
 /******************************************************************************/
 

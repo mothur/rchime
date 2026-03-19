@@ -56,7 +56,7 @@ public:
         opt_chimeras_parents_max = 3;
         opt_chimeras_diff_pct = 0.0;
         opt_chimeras_length_min = 10;
-        opt_n_mismatch = false;
+        //opt_n_mismatch = false;
         opt_mismatch = -4;
         opt_match = 2;
         opt_gap_extension_query_interior = 2;
@@ -71,7 +71,6 @@ public:
         opt_gap_open_target_interior = 20;
         opt_gap_open_target_left = 2;
         opt_gap_open_target_right = 2;
-        opt_wordlength = 8;
         opt_minwordmatches = -1;
         opt_maxqsize = int_max;
         opt_mintsize = 0;
@@ -110,7 +109,7 @@ public:
     int64_t opt_self;
     int64_t opt_selfid;
     int64_t opt_strand;
-    bool opt_n_mismatch;
+    //bool opt_n_mismatch;
     int64_t opt_mismatch;
     int64_t opt_match;
     int opt_chimeras_parts;
@@ -129,7 +128,6 @@ public:
     int opt_gap_open_target_interior;
     int opt_gap_open_target_left;
     int opt_gap_open_target_right;
-    int64_t opt_wordlength;
     int64_t opt_iddef;
     int64_t opt_minwordmatches;
     int64_t opt_maxqsize;
@@ -162,66 +160,7 @@ private:
     Vsearch_Options( const Vsearch_Options& ); // Disable copy constructor
     void operator=( const Vsearch_Options& ); // Disable assignment operator
     Vsearch_Options() {
-       opt_abskew = 2.0;
-       opt_dn = 1.4;
-       opt_xn = 8.0;
-       opt_mindiv = 0.8;
-       opt_minh = 0.28;
-       opt_threads = 1;
-       opt_chimeras_parts = 0; // will use 1 part per 100bp
-
-       opt_maxsizeratio = dbl_max;
-       opt_id = -1.0;
-       opt_mindiffs = 3;
-       opt_maxaccepts = 1;
-       opt_maxrejects = -1;
-       opt_self = 0;
-       opt_selfid = 0;
-       opt_strand = 1;
-       opt_iddef = 2;
-       opt_chimeras_parents_max = 3;
-       opt_chimeras_diff_pct = 0.0;
-       opt_chimeras_length_min = 10;
-       opt_n_mismatch = false;
-       opt_mismatch = -4;
-       opt_match = 2;
-       opt_gap_extension_query_interior = 2;
-       opt_gap_extension_query_left = 1;
-       opt_gap_extension_query_right = 1;
-       opt_gap_extension_target_interior = 2;
-       opt_gap_extension_target_left = 1;
-       opt_gap_extension_target_right = 1;
-       opt_gap_open_query_interior = 20;
-       opt_gap_open_query_left = 2;
-       opt_gap_open_query_right = 2;
-       opt_gap_open_target_interior = 20;
-       opt_gap_open_target_left = 2;
-       opt_gap_open_target_right = 2;
-       opt_wordlength = 8;
-       opt_minwordmatches = -1;
-       opt_maxqsize = int_max;
-       opt_mintsize = 0;
-       opt_minsizeratio = 0.0;
-       opt_minqt = 0.0;
-       opt_minsl = 0.0;
-       opt_maxqt = dbl_max;
-       opt_maxsl = dbl_max;
-       opt_idprefix = 0;
-       opt_idsuffix = 0;
-       opt_leftjust = 0;
-       opt_weak_id = -1.0;
-       opt_maxsubs = int_max;
-       opt_maxgaps = int_max;
-       opt_maxdiffs = int_max;
-       opt_rightjust = 0;
-       opt_mincols = 0;
-       opt_query_cov = 0.0;
-       opt_target_cov = 0.0;
-       opt_maxid = 1.0;
-       opt_mid = 0.0;
-       opt_unoise_alpha = 2.0;
-       opt_cluster_unoise = nullptr;
-       neon_present = 0;
+       reset();
    }
 };
 

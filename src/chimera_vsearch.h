@@ -7,17 +7,30 @@
 
 /******************************************************************************/
 struct orderFloatAbundance {
+    string name;
     float abund;
     unsigned index;
 
-    orderFloatAbundance() { abund = 0; index = 0; }
-    orderFloatAbundance(float a, unsigned i) : abund(a), index(i) {}
+    orderFloatAbundance() { abund = 0; index = 0; name = ""; }
+    orderFloatAbundance(string n, float a, unsigned i) : name(n), abund(a), index(i) {}
     ~orderFloatAbundance() {}
 };
 /******************************************************************************/
 //sorts highest to lowest
 static inline bool compareAbundance(orderFloatAbundance left, orderFloatAbundance right){
-    return (left.abund > right.abund);
+    if (left.abund > right.abund) {
+        return true;
+    }
+
+    if (left.abund < right.abund) {
+        return false;
+    }
+
+    // the abundance is equal, sort alphabetically
+    if (std::strcmp(left.name.c_str(), right.name.c_str()) < 0) {
+        return true;
+    }
+    return false;
 }
 /******************************************************************************/
 struct vsearchAbunds {
@@ -49,23 +62,23 @@ struct chimeraData {
     // outputs
     vector<vector<ChimeHit2>> results;
 
-    // denovo by sample only
-    vector<set<string>> chimeras;
-
-    // denovo by sample - each processor gets assigned multiple samples
-    chimeraData(std::vector<std::vector<std::string>>* names,
-                std::vector<std::vector<std::string>>* sequences,
-                std::vector<std::vector<float>>* abundances,
-                int s, int e) {
-
-        start = s;
-        stop = e;
-
-        pNames = names;
-        pSequences = sequences;
-        pAbundances = abundances;
-        results.resize(stop-start);
-    }
+    // // denovo by sample only
+    // vector<set<string>> chimeras;
+    //
+    // // denovo by sample - each processor gets assigned multiple samples
+    // chimeraData(std::vector<std::vector<std::string>>* names,
+    //             std::vector<std::vector<std::string>>* sequences,
+    //             std::vector<std::vector<float>>* abundances,
+    //             int s, int e) {
+    //
+    //     start = s;
+    //     stop = e;
+    //
+    //     pNames = names;
+    //     pSequences = sequences;
+    //     pAbundances = abundances;
+    //     results.resize(stop-start);
+    // }
 
     // reference - each processor gets assigned part of names and sequences
     chimeraData(std::vector<std::vector<std::string>>* names,
@@ -123,14 +136,14 @@ private:
 
     bool contains(std::string s, Rcpp::CharacterVector& nv);
 
-    Rcpp::List createDenovoProcesses();
+  //  Rcpp::List createDenovoProcesses();
     Rcpp::List createReferencesProcesses();
 
     Rcpp::List createVsearchResults(vector<ChimeHit2>);
-    map<string, vsearchAbunds > combineResults(chimeraData*& dataBundle,
-                                    vector<chimeraData*>& data,
-                                    vector<RcppThread::Thread*>& workerThreads,
-                                    vector<ChimeHit2>& results);
+    // map<string, vsearchAbunds > combineResults(chimeraData*& dataBundle,
+    //                                 vector<chimeraData*>& data,
+    //                                 vector<RcppThread::Thread*>& workerThreads,
+    //                                 vector<ChimeHit2>& results);
 };
 /******************************************************************************/
 #endif // CHIMERAVSEARCH_H

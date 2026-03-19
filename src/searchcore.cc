@@ -177,14 +177,6 @@ auto Vsearch_Searchcore::free_rejected_alignments(struct searchinfo_s const * se
       }
     }
 }
-
-/******************************************************************************/
-auto Vsearch_Searchcore::enough_kmers(struct searchinfo_s const & searchinfo,
-                         unsigned int const count) -> bool
-{
-  return (count >= opts->opt_minwordmatches) or (count >= searchinfo.kmersamplecount);
-}
-
 /******************************************************************************/
 auto Vsearch_Searchcore::topscores(struct searchinfo_s * searchinfo,
                                    Vsearch_Database* db,
@@ -556,7 +548,7 @@ auto Vsearch_Searchcore::align_delayed(struct searchinfo_s * searchinfo,
                nwmatches_list.data(),
                nwmismatches_list.data(),
                nwgaps_list.data(),
-               nwcigar_list.data(), db, opts->opt_n_mismatch);
+               nwcigar_list.data(), db);
     }
 
   int i = 0;
@@ -634,25 +626,19 @@ auto Vsearch_Searchcore::align_delayed(struct searchinfo_s * searchinfo,
                 nwalignmentlength;
               hit->matches = nwalignmentlength - hit->nwdiff;
               hit->mismatches = hit->nwdiff - hit->nwindels;
-// std::cout<< "hit->nwalignment = " << hit->nwalignment << " hit->nwscore = " << hit->nwscore << std::endl;
-// std::cout<< "hit->nwdiff = " << hit->nwdiff << " hit->nwgaps = " << hit->nwgaps << std::endl;
-// std::cout<< "hit->nwindels = " << hit->nwindels << " hit->nwalignmentlength = " << hit->nwalignmentlength << std::endl;
-// std::cout<< "hit->nwid = " << hit->nwid << " hit->matches = " << hit->matches << std::endl;
+
               /* trim alignment and compute numbers excluding terminal gaps */
               align_trim(hit);
-//std::cout<< "hit->id = " << hit->id  << std::endl;
 
               /* test accept/reject criteria after alignment */
               if (acceptable_aligned(*searchinfo, hit, db))
                 {
 
                   searchinfo->accepts++;
-                  //std::cout<< "searchinfo->accepts = " << searchinfo->accepts  << std::endl;
                 }
               else
                 {
                   searchinfo->rejects++;
-                  //std::cout<< "searchinfo->rejects = " << searchinfo->rejects  << std::endl;
                 }
 
               ++i;
@@ -701,10 +687,10 @@ auto Vsearch_Searchcore::onequery(struct searchinfo_s * searchinfo,
   scoring.gap_extension_query_right = opts->opt_gap_extension_query_right;
   scoring.gap_extension_target_right = opts->opt_gap_extension_target_right;
 
-  searchinfo->lma = new LinearMemoryAligner(scoring, opts->opt_n_mismatch);
+  searchinfo->lma = new LinearMemoryAligner(scoring);
 
   /* extract unique kmer samples from query*/
-  unique->count(searchinfo->uh, opts->opt_wordlength,
+  unique->count(searchinfo->uh, 8,
                searchinfo->qseqlen, searchinfo->qsequence,
                &searchinfo->kmersamplecount, &searchinfo->kmersample, seqmask);
 

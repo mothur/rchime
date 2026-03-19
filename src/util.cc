@@ -59,7 +59,6 @@
 */
 
 #include "vsearch.h"
-#include "city.h"
 #include "maps.h"
 #include "util.h"
 #include <cassert>
@@ -110,30 +109,7 @@ auto Vsearch_Util::xsprintf(char * * ret, char const * format, ...) -> int
   *ret = buffer;
   return len;
 }
-
 /******************************************************************************/
-auto Vsearch_Util::hash_cityhash64(char const * sequence, uint64_t const length) -> uint64_t
-{
-  return hash.CityHash64(sequence, length);
-}
-/******************************************************************************/
-auto Vsearch_Util::string_normalize(char * normalized, char const * raw_seq, unsigned int const len) -> void
-{
-    Vsearch_Maps maps;
-  /* convert string to upper case and replace U by T */
-  for (auto i = 0U; i < len; ++i)
-    {
-      auto const unsigned_char = static_cast<unsigned char>(*raw_seq);
-      auto const normalized_char = maps.chrmap_normalize_vector[unsigned_char];
-      *normalized = static_cast<char>(normalized_char);
-      std::advance(normalized, 1);
-      std::advance(raw_seq, 1);
-    }
-  *normalized = '\0';
-}
-
-/******************************************************************************/
-
 auto Vsearch_Util::xmalloc(std::size_t size) -> void *
 {
     static constexpr auto minimal_allocation = std::size_t{1};

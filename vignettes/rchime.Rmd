@@ -35,7 +35,6 @@ devtools::install_github("mothur/rchime")
 
 ## Tutorials to help you get started
 
-* [Creating strollur objects for use with rchime](vignettes/Strollur_Importing.html)
 * [Reference based chimera detection](vignettes/Reference_Detection.html)
 * [Denovo based chimera detection](vignettes/Denovo_Detection.html)
 

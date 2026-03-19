@@ -135,7 +135,7 @@ public:
                   unsigned short * pmismatches,
                   unsigned short * pgaps,
                   char * * pcigar,
-                  Vsearch_Database* db, bool opt_n_mismatch) -> void;
+                  Vsearch_Database* db) -> void;
 
 private:
 
@@ -158,8 +158,7 @@ private:
                      unsigned short * paligned,
                      unsigned short * pmatches,
                      unsigned short * pmismatches,
-                     unsigned short * pgaps,
-                     bool) -> void;
+                     unsigned short * pgaps) -> void;
     auto pushop(s16info_s * s, char const newop) -> void;
     auto finishop(s16info_s * s) -> void;
     auto aligncolumns_rest(VECTOR_SHORT * Sm,

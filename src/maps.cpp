@@ -74,17 +74,6 @@ auto Vsearch_Maps::map_2bit(char const nucleotide) -> unsigned int {
 auto Vsearch_Maps::map_4bit(char const nucleotide) -> unsigned char {
   return chrmap_4bit[to_uchar(nucleotide)];
 }
-
-/******************************************************************************/
-auto Vsearch_Maps::map_complement(char const nucleotide) -> char {
-  return static_cast<char>(chrmap_complement[to_uchar(nucleotide)]);
-}
-
-/******************************************************************************/
-auto Vsearch_Maps::map_mask_ambig(char const nucleotide) -> unsigned int {
-  return chrmap_mask_ambig[to_uchar(nucleotide)];
-}
-
 /******************************************************************************/
 auto Vsearch_Maps::map_mask_lower(char const nucleotide) -> unsigned int {
   return chrmap_mask_lower[to_uchar(nucleotide)];
@@ -96,21 +85,8 @@ auto Vsearch_Maps::is_equivalent_4bit(char const lhs, char const rhs) -> bool {
   auto const rhs_unsigned = map_4bit(rhs);
   return ((lhs_unsigned & rhs_unsigned) != 0);
 }
-
-/******************************************************************************/
-auto Vsearch_Maps::is_equivalent_4bit_rhs(char const lhs, char const rhs) -> bool {
-  auto const lhs_unsigned = to_uchar(lhs);
-  auto const rhs_unsigned = map_4bit(rhs);
-  return ((lhs_unsigned & rhs_unsigned) != 0);
-}
-
 /******************************************************************************/
 auto Vsearch_Maps::is_ambiguous_4bit(unsigned char const nucleotide) -> bool {
   return chrmap_ambiguous_4bit[nucleotide];
-}
-
-/******************************************************************************/
-auto Vsearch_Maps::is_same_4bit(char const lhs, char const rhs) -> bool {
-  return map_4bit(lhs) == map_4bit(rhs);
 }
 /******************************************************************************/

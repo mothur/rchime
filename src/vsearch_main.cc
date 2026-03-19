@@ -286,86 +286,6 @@ auto Vsearch_Main::find_matches(struct chimera_info_s * chimera_info) -> void
       }
     }
 }
-
-/******************************************************************************/
-auto Vsearch_Main::compare_positions(const void * a, const void * b) -> int
-{
-  const int lhs = ((const parents_info_s *) a)->start;
-  const int rhs = ((const parents_info_s *) b)->start;
-
-  if (lhs < rhs) {
-    return -1;
-  }
-  if (lhs > rhs) {
-    return +1;
-  }
-  return 0;
-}
-// /******************************************************************************/
-// auto scan_matches(struct chimera_info_s * ci,
-//                   int const * matches,
-//                   int const len,
-//                   double const percentage,
-//                   int * best_start,
-//                   int * best_len) -> bool
-// {
-//   /*
-//     Scan matches array of zeros and ones, and find the longest subsequence
-//     having a match fraction above or equal to the given percentage (e.g. 2%).
-//     Based on an idea of finding the longest positive sum substring:
-//     https://stackoverflow.com/questions/28356453/longest-positive-sum-substring
-//     If the percentage is 2%, matches are given a score of 2 and mismatches -98.
-//   */
-//
-//   auto const score_match = percentage;
-//   auto const score_mismatch = percentage - 100.0;
-//
-//   auto & p = ci->scan_p;
-//   auto & q = ci->scan_q;
-//
-//   p[0] = 0.0;
-//   for (auto i = 0; i < len; ++i) {
-//     p[i + 1] = p[i] + ((matches[i] != 0) ? score_match : score_mismatch);
-//   }
-//
-//   q[len] = p[len];
-//   for (auto i = len - 1; i >= 0; --i) {
-//     q[i] = std::max(q[i + 1], p[i]);
-//   }
-//
-//   auto best_i = 0;
-//   auto best_d = -1;
-//   auto best_c = -1.0;
-//   auto i = 1;
-//   auto j = 1;
-//   while (j <= len)
-//     {
-//       auto const c = q[j] - p[i - 1];
-//       if (c >= 0.0)
-//         {
-//           auto const d = j - i + 1;
-//           if (d > best_d)
-//             {
-//               best_i = i;
-//               best_d = d;
-//               best_c = c;
-//             }
-//           j += 1;
-//         }
-//       else
-//         {
-//           i += 1;
-//         }
-//     }
-//
-//   if (best_c >= 0.0)
-//     {
-//       *best_start = best_i - 1;
-//       *best_len = best_d;
-//       return true;
-//     }
-//   return false;
-// }
 /******************************************************************************/
 auto Vsearch_Main::find_best_parents(struct chimera_info_s * ci) -> int
 {
@@ -614,109 +534,6 @@ auto Vsearch_Main::fill_alignment_parents(struct chimera_info_s * ci) -> void
       alignment[alnpos] = '\0';
     }
 }
-/******************************************************************************/
-auto Vsearch_Main::fill_in_alignment_string_for_query(struct chimera_info_s * chimera_info) -> void {
-  auto alnpos = 0;
-  auto qpos = 0;
-  for (auto const nucleotide: chimera_info->query_seq) {
-    // add insertion (if any):
-    auto const insert_length = chimera_info->maxi[qpos];
-    std::fill_n(&chimera_info->qaln[alnpos], insert_length, '-');
-    alnpos += insert_length;
-
-    // add (mis-)matching position:
-    chimera_info->qaln[alnpos] = maps->map_uppercase(nucleotide);
-    ++alnpos;
-    ++qpos;
-  }
-  // add terminal gap (if any):
-  auto const insert_length = chimera_info->maxi[chimera_info->query_len];
-  std::fill_n(&chimera_info->qaln[alnpos], insert_length, '-');
-  alnpos += insert_length;
-  chimera_info->qaln[alnpos] = '\0';
-}
-/******************************************************************************/
-auto Vsearch_Main::fill_in_model_string_for_query(struct chimera_info_s * chimera_info) -> void {
-  int nth_parent = 0;
-  auto alnpos = 0;
-  for (int qpos = 0; qpos < chimera_info->query_len; ++qpos)
-    {
-      if (qpos >= (chimera_info->best_start[nth_parent] + chimera_info->best_len[nth_parent])) {
-        ++nth_parent;
-      }
-      // add insertion (if any):
-      auto const insert_length = chimera_info->maxi[qpos];
-      std::fill_n(&chimera_info->model[alnpos], insert_length, 'A' + nth_parent);
-      alnpos += insert_length;
-
-      // add (mis-)matching position:
-      chimera_info->model[alnpos] = 'A' + nth_parent;
-      ++alnpos;
-    }
-  // add terminal gap (if any):
-  auto const insert_length = chimera_info->maxi[chimera_info->query_len];
-  std::fill_n(&chimera_info->model[alnpos], insert_length, 'A' + nth_parent);
-  alnpos += insert_length;
-  chimera_info->model[alnpos] = '\0';
-}
-/******************************************************************************/
-auto Vsearch_Main::count_matches_with_parents(struct chimera_info_s const * chimera_info,
-                                int const alignment_length) -> std::array<int, maxparents> {
-  std::array<int, maxparents> matches {{}};
-
-  for (auto i = 0; i < alignment_length; ++i)
-    {
-      auto const qsym = maps->map_4bit(chimera_info->qaln[i]);
-
-      for (auto f = 0; f < chimera_info->parents_found; ++f)
-        {
-          auto const psym = maps->map_4bit(chimera_info->paln[f][i]);
-          if (qsym == psym) {
-            ++matches[f];
-          }
-        }
-    }
-  return matches;
-}
-/******************************************************************************/
-auto Vsearch_Main::compute_global_similarities_with_parents(
-    std::array<int, maxparents> const & match_counts,
-    int const alignment_length) -> std::array<double, maxparents> {
-  std::array<double, maxparents> similarities {{}};
-  auto compute_percentage = [alignment_length](int const match_count) -> double {
-    return 100.0 * match_count / alignment_length;
-  };
-  std::transform(match_counts.begin(), match_counts.end(),
-                 similarities.begin(), compute_percentage);
-  return similarities;
-}
-
-/******************************************************************************/
-auto Vsearch_Main::compute_diffs(struct chimera_info_s const * ci,
-                   std::vector<unsigned char> const & psym,
-                   unsigned char const qsym) -> char {
-  auto const all_defined = (qsym != 0U) and
-    std::all_of(psym.begin(),
-                psym.end(),
-                [](unsigned char const symbol) -> bool{ return symbol != 0U; });
-
-  char diff = ' ';
-
-  if (not all_defined) { return diff; }
-
-  auto z = 0;
-  for (auto f = 0; f < ci->parents_found; ++f) {
-    if (psym[f] == qsym) {
-      diff = 'A' + f;
-      ++z;
-    }
-  }
-  if (z > 1) {
-    diff = ' ';
-  }
-  return diff;
-}
-
 /******************************************************************************/
 auto Vsearch_Main::eval_parents(struct chimera_info_s * ci) -> Status
 {
@@ -1077,7 +894,7 @@ auto Vsearch_Main::eval_parents(struct chimera_info_s * ci) -> Status
 
       double const QA = 100.0 * match_QA / cols;
       double const QB = 100.0 * match_QB / cols;
-      //double const AB = 100.0 * match_AB / cols;
+      double const AB = 100.0 * match_AB / cols;
       double const QT = std::max(QA, QB);
       double const QM = 100.0 * match_QM / cols;
       double const divdiff = QM - QT;
@@ -1097,16 +914,16 @@ auto Vsearch_Main::eval_parents(struct chimera_info_s * ci) -> Status
           }
 
         ChimeHit2 thisResult;
-        thisResult.H = best_h;
+        thisResult.Score = best_h;
         thisResult.QLabel = ci->query_head.data();
         thisResult.ALabel = db->getheader(seqno_a);
         thisResult.BLabel = db->getheader(seqno_b);
 
-        thisResult.QA = 100.0 * match_QA / cols;
-        thisResult.QB = 100.0 * match_QB / cols;
-        thisResult.QC = 100.0 * match_AB / cols;
-        thisResult.QM = 100.0 * match_QM / cols;
-        thisResult.QT = std::max(QA, QB);
+        thisResult.QA = QA;
+        thisResult.QB = QB;
+        thisResult.QC = AB;
+        thisResult.QM = QM;
+        thisResult.QT = QT;
 
         if (QA >= QB) {
             thisResult.CLabel = db->getheader(seqno_a);
@@ -1248,7 +1065,7 @@ auto Vsearch_Main::chimera_core(struct chimera_info_s * ci) -> uint64_t
   scoring.gap_extension_query_right = opts->opt_gap_extension_query_right;
   scoring.gap_extension_target_right = opts->opt_gap_extension_target_right;
 
-  LinearMemoryAligner lma(scoring, opts->opt_n_mismatch);
+  LinearMemoryAligner lma(scoring);
 
   while (true)
     {
@@ -1375,7 +1192,7 @@ auto Vsearch_Main::chimera_core(struct chimera_info_s * ci) -> uint64_t
                ci->snwmismatches.data(),
                ci->snwgaps.data(),
                ci->nwcigar.data(),
-               db, opts->opt_n_mismatch);
+               db);
 
       for (auto i = 0; i < ci->cand_count; ++i)
         {
@@ -1638,7 +1455,6 @@ auto Vsearch_Main::vmain(std::vector<std::string>& sequenceNames,
 
   db = new Vsearch_Database();
   dbindex = new Vsearch_DBIndex(db, bitmap, unique);
-  dbindex->setWordLength(opts->opt_wordlength);
 
   /* prepare queries / database */
   if (!uchimeDeNovo) {
@@ -1656,7 +1472,6 @@ auto Vsearch_Main::vmain(std::vector<std::string>& sequenceNames,
   }
   else {
       db->read(sequenceNames, sequences, int64s);
-      sequenceNames.clear(); sequences.clear(); abunds.clear();
 
       dust_all(db->getsequencecount());
       dbindex->prepare();

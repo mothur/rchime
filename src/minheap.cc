@@ -219,28 +219,6 @@ auto Vsearch_Minheap::add(minheap_t * a_minheap, elem_t * n) -> void
       replaceroot(a_minheap, *n);
     }
 }
-
-/******************************************************************************/
-auto Vsearch_Minheap::pop(minheap_t * a_minheap) -> elem_t
-{
-  /* return top element and restore order */
-  static const elem_t zero = {0, 0, 0};
-
-  if (a_minheap->count != 0)
-    {
-      elem_t top = a_minheap->array[0];
-      --a_minheap->count;
-      if (a_minheap->count != 0)
-        {
-          const elem_t tmp = a_minheap->array[a_minheap->count];
-          replaceroot(a_minheap, tmp);
-        }
-      return top;
-    }
-
-  return zero;
-}
-
 /******************************************************************************/
 auto Vsearch_Minheap::sort(minheap_t * a_minheap) -> void
 {

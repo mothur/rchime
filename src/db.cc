@@ -73,21 +73,6 @@
 constexpr uint64_t memchunk = 16777216;  // 2^24
 
 /******************************************************************************/
-auto Vsearch_Database::setinfo(bool new_is_fastq,
-                uint64_t new_sequences,
-                uint64_t new_nucleotides,
-                uint64_t new_longest,
-                uint64_t new_shortest,
-                uint64_t new_longestheader) -> void
-{
-
-  sequences = new_sequences;
-  nucleotides = new_nucleotides;
-  longest = new_longest;
-  shortest = new_shortest;
-  longestheader = new_longestheader;
-}
-/******************************************************************************/
 // private
 auto Vsearch_Database::add(char const * header,
             char const * sequence,

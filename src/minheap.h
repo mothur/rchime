@@ -99,7 +99,6 @@ public:
     auto init(int size) -> minheap_t *;
     auto exit(minheap_t * a_minheap) -> void;
     auto add(minheap_t * a_minheap, elem_t * n) -> void;
-    auto pop(minheap_t * a_minheap) -> elem_t;
 
 private:
 

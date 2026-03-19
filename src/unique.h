@@ -62,7 +62,6 @@
 
 #include "util.h"
 #include "maps.h"
-#include "city.h"
 
 struct bucket_s;
 struct uhandle_s;
@@ -93,7 +92,6 @@ private:
 
     Vsearch_Util util;
     Vsearch_Maps maps;
-    Vsearch_CityHash hash;
 
     auto unique_count_bitmap(struct uhandle_s * unique_handle,
                              int const wordlength,
@@ -102,15 +100,6 @@ private:
                              unsigned int * listlen,
                              unsigned int const * * list,
                              int const seqmask) -> void;
-
-    auto unique_count_hash(struct uhandle_s * unique_handle,
-                           int const wordlength,
-                           int const seqlen,
-                           char const * seq,
-                           unsigned int * listlen,
-                           unsigned int const * * list,
-                           int const seqmask) -> void;
-
 };
 
 #endif

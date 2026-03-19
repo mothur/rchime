@@ -128,7 +128,7 @@ private:
   std::vector<int64_t> XX;
   std::vector<int64_t> YY;
 
-  bool opt_n_mismatch;
+  //bool opt_n_mismatch;
   Vsearch_Maps maps;
 
   // initializers
@@ -158,7 +158,7 @@ private:
 
 public:
 
-  explicit LinearMemoryAligner(struct Scoring const & scoring, bool opt_nmismatch);
+  explicit LinearMemoryAligner(struct Scoring const & scoring);
 
   auto align(char * _a_seq,
              char * _b_seq,
