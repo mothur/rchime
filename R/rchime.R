@@ -44,7 +44,9 @@
 #'
 #' @seealso [rchime_options()] to set vsearch specific parameters.
 #'
-#' @return data.frame() containing chimera report.
+#' @return list() containing a chimera report, and vector of the chimeric
+#' sequence's names.
+#'
 #' The \href{https://mothur.org/strollur/}{strollur} dataset object will also be
 #' updated. The sequences flagged as chimeric are removed and the chimera report
 #' is added.
@@ -52,16 +54,14 @@
 #' @author Sarah Westcott, \email{swestcot@@umich.edu}
 #' @examples
 #'
-#' # Let's create a dataset named rchime example
+#' # Let's create a dataset named "rchime denovo example"
 #'
 #' data_denovo <- strollur::new_dataset("rchime denovo example")
 #'
-#' # Read a FASTA file and a mothur formatted count file
+#' # Read the fasta and abundance data
 #'
-#' fasta_data <- strollur::read_fasta(rchime_example("miseq.ng.fasta"))
-#' abundance_data <- strollur::read_mothur_count(
-#'   rchime_example("miseq.count_table")
-#' )
+#' fasta_data <- readRDS(rchime_example("miseq_fasta.rds"))
+#' abundance_data <- readRDS(rchime_example("miseq_abundance.rds"))
 #'
 #' # Add the sequence and abundance data to the dataset
 #'
@@ -89,9 +89,7 @@
 #'
 #' reference <- new_dataset("Silva V4 Region")
 #'
-#' reference_data <- strollur::read_fasta(rchime_example(
-#'   "silva.v4.ng.fasta.gz"
-#' ))
+#' reference_data <- readRDS(rchime_example("reference.rds"))
 #'
 #' strollur::add(reference, table = reference_data, type = "sequences")
 #'
@@ -157,7 +155,7 @@ rchime <- function(data, reference = NULL, dereplicate = FALSE,
     # reference -> names, seqs abunds, refnames, refseqs
     results <- rchimeReference(
       strollur::names(data, type = "sequences"),
-      strollur::xdev_get_sequences(data),
+      strollur::xdev_get_sequences(data, degap = TRUE),
       strollur::xdev_abundance(data)$abundances,
       strollur::names(reference, type = "sequences"),
       strollur::xdev_get_sequences(reference),
@@ -168,7 +166,7 @@ rchime <- function(data, reference = NULL, dereplicate = FALSE,
       # denovo no groups -> names, seqs, abunds
       results <- rchimeDenovoSingleSample(
         strollur::names(data, type = "sequences"),
-        strollur::xdev_get_sequences(data),
+        strollur::xdev_get_sequences(data, degap = TRUE),
         strollur::xdev_abundance(data)$abundances,
         parameters
       )
@@ -186,6 +184,15 @@ rchime <- function(data, reference = NULL, dereplicate = FALSE,
     }
   }
 
+  # add chimera report to data
+  strollur::add(data,
+    table = results$chimera_report,
+    type = "reports",
+    report_type = "chimera_report",
+    table_names = list(sequence_name = "Query"),
+    verbose = !silent
+  )
+
   # remove chimeras
   if (remove_chimeras) {
     # only remove chimeras from the samples they were flagged in
@@ -193,19 +200,19 @@ rchime <- function(data, reference = NULL, dereplicate = FALSE,
       # set abundances parsed by sample
       strollur::xdev_set_abundances(
         data,
-        results$set_abundance_values$names,
+        results$set_abundance_values$sequence_names,
         results$set_abundance_values$abundances,
-        "chimeras_rchime"
+        "rchime-chimeras"
       )
     } else {
       # remove all sequences flagged as chimeric
-      if (length(results$accnos) > 0) {
+      if (length(results$chimeras) > 0) {
         strollur::xdev_remove_sequences(
           data,
-          results$accnos,
+          results$chimeras,
           rep(
             "chimeras_rchime",
-            length(results$accnos)
+            length(results$chimeras)
           )
         )
       }

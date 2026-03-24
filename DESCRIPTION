@@ -7,8 +7,8 @@ Authors@R: c(person("Sarah", "Westcott", role = c("aut", "cre"),
   email = "swestcot@umich.edu"))
 Maintainer: Schloss Lab <pschloss@umich.edu>
 Description: A package for removing chimeras.
-URL: https://github.com/SchlossLab/rchime
-BugReports: https://github.com/SchlossLab/rchime/issues
+URL: https://github.com/mothur/rchime
+BugReports: https://github.com/mothur/rchime/issues
 License: GPL (>= 2)
 Roxygen: list(markdown = TRUE)              
 Config/testthat/edition: 3

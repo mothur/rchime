@@ -259,7 +259,7 @@ Rcpp::List ChimeraVsearch::removeChimeras() {
             resultsNames.push_back("set_abundance_values");
 
             Rcpp::List abundance_values = Rcpp::List::create(
-                Rcpp::Named("names") = getKeys(seqAbunds),
+                Rcpp::Named("sequence_names") = getKeys(seqAbunds),
                 Rcpp::_("abundances") = newAbundances);
 
             // add map to results
@@ -400,10 +400,10 @@ Rcpp::List ChimeraVsearch::createVsearchResults(vector<ChimeHit2> hits) {
         Rcpp::_("Div") = Divs, Rcpp::_("Chimeric_Status") = chimericStatus);
 
     results.push_back(rchime_report);
-    resultsNames.push_back("rchime_report");
+    resultsNames.push_back("chimera_report");
 
     results.push_back(chimeras);
-    resultsNames.push_back("accnos");
+    resultsNames.push_back("chimeras");
 
     results.attr("names") = resultsNames;
 

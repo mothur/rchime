@@ -35,6 +35,6 @@ devtools::install_github("mothur/rchime")
 
 ## Tutorials to help you get started
 
-* [Reference based chimera detection](vignettes/Reference_Detection.html)
 * [Denovo based chimera detection](vignettes/Denovo_Detection.html)
+* [Reference based chimera detection](vignettes/Reference_Detection.html)
 
