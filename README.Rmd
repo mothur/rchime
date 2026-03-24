@@ -46,7 +46,7 @@ devtools::install_github("mothur/rchime")
 
 ## Usage
 
-The `rchime()` function accepts [strollur](https://mothur.org/strollur/) dataset objects as inputs. Let's create a dataset object using files from [mothur's](https://mothur.org) [Miseq_SOP](https://mothur.org/wiki/miseq_sop/) example. Then we will use the *denovo* method in `rchime()` to detect and remove the chimeras from the dataset.
+The `rchime()` function accepts [strollur](https://mothur.org/strollur/) dataset objects as inputs. Let's create a [dataset](https://mothur.org/strollur/reference/dataset.html) object using files from [mothur's](https://mothur.org) [Miseq_SOP](https://mothur.org/wiki/miseq_sop/) example analysis. Then we will use the *denovo* method in `rchime()` to detect and remove the chimeras from the dataset.
 
 ```{r example}
 library(rchime)
@@ -55,6 +55,7 @@ fasta_data <- readRDS(rchime_example("miseq_fasta.rds"))
 abundance_data <- readRDS(rchime_example("miseq_abundance.rds"))
 
 data <- strollur::new_dataset("rchime denovo example")
+
 strollur::add(data, table = fasta_data, type = "sequences")
 strollur::assign(data, table = abundance_data, type = "sequence_abundance")
 

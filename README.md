@@ -40,11 +40,12 @@ devtools::install_github("mothur/rchime")
 ## Usage
 
 The `rchime()` function accepts [strollur](https://mothur.org/strollur/)
-dataset objects as inputs. Let’s create a dataset object using files
-from [mothur’s](https://mothur.org)
-[Miseq_SOP](https://mothur.org/wiki/miseq_sop/) example. Then we will
-use the *denovo* method in `rchime()` to detect and remove the chimeras
-from the dataset.
+dataset objects as inputs. Let’s create a
+[dataset](https://mothur.org/strollur/reference/dataset.html) object
+using files from [mothur’s](https://mothur.org)
+[Miseq_SOP](https://mothur.org/wiki/miseq_sop/) example analysis. Then
+we will use the *denovo* method in `rchime()` to detect and remove the
+chimeras from the dataset.
 
 ``` r
 library(rchime)
@@ -60,6 +61,7 @@ fasta_data <- readRDS(rchime_example("miseq_fasta.rds"))
 abundance_data <- readRDS(rchime_example("miseq_abundance.rds"))
 
 data <- strollur::new_dataset("rchime denovo example")
+
 strollur::add(data, table = fasta_data, type = "sequences")
 #> ℹ Added 6084 sequences.
 #> [1] 6084
@@ -70,7 +72,7 @@ strollur::assign(data, table = abundance_data, type = "sequence_abundance")
 chimera_report <- rchime(data, dereplicate = TRUE)
 #> ℹ Added a chimera_report.
 #> → rchime removed `10453` chimeras from your dataset.
-#> → It took `4.29831504821777` seconds to detect and remove the chimeras.
+#> → It took `4.2749559879303` seconds to detect and remove the chimeras.
 
 data
 #> rchime denovo example:
