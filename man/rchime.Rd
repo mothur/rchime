@@ -38,7 +38,9 @@ Default = FALSE.}
 using  the [\code{\link[=rchime_options]{rchime_options()}}] function. Default = NULL.}
 }
 \value{
-data.frame() containing chimera report.
+list() containing a chimera report, and vector of the chimeric
+sequence's names.
+
 The \href{https://mothur.org/strollur/}{strollur} dataset object will also be
 updated. The sequences flagged as chimeric are removed and the chimera report
 is added.
@@ -61,16 +63,14 @@ This function uses code from the
 }
 \examples{
 
-# Let's create a dataset named rchime example
+# Let's create a dataset named "rchime denovo example"
 
 data_denovo <- strollur::new_dataset("rchime denovo example")
 
-# Read a FASTA file and a mothur formatted count file
+# Read the fasta and abundance data
 
-fasta_data <- strollur::read_fasta(rchime_example("miseq.ng.fasta"))
-abundance_data <- strollur::read_mothur_count(
-  rchime_example("miseq.count_table")
-)
+fasta_data <- readRDS(rchime_example("miseq_fasta.rds"))
+abundance_data <- readRDS(rchime_example("miseq_abundance.rds"))
 
 # Add the sequence and abundance data to the dataset
 
@@ -98,9 +98,7 @@ strollur::assign(data_reference,
 
 reference <- new_dataset("Silva V4 Region")
 
-reference_data <- strollur::read_fasta(rchime_example(
-  "silva.v4.ng.fasta.gz"
-))
+reference_data <- readRDS(rchime_example("reference.rds"))
 
 strollur::add(reference, table = reference_data, type = "sequences")
 

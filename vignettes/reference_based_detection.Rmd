@@ -1,0 +1,61 @@
+---
+title: "Reference Based Chimera Detection"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Reference Based Chimera Detection}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+## Overview
+
+The `rchime()` function allows you to detect and remove chimeras from your dataset using a referenced based approach. In this tutorial we use SILVA reference files trimmed to our region of interest. *rchime* is designed to be flexible and you can use any reference you choose. 
+
+```{r setup}
+library(rchime)
+```
+
+## Creating *strollur* objects
+
+The `rchime()` function takes [strollur::dataset](https://mothur.org/strollur/reference/dataset.html) objects as inputs for the data and reference parameters. Let's create a dataset that contains our reference sequences.
+
+```{r}
+reference_data <- readRDS(rchime_example("reference.rds"))
+
+reference <- strollur::new_dataset("Silva V4 Region")
+strollur::add(reference, table = reference_data, type = "sequences")
+
+reference
+```
+
+The *rchime* package contains sequence data from [mothur's](https://mothur.org) [MiSeq_SOP](https://mothur.org/wiki/miseq_sop/) example. Let's create a dataset from containing those sequences.
+
+```{r}
+fasta_data <- readRDS(rchime_example("miseq_fasta.rds"))
+abundance_data <- readRDS(rchime_example("miseq_abundance.rds"))
+
+data <- strollur::new_dataset("rchime reference example")
+
+strollur::add(data, table = fasta_data, type = "sequences")
+strollur::assign(data, table = abundance_data, type = "sequence_abundance")
+
+data
+```
+
+## Removing chimeras
+
+When removing chimeras using a reference, the potential parents are chosen from the set of reference sequences. Let's use the reference to remove the chimeras.
+
+```{r}
+results <- rchime(data, reference = reference)
+
+data
+```
+

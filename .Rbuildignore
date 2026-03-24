@@ -5,3 +5,4 @@
 ^\.github$
 ^\.vscode$
 ^debug$
+^README\.Rmd$
