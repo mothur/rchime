@@ -7,7 +7,7 @@
 #' @export
 #' @examples
 #' rchime_example()
-#' rchime_example("test.fasta")
+#' rchime_example("reference.rds")
 rchime_example <- function(file = NULL) {
   path <- ""
 

@@ -1,19 +1,21 @@
-#' @title rchime_options
+#' @title The `rchime_options()` function allows you to set vsearch specific
+#' optional parameters.
+#' @name rchime_options
+#' @rdname rchime_options
 #'
 #' @description
-#' The rchime_options function allows you to set parameters for the
-#' [[rchime()]] function. We recommend using the defaults, unless you
-#' have a compelling reason to do otherwise.
+#' The `rchime_options()` function allows you to set parameters for the
+#' various chimera detection functions. With the exception of `dereplicate`,
+#' we recommend using the defaults, unless you have a compelling reason to do
+#'  otherwise.
 #'
-#' @references
-#'   Rognes T, Flouri T, Nichols B, Quince C, Mahé F. (2016) VSEARCH: a
-#'   versatile open source tool for metagenomics. PeerJ 4:e2584.
-#'   doi: 10.7717/peerj.2584
-#'
-#' @references
-#'  Edgar,R.C., Haas,B.J., Clemente,J.C., Quince,C. and Knight,R. (2011),
-#'  UCHIME improves sensitivity and speed of chimera detection.
-#'  Bioinformatics 27:2194.
+#' @param processors Integer, number of cores to use. Default = all available
+#' @param dereplicate, Boolean, The dereplicate option allows you to remove
+#'  chimeras by sample. For example, if dereplicate parameter is FALSE, then if
+#'  one group finds the sequence to be chimeric, it will be removed from all
+#'  groups. If dereplicate is set to TRUE, sequences found to be chimeric are
+#'  only removed from the sample they are found to be chimeric in.
+#'  Default = FALSE.
 #'
 #' @param abskew Float, the minimum abundance skew (denovo only). Default = 2.0.
 #'               abskew <- min (abund(parent1), abund(parent2)) / abund(query)
@@ -41,14 +43,15 @@
 #' @return List containing selected rchime parameters and their values.
 #'
 #' @author Sarah Westcott, \email{swestcot@@umich.edu}
+#'
+#' @importFrom parallelly, availableCores
+#'
 #' @export
 #'
-rchime_options <- function(
-  abskew = 2.0,
-  minh = 0.28, mindiv = 0.8, xn = 8.0,
-  dn = 1.4, maxp = 3
-) {
-  parameters <- list()
+rchime_options <- function(processors = parallelly::availableCores(),
+                           dereplicate = FALSE, abskew = 2.0, minh = 0.28,
+                           mindiv = 0.8, xn = 8.0, dn = 1.4, maxp = 3) {
+  parameters <- list(processors = processors, dereplicate = dereplicate)
 
   # if the user sets uchime options then add to parameters
   if (abskew != 2.0) {

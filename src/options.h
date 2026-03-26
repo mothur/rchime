@@ -93,7 +93,6 @@ public:
         opt_maxid = 1.0;
         opt_mid = 0.0;
         opt_unoise_alpha = 2.0;
-        opt_cluster_unoise = nullptr;
         neon_present = 0;
     }
 
@@ -151,7 +150,6 @@ public:
     double opt_mid;
     int64_t opt_maxdiffs;
     int64_t neon_present;
-    char * opt_cluster_unoise;
     double opt_unoise_alpha;
 
 private:
