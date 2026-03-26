@@ -475,24 +475,6 @@ auto Vsearch_Searchcore::acceptable_aligned(struct searchinfo_s const & searchin
       /* maxdiffs */
       (hit->mismatches + hit->internal_indels <= opts->opt_maxdiffs))
     {
-      if (opts->opt_cluster_unoise != nullptr)
-        {
-          const auto mismatches = hit->mismatches;
-          auto const skew = 1.0 * searchinfo.qsize / db->getabundance(hit->target);
-          auto const beta = 1.0 / std::pow(2, (1.0 * opts->opt_unoise_alpha * mismatches) + 1);
-
-          if (skew <= beta or mismatches == 0)
-            {
-              /* accepted */
-              hit->accepted = true;
-              hit->weak = false;
-              return true;
-            }
-          /* rejected, but weak hit */
-          hit->rejected = true;
-          hit->weak = true;
-          return false;
-        }
 
       if (hit->id >= 100.0 * opts->opt_id)
         {

@@ -22,9 +22,9 @@ The `rchime()` function allows you to detect and remove chimeric sequences using
 library(rchime)
 ```
 
-## Creating *strollur* objects
+## Creating *[strollur](https://mothur.org/strollur)* objects
 
-The `rchime()` function takes a [strollur::dataset](https://mothur.org/strollur/reference/dataset.html) object as input for the data parameter. The *rchime* package contains sequence data from [mothur's](https://mothur.org) [MiSeq_SOP](https://mothur.org/wiki/miseq_sop/) example analysis. Let's create a dataset from containing those sequences.
+The `rchime()` function takes a [strollur::dataset](https://mothur.org/strollur/reference/dataset.html) object as input for the data parameter. The *rchime* package contains sequence data from [mothur's](https://mothur.org) [MiSeq_SOP](https://mothur.org/wiki/miseq_sop/) example analysis. Let's create a dataset containing those sequences.
 
 ```{r}
 fasta_data <- readRDS(rchime_example("miseq_fasta.rds"))
@@ -42,7 +42,7 @@ data
 
 When removing chimeras using the denovo method, the potential parents are chosen from more abundant sequences in your dataset. 
 
-Before we remove the chimeras let's discuss the *dereplicate* parameter. If your dataset includes sample assignments, we recommend setting the *dereplicate* parameter to `TRUE`. When dereplicate = `FALSE`, if a sequence is flagged as chimeric in one sample, it is removed from all samples. Our experience suggests that this is a bit aggressive since we’ve seen rare sequences get flagged as chimeric when they’re the most abundant sequence in another sample. For a more conservative approach, set dereplicate = `TRUE` which will only remove sequences from the samples in which they are flagged as chimeric. Let's use the denovo method to remove the chimeras.
+Before we remove the chimeras let's discuss the `dereplicate` parameter. If your dataset includes sample assignments, we recommend setting the `dereplicate` parameter to `TRUE`. When `dereplicate` = `FALSE`, if a sequence is flagged as chimeric in one sample, it is removed from all samples. Our experience suggests that this is a bit aggressive since we’ve seen rare sequences get flagged as chimeric when they’re the most abundant sequence in another sample. For a more conservative approach, set `dereplicate` = `TRUE` which will only remove sequences from the samples in which they are flagged as chimeric. Let's use the denovo method to remove the chimeras.
 
 ```{r}
 results <- rchime(data, dereplicate = TRUE)
@@ -51,10 +51,10 @@ data
 ```
 
 
-Let's take a look at the first 5 chimeric sequences in the chimera_report:
+Let's take a look at the first 5 chimeric sequences in the [chimera_report](https://mothur.org/rchime/articles/chimera_report.html):
 
 ```{r}
-head(results$chimera_report[results$chimera_report$Chimeric_Status != "N", ],
+head(results$chimera_report[results$chimera_report$Chimeric_Status == "Y", ],
   n = 5
 )
 ```

@@ -22,7 +22,7 @@ The `rchime()` function allows you to detect and remove chimeras from your datas
 library(rchime)
 ```
 
-## Creating *strollur* objects
+## Creating *[strollur](https://mothur.org/strollur)* objects
 
 The `rchime()` function takes [strollur::dataset](https://mothur.org/strollur/reference/dataset.html) objects as inputs for the data and reference parameters. Let's create a dataset that contains our reference sequences.
 
@@ -59,3 +59,10 @@ results <- rchime(data, reference = reference)
 data
 ```
 
+Let's take a look at the first 5 chimeric sequences in the [chimera_report](https://mothur.org/rchime/articles/chimera_report.html):
+
+```{r}
+head(results$chimera_report[results$chimera_report$Chimeric_Status == "Y", ],
+  n = 5
+)
+```

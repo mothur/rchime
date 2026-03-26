@@ -392,9 +392,9 @@ Rcpp::List ChimeraVsearch::createVsearchResults(vector<ChimeHit2> hits) {
         Rcpp::_("Query") = queries,
         Rcpp::_("ParentA") = Aparents,
         Rcpp::_("ParentB") = Bparents,
-        Rcpp::_("ParentC") = Cparents,
+        Rcpp::_("Top_Parent") = Cparents,
         Rcpp::_("QM") = QMs, Rcpp::_("QA") = QAs, Rcpp::_("QB") = QBs,
-        Rcpp::_("QC") = QCs, Rcpp::_("QT") = QTs,
+        Rcpp::_("QAB") = QCs, Rcpp::_("QT") = QTs,
         Rcpp::_("LY") = LYs, Rcpp::_("LN") = LNs, Rcpp::_("LA") = LAs,
         Rcpp::_("RY") = RYs, Rcpp::_("RN") = RNs, Rcpp::_("RA") = RAs,
         Rcpp::_("Div") = Divs, Rcpp::_("Chimeric_Status") = chimericStatus);

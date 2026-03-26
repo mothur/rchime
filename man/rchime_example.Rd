@@ -15,5 +15,5 @@ directory. This function make them easy to access.
 }
 \examples{
 rchime_example()
-rchime_example("test.fasta")
+rchime_example("reference.rds")
 }

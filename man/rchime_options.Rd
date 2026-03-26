@@ -2,9 +2,12 @@
 % Please edit documentation in R/rchime_options.R
 \name{rchime_options}
 \alias{rchime_options}
-\title{rchime_options}
+\title{The \code{rchime_options()} function allows you to set vsearch specific
+optional parameters.}
 \usage{
 rchime_options(
+  processors = parallelly::availableCores(),
+  dereplicate = FALSE,
   abskew = 2,
   minh = 0.28,
   mindiv = 0.8,
@@ -14,6 +17,15 @@ rchime_options(
 )
 }
 \arguments{
+\item{processors}{Integer, number of cores to use. Default = all available}
+
+\item{dereplicate, }{Boolean, The dereplicate option allows you to remove
+chimeras by sample. For example, if dereplicate parameter is FALSE, then if
+one group finds the sequence to be chimeric, it will be removed from all
+groups. If dereplicate is set to TRUE, sequences found to be chimeric are
+only removed from the sample they are found to be chimeric in.
+Default = FALSE.}
+
 \item{abskew}{Float, the minimum abundance skew (denovo only). Default = 2.0.
 abskew <- min (abund(parent1), abund(parent2)) / abund(query)}
 
@@ -46,18 +58,10 @@ Default 3.}
 List containing selected rchime parameters and their values.
 }
 \description{
-The rchime_options function allows you to set parameters for the
-[\code{\link[=rchime]{rchime()}}] function. We recommend using the defaults, unless you
-have a compelling reason to do otherwise.
-}
-\references{
-Rognes T, Flouri T, Nichols B, Quince C, Mahé F. (2016) VSEARCH: a
-versatile open source tool for metagenomics. PeerJ 4:e2584.
-doi: 10.7717/peerj.2584
-
-Edgar,R.C., Haas,B.J., Clemente,J.C., Quince,C. and Knight,R. (2011),
-UCHIME improves sensitivity and speed of chimera detection.
-Bioinformatics 27:2194.
+The \code{rchime_options()} function allows you to set parameters for the
+various chimera detection functions. With the exception of \code{dereplicate},
+we recommend using the defaults, unless you have a compelling reason to do
+otherwise.
 }
 \author{
 Sarah Westcott, \email{swestcot@umich.edu}

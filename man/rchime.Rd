@@ -2,13 +2,14 @@
 % Please edit documentation in R/rchime.R
 \name{rchime}
 \alias{rchime}
-\title{rchime}
+\title{Detect and remove chimeras from your
+\href{https://mothur.org/strollur/}{strollur} dataset object using a denovo
+approach or alternatively a reference model.}
 \usage{
 rchime(
   data,
   reference = NULL,
   dereplicate = FALSE,
-  processors = parallelly::availableCores(),
   silent = FALSE,
   remove_chimeras = TRUE,
   rchime_options = NULL
@@ -28,9 +29,7 @@ groups. If dereplicate is set to TRUE, sequences found to be chimeric are
 only removed from the sample they are found to be chimeric in.
 Default = FALSE.}
 
-\item{processors}{Integer, number of cores to use. Default = all available}
-
-\item{silent}{Boolean, suppress concole outputs. Default = FALSE.}
+\item{silent}{Boolean, suppress console outputs. Default = FALSE.}
 
 \item{remove_chimeras}{Boolean, remove chimeras from dataset. Default = TRUE.}
 
@@ -46,7 +45,7 @@ updated. The sequences flagged as chimeric are removed and the chimera report
 is added.
 }
 \description{
-The rchime function allows you to remove chimeras from your data
+The \code{rchime()} function allows you to remove chimeras from your data
 using a denovo approach or alternatively a reference model.
 
 Our preferred way of doing this is to use the abundant sequences
@@ -80,7 +79,7 @@ strollur::assign(data_denovo,
   type = "sequence_abundance"
 )
 
-# Detect and remove chimeras from the dataset using denovo approach
+# Detect and remove chimeras from the dataset using denovo approach by sample
 # (recommended)
 
 chimera_report <- rchime(data_denovo, dereplicate = TRUE)

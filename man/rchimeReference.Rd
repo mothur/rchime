@@ -2,15 +2,14 @@
 % Please edit documentation in R/RcppExports.R
 \name{rchimeReference}
 \alias{rchimeReference}
-\title{rchimeReference}
+\title{Detects chimeras using a reference based approach}
 \usage{
 rchimeReference(
   sequence_names,
   sequences,
-  abundances,
   reference_names,
   reference_sequences,
-  options
+  options = NULL
 )
 }
 \arguments{
@@ -18,16 +17,29 @@ rchimeReference(
 
 \item{sequences, }{vector of strings containing sequence nucleotide data}
 
-\item{abundances, }{vector of sequence abundances}
-
 \item{reference_names, }{vector of strings containing reference sequences names}
 
 \item{reference_sequences, }{vector of strings containing reference sequences}
 
-\item{options}{list containing parameter options}
+\item{options}{list containing parameter options. Default = NULL.}
 }
 \description{
-detects chimeras from your data using a reference dataset.
+detects chimeras in your data using a reference based approach.
+}
+\examples{
+
+# Read in data.frames containing sequence data
+
+fasta_data <- readRDS(rchime_example("miseq_fasta.rds"))
+reference_data <- readRDS(rchime_example("reference.rds"))
+
+# Detect chimeras
+
+results <- rchimeReference(sequence_names = fasta_data$sequence_names,
+                           sequences = fasta_data$sequences,
+                           reference_names = reference_data$sequence_names,
+                           reference_sequences = reference_data$sequences)
+
 }
 \seealso{
 \code{\link[=rchime]{rchime()}}

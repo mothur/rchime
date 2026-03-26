@@ -1,5 +1,14 @@
 # test rchime options function
 
+test_that("test rchime_example ", {
+  expected_location <- "/extdata"
+
+  actual <- rchime_example()
+
+  expect_true(grepl(expected_location, actual))
+})
+
+
 test_that("test rchime parameters ", {
   options <- rchime_options(
     minh = 0.6, abskew = 1.9, mindiv = 0.505,

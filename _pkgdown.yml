@@ -1,0 +1,19 @@
+url: https://mothur.org/rchime/
+template:
+  bootstrap: 5
+  light-switch: true
+
+reference:
+- title: Functions for detecting and removing chimeric sequences
+  desc: "Detect and remove chimeric sequences"
+  contents:
+  - rchime
+  - rchimeDenovo
+  - rchimeDenovoSingleSample
+  - rchimeReference
+- title: Utility Functions
+  desc: "helper functions"
+  contents:
+  - rchime_options
+  - rchime_example
+  - get_available_processors

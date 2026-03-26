@@ -2,9 +2,9 @@
 % Please edit documentation in R/RcppExports.R
 \name{rchimeDenovoSingleSample}
 \alias{rchimeDenovoSingleSample}
-\title{rchimeDenovoSingleSample}
+\title{Detects chimeras using a denovo approach}
 \usage{
-rchimeDenovoSingleSample(sequence_names, sequences, abundances, options)
+rchimeDenovoSingleSample(sequence_names, sequences, abundances, options = NULL)
 }
 \arguments{
 \item{sequence_names, }{vector of strings containing sequence names}
@@ -13,10 +13,24 @@ rchimeDenovoSingleSample(sequence_names, sequences, abundances, options)
 
 \item{abundances, }{vector of sequence abundances}
 
-\item{options}{list containing parameter options}
+\item{options}{list containing parameter options. Default = NULL.}
 }
 \description{
-detects chimeras from your data using a denovo method.
+detects chimeras in your data using a denovo approach.
+}
+\examples{
+
+# Read in data.frames containing sequence and abundance data
+
+fasta_data <- readRDS(rchime_example("miseq_fasta.rds"))
+abundance_data <- readRDS(rchime_example("single_sample_abundance.rds"))
+
+# Detect chimeras
+
+results <- rchimeDenovoSingleSample(sequence_names = fasta_data$sequence_names,
+                                    sequences = fasta_data$sequences,
+                                    abundances = abundance_data$abundances)
+
 }
 \seealso{
 \code{\link[=rchime]{rchime()}}

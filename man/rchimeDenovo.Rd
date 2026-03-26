@@ -2,9 +2,9 @@
 % Please edit documentation in R/RcppExports.R
 \name{rchimeDenovo}
 \alias{rchimeDenovo}
-\title{rchimeDenovo}
+\title{Detects chimeras using a denovo method processing by sample.}
 \usage{
-rchimeDenovo(sequence_names, sequences, abundances, options)
+rchimeDenovo(sequence_names, sequences, abundances, options = NULL)
 }
 \arguments{
 \item{sequence_names, }{2D vector of strings containing sequence names parsed by sample}
@@ -13,10 +13,30 @@ rchimeDenovo(sequence_names, sequences, abundances, options)
 
 \item{abundances, }{2D vector of sequence abundances parsed by sample}
 
-\item{options}{list containing parameter options}
+\item{options}{list containing parameter options. Default = NULL.}
+}
+\value{
+list()
 }
 \description{
 detects chimeras from your data using a denovo method processing by sample.
+}
+\examples{
+
+# Read in data.frames containing sequence and abundance data
+
+sequence_names <- readRDS(rchime_example("miseq_names_by_sample.rds"))
+sequences <- readRDS(rchime_example("miseq_sequences_by_sample.rds"))
+abundances <- readRDS(rchime_example("miseq_abundance_by_sample.rds"))
+
+# Detect chimeras
+
+options <- rchime_options(dereplicate = TRUE)
+results <- rchimeDenovo(sequence_names = sequence_names,
+                        sequences = sequences,
+                        abundances = abundances,
+                        options)
+
 }
 \seealso{
 \code{\link[=rchime]{rchime()}}

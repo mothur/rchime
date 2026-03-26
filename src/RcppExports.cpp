@@ -12,24 +12,33 @@ Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
 Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
+// get_available_processors
+int get_available_processors();
+RcppExport SEXP _rchime_get_available_processors() {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    rcpp_result_gen = Rcpp::wrap(get_available_processors());
+    return rcpp_result_gen;
+END_RCPP
+}
 // rchimeReference
-Rcpp::List rchimeReference(std::vector<std::string> sequence_names, std::vector<std::string> sequences, std::vector<float> abundances, std::vector<std::string> reference_names, std::vector<std::string> reference_sequences, Rcpp::List options);
-RcppExport SEXP _rchime_rchimeReference(SEXP sequence_namesSEXP, SEXP sequencesSEXP, SEXP abundancesSEXP, SEXP reference_namesSEXP, SEXP reference_sequencesSEXP, SEXP optionsSEXP) {
+Rcpp::List rchimeReference(std::vector<std::string> sequence_names, std::vector<std::string> sequences, std::vector<std::string> reference_names, std::vector<std::string> reference_sequences, Rcpp::Nullable<Rcpp::List> options);
+RcppExport SEXP _rchime_rchimeReference(SEXP sequence_namesSEXP, SEXP sequencesSEXP, SEXP reference_namesSEXP, SEXP reference_sequencesSEXP, SEXP optionsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< std::vector<std::string> >::type sequence_names(sequence_namesSEXP);
     Rcpp::traits::input_parameter< std::vector<std::string> >::type sequences(sequencesSEXP);
-    Rcpp::traits::input_parameter< std::vector<float> >::type abundances(abundancesSEXP);
     Rcpp::traits::input_parameter< std::vector<std::string> >::type reference_names(reference_namesSEXP);
     Rcpp::traits::input_parameter< std::vector<std::string> >::type reference_sequences(reference_sequencesSEXP);
-    Rcpp::traits::input_parameter< Rcpp::List >::type options(optionsSEXP);
-    rcpp_result_gen = Rcpp::wrap(rchimeReference(sequence_names, sequences, abundances, reference_names, reference_sequences, options));
+    Rcpp::traits::input_parameter< Rcpp::Nullable<Rcpp::List> >::type options(optionsSEXP);
+    rcpp_result_gen = Rcpp::wrap(rchimeReference(sequence_names, sequences, reference_names, reference_sequences, options));
     return rcpp_result_gen;
 END_RCPP
 }
 // rchimeDenovoSingleSample
-Rcpp::List rchimeDenovoSingleSample(std::vector<std::string> sequence_names, std::vector<std::string> sequences, std::vector<float> abundances, Rcpp::List options);
+Rcpp::List rchimeDenovoSingleSample(std::vector<std::string> sequence_names, std::vector<std::string> sequences, std::vector<float> abundances, Rcpp::Nullable<Rcpp::List> options);
 RcppExport SEXP _rchime_rchimeDenovoSingleSample(SEXP sequence_namesSEXP, SEXP sequencesSEXP, SEXP abundancesSEXP, SEXP optionsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
@@ -37,13 +46,13 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< std::vector<std::string> >::type sequence_names(sequence_namesSEXP);
     Rcpp::traits::input_parameter< std::vector<std::string> >::type sequences(sequencesSEXP);
     Rcpp::traits::input_parameter< std::vector<float> >::type abundances(abundancesSEXP);
-    Rcpp::traits::input_parameter< Rcpp::List >::type options(optionsSEXP);
+    Rcpp::traits::input_parameter< Rcpp::Nullable<Rcpp::List> >::type options(optionsSEXP);
     rcpp_result_gen = Rcpp::wrap(rchimeDenovoSingleSample(sequence_names, sequences, abundances, options));
     return rcpp_result_gen;
 END_RCPP
 }
 // rchimeDenovo
-Rcpp::List rchimeDenovo(std::vector<std::vector<std::string>> sequence_names, std::vector<std::vector<std::string>> sequences, std::vector<std::vector<float>> abundances, Rcpp::List options);
+Rcpp::List rchimeDenovo(std::vector<std::vector<std::string>> sequence_names, std::vector<std::vector<std::string>> sequences, std::vector<std::vector<float>> abundances, Rcpp::Nullable<Rcpp::List> options);
 RcppExport SEXP _rchime_rchimeDenovo(SEXP sequence_namesSEXP, SEXP sequencesSEXP, SEXP abundancesSEXP, SEXP optionsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
@@ -51,14 +60,15 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< std::vector<std::vector<std::string>> >::type sequence_names(sequence_namesSEXP);
     Rcpp::traits::input_parameter< std::vector<std::vector<std::string>> >::type sequences(sequencesSEXP);
     Rcpp::traits::input_parameter< std::vector<std::vector<float>> >::type abundances(abundancesSEXP);
-    Rcpp::traits::input_parameter< Rcpp::List >::type options(optionsSEXP);
+    Rcpp::traits::input_parameter< Rcpp::Nullable<Rcpp::List> >::type options(optionsSEXP);
     rcpp_result_gen = Rcpp::wrap(rchimeDenovo(sequence_names, sequences, abundances, options));
     return rcpp_result_gen;
 END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_rchime_rchimeReference", (DL_FUNC) &_rchime_rchimeReference, 6},
+    {"_rchime_get_available_processors", (DL_FUNC) &_rchime_get_available_processors, 0},
+    {"_rchime_rchimeReference", (DL_FUNC) &_rchime_rchimeReference, 5},
     {"_rchime_rchimeDenovoSingleSample", (DL_FUNC) &_rchime_rchimeDenovoSingleSample, 4},
     {"_rchime_rchimeDenovo", (DL_FUNC) &_rchime_rchimeDenovo, 4},
     {NULL, NULL, 0}

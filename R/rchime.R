@@ -1,7 +1,10 @@
-#' @title rchime
-#'
+#' @title Detect and remove chimeras from your
+#' \href{https://mothur.org/strollur/}{strollur} dataset object using a denovo
+#' approach or alternatively a reference model.
+#' @name rchime
+#' @rdname rchime
 #' @description
-#' The rchime function allows you to remove chimeras from your data
+#' The `rchime()` function allows you to remove chimeras from your data
 #' using a denovo approach or alternatively a reference model.
 #'
 #' Our preferred way of doing this is to use the abundant sequences
@@ -35,10 +38,9 @@
 #'  one group finds the sequence to be chimeric, it will be removed from all
 #'  groups. If dereplicate is set to TRUE, sequences found to be chimeric are
 #'  only removed from the sample they are found to be chimeric in.
-#'   Default = FALSE.
-#' @param processors Integer, number of cores to use. Default = all available
+#'  Default = FALSE.
 #' @param remove_chimeras Boolean, remove chimeras from dataset. Default = TRUE.
-#' @param silent Boolean, suppress concole outputs. Default = FALSE.
+#' @param silent Boolean, suppress console outputs. Default = FALSE.
 #' @param rchime_options List, You can fine tune the vsearch specific options
 #' using  the [[rchime_options()]] function. Default = NULL.
 #'
@@ -71,7 +73,7 @@
 #'   type = "sequence_abundance"
 #' )
 #'
-#' # Detect and remove chimeras from the dataset using denovo approach
+#' # Detect and remove chimeras from the dataset using denovo approach by sample
 #' # (recommended)
 #'
 #' chimera_report <- rchime(data_denovo, dereplicate = TRUE)
@@ -97,11 +99,8 @@
 #' data_reference
 #'
 #' @import cli
-#' @importFrom parallelly, availableCores
-#'
 #' @export
 rchime <- function(data, reference = NULL, dereplicate = FALSE,
-                   processors = parallelly::availableCores(),
                    silent = FALSE, remove_chimeras = TRUE,
                    rchime_options = NULL) {
   if (!("dataset" %in% class(data))) {
@@ -113,8 +112,8 @@ rchime <- function(data, reference = NULL, dereplicate = FALSE,
   num_seqs <- strollur::count(data, type = "sequences")
 
   parameters <- list(
-    processors = processors,
-    dereplicate = dereplicate
+    dereplicate = dereplicate,
+    processors = parallelly::availableCores()
   )
 
   # if the user sets uchime options then add to parameters
@@ -137,6 +136,12 @@ rchime <- function(data, reference = NULL, dereplicate = FALSE,
     if (!is.null(rchime_options$maxp)) {
       parameters <- c(parameters, maxp = rchime_options$maxp)
     }
+    if (!is.null(rchime_options$processors)) {
+      parameters[["processors"]] <- rchime_options$processors
+    }
+    if (!is.null(rchime_options$dereplicate)) {
+      parameters[["dereplicate"]] <- rchime_options$dereplicate
+    }
   }
 
   num_samples <- strollur::count(data, type = "samples")
@@ -156,7 +161,6 @@ rchime <- function(data, reference = NULL, dereplicate = FALSE,
     results <- rchimeReference(
       strollur::names(data, type = "sequences"),
       strollur::xdev_get_sequences(data, degap = TRUE),
-      strollur::xdev_abundance(data)$abundances,
       strollur::names(reference, type = "sequences"),
       strollur::xdev_get_sequences(reference),
       parameters
@@ -196,7 +200,7 @@ rchime <- function(data, reference = NULL, dereplicate = FALSE,
   # remove chimeras
   if (remove_chimeras) {
     # only remove chimeras from the samples they were flagged in
-    if ((dereplicate) && (num_samples != 0)) {
+    if ((parameters[["dereplicate"]]) && (num_samples != 0)) {
       # set abundances parsed by sample
       strollur::xdev_set_abundances(
         data,
@@ -204,6 +208,7 @@ rchime <- function(data, reference = NULL, dereplicate = FALSE,
         results$set_abundance_values$abundances,
         "rchime-chimeras"
       )
+      results[["set_abundance_values"]] <- NULL
     } else {
       # remove all sequences flagged as chimeric
       if (length(results$chimeras) > 0) {
