@@ -2,7 +2,7 @@
 % Please edit documentation in R/rchime_example.R
 \name{rchime_example}
 \alias{rchime_example}
-\title{Get path to rchime example}
+\title{Get path to rchime example files}
 \usage{
 rchime_example(file = NULL)
 }
