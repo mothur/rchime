@@ -3,22 +3,6 @@
 #include "chimera_vsearch.h"
 
 // ============================================================================
-//' @title Get the number of available cores
-//' @rdname get_available_processors
-//' @name get_available_processors
-//' @description
-//' Get the number of available cores
-//' @export
-// [[Rcpp::export]]
-int get_available_processors() {
-     // Use Rcpp::Environment and Rcpp::Function to call R code from C++.
-     Rcpp::Environment parallelly_env = Rcpp::Environment::namespace_env("parallelly");
-     Rcpp::Function availableCores = parallelly_env["availableCores"];
-
-     // Call the R function and return the result.
-     return Rcpp::as<int>(availableCores());
-}
-// ============================================================================
 //' @title Detects chimeras using a reference based approach
 //' @name rchimeReference
 //' @rdname rchimeReference
@@ -70,6 +54,10 @@ Rcpp::List rchimeReference(std::vector<std::string> sequence_names,
         throw Rcpp::exception(message.c_str());
     }
 
+    // Use Rcpp::Environment and Rcpp::Function to call R code from C++.
+    Rcpp::Environment parallelly_env = Rcpp::Environment::namespace_env("parallelly");
+    Rcpp::Function availableCores = parallelly_env["availableCores"];
+
     Rcpp::List optionsReference = Rcpp::List::create();
     if (options.isNotNull()) {
 
@@ -79,7 +67,7 @@ Rcpp::List rchimeReference(std::vector<std::string> sequence_names,
         if (!opts_list.containsElementNamed("processors")) {
             vector<string> newNames = opts_list.attr("names");
             newNames.push_back("processors");
-            opts_list.push_back(get_available_processors());
+            opts_list.push_back(Rcpp::as<int>(availableCores()));
             opts_list.attr("names") = newNames;
         }
 
@@ -93,7 +81,7 @@ Rcpp::List rchimeReference(std::vector<std::string> sequence_names,
         optionsReference = opts_list;
     }else{
         vector<string> optionNames = {"processors", "dereplicate"};
-        optionsReference.push_back(get_available_processors());
+        optionsReference.push_back(Rcpp::as<int>(availableCores()));
         optionsReference.push_back(false);
         optionsReference.attr("names") = optionNames;
     }

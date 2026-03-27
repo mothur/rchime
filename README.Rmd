@@ -13,7 +13,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-# rchime
+# rchime <a href="https://mothur.org/rchime/"><img src="man/figures/logo.png" align="right" height="136" alt="rchime website" /></a>
 
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/mothur/rchime/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/mothur/rchime/actions/workflows/R-CMD-check.yaml)
@@ -25,7 +25,10 @@ knitr::opts_chunk$set(
 The *rchime* package allows you to detect and remove chimeras from your dataset using a denovo approach or alternatively a reference model. This package uses 
 code from the [vsearch](https://github.com/torognes/vsearch) tools.
 
-* `rchime()` detect and remove chimeras from your dataset
+* `rchime()` detect and remove chimeras from your [strollur](https://mothur.org/strollur/) dataset object
+* `rchimeReference()` detect chimeras in your sequences using a reference
+* `rchimeDenovoSingleSample()` detect chimeras in your sequences 
+* `rchimeDenovo()` detect chimeras in your sequences parsed by sample
 
 ## Installation
 

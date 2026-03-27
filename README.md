@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# rchime
+# rchime <a href="https://mothur.org/rchime/"><img src="man/figures/logo.png" align="right" height="136" alt="rchime website" /></a>
 
 <!-- badges: start -->
 
@@ -17,7 +17,12 @@ dataset using a denovo approach or alternatively a reference model. This
 package uses code from the
 [vsearch](https://github.com/torognes/vsearch) tools.
 
-- `rchime()` detect and remove chimeras from your dataset
+- `rchime()` detect and remove chimeras from your
+  [strollur](https://mothur.org/strollur/) dataset object
+- `rchimeReference()` detect chimeras in your sequences using a
+  reference
+- `rchimeDenovoSingleSample()` detect chimeras in your sequences
+- `rchimeDenovo()` detect chimeras in your sequences parsed by sample
 
 ## Installation
 
@@ -56,6 +61,11 @@ library(rchime)
 #> The following objects are masked from 'package:base':
 #> 
 #>     assign, names, summary
+#> 
+#> Attaching package: 'rchime'
+#> The following object is masked from 'package:strollur':
+#> 
+#>     get_available_processors
 
 fasta_data <- readRDS(rchime_example("miseq_fasta.rds"))
 abundance_data <- readRDS(rchime_example("miseq_abundance.rds"))
@@ -70,9 +80,11 @@ strollur::assign(data, table = abundance_data, type = "sequence_abundance")
 #> [1] 6084
 
 chimera_report <- rchime(data, dereplicate = TRUE)
+#> 
+#> The denovo method runs with a single processor.
 #> ℹ Added a chimera_report.
 #> → rchime removed `10453` chimeras from your dataset.
-#> → It took `4.2749559879303` seconds to detect and remove the chimeras.
+#> → It took `4.2465660572052` seconds to detect and remove the chimeras.
 
 data
 #> rchime denovo example:
