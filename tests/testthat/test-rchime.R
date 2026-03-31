@@ -15,10 +15,12 @@ test_that("test rchime - errors and rchime_options", {
   # this should not change since the rchime command below does not remove
   num_seqs <- strollur::count(data)
 
+  options <- rchime_options(dereplicate = FALSE)
   chimera_report <- rchime(data,
     reference = reference_ob,
     remove_chimeras = FALSE,
-    silent = FALSE
+    silent = FALSE,
+    rchime_options = options
   )
 
   expect_equal(strollur::count(data), num_seqs)
@@ -153,8 +155,7 @@ test_that("test rchime denovo - mulitple samples, dereplicate = TRUE", {
   strollur::add(data, table = fasta_data, type = "sequences")
   strollur::assign(data, table = abundance_data, type = "sequence_abundance")
 
-  options <- rchime_options(dereplicate = TRUE)
-  chimera_report <- rchime(data, rchime_options = options, silent = TRUE)
+  chimera_report <- rchime(data, silent = TRUE)
 
   # checks to make sure the correct things are created
   expect_equal(length(chimera_report), 2)
@@ -245,7 +246,8 @@ test_that("test rchime denovo - mulitple samples, dereplicate = FALSE", {
   strollur::add(data, table = fasta_data, type = "sequences")
   strollur::assign(data, table = abundance_data, type = "sequence_abundance")
 
-  chimera_report <- rchime(data, silent = TRUE)
+  options <- rchime_options(dereplicate = FALSE)
+  chimera_report <- rchime(data, silent = TRUE, rchime_options = options)
 
   # checks to make sure the correct things are created
   expect_equal(length(chimera_report), 2)

@@ -62,7 +62,7 @@ data <- strollur::new_dataset("rchime denovo example")
 strollur::add(data, table = fasta_data, type = "sequences")
 strollur::assign(data, table = abundance_data, type = "sequence_abundance")
 
-chimera_report <- rchime(data, dereplicate = TRUE)
+chimera_report <- rchime(data)
 
 data
 ```

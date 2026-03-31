@@ -38,7 +38,7 @@
 #'  one group finds the sequence to be chimeric, it will be removed from all
 #'  groups. If dereplicate is set to TRUE, sequences found to be chimeric are
 #'  only removed from the sample they are found to be chimeric in.
-#'  Default = FALSE.
+#'  Default = TRUE.
 #' @param remove_chimeras Boolean, remove chimeras from dataset. Default = TRUE.
 #' @param silent Boolean, suppress console outputs. Default = FALSE.
 #' @param rchime_options List, You can fine tune the vsearch specific options
@@ -100,11 +100,11 @@
 #'
 #' @import cli
 #' @export
-rchime <- function(data, reference = NULL, dereplicate = FALSE,
+rchime <- function(data, reference = NULL, dereplicate = TRUE,
                    silent = FALSE, remove_chimeras = TRUE,
                    rchime_options = NULL) {
-  if (!("dataset" %in% class(data))) {
-    stop("data must be a stroller::dataset object")
+  if (!("strollur" %in% class(data))) {
+    stop("data must be a stroller::strollur object")
   }
 
   start_time <- Sys.time()
@@ -153,8 +153,8 @@ rchime <- function(data, reference = NULL, dereplicate = FALSE,
   results <- NULL
 
   if (!is.null(reference)) {
-    if (!("dataset" %in% class(reference))) {
-      stop("reference must be a stroller::dataset object")
+    if (!("strollur" %in% class(reference))) {
+      stop("reference must be a stroller::strollur object")
     }
 
     # reference -> names, seqs abunds, refnames, refseqs

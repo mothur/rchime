@@ -61,11 +61,6 @@ library(rchime)
 #> The following objects are masked from 'package:base':
 #> 
 #>     assign, names, summary
-#> 
-#> Attaching package: 'rchime'
-#> The following object is masked from 'package:strollur':
-#> 
-#>     get_available_processors
 
 fasta_data <- readRDS(rchime_example("miseq_fasta.rds"))
 abundance_data <- readRDS(rchime_example("miseq_abundance.rds"))
@@ -79,12 +74,12 @@ strollur::assign(data, table = abundance_data, type = "sequence_abundance")
 #> ℹ Assigned 6084 sequence abundances.
 #> [1] 6084
 
-chimera_report <- rchime(data, dereplicate = TRUE)
+chimera_report <- rchime(data)
 #> 
 #> The denovo method runs with a single processor.
 #> ℹ Added a chimera_report.
 #> → rchime removed `10453` chimeras from your dataset.
-#> → It took `4.2465660572052` seconds to detect and remove the chimeras.
+#> → It took `4.27263188362122` seconds to detect and remove the chimeras.
 
 data
 #> rchime denovo example:
