@@ -1,20 +1,93 @@
+
 #' @title Detect and remove chimeras from your
-#' \href{https://mothur.org/strollur/}{strollur} dataset object using a denovo
-#' approach or alternatively a reference model.
+#'   \href{https://mothur.org/strollur/}{strollur} dataset object or data.frame
+#'   using a denovo approach or alternatively a reference model.
 #' @name rchime
 #' @rdname rchime
 #' @description
-#' The `rchime()` function allows you to remove chimeras from your data
-#' using a denovo approach or alternatively a reference model.
+#' The `rchime()` function allows you to detect and remove chimeras from your
+#' data using a denovo approach or alternatively a reference model.
 #'
-#' Our preferred way of doing this is to use the abundant sequences
-#' as our reference (denovo). In addition, if a sequence is flagged as chimeric
-#' in one sample, the default (dereplicate=FALSE) is to remove it from
-#' all samples. Our experience suggests that this is a bit aggressive
-#' since we’ve seen rare sequences get flagged as chimeric when they’re
-#' the most abundant sequence in another sample. For a more conservative
-#' approach, set (dereplicate=TRUE) which will only remove sequences
-#' from the samples in which they are flagged as chimeric.
+#' Our preferred way of doing this is to use the abundant sequences as our
+#' reference (denovo). In addition, if a sequence is flagged as chimeric in one
+#' sample, and (dereplicate=FALSE) then sequence is removed from all samples.
+#' Our experience suggests that this is a bit aggressive since we’ve seen rare
+#' sequences get flagged as chimeric when they’re the most abundant sequence in
+#' another sample. For a more conservative approach, set (dereplicate=TRUE)
+#' which will only remove sequences from the samples in which they are flagged
+#' as chimeric.
+#'
+#' This function uses code from the
+#'  \href{https://github.com/torognes/vsearch}{vsearch} tools.
+#'
+#' @references
+#'   Rognes T, Flouri T, Nichols B, Quince C, Mahé F. (2016) VSEARCH: a
+#'   versatile open source tool for metagenomics. PeerJ 4:e2584.
+#'   doi: 10.7717/peerj.2584
+#'
+#' @references
+#'  Edgar,R.C., Haas,B.J., Clemente,J.C., Quince,C. and Knight,R. (2011),
+#'  UCHIME improves sensitivity and speed of chimera detection.
+#'  Bioinformatics 27:2194.
+#'
+#' @param data a \href{https://mothur.org/strollur/}{strollur} dataset object or
+#'   a data.frame containing your sequence data.
+#' @param reference a \href{https://mothur.org/strollur/}{strollur} dataset
+#'   object or a data.frame containing reference sequence data.
+#' @param dereplicate, Boolean, The dereplicate option allows you to remove
+#'  chimeras by sample. For example, if dereplicate parameter is FALSE, then if
+#'  one group finds the sequence to be chimeric, it will be removed from all
+#'  groups. If dereplicate is set to TRUE, sequences found to be chimeric are
+#'  only removed from the sample they are found to be chimeric in.
+#'  Default = TRUE.
+#' @param remove_chimeras Boolean, remove chimeras from dataset. Default = TRUE.
+#'   Only used when `data` is a strollur object.
+#' @param silent Boolean, suppress console outputs. Default = FALSE.
+#' @param rchime_options List, You can fine tune the vsearch specific options
+#' using  the [[rchime_options()]] function. Default = NULL.
+#' @param table_names, named list used to indicate the names of the columns in
+#' the data.frame. Only used when `data` is a data.frame.
+#' @seealso [rchime_options()] to set vsearch specific parameters.
+#'
+#' @return list() containing a chimera report, and vector of the chimeric
+#' sequence's names.
+#'
+#' The \href{https://mothur.org/strollur/}{strollur} dataset object will also be
+#' updated. The sequences flagged as chimeric are removed and the chimera report
+#' is added.
+#'
+#' @author Sarah Westcott, \email{swestcot@@umich.edu}
+#' @export
+rchime <- function(data, reference = NULL, dereplicate = TRUE,
+                   silent = FALSE, remove_chimeras = TRUE,
+                   rchime_options = NULL,
+                   table_names = list(
+                     sequence_name = "sequence_names",
+                     sequence = "sequences",
+                     abundance = "abundances",
+                     sample = "samples"
+                   )) {
+  UseMethod("rchime", data)
+}
+
+
+#' @title Detect and remove chimeras from your
+#' \href{https://mothur.org/strollur/}{strollur} dataset object using a denovo
+#' approach or alternatively a reference model.
+#' @name rchime.strollur
+#' @rdname rchime.strollur
+#' @description
+#' The `rchime()` function allows you to detect and remove chimeras from your
+#' data using a denovo approach or alternatively a reference model.
+#'
+#' Our preferred way of doing this is to use the abundant sequences as our
+#' reference (denovo). In addition, if a sequence is flagged as chimeric in one
+#' sample, and (dereplicate=FALSE) then sequence is removed from all samples.
+#' Our experience suggests that this is a bit aggressive since we’ve seen rare
+#' sequences get flagged as chimeric when they’re the most abundant sequence in
+#' another sample. For a more conservative approach, set (dereplicate=TRUE)
+#' which will only remove sequences from the samples in which they are flagged
+#' as chimeric.
 #'
 #' This function uses code from the
 #'  \href{https://github.com/torognes/vsearch}{vsearch} tools.
@@ -43,7 +116,8 @@
 #' @param silent Boolean, suppress console outputs. Default = FALSE.
 #' @param rchime_options List, You can fine tune the vsearch specific options
 #' using  the [[rchime_options()]] function. Default = NULL.
-#'
+#' @param table_names, NA. Only used when `data` is a data.frame.
+
 #' @seealso [rchime_options()] to set vsearch specific parameters.
 #'
 #' @return list() containing a chimera report, and vector of the chimeric
@@ -100,9 +174,10 @@
 #'
 #' @import cli
 #' @export
-rchime <- function(data, reference = NULL, dereplicate = TRUE,
-                   silent = FALSE, remove_chimeras = TRUE,
-                   rchime_options = NULL) {
+rchime.strollur <- function(data, reference = NULL, dereplicate = TRUE,
+                            silent = FALSE, remove_chimeras = TRUE,
+                            rchime_options = NULL,
+                            table_names = NA) {
   if (!("strollur" %in% class(data))) {
     stop("data must be a stroller::strollur object")
   }
@@ -138,9 +213,11 @@ rchime <- function(data, reference = NULL, dereplicate = TRUE,
     }
     if (!is.null(rchime_options$processors)) {
       parameters[["processors"]] <- rchime_options$processors
+      processors <- rchime_options$processors
     }
     if (!is.null(rchime_options$dereplicate)) {
       parameters[["dereplicate"]] <- rchime_options$dereplicate
+      dereplicate <- rchime_options$dereplicate
     }
   }
 
@@ -154,18 +231,24 @@ rchime <- function(data, reference = NULL, dereplicate = TRUE,
 
   if (!is.null(reference)) {
     if (!("strollur" %in% class(reference))) {
-      stop("reference must be a stroller::strollur object")
+      stop("reference must be a strollur object")
     }
+
+    dereplicate <- FALSE
 
     # reference -> names, seqs abunds, refnames, refseqs
     results <- rchimeReference(
       strollur::names(data, type = "sequences"),
       strollur::xdev_get_sequences(data, degap = TRUE),
       strollur::names(reference, type = "sequences"),
-      strollur::xdev_get_sequences(reference),
+      strollur::xdev_get_sequences(reference, degap = TRUE),
       parameters
     )
   } else {
+    if (!silent) {
+      message <- "The denovo method runs with a single processor.\n\n"
+      cli::cli_alert_info(message)
+    }
     if (num_samples == 0) {
       # denovo no groups -> names, seqs, abunds
       results <- rchimeDenovoSingleSample(
@@ -180,7 +263,8 @@ rchime <- function(data, reference = NULL, dereplicate = TRUE,
         strollur::xdev_get_by_sample(data),
         strollur::xdev_get_by_sample(
           data,
-          type = "sequences"
+          type = "sequences",
+          degap = TRUE
         ),
         strollur::xdev_get_abundances_by_sample(data),
         parameters
@@ -200,7 +284,7 @@ rchime <- function(data, reference = NULL, dereplicate = TRUE,
   # remove chimeras
   if (remove_chimeras) {
     # only remove chimeras from the samples they were flagged in
-    if ((parameters[["dereplicate"]]) && (num_samples != 0)) {
+    if ((dereplicate) && (num_samples != 0)) {
       # set abundances parsed by sample
       strollur::xdev_set_abundances(
         data,
@@ -249,3 +333,268 @@ rchime <- function(data, reference = NULL, dereplicate = TRUE,
 
   results
 }
+
+# =============================================================================#
+#' @title Detect chimeras in your dataset object using a denovo approach or
+#'   alternatively a reference model.
+#' @name rchime.data.frame
+#' @rdname rchime.data.frame
+#' @description
+#' The `rchime()` function allows you to detect chimeras from your
+#' data using a denovo approach or alternatively a reference model.
+#'
+#' Our preferred way of doing this is to use the abundant sequences as our
+#' reference (denovo). In addition, if a sequence is flagged as chimeric in one
+#' sample, and (dereplicate=FALSE) then sequence is removed from all samples.
+#' Our experience suggests that this is a bit aggressive since we’ve seen rare
+#' sequences get flagged as chimeric when they’re the most abundant sequence in
+#' another sample. For a more conservative approach, set (dereplicate=TRUE)
+#' which will only remove sequences from the samples in which they are flagged
+#' as chimeric.
+#'
+#' This function uses code from the
+#'  \href{https://github.com/torognes/vsearch}{vsearch} tools.
+#'
+#' @references
+#'   Rognes T, Flouri T, Nichols B, Quince C, Mahé F. (2016) VSEARCH: a
+#'   versatile open source tool for metagenomics. PeerJ 4:e2584.
+#'   doi: 10.7717/peerj.2584
+#'
+#' @references
+#'  Edgar,R.C., Haas,B.J., Clemente,J.C., Quince,C. and Knight,R. (2011),
+#'  UCHIME improves sensitivity and speed of chimera detection.
+#'  Bioinformatics 27:2194.
+#'
+#' @param data a data.frame containing your sequence data.
+#' @param reference a data.frame containing reference sequence data.
+#' @param dereplicate, Boolean, The dereplicate option allows you to flag
+#'  chimeras by sample. For example, if dereplicate parameter is FALSE, then if
+#'  one group finds the sequence to be chimeric, it will be flagged in all
+#'  groups. If dereplicate is set to TRUE, sequences found to be chimeric are
+#'  only flagged in the sample they are found to be chimeric in.
+#'  Default = TRUE.
+#' @param remove_chimeras Boolean, NA. Only used when `data` is a strollur
+#'   object.
+#' @param silent Boolean, suppress console outputs. Default = FALSE.
+#' @param rchime_options List, You can fine tune the vsearch specific options
+#' using  the [[rchime_options()]] function. Default = NULL.
+#' @param table_names, named list used to indicate the names of the columns in
+#' the data.frame. Only used when `data` is a data.frame. By default:
+#'
+#' table_names <- list(sequence_name = "sequence_names",
+#'                     sequence = "sequences"
+#'                     abundance = "abundances",
+#'                     sample = "samples")
+#'
+#' In table_names, 'sequence_name' is a string containing the name of the column
+#' in 'table' that contains the sequence names. Default column name is
+#' 'sequence_names'.
+#'
+#' In table_names, 'sequence' is a string containing the name of the
+#' column in 'table' that contains the sequences. Default column name is
+#'  'sequences'.
+#'
+#' In table_names, 'abundance' is a string containing the name of the column in
+#' 'table' that contains the abundances. Default column name is 'abundances'.
+#'
+#' In table_names, 'sample' is a string containing the name of the column in
+#' 'table' that contains the samples. Default column name is 'samples'.
+#'
+#' @seealso [rchime_options()] to set vsearch specific parameters.
+#'
+#' @return list() containing a chimera report, and vector of the chimeric
+#'   sequence's names. If running with multiple samples and dereplicate = TRUE,
+#'   then a table containing the modified sequence abundances will also be
+#'   returned.
+#'
+#' @author Sarah Westcott, \email{swestcot@@umich.edu}
+#' @examples
+#'
+#' # Detect chimeras from the dataset using denovo approach by sample
+#' # (recommended)
+#'
+#' data <- readRDS(rchime_example("miseq_data_frame_by_sample.rds"))
+#'
+#' chimera_report <- rchime(data, dereplicate = TRUE)
+#'
+#' # Alternatively you can detect chimeras using a reference
+#'
+#' reference <- readRDS(rchime_example("reference.rds"))
+#' data <- readRDS(rchime_example("miseq_data_frame.rds"))
+#'
+#' chimera_report <- rchime(data, reference = reference)
+#'
+#' @import cli
+#' @export
+rchime.data.frame <- function(data, reference = NULL, dereplicate = TRUE,
+                              silent = FALSE, remove_chimeras = NA,
+                              rchime_options = NULL,
+                              table_names = list(
+                                sequence_name = "sequence_names",
+                                sequence = "sequences",
+                                abundance = "abundances",
+                                sample = "samples"
+                              )) {
+  if (!("data.frame" %in% class(data))) {
+    stop("data must be a data.frame object")
+  }
+
+  start_time <- Sys.time()
+
+  parameters <- list(
+    dereplicate = dereplicate,
+    processors = parallelly::availableCores()
+  )
+
+  # if the user sets uchime options then add to parameters
+  if (!is.null(rchime_options)) {
+    if (!is.null(rchime_options$abskew)) {
+      parameters <- c(parameters, abskew = rchime_options$abskew)
+    }
+    if (!is.null(rchime_options$minh)) {
+      parameters <- c(parameters, minh = rchime_options$minh)
+    }
+    if (!is.null(rchime_options$mindiv)) {
+      parameters <- c(parameters, mindiv = rchime_options$mindiv)
+    }
+    if (!is.null(rchime_options$xn)) {
+      parameters <- c(parameters, xn = rchime_options$xn)
+    }
+    if (!is.null(rchime_options$dn)) {
+      parameters <- c(parameters, dn = rchime_options$dn)
+    }
+    if (!is.null(rchime_options$maxp)) {
+      parameters <- c(parameters, maxp = rchime_options$maxp)
+    }
+    if (!is.null(rchime_options$processors)) {
+      parameters[["processors"]] <- rchime_options$processors
+      processors <- rchime_options$processors
+    }
+    if (!is.null(rchime_options$dereplicate)) {
+      parameters[["dereplicate"]] <- rchime_options$dereplicate
+      dereplicate <- rchime_options$dereplicate
+    }
+  }
+
+  num_samples <- 0
+
+  default_tn <- list(
+    sequence_name = "sequence_names",
+    abundance = "abundances",
+    sample = "samples",
+    sequence = "sequences"
+  )
+
+  table_names <- modifyList(default_tn, table_names)
+
+  # check for sample info
+  if ("samples" %in% names(data)) {
+    # create strollur object to read and parse inputs
+    strollur_data <- strollur::new_dataset()
+
+    # add sequence data
+    strollur::add(strollur_data,
+      table = unique(data[, c(
+        table_names[["sequence_name"]],
+        table_names[["sequence"]]
+      )]),
+      type = "sequences",
+      table_names = table_names, verbose = !silent
+    )
+
+    # assign sequence abundance
+    strollur::assign(strollur_data,
+      table = data,
+      type = "sequence_abundance",
+      table_names = table_names, verbose = !silent
+    )
+
+    num_samples <- strollur::count(strollur_data, type = "samples")
+  }
+
+  # inputs needed ->
+  ## reference -> names, seqs abunds, refnames, refseqs
+  ## denovo no groups -> names, seqs, abunds
+  ## denovo with groups -> names, seqs and abunds parsed by sample
+
+  results <- NULL
+
+  if (!is.null(reference)) {
+    if (!("data.frame" %in% class(data))) {
+      stop("reference must be a data.frame")
+    }
+
+    dereplicate <- FALSE
+
+    # reference -> names, seqs, refnames, refseqs
+    results <- rchimeReference(
+      fill_required_parameters(data, "sequence_names"),
+      gsub("[.-]", "", fill_required_parameters(data, "sequences")),
+      fill_required_parameters(
+        reference,
+        "sequence_names"
+      ),
+      gsub("[.-]", "", fill_required_parameters(
+        reference,
+        "sequences"
+      )),
+      parameters
+    )
+  } else {
+    if (!silent) {
+      message <- "The denovo method runs with a single processor.\n\n"
+      cli::cli_alert_info(message)
+    }
+    if (num_samples == 0) {
+      # denovo no groups -> names, seqs, abunds
+      results <- rchimeDenovoSingleSample(
+        fill_required_parameters(data, "sequence_names"),
+        gsub("[.-]", "", fill_required_parameters(
+          data,
+          "sequences"
+        )),
+        fill_required_parameters(data, "abundances"),
+        parameters
+      )
+    } else {
+      # denovo with groups -> names, seqs and abunds parsed by sample
+      results <- rchimeDenovo(
+        strollur::xdev_get_by_sample(strollur_data),
+        strollur::xdev_get_by_sample(
+          strollur_data,
+          type = "sequences",
+          degap = TRUE
+        ),
+        strollur::xdev_get_abundances_by_sample(strollur_data),
+        parameters
+      )
+
+      if (dereplicate) {
+        # add sample names to updated abundance info
+        sample_names <- strollur::names(strollur_data, type = "samples")
+        name <- "set_abundance_values"
+        results[[name]][["samples"]] <- sample_names
+      }
+    }
+  }
+
+  if (!silent) {
+    timing <- difftime(Sys.time(), start_time, units = "secs")[[1]]
+    cli::cli_alert("It took {.var {timing}} seconds to detect the chimeras.")
+  }
+
+  results
+}
+# =============================================================================#
+#' @export
+rchime.default <- function(data, reference = NULL, dereplicate = TRUE,
+                           silent = FALSE, remove_chimeras = TRUE,
+                           rchime_options = NULL, table_names = list(
+                               sequence_name = "sequence_names",
+                               sequence = "sequences",
+                               abundance = "abundances",
+                               sample = "samples"
+                           )) {
+  stop("data must be a strollur object or a data.frame")
+}
+# =============================================================================#

@@ -30,6 +30,7 @@
 //'                            reference_sequences = reference_data$sequences)
 //'
 //' @seealso [rchime()]
+//' @export
 //[[Rcpp::export]]
 Rcpp::List rchimeReference(std::vector<std::string> sequence_names,
                            std::vector<std::string> sequences,
@@ -131,6 +132,7 @@ Rcpp::List rchimeReference(std::vector<std::string> sequence_names,
 //'                                     abundances = abundance_data$abundances)
 //'
 //' @seealso [rchime()]
+//' @export
 //[[Rcpp::export]]
 Rcpp::List rchimeDenovoSingleSample(std::vector<std::string> sequence_names,
                         std::vector<std::string> sequences,
@@ -190,9 +192,6 @@ Rcpp::List rchimeDenovoSingleSample(std::vector<std::string> sequence_names,
     std::vector<std::vector<float>> abunds;
     abunds.push_back(abundances);
 
-    Rcpp::Rcout << std::endl;
-    Rcpp::Rcout << "The denovo method runs with a single processor.\n\n";
-
     ChimeraVsearch* chimera = new ChimeraVsearch(seqNames, seqs, abunds,
                                                  optionsDenovo);
 
@@ -231,6 +230,7 @@ Rcpp::List rchimeDenovoSingleSample(std::vector<std::string> sequence_names,
 //' @seealso [rchime()]
 //' @description detects chimeras from your data using a denovo method processing by sample.
 //' @returns list()
+//' @export
 //[[Rcpp::export]]
 Rcpp::List rchimeDenovo(std::vector<std::vector<std::string>> sequence_names,
                          std::vector<std::vector<std::string>> sequences,
@@ -276,9 +276,6 @@ Rcpp::List rchimeDenovo(std::vector<std::vector<std::string>> sequence_names,
         optionsDenovo.push_back(false);
         optionsDenovo.attr("names") = optionNames;
     }
-
-    Rcpp::Rcout << std::endl;
-    Rcpp::Rcout << "The denovo method runs with a single processor.\n\n";
 
      ChimeraVsearch* chimera = new ChimeraVsearch(sequence_names,
                                                   sequences,

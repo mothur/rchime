@@ -14,9 +14,10 @@ Roxygen: list(markdown = TRUE)
 Config/testthat/edition: 3
 RoxygenNote: 7.3.3
 Imports:
-  cli,
-  parallelly,
-  RcppThread
+    cli,
+    parallelly,
+    RcppThread,
+    utils
 Depends: Rcpp (>= 1.0.12), R (>= 4.5.0), strollur
 Suggests: 
     knitr,

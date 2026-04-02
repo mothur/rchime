@@ -28,6 +28,7 @@
 #'                            reference_sequences = reference_data$sequences)
 #'
 #' @seealso [rchime()]
+#' @export
 rchimeReference <- function(sequence_names, sequences, reference_names, reference_sequences, options = NULL) {
     .Call(`_rchime_rchimeReference`, sequence_names, sequences, reference_names, reference_sequences, options)
 }
@@ -57,6 +58,7 @@ rchimeReference <- function(sequence_names, sequences, reference_names, referenc
 #'                                     abundances = abundance_data$abundances)
 #'
 #' @seealso [rchime()]
+#' @export
 rchimeDenovoSingleSample <- function(sequence_names, sequences, abundances, options = NULL) {
     .Call(`_rchime_rchimeDenovoSingleSample`, sequence_names, sequences, abundances, options)
 }
@@ -89,6 +91,7 @@ rchimeDenovoSingleSample <- function(sequence_names, sequences, abundances, opti
 #' @seealso [rchime()]
 #' @description detects chimeras from your data using a denovo method processing by sample.
 #' @returns list()
+#' @export
 rchimeDenovo <- function(sequence_names, sequences, abundances, options = NULL) {
     .Call(`_rchime_rchimeDenovo`, sequence_names, sequences, abundances, options)
 }

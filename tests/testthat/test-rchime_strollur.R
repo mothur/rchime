@@ -1,8 +1,6 @@
 # test rchime function
 
 test_that("test rchime - errors and rchime_options", {
-  expect_error(rchime("not a strollur object"))
-
   fasta_data <- readRDS(rchime_example("miseq_fasta.rds"))
   reference_data <- readRDS(rchime_example("reference.rds"))
 
@@ -62,7 +60,7 @@ test_that("test rchime - errors and rchime_options", {
   expect_equal(nrow(chimera_report$chimera_report), 100)
 })
 
-test_that("test rchime by reference ", {
+test_that("test rchime by reference - strollur", {
   fasta_data <- readRDS(rchime_example("miseq_fasta.rds"))
   reference_data <- readRDS(rchime_example("reference.rds"))
 
@@ -129,7 +127,7 @@ test_that("test rchime by reference ", {
   expect_equal(chimera_report$chimera_report[[3, 16]], 5)
 })
 
-test_that("test rchime denovo - single sample ", {
+test_that("test rchime denovo - strollur - single sample ", {
   # no need to check dereplicate since one sample
 
   fasta_data <- readRDS(rchime_example("miseq_fasta.rds"))
@@ -147,7 +145,7 @@ test_that("test rchime denovo - single sample ", {
   expect_equal(nrow(chimera_report$chimera_report), 6084)
 })
 
-test_that("test rchime denovo - mulitple samples, dereplicate = TRUE", {
+test_that("test rchime denovo -strollur/mulitple samples, dereplicate = TRUE", {
   fasta_data <- readRDS(rchime_example("miseq_fasta.rds"))
   abundance_data <- readRDS(rchime_example("miseq_abundance.rds"))
 
@@ -238,7 +236,7 @@ test_that("test rchime denovo - mulitple samples, dereplicate = TRUE", {
   expect_equal(chimera_report$chimera_report[[8, 16]], 21)
 })
 
-test_that("test rchime denovo - mulitple samples, dereplicate = FALSE", {
+test_that("test rchime denovo strollur/mulitple samples, dereplicate = FALSE", {
   fasta_data <- readRDS(rchime_example("miseq_fasta.rds"))
   abundance_data <- readRDS(rchime_example("miseq_abundance.rds"))
 

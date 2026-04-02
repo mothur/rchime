@@ -5,6 +5,7 @@ output: github_document
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
 ```{r, include = FALSE}
+library(rchime)
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
@@ -17,7 +18,10 @@ knitr::opts_chunk$set(
 
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/mothur/rchime/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/mothur/rchime/actions/workflows/R-CMD-check.yaml)
-[![Codecov test coverage](https://codecov.io/gh/mothur/rchime/graph/badge.svg)](https://app.codecov.io/gh/SchlossLab/rchime)
+[![Codecov test coverage](https://codecov.io/gh/mothur/rchime/graph/badge.svg)](https://app.codecov.io/gh/mothur/rchime)
+
+[![pkgdown](https://github.com/SchlossLab/rchime/actions/workflows/pkgdown.yaml/badge.svg)](https://github.com/SchlossLab/rchime/actions/workflows/pkgdown.yaml)
+[![CRAN status](https://www.r-pkg.org/badges/version/rchime)](https://CRAN.R-project.org/package=rchime)
 <!-- badges: end -->
 
 ## Overview 
@@ -25,10 +29,7 @@ knitr::opts_chunk$set(
 The *rchime* package allows you to detect and remove chimeras from your dataset using a denovo approach or alternatively a reference model. This package uses 
 code from the [vsearch](https://github.com/torognes/vsearch) tools.
 
-* `rchime()` detect and remove chimeras from your [strollur](https://mothur.org/strollur/) dataset object
-* `rchimeReference()` detect chimeras in your sequences using a reference
-* `rchimeDenovoSingleSample()` detect chimeras in your sequences 
-* `rchimeDenovo()` detect chimeras in your sequences parsed by sample
+* `rchime()` detect and remove chimeras from your [strollur](https://mothur.org/strollur/) dataset object or data.frame
 
 ## Installation
 
@@ -49,11 +50,9 @@ devtools::install_github("mothur/rchime")
 
 ## Usage
 
-The `rchime()` function accepts [strollur](https://mothur.org/strollur/) dataset objects as inputs. Let's create a [dataset](https://mothur.org/strollur/reference/dataset.html) object using files from [mothur's](https://mothur.org) [Miseq_SOP](https://mothur.org/wiki/miseq_sop/) example analysis. Then we will use the *denovo* method in `rchime()` to detect and remove the chimeras from the dataset.
+The `rchime()` function accepts [strollur](https://mothur.org/strollur/) objects or data.frames as inputs. Let's create a [strollur::strollur](https://mothur.org/strollur/reference/strollur.html) object using files from [mothur's](https://mothur.org) [Miseq_SOP](https://mothur.org/wiki/miseq_sop/) example analysis. Then we will use the *denovo* method in `rchime()` to detect and remove the chimeras from the dataset.
 
 ```{r example}
-library(rchime)
-
 fasta_data <- readRDS(rchime_example("miseq_fasta.rds"))
 abundance_data <- readRDS(rchime_example("miseq_abundance.rds"))
 

@@ -7,7 +7,11 @@
 
 [![R-CMD-check](https://github.com/mothur/rchime/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/mothur/rchime/actions/workflows/R-CMD-check.yaml)
 [![Codecov test
-coverage](https://codecov.io/gh/mothur/rchime/graph/badge.svg)](https://app.codecov.io/gh/SchlossLab/rchime)
+coverage](https://codecov.io/gh/mothur/rchime/graph/badge.svg)](https://app.codecov.io/gh/mothur/rchime)
+
+[![pkgdown](https://github.com/SchlossLab/rchime/actions/workflows/pkgdown.yaml/badge.svg)](https://github.com/SchlossLab/rchime/actions/workflows/pkgdown.yaml)
+[![CRAN
+status](https://www.r-pkg.org/badges/version/rchime)](https://CRAN.R-project.org/package=rchime)
 <!-- badges: end -->
 
 ## Overview
@@ -18,11 +22,7 @@ package uses code from the
 [vsearch](https://github.com/torognes/vsearch) tools.
 
 - `rchime()` detect and remove chimeras from your
-  [strollur](https://mothur.org/strollur/) dataset object
-- `rchimeReference()` detect chimeras in your sequences using a
-  reference
-- `rchimeDenovoSingleSample()` detect chimeras in your sequences
-- `rchimeDenovo()` detect chimeras in your sequences parsed by sample
+  [strollur](https://mothur.org/strollur/) dataset object or data.frame
 
 ## Installation
 
@@ -45,23 +45,14 @@ devtools::install_github("mothur/rchime")
 ## Usage
 
 The `rchime()` function accepts [strollur](https://mothur.org/strollur/)
-dataset objects as inputs. Let’s create a
-[dataset](https://mothur.org/strollur/reference/dataset.html) object
-using files from [mothur’s](https://mothur.org)
+objects or data.frames as inputs. Let’s create a
+[strollur::strollur](https://mothur.org/strollur/reference/strollur.html)
+object using files from [mothur’s](https://mothur.org)
 [Miseq_SOP](https://mothur.org/wiki/miseq_sop/) example analysis. Then
 we will use the *denovo* method in `rchime()` to detect and remove the
 chimeras from the dataset.
 
 ``` r
-library(rchime)
-#> Loading required package: Rcpp
-#> Loading required package: strollur
-#> 
-#> Attaching package: 'strollur'
-#> The following objects are masked from 'package:base':
-#> 
-#>     assign, names, summary
-
 fasta_data <- readRDS(rchime_example("miseq_fasta.rds"))
 abundance_data <- readRDS(rchime_example("miseq_abundance.rds"))
 
@@ -79,7 +70,7 @@ chimera_report <- rchime(data)
 #> The denovo method runs with a single processor.
 #> ℹ Added a chimera_report.
 #> → rchime removed `10453` chimeras from your dataset.
-#> → It took `4.27263188362122` seconds to detect and remove the chimeras.
+#> → It took `4.26860308647156` seconds to detect and remove the chimeras.
 
 data
 #> rchime denovo example:

@@ -21,3 +21,17 @@ rchime_example <- function(file = NULL) {
   }
   return(path)
 }
+
+#' @keywords internal
+fill_required_parameters <- function(df, given_column_name) {
+  if (!(given_column_name %in% names(df))) {
+    message <- paste0(
+      "Expected a data.frame column named ",
+      given_column_name, " to be provided."
+    )
+
+    cli::cli_abort(message)
+  }
+
+  return(df[[given_column_name]])
+}

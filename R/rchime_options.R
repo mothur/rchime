@@ -44,10 +44,7 @@
 #'
 #' @author Sarah Westcott, \email{swestcot@@umich.edu}
 #'
-#' @importFrom parallelly, availableCores
-#'
 #' @export
-#'
 rchime_options <- function(processors = parallelly::availableCores(),
                            dereplicate = TRUE, abskew = 2.0, minh = 0.28,
                            mindiv = 0.8, xn = 8.0, dn = 1.4, maxp = 3) {
