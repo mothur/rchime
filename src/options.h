@@ -94,6 +94,8 @@ public:
         opt_mid = 0.0;
         opt_unoise_alpha = 2.0;
         neon_present = 0;
+        ssse3_present = 0;
+        sse2_present = 0;
     }
 
     // user setable
@@ -151,6 +153,8 @@ public:
     int64_t opt_maxdiffs;
     int64_t neon_present;
     double opt_unoise_alpha;
+    int64_t ssse3_present;
+    int64_t sse2_present;
 
 private:
 

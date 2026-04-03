@@ -241,7 +241,7 @@ auto Vsearch_AlignSimd::dprofile_fill16(CELL * dprofile_word,
           d[z] = dseq[(j * CHANNELS) + z] << 4U;
         }
 
-      for (int i = 0; i < matrix_size; i += 8)
+      for (auto i = 0; i < matrix_size; i += 8)
         {
 
 #ifdef __PPC__
@@ -1091,7 +1091,7 @@ auto Vsearch_AlignSimd::search16_qprep(s16info_s * s, char * qseq, int qlen) -> 
     }
   s->qtable = (VECTOR_SHORT **) util.xmalloc(s->qlen * sizeof(VECTOR_SHORT*));
 
-  for (int i = 0; i < qlen; i++)
+  for (auto i = 0; i < qlen; i++)
     {
       s->qtable[i] = s->dprofile + (4 * maps.map_4bit(qseq[i]));
     }
@@ -1309,7 +1309,7 @@ auto Vsearch_AlignSimd::search16(s16info_s * s,
   auto const score_min = compute_score_min(*s);
   auto const score_max = std::numeric_limits<short>::max();
 
-  for (int i = 0; i < 4; i++)
+  for (auto i = 0; i < 4; i++)
     {
       S[i] = v_zero;
       dseqalloc[i] = v_zero;

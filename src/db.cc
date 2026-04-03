@@ -162,7 +162,7 @@ auto Vsearch_Database::read(std::vector<std::string>& names,
     seqindex_alloc = 0;
     seqindex = nullptr;
 
-    for (int i = 0; i < seqs.size(); i++) {
+    for (auto i = 0; i < seqs.size(); i++) {
         size_t const sequencelength = seqs[i].length();
         int64_t const abundance = abundances[i];
 

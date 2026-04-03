@@ -69,7 +69,7 @@ void ChimeraVsearch::sortDescending(std::vector<std::string>& sequenceNames,
 
     vector<orderFloatAbundance> sortedVector((abunds).size());
 
-    for (int i = 0; i < (abunds).size(); i++) {
+    for (auto i = 0; i < (abunds).size(); i++) {
         sortedVector[i].index = i;
         sortedVector[i].abund = abunds[i];
         sortedVector[i].name = sequenceNames[i];
@@ -78,7 +78,7 @@ void ChimeraVsearch::sortDescending(std::vector<std::string>& sequenceNames,
     sort(sortedVector.begin(), sortedVector.end(), compareAbundance);
 
     vector<unsigned> order((abunds).size(), 0);
-    for (int i = 0; i < (abunds).size(); i++) {
+    for (auto i = 0; i < (abunds).size(); i++) {
         order[i] = sortedVector[i].index;
         abunds[i] = sortedVector[i].abund;
         sequenceNames[i] = sortedVector[i].name;
@@ -198,7 +198,7 @@ Rcpp::List ChimeraVsearch::removeChimeras() {
         // else pick first non-chimeric result.
         set<string> resolved;
         vector<ChimeHit2> results;
-        for (int i = 0; i < vsearchOut.size(); i++) {
+        for (auto i = 0; i < vsearchOut.size(); i++) {
 
             for (int j = 0; j < vsearchOut[i].size(); j++) {
 
@@ -286,7 +286,7 @@ Rcpp::List ChimeraVsearch::removeChimeras(std::vector<std::string>& refNames,
     vector<pieceOfWork> indexes = divideWork(pNames->at(0).size(), processors);
 
     //Launch worker threads
-    for (int i = 0; i < processors-1; i++) {
+    for (auto i = 0; i < processors-1; i++) {
 
         chimeraData* dataBundle = new chimeraData(pNames, pSequences, pAbundances,
                                                   &refNames, &refSequences,
@@ -305,7 +305,7 @@ Rcpp::List ChimeraVsearch::removeChimeras(std::vector<std::string>& refNames,
 
     vector<ChimeHit2> hits = dataBundle->results[0];
 
-    for (int i = 0; i < workerThreads.size(); i++) {
+    for (auto i = 0; i < workerThreads.size(); i++) {
 
         workerThreads[i]->join();
 
@@ -340,7 +340,7 @@ Rcpp::List ChimeraVsearch::createVsearchResults(vector<ChimeHit2> hits) {
     vector<string> chimeras;
 
     // create a uchimeout
-    for (int i = 0; i < hits.size(); i++) {
+    for (auto i = 0; i < hits.size(); i++) {
 
         if (hits[i].status == "Y") {
             chimeras.push_back(hits[i].QLabel);

@@ -122,7 +122,7 @@ set<T> toSet(const vector<T>& x) {
 
     if (x.size() == 0) { return results; }
 
-    for (int i = 0; i < x.size(); i++ ) {
+    for (auto i = 0; i < x.size(); i++ ) {
         results.insert(x[i]);
     }
 
@@ -161,7 +161,7 @@ template<typename T>
 void applyOrder(T& x, const std::vector<unsigned>& order) {
     T copy = x;
 
-    for (int i = 0; i < order.size(); i++) {
+    for (auto i = 0; i < order.size(); i++) {
         x[i] = copy[order[i]];
     }
 }

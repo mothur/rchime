@@ -206,7 +206,7 @@ auto Vsearch_Searchcore::topscores(struct searchinfo_s * searchinfo,
   if (bitmap != nullptr)
         {
 #ifdef __x86_64__
-          if (ssse3_present != 0)
+          if (opts->ssse3_present != 0)
             {
               cpu.increment_counters_from_bitmap_ssse3(searchinfo->kmers,
                                                    bitmap, indexed_count);
