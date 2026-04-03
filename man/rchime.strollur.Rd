@@ -65,22 +65,10 @@ This function uses code from the
 }
 \examples{
 
-# Let's create a dataset named "rchime denovo example"
+# Let's load a strollur object named "rchime denovo example"
 
-data_denovo <- strollur::new_dataset("rchime denovo example")
-
-# Read the fasta and abundance data
-
-fasta_data <- readRDS(rchime_example("miseq_fasta.rds"))
-abundance_data <- readRDS(rchime_example("miseq_abundance.rds"))
-
-# Add the sequence and abundance data to the dataset
-
-strollur::add(data_denovo, table = fasta_data, type = "sequences")
-strollur::assign(data_denovo,
-  table = abundance_data,
-  type = "sequence_abundance"
-)
+data_denovo <- strollur::load_dataset(
+                           rchime_example("strollur_multi_sample.rds"))
 
 # Detect and remove chimeras from the dataset using denovo approach by sample
 # (recommended)
@@ -90,19 +78,10 @@ data_denovo
 
 # Alternatively you can detect and remove chimeras using a reference
 
-data_reference <- strollur::new_dataset("rchime reference example")
+data_reference <- strollur::load_dataset(
+                           rchime_example("strollur_multi_sample.rds"))
 
-strollur::add(data_reference, table = fasta_data, type = "sequences")
-strollur::assign(data_reference,
-  table = abundance_data,
-  type = "sequence_abundance"
-)
-
-reference <- new_dataset("Silva V4 Region")
-
-reference_data <- readRDS(rchime_example("reference.rds"))
-
-strollur::add(reference, table = reference_data, type = "sequences")
+reference <- strollur::load_dataset(rchime_example("strollur_reference.rds"))
 
 chimera_report <- rchime(data_reference, reference = reference)
 data_reference

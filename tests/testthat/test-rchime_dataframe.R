@@ -113,7 +113,7 @@ test_that("test rchime denovo - strollur - single sample ", {
 
 test_that("test rchime denovo -strollur/mulitple samples, dereplicate = TRUE", {
   data <- readRDS(rchime_example("miseq_data_frame_by_sample.rds"))
-  chimera_report <- rchime(data, silent = TRUE)
+  chimera_report <- rchime(data, dereplicate = TRUE, silent = TRUE)
 
   # checks to make sure the correct things are created
   expect_equal(length(chimera_report), 3)

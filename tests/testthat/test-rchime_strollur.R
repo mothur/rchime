@@ -70,12 +70,20 @@ test_that("test rchime by reference - strollur", {
   reference <- new_dataset("Silva V4 Region")
   strollur::add(reference, table = reference_data, type = "sequences")
 
+  chimera_report <- rchime(data, reference = reference, remove_chimeras = FALSE)
+
+  # checks to make sure the correct things are created
+  expect_equal(length(chimera_report), 2)
+  expect_equal(length(chimera_report$chimeras), 24)
+  expect_equal(nrow(chimera_report$chimera_report), 100)
+
   chimera_report <- rchime(data, reference = reference)
 
   # checks to make sure the correct things are created
   expect_equal(length(chimera_report), 2)
   expect_equal(length(chimera_report$chimeras), 24)
   expect_equal(nrow(chimera_report$chimera_report), 100)
+
 
   # spot check chimera report
   # check first chimeric sequence
@@ -146,13 +154,7 @@ test_that("test rchime denovo - strollur - single sample ", {
 })
 
 test_that("test rchime denovo -strollur/mulitple samples, dereplicate = TRUE", {
-  fasta_data <- readRDS(rchime_example("miseq_fasta.rds"))
-  abundance_data <- readRDS(rchime_example("miseq_abundance.rds"))
-
-  data <- strollur::new_dataset("rchime denovo example")
-  strollur::add(data, table = fasta_data, type = "sequences")
-  strollur::assign(data, table = abundance_data, type = "sequence_abundance")
-
+  data <- strollur::load_dataset(rchime_example("strollur_multi_sample.rds"))
   chimera_report <- rchime(data, silent = TRUE)
 
   # checks to make sure the correct things are created
@@ -237,12 +239,7 @@ test_that("test rchime denovo -strollur/mulitple samples, dereplicate = TRUE", {
 })
 
 test_that("test rchime denovo strollur/mulitple samples, dereplicate = FALSE", {
-  fasta_data <- readRDS(rchime_example("miseq_fasta.rds"))
-  abundance_data <- readRDS(rchime_example("miseq_abundance.rds"))
-
-  data <- strollur::new_dataset("rchime denovo example")
-  strollur::add(data, table = fasta_data, type = "sequences")
-  strollur::assign(data, table = abundance_data, type = "sequence_abundance")
+  data <- strollur::load_dataset(rchime_example("strollur_multi_sample.rds"))
 
   options <- rchime_options(dereplicate = FALSE)
   chimera_report <- rchime(data, silent = TRUE, rchime_options = options)

@@ -13,7 +13,6 @@ A package for detecting and removing chimeras.
 Useful links:
 \itemize{
   \item \url{https://mothur.org/rchime}
-  \item \url{http://mothur.org/rchime/}
   \item Report bugs at \url{https://github.com/mothur/rchime/issues}
 }
 

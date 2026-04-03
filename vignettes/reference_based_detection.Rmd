@@ -8,6 +8,7 @@ vignette: >
 ---
 
 ```{r, include = FALSE}
+library(rchime)
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
@@ -16,37 +17,46 @@ knitr::opts_chunk$set(
 
 ## Overview
 
-The `rchime()` function allows you to detect and remove chimeras from your dataset using a referenced based approach. In this tutorial we use SILVA reference files trimmed to our region of interest. *rchime* is designed to be flexible and you can use any reference you choose. 
+The `rchime()` function allows you to detect and remove chimeras from your dataset using a referenced based approach. `rchime()` can be used with [strollur objects](https://mothur.org/strollur/reference/strollur.html) or data.frames as inputs. Let's look at examples of both data types using sequence data from [mothur's](https://mothur.org) [MiSeq_SOP](https://mothur.org/wiki/miseq_sop/) example analysis, and SILVA reference sequences trimmed to our region of interest as the reference. *rchime* is designed to be flexible and you can use any reference you choose. 
 
-```{r setup}
-library(rchime)
-```
+### Creating *[strollur](https://mothur.org/strollur)* objects
 
-## Creating *[strollur](https://mothur.org/strollur)* objects
-
-The `rchime()` function takes [strollur::dataset](https://mothur.org/strollur/reference/dataset.html) objects as inputs for the data and reference parameters. Let's create a dataset that contains our reference sequences.
+Let's create a [strollur object](https://mothur.org/strollur/reference/strollur.html) that contains our SILVA reference sequences.
 
 ```{r}
-reference_data <- readRDS(rchime_example("reference.rds"))
-
 reference <- strollur::new_dataset("Silva V4 Region")
-strollur::add(reference, table = reference_data, type = "sequences")
+
+strollur::add(reference,
+              table = readRDS(rchime_example("reference.rds")),
+              type = "sequences")
 
 reference
 ```
 
-The *rchime* package contains sequence data from [mothur's](https://mothur.org) [MiSeq_SOP](https://mothur.org/wiki/miseq_sop/) example. Let's create a dataset from containing those sequences.
+Let's create a [strollur object](https://mothur.org/strollur/reference/strollur.html) containing the MiSeq_SOP sequences.
 
 ```{r}
 fasta_data <- readRDS(rchime_example("miseq_fasta.rds"))
 abundance_data <- readRDS(rchime_example("miseq_abundance.rds"))
 
-data <- strollur::new_dataset("rchime reference example")
+strollur <- strollur::new_dataset("rchime reference example")
 
-strollur::add(data, table = fasta_data, type = "sequences")
-strollur::assign(data, table = abundance_data, type = "sequence_abundance")
+strollur::add(strollur, table = fasta_data, type = "sequences")
+strollur::assign(strollur, table = abundance_data, type = "sequence_abundance")
 
-data
+strollur
+```
+
+### Loading data.frames
+
+```{r}
+reference_data <- readRDS(rchime_example("reference.rds"))
+
+str(reference_data)
+
+data_df <- readRDS(rchime_example("miseq_data_frame_by_sample.rds"))
+
+str(data_df)
 ```
 
 ## Removing chimeras
@@ -54,15 +64,33 @@ data
 When removing chimeras using a reference, the potential parents are chosen from the set of reference sequences. Let's use the reference to remove the chimeras.
 
 ```{r}
-results <- rchime(data, reference = reference)
+strollur_results <- rchime(strollur, reference = reference)
 
-data
+strollur
+
+data_frame_results <- rchime(data_df, reference = reference_data)
 ```
 
-Let's take a look at the first 5 chimeric sequences in the [chimera_report](https://mothur.org/rchime/articles/chimera_report.html):
+## Results
+
+The `rchime()` function returns a list containing the results of the function. When you are running the command with a strollur object, the chimera_report is  added, and chimeras are removed for you automatically. Let's take a closer look at the results returned. 
+
+### Chimera Report
+
+The [chimera_report](https://mothur.org/rchime/articles/chimera_report.html) is a data.frame with a row for each sequence in your dataset. Let's take a look at the first 5 chimeric sequences in the report:
 
 ```{r}
-head(results$chimera_report[results$chimera_report$Chimeric_Status == "Y", ],
+head(strollur_results$chimera_report[strollur_results$chimera_report$Chimeric_Status == "Y", ],
   n = 5
 )
 ```
+
+### Chimeras
+
+Results also contains a list of the names of the chimeric sequences. Let's get the names of the first 10 chimeras.
+
+```{r}
+strollur_results$chimeras |> head(n = 10)
+```
+
+
