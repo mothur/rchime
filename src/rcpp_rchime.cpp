@@ -40,7 +40,7 @@ Rcpp::List rchimeReference(std::vector<std::string> sequence_names,
 
     // check vector lengths match
     if (sequence_names.size() != sequences.size()) {
-        string message = "sequence_names must be the same length as sequences.";
+        std::string message = "sequence_names must be the same length as sequences.";
         message += " You provided " + toString(sequence_names.size());
         message += " sequence names, and " + toString(sequences.size());
         message += " sequences.";
@@ -48,7 +48,7 @@ Rcpp::List rchimeReference(std::vector<std::string> sequence_names,
     }
 
     if (reference_names.size() != reference_sequences.size()) {
-        string message = "reference_names must be the same length as reference_sequences.";
+        std::string message = "reference_names must be the same length as reference_sequences.";
         message += " You provided " + toString(reference_names.size());
         message += " reference names, and " + toString(reference_sequences.size());
         message += " reference sequences.";
@@ -66,7 +66,7 @@ Rcpp::List rchimeReference(std::vector<std::string> sequence_names,
 
         // add required processors options if needed
         if (!opts_list.containsElementNamed("processors")) {
-            vector<string> newNames = opts_list.attr("names");
+            std::vector<std::string> newNames = opts_list.attr("names");
             newNames.push_back("processors");
             opts_list.push_back(Rcpp::as<int>(availableCores()));
             opts_list.attr("names") = newNames;
@@ -74,14 +74,14 @@ Rcpp::List rchimeReference(std::vector<std::string> sequence_names,
 
         // add required dereplicate options if needed
         if (!opts_list.containsElementNamed("dereplicate")) {
-            vector<string> newNames = opts_list.attr("names");
+            std::vector<std::string> newNames = opts_list.attr("names");
             newNames.push_back("dereplicate");
             opts_list.push_back(false);
             opts_list.attr("names") = newNames;
         }
         optionsReference = opts_list;
     }else{
-        vector<string> optionNames = {"processors", "dereplicate"};
+        std::vector<std::string> optionNames = {"processors", "dereplicate"};
         optionsReference.push_back(Rcpp::as<int>(availableCores()));
         optionsReference.push_back(false);
         optionsReference.attr("names") = optionNames;
@@ -141,7 +141,7 @@ Rcpp::List rchimeDenovoSingleSample(std::vector<std::string> sequence_names,
 
     // check vector lengths match
     if (sequence_names.size() != sequences.size()) {
-        string message = "sequence_names must be the same length as sequences.";
+        std::string message = "sequence_names must be the same length as sequences.";
         message += " You provided " + toString(sequence_names.size());
         message += " sequence names, and " + toString(sequences.size());
         message += " sequences.";
@@ -150,7 +150,7 @@ Rcpp::List rchimeDenovoSingleSample(std::vector<std::string> sequence_names,
 
     // check vector lengths match
     if (sequence_names.size() != abundances.size()) {
-        string message = "sequence_names must be the same length as abundances.";
+        std::string message = "sequence_names must be the same length as abundances.";
         message += " You provided " + toString(sequence_names.size());
         message += " sequence names, and " + toString(abundances.size());
         message += " abundances.";
@@ -164,7 +164,7 @@ Rcpp::List rchimeDenovoSingleSample(std::vector<std::string> sequence_names,
 
         // add required processors options if needed
         if (!opts_list.containsElementNamed("processors")) {
-            vector<string> newNames = opts_list.attr("names");
+            std::vector<std::string> newNames = opts_list.attr("names");
             newNames.push_back("processors");
             opts_list.push_back(1);
             opts_list.attr("names") = newNames;
@@ -172,14 +172,14 @@ Rcpp::List rchimeDenovoSingleSample(std::vector<std::string> sequence_names,
 
         // add required dereplicate options if needed
         if (!opts_list.containsElementNamed("dereplicate")) {
-            vector<string> newNames = opts_list.attr("names");
+            std::vector<std::string> newNames = opts_list.attr("names");
             newNames.push_back("dereplicate");
             opts_list.push_back(false);
             opts_list.attr("names") = newNames;
         }
         optionsDenovo = opts_list;
     }else{
-        vector<string> optionNames = {"processors", "dereplicate"};
+        std::vector<std::string> optionNames = {"processors", "dereplicate"};
         optionsDenovo.push_back(1);
         optionsDenovo.push_back(false);
         optionsDenovo.attr("names") = optionNames;
@@ -239,13 +239,13 @@ Rcpp::List rchimeDenovo(std::vector<std::vector<std::string>> sequence_names,
 
     // check vector lengths match
     if (sequence_names.size() != sequences.size()) {
-        string message = "sequence_names must be the same length as sequences.";
+        std::string message = "sequence_names must be the same length as sequences.";
         throw Rcpp::exception(message.c_str());
     }
 
     // check vector lengths match
     if (sequence_names.size() != abundances.size()) {
-        string message = "sequence_names must be the same length as abundances.";
+        std::string message = "sequence_names must be the same length as abundances.";
         throw Rcpp::exception(message.c_str());
     }
 
@@ -256,7 +256,7 @@ Rcpp::List rchimeDenovo(std::vector<std::vector<std::string>> sequence_names,
 
         // add required processors options if needed
         if (!opts_list.containsElementNamed("processors")) {
-            vector<string> newNames = opts_list.attr("names");
+            std::vector<std::string> newNames = opts_list.attr("names");
             newNames.push_back("processors");
             opts_list.push_back(1);
             opts_list.attr("names") = newNames;
@@ -264,14 +264,14 @@ Rcpp::List rchimeDenovo(std::vector<std::vector<std::string>> sequence_names,
 
         // add required dereplicate options if needed
         if (!opts_list.containsElementNamed("dereplicate")) {
-            vector<string> newNames = opts_list.attr("names");
+            std::vector<std::string> newNames = opts_list.attr("names");
             newNames.push_back("dereplicate");
             opts_list.push_back(false);
             opts_list.attr("names") = newNames;
         }
         optionsDenovo = opts_list;
     }else{
-        vector<string> optionNames = {"processors", "dereplicate"};
+        std::vector<std::string> optionNames = {"processors", "dereplicate"};
         optionsDenovo.push_back(1);
         optionsDenovo.push_back(false);
         optionsDenovo.attr("names") = optionNames;
