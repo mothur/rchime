@@ -19,6 +19,8 @@ Imports:
     RcppThread,
     utils
 Depends: Rcpp (>= 1.0.12), R (>= 4.5.0), strollur
+Remotes: 
+    mothur/strollur
 Suggests: 
     knitr,
     rmarkdown,

@@ -1,3 +1,4 @@
+#' @importFrom parallelly availableCores
 #' @title The `rchime_options()` function allows you to set vsearch specific
 #' optional parameters.
 #' @name rchime_options

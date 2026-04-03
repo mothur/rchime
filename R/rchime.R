@@ -1,3 +1,5 @@
+#' @import RcppThread
+#' @import cli
 #' @title Detect and remove chimeras from your
 #'   \href{https://mothur.org/strollur/}{strollur} dataset object or data.frame
 #'   using a denovo approach or alternatively a reference model.
