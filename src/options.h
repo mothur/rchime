@@ -98,6 +98,15 @@ public:
         neon_present = 0;
         ssse3_present = 0;
         sse2_present = 0;
+        altivec_present = 0;
+        mmx_present = 0;
+        sse_present = 0;
+        sse3_present = 0;
+        sse41_present = 0;
+        sse42_present = 0;
+        popcnt_present = 0;
+        avx_present = 0;
+        avx2_present = 0;
     }
 
     // user setable
@@ -157,6 +166,15 @@ public:
     double opt_unoise_alpha;
     int64_t ssse3_present;
     int64_t sse2_present;
+    int64_t altivec_present;
+    int64_t mmx_present;
+    int64_t sse_present;
+    int64_t sse3_present;
+    int64_t sse41_present;
+    int64_t sse42_present;
+    int64_t popcnt_present;
+    int64_t avx_present;
+    int64_t avx2_present;
 
 private:
 

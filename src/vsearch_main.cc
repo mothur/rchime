@@ -132,6 +132,13 @@ Vsearch_Main::~Vsearch_Main() {
     delete maps;
 }
 /******************************************************************************/
+#ifdef __x86_64__
+#define cpuid(f1, f2, a, b, c, d)                                         \
+__asm__ __volatile__ ("cpuid"                                             \
+                          : "=a" (a), "=b" (b), "=c" (c), "=d" (d)        \
+                          : "a" (f1), "c" (f2));
+#endif
+
 auto Vsearch_Main::cpu_features_detect() -> void {
 #ifdef __aarch64__
 #ifdef __ARM_NEON
@@ -141,7 +148,7 @@ auto Vsearch_Main::cpu_features_detect() -> void {
 #error ARM Neon not present
 #endif
 #elif __PPC__
-    altivec_present = 1;
+    opts->altivec_present = 1;
 #elif __x86_64__
     unsigned int a = 0;
     unsigned int b = 0;
@@ -154,20 +161,20 @@ auto Vsearch_Main::cpu_features_detect() -> void {
     if (maxlevel >= 1)
     {
         cpuid(1, 0, a, b, c, d);
-        //mmx_present    = (d >> 23U) & 1U;
-        //sse_present    = (d >> 25U) & 1U;
+        opts->mmx_present    = (d >> 23U) & 1U;
+        opts->sse_present    = (d >> 25U) & 1U;
         opts->sse2_present   = (d >> 26U) & 1U;
-        //sse3_present   = (c >>  0U) & 1U;
+        opts->sse3_present   = (c >>  0U) & 1U;
         opts->ssse3_present  = (c >>  9U) & 1U;
-        //sse41_present  = (c >> 19U) & 1U;
-        //sse42_present  = (c >> 20U) & 1U;
-        //popcnt_present = (c >> 23U) & 1U;
-       // avx_present    = (c >> 28U) & 1U;
+        opts->sse41_present  = (c >> 19U) & 1U;
+        opts->sse42_present  = (c >> 20U) & 1U;
+        opts->popcnt_present = (c >> 23U) & 1U;
+        opts->avx_present    = (c >> 28U) & 1U;
 
         if (maxlevel >= 7)
         {
             cpuid(7, 0, a, b, c, d);
-            //avx2_present = (b >>  5U) & 1U;
+            opts->avx2_present = (b >>  5U) & 1U;
         }
     }
 #else
