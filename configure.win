@@ -1,0 +1,6 @@
+@echo off
+set "R_SCRIPT=%R_HOME%\bin\Rscript.exe"
+
+for /f "delims=" %%i in ('"%R_SCRIPT%" -e "cat(RcppXsimd::getSSEFlags(), RcppXsimd::getNEONFlags())"') do set XSIMD_FLAGS=%%i
+
+sed -e "s|@XSIMD_FLAGS@|%XSIMD_FLAGS%|" src/Makevars.in > src/Makevars.win

@@ -1,3 +1,2 @@
-# Call RcppXsimd to get the correct SSE flags for the current hardware
-PKG_CFLAGS = $(shell "${R_HOME}/bin/Rscript" -e "cat(RcppXsimd::getSSEFlags(), RcppXsimd::getNEONFlags())")
-PKG_CXXFLAGS = $(shell "${R_HOME}/bin/Rscript" -e "cat(RcppXsimd::getSSEFlags(), RcppXsimd::getNEONFlags())")
+# Get SSE/NEON flags and append the Windows-specific byte fix
+PKG_CXXFLAGS = @XSIMD_FLAGS@ -D_HAS_STD_BYTE=0
