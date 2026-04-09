@@ -1,8 +1,6 @@
 # test rchime function
 
 test_that("test rchime - errors and rchime_options", {
-  expect_error(rchime("not a strollur object"))
-
   fasta_data <- readRDS(rchime_example("miseq_fasta.rds"))
   reference_data <- readRDS(rchime_example("reference.rds"))
 
@@ -15,10 +13,12 @@ test_that("test rchime - errors and rchime_options", {
   # this should not change since the rchime command below does not remove
   num_seqs <- strollur::count(data)
 
+  options <- rchime_options(dereplicate = FALSE)
   chimera_report <- rchime(data,
     reference = reference_ob,
     remove_chimeras = FALSE,
-    silent = FALSE
+    silent = FALSE,
+    rchime_options = options
   )
 
   expect_equal(strollur::count(data), num_seqs)
@@ -60,7 +60,7 @@ test_that("test rchime - errors and rchime_options", {
   expect_equal(nrow(chimera_report$chimera_report), 100)
 })
 
-test_that("test rchime by reference ", {
+test_that("test rchime by reference - strollur", {
   fasta_data <- readRDS(rchime_example("miseq_fasta.rds"))
   reference_data <- readRDS(rchime_example("reference.rds"))
 
@@ -70,12 +70,20 @@ test_that("test rchime by reference ", {
   reference <- new_dataset("Silva V4 Region")
   strollur::add(reference, table = reference_data, type = "sequences")
 
+  chimera_report <- rchime(data, reference = reference, remove_chimeras = FALSE)
+
+  # checks to make sure the correct things are created
+  expect_equal(length(chimera_report), 2)
+  expect_equal(length(chimera_report$chimeras), 24)
+  expect_equal(nrow(chimera_report$chimera_report), 100)
+
   chimera_report <- rchime(data, reference = reference)
 
   # checks to make sure the correct things are created
   expect_equal(length(chimera_report), 2)
   expect_equal(length(chimera_report$chimeras), 24)
   expect_equal(nrow(chimera_report$chimera_report), 100)
+
 
   # spot check chimera report
   # check first chimeric sequence
@@ -127,7 +135,7 @@ test_that("test rchime by reference ", {
   expect_equal(chimera_report$chimera_report[[3, 16]], 5)
 })
 
-test_that("test rchime denovo - single sample ", {
+test_that("test rchime denovo - strollur - single sample ", {
   # no need to check dereplicate since one sample
 
   fasta_data <- readRDS(rchime_example("miseq_fasta.rds"))
@@ -145,16 +153,9 @@ test_that("test rchime denovo - single sample ", {
   expect_equal(nrow(chimera_report$chimera_report), 6084)
 })
 
-test_that("test rchime denovo - mulitple samples, dereplicate = TRUE", {
-  fasta_data <- readRDS(rchime_example("miseq_fasta.rds"))
-  abundance_data <- readRDS(rchime_example("miseq_abundance.rds"))
-
-  data <- strollur::new_dataset("rchime denovo example")
-  strollur::add(data, table = fasta_data, type = "sequences")
-  strollur::assign(data, table = abundance_data, type = "sequence_abundance")
-
-  options <- rchime_options(dereplicate = TRUE)
-  chimera_report <- rchime(data, rchime_options = options, silent = TRUE)
+test_that("test rchime denovo -strollur/mulitple samples, dereplicate = TRUE", {
+  data <- strollur::load_dataset(rchime_example("strollur_multi_sample.rds"))
+  chimera_report <- rchime(data, silent = TRUE)
 
   # checks to make sure the correct things are created
   expect_equal(length(chimera_report), 2)
@@ -237,15 +238,11 @@ test_that("test rchime denovo - mulitple samples, dereplicate = TRUE", {
   expect_equal(chimera_report$chimera_report[[8, 16]], 21)
 })
 
-test_that("test rchime denovo - mulitple samples, dereplicate = FALSE", {
-  fasta_data <- readRDS(rchime_example("miseq_fasta.rds"))
-  abundance_data <- readRDS(rchime_example("miseq_abundance.rds"))
+test_that("test rchime denovo strollur/mulitple samples, dereplicate = FALSE", {
+  data <- strollur::load_dataset(rchime_example("strollur_multi_sample.rds"))
 
-  data <- strollur::new_dataset("rchime denovo example")
-  strollur::add(data, table = fasta_data, type = "sequences")
-  strollur::assign(data, table = abundance_data, type = "sequence_abundance")
-
-  chimera_report <- rchime(data, silent = TRUE)
+  options <- rchime_options(dereplicate = FALSE)
+  chimera_report <- rchime(data, silent = TRUE, rchime_options = options)
 
   # checks to make sure the correct things are created
   expect_equal(length(chimera_report), 2)

@@ -7,12 +7,12 @@
 
 /******************************************************************************/
 struct orderFloatAbundance {
-    string name;
+    std::string name;
     float abund;
     unsigned index;
 
     orderFloatAbundance() { abund = 0; index = 0; name = ""; }
-    orderFloatAbundance(string n, float a, unsigned i) : name(n), abund(a), index(i) {}
+    orderFloatAbundance(std::string n, float a, unsigned i) : name(n), abund(a), index(i) {}
     ~orderFloatAbundance() {}
 };
 /******************************************************************************/
@@ -34,11 +34,11 @@ static inline bool compareAbundance(orderFloatAbundance left, orderFloatAbundanc
 }
 /******************************************************************************/
 struct vsearchAbunds {
-    vector<float> abundances;
+    std::vector<float> abundances;
     bool chimeric;
 
     vsearchAbunds() { chimeric = true; }
-    vsearchAbunds(vector<float> abunds, bool c) {
+    vsearchAbunds(std::vector<float> abunds, bool c) {
         abundances = abunds;
         chimeric = c;
     }
@@ -60,7 +60,7 @@ struct chimeraData {
     int stop;
 
     // outputs
-    vector<vector<ChimeHit2>> results;
+    std::vector<std::vector<ChimeHit2>> results;
 
     // // denovo by sample only
     // vector<set<string>> chimeras;
@@ -136,14 +136,8 @@ private:
 
     bool contains(std::string s, Rcpp::CharacterVector& nv);
 
-  //  Rcpp::List createDenovoProcesses();
     Rcpp::List createReferencesProcesses();
-
-    Rcpp::List createVsearchResults(vector<ChimeHit2>);
-    // map<string, vsearchAbunds > combineResults(chimeraData*& dataBundle,
-    //                                 vector<chimeraData*>& data,
-    //                                 vector<RcppThread::Thread*>& workerThreads,
-    //                                 vector<ChimeHit2>& results);
+    Rcpp::List createVsearchResults(std::vector<ChimeHit2>);
 };
 /******************************************************************************/
 #endif // CHIMERAVSEARCH_H

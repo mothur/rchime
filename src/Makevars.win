@@ -1,0 +1,3 @@
+# Get SSE/NEON flags and append the Windows-specific byte fix
+PKG_CXXFLAGS = @XSIMD_FLAGS@
+-D_HAS_STD_BYTE=0

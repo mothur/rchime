@@ -14,7 +14,7 @@
 #include <fstream>
 #include <sstream>
 
-using namespace std;
+#include <cmath>
 
 /**********************************************************************/
 
@@ -37,9 +37,9 @@ using namespace std;
 #endif
 
 /**********************************************************************/
-const vector<string> nullVector;  // used to pass blank vector
-const vector<int> nullIntVector;  // used to pass blank vector
-const vector<float> nullFloatVector;  // used to pass blank vector
+const std::vector<std::string> nullVector;  // used to pass blank vector
+const std::vector<int> nullIntVector;  // used to pass blank vector
+const std::vector<float> nullFloatVector;  // used to pass blank vector
 /**********************************************************************/
 template<typename T>
 bool isEqual(const T& num1, const T& num2) {
@@ -50,8 +50,8 @@ bool isEqual(const T& num1, const T& num2) {
     return equal;
 }
 /**********************************************************************/
-inline string toString(const set<string>& x, char delim) {
-    string result = "";
+inline std::string toString(const std::set<std::string>& x, char delim) {
+    std::string result = "";
 
     if (x.size() == 0) { return result; }
 
@@ -63,7 +63,7 @@ inline string toString(const set<string>& x, char delim) {
     return result;
 }
 /**********************************************************************/
-inline string toString(const bool& x) {
+inline std::string toString(const bool& x) {
     if (x) {
         return "TRUE";
     }else{
@@ -71,8 +71,8 @@ inline string toString(const bool& x) {
     }
 }
 /**********************************************************************/
-inline string toString(const set<string>& x, string delim) {
-    string result = "";
+inline std::string toString(const std::set<std::string>& x, std::string delim) {
+    std::string result = "";
 
     if (x.size() == 0) { return result; }
 
@@ -85,15 +85,15 @@ inline string toString(const set<string>& x, string delim) {
 }
 /**********************************************************************/
 template<typename T>
-string toString(const T&x) {
-  stringstream output;
+std::string toString(const T&x) {
+    std::stringstream output;
   output << x;
   return output.str();
 }
 /**********************************************************************/
 template<typename T>
-string toString(const T&x, int i) {
-  stringstream output;
+std::string toString(const T&x, int i) {
+    std::stringstream output;
 
   output.precision(i);
   output << std::fixed << x;
@@ -102,8 +102,8 @@ string toString(const T&x, int i) {
 }
 /**********************************************************************/
 template<typename T>
-string toString(const vector<T>& x, char delim) {
-    string result = "";
+std::string toString(const std::vector<T>& x, char delim) {
+    std::string result = "";
 
     if (x.size() == 0) { return result; }
 
@@ -117,12 +117,12 @@ string toString(const vector<T>& x, char delim) {
 }
 /**********************************************************************/
 template<typename T>
-set<T> toSet(const vector<T>& x) {
-    set<T> results;
+std::set<T> toSet(const std::vector<T>& x) {
+    std::set<T> results;
 
     if (x.size() == 0) { return results; }
 
-    for (int i = 0; i < x.size(); i++ ) {
+    for (auto i = 0; i < x.size(); i++ ) {
         results.insert(x[i]);
     }
 
@@ -130,8 +130,8 @@ set<T> toSet(const vector<T>& x) {
 }
 /**********************************************************************/
 template<typename T>
-vector<T> toVector(const set<T>& x) {
-    vector<T> results;
+std::vector<T> toVector(const std::set<T>& x) {
+    std::vector<T> results;
 
     if (x.size() == 0) { return results; }
 
@@ -143,8 +143,8 @@ vector<T> toVector(const set<T>& x) {
 }
 /**********************************************************************/
 template<typename T, typename T2>
-vector<T> getKeys(const map<T, T2>& x) {
-    vector<T> results(x.size());
+std::vector<T> getKeys(const std::map<T, T2>& x) {
+    std::vector<T> results(x.size());
 
     if (x.size() == 0) { return results; }
 
@@ -161,7 +161,7 @@ template<typename T>
 void applyOrder(T& x, const std::vector<unsigned>& order) {
     T copy = x;
 
-    for (int i = 0; i < order.size(); i++) {
+    for (auto i = 0; i < order.size(); i++) {
         x[i] = copy[order[i]];
     }
 }
@@ -174,9 +174,9 @@ struct pieceOfWork {
   ~pieceOfWork() {}
 };
 
-inline vector<pieceOfWork> divideWork(double numItems, int& numProcessors) {
+inline std::vector<pieceOfWork> divideWork(double numItems, int& numProcessors) {
     // divide work between processors
-    vector<pieceOfWork> work;
+    std::vector<pieceOfWork> work;
 
     if (numItems < numProcessors) { numProcessors = numItems; }
     size_t startIndex = 0;

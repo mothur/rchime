@@ -241,7 +241,7 @@ auto Vsearch_AlignSimd::dprofile_fill16(CELL * dprofile_word,
           d[z] = dseq[(j * CHANNELS) + z] << 4U;
         }
 
-      for (int i = 0; i < matrix_size; i += 8)
+      for (auto i = 0; i < matrix_size; i += 8)
         {
 
 #ifdef __PPC__
@@ -1091,7 +1091,7 @@ auto Vsearch_AlignSimd::search16_qprep(s16info_s * s, char * qseq, int qlen) -> 
     }
   s->qtable = (VECTOR_SHORT **) util.xmalloc(s->qlen * sizeof(VECTOR_SHORT*));
 
-  for (int i = 0; i < qlen; i++)
+  for (auto i = 0; i < qlen; i++)
     {
       s->qtable[i] = s->dprofile + (4 * maps.map_4bit(qseq[i]));
     }
@@ -1138,51 +1138,6 @@ auto Vsearch_AlignSimd::search16(s16info_s * s,
   CELL * dprofile = (CELL *) s->dprofile;
   CELL * hearray = (CELL *) s->hearray;
   uint64_t const qlen = s->qlen;
-
-  // there should not be blank sequences
-  // if (qlen == 0)
-  //   {
-  //     for (auto cand_id = 0U; cand_id < sequences; cand_id++)
-  //       {
-  //         auto const seqno = seqnos[cand_id];
-  //         int64_t const length = db->getsequencelen(seqno);
-  //
-  //         paligned[cand_id] = length;
-  //         pmatches[cand_id] = 0;
-  //         pmismatches[cand_id] = 0;
-  //         pgaps[cand_id] = length;
-  //
-  //         if (length == 0)
-  //           {
-  //             pscores[cand_id] = 0;
-  //           }
-  //         else
-  //           {
-  //             pscores[cand_id] =
-  //               std::max(- s->penalty_gap_open_target_left -
-  //                   (length * s->penalty_gap_extension_target_left),
-  //                   - s->penalty_gap_open_target_right -
-  //                   (length * s->penalty_gap_extension_target_right));
-  //           }
-  //
-  //         char * cigar = nullptr;
-  //         if (length > 0)
-  //           {
-  //             auto const ret = util.xsprintf(&cigar, "%ldI", length);
-  //             if ((ret < 2) or (cigar == nullptr))
-  //               {
-  //                 throw Rcpp::exception("Unable to allocate enough memory.");
-  //               }
-  //           }
-  //         else
-  //           {
-  //             cigar = (char *) util.xmalloc(1);
-  //             cigar[0] = 0;
-  //           }
-  //         pcigar[cand_id] = cigar;
-  //       }
-  //     return;
-  //   }
 
   /* find longest target sequence and reallocate direction buffer */
   uint64_t maxdlen = 0;
@@ -1309,7 +1264,7 @@ auto Vsearch_AlignSimd::search16(s16info_s * s,
   auto const score_min = compute_score_min(*s);
   auto const score_max = std::numeric_limits<short>::max();
 
-  for (int i = 0; i < 4; i++)
+  for (auto i = 0; i < 4; i++)
     {
       S[i] = v_zero;
       dseqalloc[i] = v_zero;

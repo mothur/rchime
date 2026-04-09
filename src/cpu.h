@@ -72,12 +72,18 @@ public:
     ~Vsearch_Cpu() = default;
 
 #ifdef __x86_64__
-    auto increment_counters_from_bitmap_sse2(count_t * counters,
-                                         unsigned char * bitmap,
-                                         unsigned int totalbits) -> void;
-    auto increment_counters_from_bitmap_ssse3(count_t * counters,
-                                          unsigned char * bitmap,
-                                          unsigned int totalbits) -> void;
+
+    #if defined(__SSSE3__) || defined(SSSE3)
+
+        auto increment_counters_from_bitmap_ssse3(count_t * counters,
+                                              unsigned char * bitmap,
+                                              unsigned int totalbits) -> void;
+    #else
+
+        auto increment_counters_from_bitmap_sse2(count_t * counters,
+                                                 unsigned char * bitmap,
+                                                 unsigned int totalbits) -> void;
+    #endif
 #else
     auto increment_counters_from_bitmap(count_t * counters,
                                     unsigned char * bitmap,

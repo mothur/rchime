@@ -132,6 +132,13 @@ Vsearch_Main::~Vsearch_Main() {
     delete maps;
 }
 /******************************************************************************/
+#ifdef __x86_64__
+#define cpuid(f1, f2, a, b, c, d)                                         \
+__asm__ __volatile__ ("cpuid"                                             \
+                          : "=a" (a), "=b" (b), "=c" (c), "=d" (d)        \
+                          : "a" (f1), "c" (f2));
+#endif
+
 auto Vsearch_Main::cpu_features_detect() -> void {
 #ifdef __aarch64__
 #ifdef __ARM_NEON
@@ -141,7 +148,7 @@ auto Vsearch_Main::cpu_features_detect() -> void {
 #error ARM Neon not present
 #endif
 #elif __PPC__
-    altivec_present = 1;
+    opts->altivec_present = 1;
 #elif __x86_64__
     unsigned int a = 0;
     unsigned int b = 0;
@@ -154,20 +161,20 @@ auto Vsearch_Main::cpu_features_detect() -> void {
     if (maxlevel >= 1)
     {
         cpuid(1, 0, a, b, c, d);
-        mmx_present    = (d >> 23U) & 1U;
-        sse_present    = (d >> 25U) & 1U;
-        sse2_present   = (d >> 26U) & 1U;
-        sse3_present   = (c >>  0U) & 1U;
-        ssse3_present  = (c >>  9U) & 1U;
-        sse41_present  = (c >> 19U) & 1U;
-        sse42_present  = (c >> 20U) & 1U;
-        popcnt_present = (c >> 23U) & 1U;
-        avx_present    = (c >> 28U) & 1U;
+        opts->mmx_present    = (d >> 23U) & 1U;
+        opts->sse_present    = (d >> 25U) & 1U;
+        opts->sse2_present   = (d >> 26U) & 1U;
+        opts->sse3_present   = (c >>  0U) & 1U;
+        opts->ssse3_present  = (c >>  9U) & 1U;
+        opts->sse41_present  = (c >> 19U) & 1U;
+        opts->sse42_present  = (c >> 20U) & 1U;
+        opts->popcnt_present = (c >> 23U) & 1U;
+        opts->avx_present    = (c >> 28U) & 1U;
 
         if (maxlevel >= 7)
         {
             cpuid(7, 0, a, b, c, d);
-            avx2_present = (b >>  5U) & 1U;
+            opts->avx2_present = (b >>  5U) & 1U;
         }
     }
 #else
@@ -334,7 +341,7 @@ auto Vsearch_Main::find_best_parents(struct chimera_info_s * ci) -> int
       // refactoring: reset or initialize?
       std::fill(ci->maxsmooth.begin(), ci->maxsmooth.end(), 0);
 
-      for (int i = 0; i < ci->cand_count; ++i)
+      for (auto i = 0; i < ci->cand_count; ++i)
         {
           if (not cand_selected[i])
             {
@@ -365,7 +372,7 @@ auto Vsearch_Main::find_best_parents(struct chimera_info_s * ci) -> int
         {
           if (ci->maxsmooth[qpos] != 0)
             {
-              for (int i = 0; i < ci->cand_count; ++i)
+              for (auto i = 0; i < ci->cand_count; ++i)
                 {
                   if (not cand_selected[i])
                     {
@@ -382,7 +389,7 @@ auto Vsearch_Main::find_best_parents(struct chimera_info_s * ci) -> int
       /* select best parent based on most wins */
 
       int maxwins = 0;
-      for (int i = 0; i < ci->cand_count; ++i)
+      for (auto i = 0; i < ci->cand_count; ++i)
         {
           int const w = wins[i];
           if (w > maxwins)
@@ -457,7 +464,7 @@ auto Vsearch_Main::fill_alignment_parents(struct chimera_info_s * ci) -> void
 {
   /* fill in alignment strings for the parents */
 
-  for (int i = 0; i < ci->parents_found; ++i)
+  for (auto i = 0; i < ci->parents_found; ++i)
     {
       auto & alignment = ci->paln[i];
       int const cand = ci->best_parents[i];
@@ -549,7 +556,7 @@ auto Vsearch_Main::eval_parents(struct chimera_info_s * ci) -> Status
 
   char * q = ci->qaln.data();
   int qpos = 0;
-  for (int i = 0; i < ci->query_len; ++i)
+  for (auto i = 0; i < ci->query_len; ++i)
     {
       for (int j = 0; j < ci->maxi[i]; ++j)
         {
@@ -570,7 +577,7 @@ auto Vsearch_Main::eval_parents(struct chimera_info_s * ci) -> Status
   /* mark positions to ignore in voting */
   std::fill(ci->ignore.begin(), ci->ignore.end(), false);
 
-  for (int i = 0; i < alnlen; ++i)
+  for (auto i = 0; i < alnlen; ++i)
     {
       auto const qsym  = maps->map_4bit(ci->qaln[i]);
       auto const p1sym = maps->map_4bit(ci->paln[0][i]);
@@ -696,7 +703,7 @@ auto Vsearch_Main::eval_parents(struct chimera_info_s * ci) -> Status
   int best_left_a = 0;
   int best_right_a = 0;
 
-  for (int i = 0; i < alnlen; ++i)
+  for (auto i = 0; i < alnlen; ++i)
     {
       if (not ci->ignore[i])
         {
@@ -777,7 +784,7 @@ auto Vsearch_Main::eval_parents(struct chimera_info_s * ci) -> Status
 
       if (best_is_reverse)
         {
-          for (int i = 0; i < alnlen; ++i)
+          for (auto i = 0; i < alnlen; ++i)
             {
               char const diff = ci->diffs[i];
               if (diff == 'A')
@@ -793,7 +800,7 @@ auto Vsearch_Main::eval_parents(struct chimera_info_s * ci) -> Status
 
       /* fill in votes and model */
 
-      for (int i = 0; i < alnlen; ++i)
+      for (auto i = 0; i < alnlen; ++i)
         {
           char const m = i <= best_i ? 'A' : 'B';
           ci->model[i] = m;
@@ -1011,7 +1018,7 @@ auto Vsearch_Main::partition_query(struct chimera_info_s * chimera_info) -> void
 auto Vsearch_Main::chimera_init(struct chimera_info_s * ci) -> void
 {
 
-  for (int i = 0; i < maxparts; ++i)
+  for (auto i = 0; i < maxparts; ++i)
     {
       query_init(&ci->si[i]);
     }
@@ -1406,7 +1413,7 @@ auto Vsearch_Main::dust(char * seq, int len) -> void
 }
 /******************************************************************************/
 auto Vsearch_Main::dust_all(uint64_t seqcount) -> void {
-    for (int i = 0; i < seqcount; i++) {
+    for (auto i = 0; i < seqcount; i++) {
         dust(db->getsequence(i), db->getsequencelen(i));
     }
 }
@@ -1419,7 +1426,7 @@ auto Vsearch_Main::vmain(std::vector<std::string>& sequenceNames,
                                     unsigned int start, unsigned int stop) -> std::vector<ChimeHit2> {
 
 #ifdef __x86_64__
-   if (sse2_present == 0) {
+   if (opts->sse2_present == 0) {
       throw Rcpp::exception("Sorry, this program requires a cpu with SSE2.");
    }
 #endif

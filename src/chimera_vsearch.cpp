@@ -5,8 +5,8 @@
 Vsearch_Options* Vsearch_Options::_uniqueInstance = 0;
 
 /******************************************************************************/
-ChimeraVsearch::ChimeraVsearch(std::vector<std::vector<string>>& sequenceNames,
-                               std::vector<std::vector<string>>& sequences,
+ChimeraVsearch::ChimeraVsearch(std::vector<std::vector<std::string>>& sequenceNames,
+                               std::vector<std::vector<std::string>>& sequences,
                                std::vector<std::vector<float>>& abundances,
                                Rcpp::List options)  {
 
@@ -67,9 +67,9 @@ void ChimeraVsearch::sortDescending(std::vector<std::string>& sequenceNames,
                                     std::vector<std::string>& sequences,
                                     std::vector<float>& abunds) {
 
-    vector<orderFloatAbundance> sortedVector((abunds).size());
+    std::vector<orderFloatAbundance> sortedVector((abunds).size());
 
-    for (int i = 0; i < (abunds).size(); i++) {
+    for (auto i = 0; i < (abunds).size(); i++) {
         sortedVector[i].index = i;
         sortedVector[i].abund = abunds[i];
         sortedVector[i].name = sequenceNames[i];
@@ -77,8 +77,8 @@ void ChimeraVsearch::sortDescending(std::vector<std::string>& sequenceNames,
 
     sort(sortedVector.begin(), sortedVector.end(), compareAbundance);
 
-    vector<unsigned> order((abunds).size(), 0);
-    for (int i = 0; i < (abunds).size(); i++) {
+    std::vector<unsigned> order((abunds).size(), 0);
+    for (auto i = 0; i < (abunds).size(); i++) {
         order[i] = sortedVector[i].index;
         abunds[i] = sortedVector[i].abund;
         sequenceNames[i] = sortedVector[i].name;
@@ -116,7 +116,7 @@ Rcpp::List ChimeraVsearch::removeChimeras() {
                        pSequences->at(0),
                        pAbundances->at(0));
 
-        vector<ChimeHit2> results = vsearch.vmain(pNames->at(0),
+        std::vector<ChimeHit2> results = vsearch.vmain(pNames->at(0),
                                 pSequences->at(0),
                                 refNames, refSeqs,
                                 pAbundances->at(0), 0, 0);
@@ -125,8 +125,8 @@ Rcpp::List ChimeraVsearch::removeChimeras() {
     }else{
 
         // outputs
-        vector<vector<ChimeHit2>> vsearchOut(pNames->size());
-        map<string, vsearchAbunds > seqAbunds;
+        std::vector<std::vector<ChimeHit2>> vsearchOut(pNames->size());
+        std::map<std::string, vsearchAbunds > seqAbunds;
 
         // denovo by sample
         for (int k = 0; k < pNames->size(); k++) {
@@ -145,19 +145,19 @@ Rcpp::List ChimeraVsearch::removeChimeras() {
                                         refNames, refSeqs,
                                         pAbundances->at(k), 0, 0);
 
-            set<string> chimeras = vsearch.chimeraNames;
+            std::set<std::string> chimeras = vsearch.chimeraNames;
 
             // combining results
             for (int j = 0; j < pNames->at(k).size(); j++) {
 
-                string seqName = pNames->at(k)[j];
+                std::string seqName = pNames->at(k)[j];
                 auto it = seqAbunds.find(seqName);
 
                 // create new abunds vector and fill this groups abunds
                 if (it == seqAbunds.end()) {
 
                     // abunds(numSamples, 0)
-                    vector<float> abunds((pNames->size()), 0);
+                    std::vector<float> abunds((pNames->size()), 0);
                     vsearchAbunds abundFlag(abunds, dereplicate);
 
                     if (dereplicate) {
@@ -196,13 +196,13 @@ Rcpp::List ChimeraVsearch::removeChimeras() {
 
         // if all samples find the query to be chimeric, choose first chimeric result
         // else pick first non-chimeric result.
-        set<string> resolved;
-        vector<ChimeHit2> results;
-        for (int i = 0; i < vsearchOut.size(); i++) {
+        std::set<std::string> resolved;
+        std::vector<ChimeHit2> results;
+        for (auto i = 0; i < vsearchOut.size(); i++) {
 
             for (int j = 0; j < vsearchOut[i].size(); j++) {
 
-                string seqName = vsearchOut[i][j].QLabel;
+                std::string seqName = vsearchOut[i][j].QLabel;
                 auto it = resolved.find(seqName);
 
                 // if we haven't recorded this sequence
@@ -255,7 +255,7 @@ Rcpp::List ChimeraVsearch::removeChimeras() {
                 i++;
             }
 
-            vector<string> resultsNames = denovoResults.names();
+            std::vector<std::string> resultsNames = denovoResults.names();
             resultsNames.push_back("set_abundance_values");
 
             Rcpp::List abundance_values = Rcpp::List::create(
@@ -279,14 +279,14 @@ Rcpp::List ChimeraVsearch::removeChimeras(std::vector<std::string>& refNames,
     pRefNames = &refNames;
     pRefSequences = &refSequences;
 
-    vector<RcppThread::Thread*> workerThreads;
-    vector<chimeraData*> data;
+    std::vector<RcppThread::Thread*> workerThreads;
+    std::vector<chimeraData*> data;
 
-    vector<int> starts, ends;
-    vector<pieceOfWork> indexes = divideWork(pNames->at(0).size(), processors);
+    std::vector<int> starts, ends;
+    std::vector<pieceOfWork> indexes = divideWork(pNames->at(0).size(), processors);
 
     //Launch worker threads
-    for (int i = 0; i < processors-1; i++) {
+    for (auto i = 0; i < processors-1; i++) {
 
         chimeraData* dataBundle = new chimeraData(pNames, pSequences, pAbundances,
                                                   &refNames, &refSequences,
@@ -303,9 +303,9 @@ Rcpp::List ChimeraVsearch::removeChimeras(std::vector<std::string>& refNames,
                                               indexes[0].end);
     processReferenceVsearch(dataBundle);
 
-    vector<ChimeHit2> hits = dataBundle->results[0];
+    std::vector<ChimeHit2> hits = dataBundle->results[0];
 
-    for (int i = 0; i < workerThreads.size(); i++) {
+    for (auto i = 0; i < workerThreads.size(); i++) {
 
         workerThreads[i]->join();
 
@@ -320,10 +320,10 @@ Rcpp::List ChimeraVsearch::removeChimeras(std::vector<std::string>& refNames,
     return results;
 }
 /******************************************************************************/
-Rcpp::List ChimeraVsearch::createVsearchResults(vector<ChimeHit2> hits) {
+Rcpp::List ChimeraVsearch::createVsearchResults(std::vector<ChimeHit2> hits) {
 
     Rcpp::List results;
-    vector<string> resultsNames;
+    std::vector<std::string> resultsNames;
 
     // Default constructor values
     // QLabel = ""; ALabel = "*"; BLabel = "*"; CLabel = "*"; status = "N";
@@ -332,15 +332,16 @@ Rcpp::List ChimeraVsearch::createVsearchResults(vector<ChimeHit2> hits) {
     // Div = 0.0; Score = 0.0; H = 0.0;
 
     // Q, A, B, Y
-    vector<string> queries, Aparents, Bparents, Cparents, chimericStatus;
-    vector<double> scores, QMs, QAs, QBs, QCs, QTs, Divs;
+    std::vector<std::string> queries, Aparents, Bparents, Cparents,
+    chimericStatus;
+    std::vector<double> scores, QMs, QAs, QBs, QCs, QTs, Divs;
 
     // LY, LN, LA, RN, RY, RA - segment votes
-    vector<int> LYs, LNs, LAs, RNs, RYs, RAs;
-    vector<string> chimeras;
+    std::vector<int> LYs, LNs, LAs, RNs, RYs, RAs;
+    std::vector<std::string> chimeras;
 
     // create a uchimeout
-    for (int i = 0; i < hits.size(); i++) {
+    for (auto i = 0; i < hits.size(); i++) {
 
         if (hits[i].status == "Y") {
             chimeras.push_back(hits[i].QLabel);

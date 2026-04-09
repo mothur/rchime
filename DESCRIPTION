@@ -14,15 +14,18 @@ Roxygen: list(markdown = TRUE)
 Config/testthat/edition: 3
 RoxygenNote: 7.3.3
 Imports:
-  cli,
-  parallelly,
-  RcppThread
-Depends: Rcpp (>= 1.0.12), R (>= 4.5.0), strollur
+    cli,
+    parallelly,
+    RcppThread,
+    utils
+Depends: Rcpp (>= 1.0.12), R (>= 4.4.0), strollur
+Remotes: 
+    mothur/strollur
 Suggests: 
     knitr,
     rmarkdown,
     xml2,
     testthat (>= 3.0.0)
-LinkingTo: Rcpp, RcppThread, cli
+LinkingTo: Rcpp, RcppThread, RcppXsimd, cli
 Encoding: UTF-8
 VignetteBuilder: knitr

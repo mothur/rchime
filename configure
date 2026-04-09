@@ -1,0 +1,9 @@
+#!/bin/sh
+
+# Use R to get the flags from RcppXsimd
+XSIMD_FLAGS=`"${R_HOME}/bin/Rscript" -e "cat(RcppXsimd::getSSEFlags(), RcppXsimd::getNEONFlags())"`
+
+# Substitute the placeholder in Makevars.in to create Makevars
+sed -e "s|@XSIMD_FLAGS@|${XSIMD_FLAGS}|" -e "s|@WIN_FLAGS@||" src/Makevars.in > src/Makevars
+
+exit 0

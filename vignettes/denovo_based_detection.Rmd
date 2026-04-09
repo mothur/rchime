@@ -8,6 +8,7 @@ vignette: >
 ---
 
 ```{r, include = FALSE}
+library(rchime)
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
@@ -16,26 +17,28 @@ knitr::opts_chunk$set(
 
 ## Overview
 
-The `rchime()` function allows you to detect and remove chimeric sequences using the dataset as it's own reference (denovo). The denovo approach is our preferred method for removing chimeras.
+The `rchime()` function allows you to detect and remove chimeric sequences using the dataset as it's own reference (denovo). The denovo approach is our preferred method for removing chimeras. `rchime()` can be used with [strollur objects](https://mothur.org/strollur/reference/strollur.html) or data.frames as inputs. Let's look at examples of both data types using sequence data from [mothur's](https://mothur.org) [MiSeq_SOP](https://mothur.org/wiki/miseq_sop/) example analysis. 
 
-```{r setup}
-library(rchime)
-```
-
-## Creating *[strollur](https://mothur.org/strollur)* objects
-
-The `rchime()` function takes a [strollur::dataset](https://mothur.org/strollur/reference/dataset.html) object as input for the data parameter. The *rchime* package contains sequence data from [mothur's](https://mothur.org) [MiSeq_SOP](https://mothur.org/wiki/miseq_sop/) example analysis. Let's create a dataset containing those sequences.
+### Creating *[strollur](https://mothur.org/strollur)* objects
 
 ```{r}
 fasta_data <- readRDS(rchime_example("miseq_fasta.rds"))
 abundance_data <- readRDS(rchime_example("miseq_abundance.rds"))
 
-data <- strollur::new_dataset("rchime denovo example")
+strollur <- strollur::new_dataset("rchime denovo example")
 
-strollur::add(data, table = fasta_data, type = "sequences")
-strollur::assign(data, table = abundance_data, type = "sequence_abundance")
+strollur::add(strollur, table = fasta_data, type = "sequences")
+strollur::assign(strollur, table = abundance_data, type = "sequence_abundance")
 
-data
+strollur
+```
+
+### Loading data.frames
+
+```{r}
+df <- readRDS(rchime_example("miseq_data_frame_by_sample.rds"))
+
+str(df)
 ```
 
 ## Removing chimeras
@@ -45,17 +48,70 @@ When removing chimeras using the denovo method, the potential parents are chosen
 Before we remove the chimeras let's discuss the `dereplicate` parameter. If your dataset includes sample assignments, we recommend setting the `dereplicate` parameter to `TRUE`. When `dereplicate` = `FALSE`, if a sequence is flagged as chimeric in one sample, it is removed from all samples. Our experience suggests that this is a bit aggressive since we’ve seen rare sequences get flagged as chimeric when they’re the most abundant sequence in another sample. For a more conservative approach, set `dereplicate` = `TRUE` which will only remove sequences from the samples in which they are flagged as chimeric. Let's use the denovo method to remove the chimeras.
 
 ```{r}
-results <- rchime(data, dereplicate = TRUE)
+strollur_results <- rchime(strollur, dereplicate = TRUE)
 
-data
+strollur
+
+data_frame_results <- rchime(df, dereplicate = TRUE)
 ```
 
+## Results
 
-Let's take a look at the first 5 chimeric sequences in the [chimera_report](https://mothur.org/rchime/articles/chimera_report.html):
+The `rchime()` function returns a list containing the results of the function. When you are running the command with a strollur object, the chimera_report is  added, and chimeras are removed for you automatically. Let's take a closer look at the results returned. 
+
+### Chimera Report
+
+The [chimera_report](https://mothur.org/rchime/articles/chimera_report.html) is a data.frame with a row for each sequence in your dataset. Let's take a look at the first 5 chimeric sequences in the report:
 
 ```{r}
-head(results$chimera_report[results$chimera_report$Chimeric_Status == "Y", ],
-  n = 5
-)
+strollur_results$chimera_report[
+  strollur_results$chimera_report$Chimeric_Status == "Y",
+] |> head(n = 5)
 ```
 
+### Chimeras
+
+Results also contains a list of the names of the chimeric sequences. Let's get the names of the first 10 chimeras.
+
+```{r}
+strollur_results$chimeras |> head(n = 10)
+```
+
+### Set_abundance_values 
+
+Results will only contain the set_abundance_values list when dereplicate = TRUE and you are not removing the chimeras automatically. set_abundance_values has three items: 'sequence_names', 'abundances' and 'samples'. For each sequence in your dataset there will be an entry in sequence_names and abundances. The abundance values are parsed by sample, and the order is given in set_abundance_values$samples. Let's look at the first two sequences abundances after detecting the chimeras:
+
+```{r}
+names(data_frame_results$set_abundance_values)
+
+data_frame_results$set_abundance_values$samples
+
+sequences_names <- c(
+  "M00967_43_000000000-A3JHG_1_1103_5171_14027",
+  "M00967_43_000000000-A3JHG_1_1101_10133_8460"
+)
+
+df[df$sequence_names %in% sequences_names, c(1, 3, 4)]
+
+data_frame_results$set_abundance_values$sequence_names[1:2]
+
+data_frame_results$set_abundance_values$abundances[1:2]
+```
+
+We can see that the abundances for sequence M00967_43_000000000-A3JHG_1_1101_10133_8460 remain the same meaning it was not chimeric in any sample it was present in. We can see that sequence M00967_43_000000000-A3JHG_1_1101_10134_24617 was found to be chimeric in every sample it was included in. Now let's look at an example of a sequence that was found to be chimeric in some of the samples it is present in.
+
+```{r}
+df[
+  df$sequence_names %in% "M00967_43_000000000-A3JHG_1_1103_5171_14027",
+  c(1, 3, 4)
+]
+
+data_frame_results$set_abundance_values$samples
+
+data_frame_results$set_abundance_values$abundances[
+  data_frame_results$set_abundance_values$sequence_names %in%
+    "M00967_43_000000000-A3JHG_1_1103_5171_14027"
+]
+```
+
+We can see that samples F3D0 and F3D142 did not find the sequence to be chimeric, but F3D1, F3D2, F3D148 did find it to be chimeric so the abundance for those samples is set to 0.

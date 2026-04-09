@@ -7,7 +7,7 @@ optional parameters.}
 \usage{
 rchime_options(
   processors = parallelly::availableCores(),
-  dereplicate = FALSE,
+  dereplicate = TRUE,
   abskew = 2,
   minh = 0.28,
   mindiv = 0.8,
@@ -24,7 +24,7 @@ chimeras by sample. For example, if dereplicate parameter is FALSE, then if
 one group finds the sequence to be chimeric, it will be removed from all
 groups. If dereplicate is set to TRUE, sequences found to be chimeric are
 only removed from the sample they are found to be chimeric in.
-Default = FALSE.}
+Default = \code{TRUE}.}
 
 \item{abskew}{Float, the minimum abundance skew (denovo only). Default = 2.0.
 abskew <- min (abund(parent1), abund(parent2)) / abund(query)}

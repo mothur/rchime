@@ -1,18 +1,20 @@
-url: https://mothur.org/rchime/
+url: http://mothur.org/rchime/
 template:
   bootstrap: 5
-  light-switch: true
-
+  light-switch: yes
 reference:
 - title: Functions for detecting and removing chimeric sequences
-  desc: "Detect and remove chimeric sequences"
+  desc: Detect and remove chimeric sequences
   contents:
   - rchime
-  - rchimeDenovo
-  - rchimeDenovoSingleSample
-  - rchimeReference
+  - rchime.strollur
+  - rchime.data.frame
 - title: Utility Functions
-  desc: "helper functions"
+  desc: helper functions
   contents:
   - rchime_options
   - rchime_example
+  - rchimeDenovo
+  - rchimeDenovoSingleSample
+  - rchimeReference
+
