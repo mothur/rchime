@@ -28,6 +28,11 @@ jobs:
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
       R_KEEP_PKG_SOURCE: yes
+
+      # Add -mssse3 only for Windows and Linux (ubuntu)
+      PKG_CFLAGS: ${{ matrix.config.os != 'macos-latest' && '-mssse3' || '' }}
+      PKG_CXXFLAGS: ${{ matrix.config.os != 'macos-latest' && '-mssse3' || '' }}
+
       # Fix for 'byte' ambiguity on Windows
       MAKEFLAGS: ${{ matrix.config.os == 'windows-latest' && 'CPPFLAGS=-D_HAS_STD_BYTE=0' || '' }}
 
