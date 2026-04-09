@@ -134,7 +134,8 @@ rchime <- function(data, reference = NULL, dereplicate = TRUE,
 #' # Let's load a strollur object named "rchime denovo example"
 #'
 #' data_denovo <- strollur::load_dataset(
-#'                            rchime_example("strollur_multi_sample.rds"))
+#'   rchime_example("strollur_multi_sample.rds")
+#' )
 #'
 #' # Detect and remove chimeras from the dataset using denovo approach by sample
 #' # (recommended)
@@ -145,7 +146,8 @@ rchime <- function(data, reference = NULL, dereplicate = TRUE,
 #' # Alternatively you can detect and remove chimeras using a reference
 #'
 #' data_reference <- strollur::load_dataset(
-#'                            rchime_example("strollur_multi_sample.rds"))
+#'   rchime_example("strollur_multi_sample.rds")
+#' )
 #'
 #' reference <- strollur::load_dataset(rchime_example("strollur_reference.rds"))
 #'
@@ -443,10 +445,10 @@ rchime.data.frame <- function(data, reference = NULL, dereplicate = TRUE,
   start_time <- Sys.time()
 
   default_tn <- list(
-      sequence_name = "sequence_names",
-      abundance = "abundances",
-      sample = "samples",
-      sequence = "sequences"
+    sequence_name = "sequence_names",
+    abundance = "abundances",
+    sample = "samples",
+    sequence = "sequences"
   )
 
   table_names <- modifyList(default_tn, table_names)
@@ -529,10 +531,14 @@ rchime.data.frame <- function(data, reference = NULL, dereplicate = TRUE,
 
     # reference -> names, seqs, refnames, refseqs
     results <- rchimeReference(
-      fill_required_parameters(data,
-                               table_names[["sequence_name"]]),
-      gsub("[.-]", "", fill_required_parameters(data,
-                                                table_names[["sequence"]])),
+      fill_required_parameters(
+        data,
+        table_names[["sequence_name"]]
+      ),
+      gsub("[.-]", "", fill_required_parameters(
+        data,
+        table_names[["sequence"]]
+      )),
       fill_required_parameters(
         reference,
         table_names[["sequence_name"]]
@@ -582,34 +588,34 @@ rchime.data.frame <- function(data, reference = NULL, dereplicate = TRUE,
   }
 
   if (!silent) {
-      # report detected
-      if ((dereplicate) && (num_samples != 0)) {
-          after_count <- sum(unlist(results$set_abundance_values$abundances))
-          num_seqs <- strollur::count(strollur_data, type = "sequences")
+    # report detected
+    if ((dereplicate) && (num_samples != 0)) {
+      after_count <- sum(unlist(results$set_abundance_values$abundances))
+      num_seqs <- strollur::count(strollur_data, type = "sequences")
+    } else {
+      # number of chimeras removed
+      if (table_names[["abundance"]] %in% names(data)) {
+        num_chimeras <- sum(data[[table_names[["abundance"]]]][
+          data[[table_names[["sequence_name"]]]] %in% results$chimeras
+        ])
+        num_seqs <- sum(data[[table_names[["abundance"]]]])
       } else {
-          # number of chimeras removed
-          if (table_names[["abundance"]] %in% names(data)) {
-              num_chimeras <- sum(data[[table_names[["abundance"]]]][
-                  data[[table_names[["sequence_name"]]]] %in% results$chimeras
-              ])
-              num_seqs <- sum(data[[table_names[["abundance"]]]])
-          }else {
-              # assume unique
-              num_chimeras <- length(results$chimeras)
-              num_seqs <- nrow(results$chimera_report)
-          }
+        # assume unique
+        num_chimeras <- length(results$chimeras)
+        num_seqs <- nrow(results$chimera_report)
+      }
 
-          after_count <- num_seqs - num_chimeras
-      }
-      if (after_count < num_seqs) {
-          message <- paste(
-              "rchime detected {.var {num_seqs-after_count}}",
-              "chimeras in your dataset."
-          )
-      } else if (after_count == num_seqs) {
-          message <- ("rchime complete, no chimeras found.")
-      }
-      cli::cli_alert(message)
+      after_count <- num_seqs - num_chimeras
+    }
+    if (after_count < num_seqs) {
+      message <- paste(
+        "rchime detected {.var {num_seqs-after_count}}",
+        "chimeras in your dataset."
+      )
+    } else if (after_count == num_seqs) {
+      message <- ("rchime complete, no chimeras found.")
+    }
+    cli::cli_alert(message)
     timing <- difftime(Sys.time(), start_time, units = "secs")[[1]]
     cli::cli_alert("It took {.var {timing}} seconds to detect the chimeras.")
   }

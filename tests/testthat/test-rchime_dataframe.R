@@ -7,9 +7,11 @@ test_that("test rchime - errors", {
     reference = "not a data.frame"
   ))
 
-  df <- data.frame(not_right_tag = c("seq1", "seq2"),
-                   sequences = c("ATGC", "ATGC"),
-                   abundances = c(100, 10))
+  df <- data.frame(
+    not_right_tag = c("seq1", "seq2"),
+    sequences = c("ATGC", "ATGC"),
+    abundances = c(100, 10)
+  )
 
   expect_error(rchime(data = df))
 

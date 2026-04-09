@@ -27,8 +27,9 @@ Let's create a [strollur object](https://mothur.org/strollur/reference/strollur.
 reference <- strollur::new_dataset("Silva V4 Region")
 
 strollur::add(reference,
-              table = readRDS(rchime_example("reference.rds")),
-              type = "sequences")
+  table = readRDS(rchime_example("reference.rds")),
+  type = "sequences"
+)
 
 reference
 ```
@@ -80,9 +81,9 @@ The `rchime()` function returns a list containing the results of the function. W
 The [chimera_report](https://mothur.org/rchime/articles/chimera_report.html) is a data.frame with a row for each sequence in your dataset. Let's take a look at the first 5 chimeric sequences in the report:
 
 ```{r}
-head(strollur_results$chimera_report[strollur_results$chimera_report$Chimeric_Status == "Y", ],
-  n = 5
-)
+strollur_results$chimera_report[
+  strollur_results$chimera_report$Chimeric_Status == "Y",
+] |> head(n = 5)
 ```
 
 ### Chimeras
@@ -92,5 +93,3 @@ Results also contains a list of the names of the chimeric sequences. Let's get t
 ```{r}
 strollur_results$chimeras |> head(n = 10)
 ```
-
-
