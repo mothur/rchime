@@ -9,6 +9,8 @@
  *
  */
 
+#include <limits>
+
 constexpr int64_t default_fasta_width = 80;
 constexpr int64_t default_fastq_tail = 4;
 constexpr int64_t default_maxseqlength = 50000;
