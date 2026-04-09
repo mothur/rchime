@@ -200,7 +200,7 @@ void Vsearch_Cpu::increment_counters_from_bitmap_sse2(count_t * counters,
   // 0xf7fbfdfe -> 1111'0111'1111'1011'1111'1101'1111'1110 (32 bits)
   static constexpr auto mask2 = static_cast<int32_t>(0xf7fbfdfe);
 
-#if defined(SSSE3) || defined(SIMDE_VERSION)
+#if defined(__SSSE3__) || defined(SSSE3) || defined(SIMDE_VERSION)
   const auto c1 = _mm_set_epi32(0x01010101, 0x01010101, 0x00000000, 0x00000000);
 #endif
   const auto c2 = _mm_set_epi32(mask1, mask2, mask1, mask2);
@@ -213,7 +213,7 @@ void Vsearch_Cpu::increment_counters_from_bitmap_sse2(count_t * counters,
   for (auto j = 0U; j < r; j++)
     {
       const auto xmm0 = _mm_loadu_si128((__m128i *) p++);
-#if defined(SSSE3) || defined(SIMDE_VERSION)
+#if defined(__SSSE3__) || defined(SSSE3) || defined(SIMDE_VERSION)
       const auto xmm1 = _mm_shuffle_epi8(xmm0, c1);
 #else
       const auto xmm6 = _mm_unpacklo_epi8(xmm0, xmm0);
