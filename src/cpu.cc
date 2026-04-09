@@ -165,7 +165,7 @@ void Vsearch_Cpu::increment_counters_from_bitmap(count_t * counters,
 void Vsearch_Cpu::increment_counters_from_bitmap(count_t * counters,
                                     unsigned char * bitmap,
                                     unsigned int totalbits)
-#elif defined(SSSE3)
+#elif defined(__SSSE3__) || defined(SSSE3)
 void Vsearch_Cpu::increment_counters_from_bitmap_ssse3(count_t * counters,
                                           unsigned char * bitmap,
                                           unsigned int totalbits)
