@@ -29,10 +29,6 @@ jobs:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
       R_KEEP_PKG_SOURCE: yes
 
-      # Add -mssse3 only for Windows and Linux (ubuntu)
-      PKG_CFLAGS: ${{ matrix.config.os != 'macos-latest' && '-mssse3' || '' }}
-      PKG_CXXFLAGS: ${{ matrix.config.os != 'macos-latest' && '-mssse3' || '' }}
-
       # Fix for 'byte' ambiguity on Windows
       MAKEFLAGS: ${{ matrix.config.os == 'windows-latest' && 'CPPFLAGS=-D_HAS_STD_BYTE=0' || '' }}
 
@@ -49,7 +45,7 @@ jobs:
 
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
-          extra-packages: any::rcmdcheck, mothur/strollur
+          extra-packages: any::rcmdcheck, mothur/strollur, any::RcppXsimd
           needs: check
 
       - uses: r-lib/actions/check-r-package@v2

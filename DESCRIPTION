@@ -26,6 +26,6 @@ Suggests:
     rmarkdown,
     xml2,
     testthat (>= 3.0.0)
-LinkingTo: Rcpp, RcppThread, cli
+LinkingTo: Rcpp, RcppThread, RcppXsimd, cli
 Encoding: UTF-8
 VignetteBuilder: knitr
