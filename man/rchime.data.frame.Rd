@@ -10,7 +10,6 @@ alternatively a reference model.}
   reference = NULL,
   dereplicate = TRUE,
   silent = FALSE,
-  remove_chimeras = NA,
   rchime_options = NULL,
   table_names = list(sequence_name = "sequence_names", sequence = "sequences", abundance
     = "abundances", sample = "samples")
@@ -29,9 +28,6 @@ only flagged in the sample they are found to be chimeric in.
 Default = TRUE.}
 
 \item{silent}{Boolean, suppress console outputs. Default = FALSE.}
-
-\item{remove_chimeras}{Boolean, NA. Only used when \code{data} is a strollur
-object.}
 
 \item{rchime_options}{List, You can fine tune the vsearch specific options
 using  the [\code{\link[=rchime_options]{rchime_options()}}] function. Default = NULL.}

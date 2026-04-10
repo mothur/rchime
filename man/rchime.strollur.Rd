@@ -12,8 +12,7 @@ approach or alternatively a reference model.}
   dereplicate = TRUE,
   silent = FALSE,
   remove_chimeras = TRUE,
-  rchime_options = NULL,
-  table_names = NA
+  rchime_options = NULL
 )
 }
 \arguments{
@@ -36,8 +35,6 @@ Default = TRUE.}
 
 \item{rchime_options}{List, You can fine tune the vsearch specific options
 using  the [\code{\link[=rchime_options]{rchime_options()}}] function. Default = NULL.}
-
-\item{table_names, }{NA. Only used when \code{data} is a data.frame.}
 }
 \value{
 list() containing a chimera report, and vector of the chimeric
@@ -68,7 +65,8 @@ This function uses code from the
 # Let's load a strollur object named "rchime denovo example"
 
 data_denovo <- strollur::load_dataset(
-                           rchime_example("strollur_multi_sample.rds"))
+  rchime_example("strollur_multi_sample.rds")
+)
 
 # Detect and remove chimeras from the dataset using denovo approach by sample
 # (recommended)
@@ -79,7 +77,8 @@ data_denovo
 # Alternatively you can detect and remove chimeras using a reference
 
 data_reference <- strollur::load_dataset(
-                           rchime_example("strollur_multi_sample.rds"))
+  rchime_example("strollur_multi_sample.rds")
+)
 
 reference <- strollur::load_dataset(rchime_example("strollur_reference.rds"))
 

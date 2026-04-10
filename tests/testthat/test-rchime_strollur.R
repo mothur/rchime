@@ -133,6 +133,11 @@ test_that("test rchime by reference - strollur", {
   expect_equal(chimera_report$chimera_report[[3, 14]], 7)
   expect_equal(chimera_report$chimera_report[[3, 15]], 1)
   expect_equal(chimera_report$chimera_report[[3, 16]], 5)
+
+  # check by reference with multiple sample object
+  data <- strollur::load_dataset(rchime_example("strollur_multi_sample.rds"))
+  chimera_report <- rchime(data, reference = reference)
+
 })
 
 test_that("test rchime denovo - strollur - single sample ", {
