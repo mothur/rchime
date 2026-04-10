@@ -117,8 +117,6 @@ rchime <- function(data, reference = NULL, dereplicate = TRUE,
 #' @param silent Boolean, suppress console outputs. Default = FALSE.
 #' @param rchime_options List, You can fine tune the vsearch specific options
 #' using  the [[rchime_options()]] function. Default = NULL.
-#' @param table_names, NA. Only used when `data` is a data.frame.
-
 #' @seealso [rchime_options()] to set vsearch specific parameters.
 #'
 #' @return list() containing a chimera report, and vector of the chimeric
@@ -158,8 +156,7 @@ rchime <- function(data, reference = NULL, dereplicate = TRUE,
 #' @export
 rchime.strollur <- function(data, reference = NULL, dereplicate = TRUE,
                             silent = FALSE, remove_chimeras = TRUE,
-                            rchime_options = NULL,
-                            table_names = NA) {
+                            rchime_options = NULL) {
   if (!("strollur" %in% class(data))) {
     stop("data must be a stroller::strollur object")
   }
@@ -376,8 +373,6 @@ rchime.strollur <- function(data, reference = NULL, dereplicate = TRUE,
 #'  groups. If dereplicate is set to TRUE, sequences found to be chimeric are
 #'  only flagged in the sample they are found to be chimeric in.
 #'  Default = TRUE.
-#' @param remove_chimeras Boolean, NA. Only used when `data` is a strollur
-#'   object.
 #' @param silent Boolean, suppress console outputs. Default = FALSE.
 #' @param rchime_options List, You can fine tune the vsearch specific options
 #' using  the [[rchime_options()]] function. Default = NULL.
@@ -430,8 +425,7 @@ rchime.strollur <- function(data, reference = NULL, dereplicate = TRUE,
 #' @import cli
 #' @export
 rchime.data.frame <- function(data, reference = NULL, dereplicate = TRUE,
-                              silent = FALSE, remove_chimeras = NA,
-                              rchime_options = NULL,
+                              silent = FALSE, rchime_options = NULL,
                               table_names = list(
                                 sequence_name = "sequence_names",
                                 sequence = "sequences",
