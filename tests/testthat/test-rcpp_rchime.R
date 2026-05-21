@@ -6,27 +6,27 @@ test_that("test rchimeReference - errors", {
 
   # not equal sizes
   expect_error(rchimeReference(
-    sequence_names = fasta_data$sequence_names[1:50],
-    sequences = fasta_data$sequences[1:100],
-    reference_names = reference_data$sequence_names,
-    reference_sequences = reference_data$sequences
+    sequence_name = fasta_data$sequence_name[1:50],
+    sequence = fasta_data$sequence[1:100],
+    reference_name = reference_data$sequence_name,
+    reference_sequence = reference_data$sequence
   ))
 
   # not equal sizes
   expect_error(rchimeReference(
-    sequence_names = fasta_data$sequence_names[1:100],
-    sequences = fasta_data$sequences[1:100],
-    reference_names = reference_data$sequence_names[1:5],
-    reference_sequences = reference_data$sequences[1:10]
+    sequence_name = fasta_data$sequence_name[1:100],
+    sequence = fasta_data$sequence[1:100],
+    reference_name = reference_data$sequence_name[1:5],
+    reference_sequence = reference_data$sequence[1:10]
   ))
 
   options <- list(xn = 8.0)
   # create options but leave off processors and dereplicate
   results <- rchimeReference(
-    sequence_names = fasta_data$sequence_names[1:100],
-    sequences = fasta_data$sequences[1:100],
-    reference_names = reference_data$sequence_names,
-    reference_sequences = reference_data$sequences,
+    sequence_name = fasta_data$sequence_name[1:100],
+    sequence = fasta_data$sequence[1:100],
+    reference_name = reference_data$sequence_name,
+    reference_sequence = reference_data$sequence,
     options = options
   )
 
@@ -42,24 +42,24 @@ test_that("test rchimeDenovo, rchimeDenovoSingleSample - errors", {
 
   # not equal sizes
   expect_error(rchimeDenovoSingleSample(
-    sequence_names = fasta_data$sequence_names[1:50],
-    sequences = fasta_data$sequences[1:100],
-    abundances = abundance_data$abundances
+    sequence_name = fasta_data$sequence_name[1:50],
+    sequence = fasta_data$sequence[1:100],
+    abundance = abundance_data$abundance
   ))
 
   # not equal sizes
   expect_error(rchimeDenovoSingleSample(
-    sequence_names = fasta_data$sequence_names[1:100],
-    sequences = fasta_data$sequences[1:100],
-    abundances = abundance_data$abundances
+    sequence_name = fasta_data$sequence_name[1:100],
+    sequence = fasta_data$sequence[1:100],
+    abundance = abundance_data$abundance
   ))
 
   options <- list(xn = 8.0)
   # create options but leave off processors and dereplicate
   results <- rchimeDenovoSingleSample(
-    sequence_names = fasta_data$sequence_names,
-    sequences = fasta_data$sequences,
-    abundances = abundance_data$abundances,
+    sequence_name = fasta_data$sequence_name,
+    sequence = fasta_data$sequence,
+    abundance = abundance_data$abundance,
     options = options
   )
 
@@ -73,22 +73,22 @@ test_that("test rchimeDenovo, rchimeDenovoSingleSample - errors", {
   abundances <- readRDS(rchime_example("miseq_abundance_by_sample.rds"))
 
   expect_error(rchimeDenovo(
-    sequence_names = sequence_names[1:2],
-    sequences = sequences[1:5],
-    abundances = abundances
+    sequence_name = sequence_names[1:2],
+    sequence = sequences[1:5],
+    abundance = abundances
   ))
 
   expect_error(rchimeDenovo(
-    sequence_names = sequence_names,
-    sequences = sequences,
-    abundances = abundances[1:2]
+    sequence_name = sequence_names,
+    sequence = sequences,
+    abundance = abundances[1:2]
   ))
 
   options <- list(xn = 8)
   results <- rchimeDenovo(
-    sequence_names = sequence_names,
-    sequences = sequences,
-    abundances = abundances, options
+    sequence_name = sequence_names,
+    sequence = sequences,
+    abundance = abundances, options
   )
 
   # checks to make sure the correct things are created
@@ -102,10 +102,10 @@ test_that("test rchimeReference ", {
   reference_data <- readRDS(rchime_example("reference.rds"))
 
   results <- rchimeReference(
-    sequence_names = fasta_data$sequence_names[1:100],
-    sequences = fasta_data$sequences[1:100],
-    reference_names = reference_data$sequence_names,
-    reference_sequences = reference_data$sequences
+    sequence_name = fasta_data$sequence_name[1:100],
+    sequence = fasta_data$sequence[1:100],
+    reference_name = reference_data$sequence_name,
+    reference_sequence = reference_data$sequence
   )
 
   # checks to make sure the correct things are created
@@ -119,9 +119,9 @@ test_that("test rchimeDenovoSingleSample ", {
   abundance_data <- readRDS(rchime_example("single_sample_abundance.rds"))
 
   results <- rchimeDenovoSingleSample(
-    sequence_names = fasta_data$sequence_names[100:200],
-    sequences = fasta_data$sequences[100:200],
-    abundances = abundance_data$abundances[100:200]
+    sequence_name = fasta_data$sequence_name[100:200],
+    sequence = fasta_data$sequence[100:200],
+    abundance = abundance_data$abundance[100:200]
   )
 
   # checks to make sure the correct things are created
@@ -138,9 +138,9 @@ test_that("test rchimeDenovo ", {
   options <- rchime_options(dereplicate = TRUE)
 
   results <- rchimeDenovo(
-    sequence_names = sequence_names[1:2],
-    sequences = sequences[1:2],
-    abundances = abundances[1:2], options
+    sequence_name = sequence_names[1:2],
+    sequence = sequences[1:2],
+    abundance = abundances[1:2], options
   )
 
   # checks to make sure the correct things are created
@@ -149,9 +149,9 @@ test_that("test rchimeDenovo ", {
   expect_equal(nrow(results$chimera_report), 966)
 
   results <- rchimeDenovo(
-    sequence_names = sequence_names[3:10],
-    sequences = sequences[3:10],
-    abundances = abundances[3:10]
+    sequence_name = sequence_names[3:10],
+    sequence = sequences[3:10],
+    abundance = abundances[3:10]
   )
 
   # checks to make sure the correct things are created

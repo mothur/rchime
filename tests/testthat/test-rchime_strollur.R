@@ -5,10 +5,10 @@ test_that("test rchime - errors and rchime_options", {
   reference_data <- readRDS(rchime_example("reference.rds"))
 
   data <- strollur::new_dataset("rchime reference example")
-  strollur::add(data, table = fasta_data[1:100, ], type = "sequences")
+  strollur::add(data, table = fasta_data[1:100, ], type = "sequence")
 
   reference_ob <- new_dataset("Silva V4 Region")
-  strollur::add(reference_ob, table = reference_data, type = "sequences")
+  strollur::add(reference_ob, table = reference_data, type = "sequence")
 
   # this should not change since the rchime command below does not remove
   num_seqs <- strollur::count(data)
@@ -32,7 +32,7 @@ test_that("test rchime - errors and rchime_options", {
 
   # test small enough set no chimeras are detected
   data <- strollur::new_dataset("rchime reference example")
-  strollur::add(data, table = fasta_data[1:3, ], type = "sequences")
+  strollur::add(data, table = fasta_data[1:3, ], type = "sequence")
 
   chimera_report <- rchime(data, reference = reference_ob)
 
@@ -46,7 +46,7 @@ test_that("test rchime - errors and rchime_options", {
   )
 
   data <- strollur::new_dataset("rchime reference example")
-  strollur::add(data, table = fasta_data[1:100, ], type = "sequences")
+  strollur::add(data, table = fasta_data[1:100, ], type = "sequence")
 
   chimera_report <- rchime(data,
     reference = reference_ob,
@@ -65,10 +65,10 @@ test_that("test rchime by reference - strollur", {
   reference_data <- readRDS(rchime_example("reference.rds"))
 
   data <- strollur::new_dataset("rchime reference example")
-  strollur::add(data, table = fasta_data[1:100, ], type = "sequences")
+  strollur::add(data, table = fasta_data[1:100, ], type = "sequence")
 
   reference <- new_dataset("Silva V4 Region")
-  strollur::add(reference, table = reference_data, type = "sequences")
+  strollur::add(reference, table = reference_data, type = "sequence")
 
   chimera_report <- rchime(data, reference = reference, remove_chimeras = FALSE)
 
@@ -137,7 +137,6 @@ test_that("test rchime by reference - strollur", {
   # check by reference with multiple sample object
   data <- strollur::load_dataset(rchime_example("strollur_multi_sample.rds"))
   chimera_report <- rchime(data, reference = reference)
-
 })
 
 test_that("test rchime denovo - strollur - single sample ", {
@@ -147,7 +146,7 @@ test_that("test rchime denovo - strollur - single sample ", {
   abundance_data <- readRDS(rchime_example("single_sample_abundance.rds"))
 
   data <- strollur::new_dataset("rchime denovo example")
-  strollur::add(data, table = fasta_data, type = "sequences")
+  strollur::add(data, table = fasta_data, type = "sequence")
   strollur::assign(data, table = abundance_data, type = "sequence_abundance")
 
   chimera_report <- rchime(data, silent = TRUE)

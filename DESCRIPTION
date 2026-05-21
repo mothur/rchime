@@ -1,7 +1,7 @@
 Package: rchime
 Type: Package
 Title: R package for chimera detection 
-Version: 1.0
+Version: 0.1.0
 Date: 2026-03-28
 Authors@R: c(person("Sarah", "Westcott", role = c("aut", "cre"), 
   email = "swestcot@umich.edu"))
@@ -12,20 +12,21 @@ BugReports: https://github.com/mothur/rchime/issues
 License: GPL (>= 2)
 Roxygen: list(markdown = TRUE)              
 Config/testthat/edition: 3
-RoxygenNote: 7.3.3
 Imports:
     cli,
     parallelly,
     RcppThread,
     utils
-Depends: Rcpp (>= 1.0.12), R (>= 4.4.0), strollur
+Depends: Rcpp, R (>= 4.5.0), strollur
 Remotes: 
     mothur/strollur
 Suggests: 
     knitr,
     rmarkdown,
     xml2,
+    pak,
     testthat (>= 3.0.0)
 LinkingTo: Rcpp, RcppThread, RcppXsimd, cli
 Encoding: UTF-8
 VignetteBuilder: knitr
+Config/roxygen2/version: 8.0.0

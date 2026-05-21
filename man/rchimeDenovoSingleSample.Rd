@@ -4,14 +4,14 @@
 \alias{rchimeDenovoSingleSample}
 \title{Detects chimeras using a denovo approach}
 \usage{
-rchimeDenovoSingleSample(sequence_names, sequences, abundances, options = NULL)
+rchimeDenovoSingleSample(sequence_name, sequence, abundance, options = NULL)
 }
 \arguments{
-\item{sequence_names, }{vector of strings containing sequence names}
+\item{sequence_name, }{vector of strings containing sequence names}
 
-\item{sequences, }{vector of strings containing sequence nucleotide data}
+\item{sequence, }{vector of strings containing sequence nucleotide data}
 
-\item{abundances, }{vector of sequence abundances}
+\item{abundance, }{vector of sequence abundances}
 
 \item{options}{list containing parameter options. Default = NULL.}
 }
@@ -27,9 +27,9 @@ abundance_data <- readRDS(rchime_example("single_sample_abundance.rds"))
 
 # Detect chimeras
 
-results <- rchimeDenovoSingleSample(sequence_names = fasta_data$sequence_names,
-                                    sequences = fasta_data$sequences,
-                                    abundances = abundance_data$abundances)
+results <- rchimeDenovoSingleSample(sequence_name = fasta_data$sequence_name,
+                                    sequence = fasta_data$sequence,
+                                    abundance = abundance_data$abundance)
 
 }
 \seealso{

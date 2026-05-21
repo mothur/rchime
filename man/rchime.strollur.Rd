@@ -3,8 +3,7 @@
 \name{rchime.strollur}
 \alias{rchime.strollur}
 \title{Detect and remove chimeras from your
-\href{https://mothur.org/strollur/}{strollur} dataset object using a denovo
-approach or alternatively a reference model.}
+\href{https://mothur.org/strollur/}{strollur} dataset object.}
 \usage{
 \method{rchime}{strollur}(
   data,
@@ -12,7 +11,8 @@ approach or alternatively a reference model.}
   dereplicate = TRUE,
   silent = FALSE,
   remove_chimeras = TRUE,
-  rchime_options = NULL
+  rchime_options = NULL,
+  table_names = NULL
 )
 }
 \arguments{
@@ -35,6 +35,8 @@ Default = TRUE.}
 
 \item{rchime_options}{List, You can fine tune the vsearch specific options
 using  the [\code{\link[=rchime_options]{rchime_options()}}] function. Default = NULL.}
+
+\item{table_names, }{Only used when \code{data} is a data.frame. Default = NULL.}
 }
 \value{
 list() containing a chimera report, and vector of the chimeric

@@ -13,8 +13,8 @@ rchime(
   silent = FALSE,
   remove_chimeras = TRUE,
   rchime_options = NULL,
-  table_names = list(sequence_name = "sequence_names", sequence = "sequences", abundance
-    = "abundances", sample = "samples")
+  table_names = list(sequence_name = "sequence_name", sequence = "sequence", abundance =
+    "abundance", sample = "sample")
 )
 }
 \arguments{
