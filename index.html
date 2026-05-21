@@ -76,7 +76,7 @@
 </div>
 <!-- badges: start -->
 
-<p><a href="https://github.com/SchlossLab/rchime/actions/workflows/pkgdown.yaml" class="external-link"><img src="https://github.com/SchlossLab/rchime/actions/workflows/pkgdown.yaml/badge.svg" alt="pkgdown"></a> <a href="https://CRAN.R-project.org/package=rchime" class="external-link"><img src="https://www.r-pkg.org/badges/version/rchime" alt="CRAN status"></a> <!-- badges: end --></p>
+<p><a href="https://github.com/mothur/rchime/actions/workflows/pkgdown.yaml" class="external-link"><img src="https://github.com/mothur/rchime/actions/workflows/pkgdown.yaml/badge.svg" alt="pkgdown"></a> <a href="https://CRAN.R-project.org/package=rchime" class="external-link"><img src="https://www.r-pkg.org/badges/version/rchime" alt="CRAN status"></a> <!-- badges: end --></p>
 <div class="section level2">
 <h2 id="overview">Overview<a class="anchor" aria-label="anchor" href="#overview"></a>
 </h2>
@@ -98,8 +98,7 @@
 </h2>
 <p>You can install the development version of rchime from <a href="https://github.com/mothur/rchime" class="external-link">GitHub</a> with:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># install.packages("devtools")</span></span>
-<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"mothur/rchime"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu">pak</span><span class="fu">::</span><span class="fu"><a href="https://pak.r-lib.org/reference/pak.html" class="external-link">pak</a></span><span class="op">(</span><span class="st">"mothur/rchime"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a>
@@ -111,19 +110,16 @@
 <span></span>
 <span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu">strollur</span><span class="fu">::</span><span class="fu"><a href="https://mothur.org/strollur/reference/new_dataset.html" class="external-link">new_dataset</a></span><span class="op">(</span><span class="st">"rchime denovo example"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">strollur</span><span class="fu">::</span><span class="fu"><a href="https://mothur.org/strollur/reference/add.html" class="external-link">add</a></span><span class="op">(</span><span class="va">data</span>, table <span class="op">=</span> <span class="va">fasta_data</span>, type <span class="op">=</span> <span class="st">"sequences"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; ℹ Added 6084 sequences.</span></span>
-<span><span class="co">#&gt; [1] 6084</span></span>
+<span><span class="fu">strollur</span><span class="fu">::</span><span class="fu"><a href="https://mothur.org/strollur/reference/add.html" class="external-link">add</a></span><span class="op">(</span><span class="va">data</span>, table <span class="op">=</span> <span class="va">fasta_data</span>, type <span class="op">=</span> <span class="st">"sequence"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Added 6084 sequences.</span></span>
 <span><span class="fu">strollur</span><span class="fu">::</span><span class="fu"><a href="https://mothur.org/strollur/reference/assign.html" class="external-link">assign</a></span><span class="op">(</span><span class="va">data</span>, table <span class="op">=</span> <span class="va">abundance_data</span>, type <span class="op">=</span> <span class="st">"sequence_abundance"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; ℹ Assigned 6084 sequence abundances.</span></span>
-<span><span class="co">#&gt; [1] 6084</span></span>
+<span><span class="co">#&gt; Assigned 6084 sequence abundances.</span></span>
 <span></span>
 <span><span class="va">chimera_report</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/rchime.html">rchime</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; The denovo method runs with a single processor.</span></span>
-<span><span class="co">#&gt; ℹ Added a chimera_report.</span></span>
+<span><span class="co">#&gt; ℹ The denovo method runs with a single processor.</span></span>
+<span><span class="co">#&gt; Added a chimera_report.</span></span>
 <span><span class="co">#&gt; → rchime removed `10453` chimeras from your dataset.</span></span>
-<span><span class="co">#&gt; → It took `4.26860308647156` seconds to detect and remove the chimeras.</span></span>
+<span><span class="co">#&gt; → It took `4.20527505874634` seconds to detect and remove the chimeras.</span></span>
 <span></span>
 <span><span class="va">data</span></span>
 <span><span class="co">#&gt; rchime denovo example:</span></span>
