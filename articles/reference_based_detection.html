@@ -12,8 +12,8 @@
 <link rel="icon" sizes="any" href="../favicon.ico">
 <link rel="manifest" href="../site.webmanifest">
 <script src="../lightswitch.js"></script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Reference Based Chimera Detection">
 </head>
@@ -25,7 +25,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">rchime</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -101,10 +101,9 @@ object</a> that contains our SILVA reference sequences.</p>
 <span></span>
 <span><span class="fu">strollur</span><span class="fu">::</span><span class="fu"><a href="https://mothur.org/strollur/reference/add.html" class="external-link">add</a></span><span class="op">(</span><span class="va">reference</span>,</span>
 <span>  table <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="fu"><a href="../reference/rchime_example.html">rchime_example</a></span><span class="op">(</span><span class="st">"reference.rds"</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>  type <span class="op">=</span> <span class="st">"sequences"</span></span>
+<span>  type <span class="op">=</span> <span class="st">"sequence"</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Added 14956 sequences.</span></span>
-<span><span class="co">#&gt; [1] 14956</span></span>
+<span><span class="co">#&gt; Added 14956 sequences.</span></span>
 <span></span>
 <span><span class="va">reference</span></span>
 <span><span class="co">#&gt; Silva V4 Region:</span></span>
@@ -129,12 +128,10 @@ object</a> containing the MiSeq_SOP sequences.</p>
 <span></span>
 <span><span class="va">strollur</span> <span class="op">&lt;-</span> <span class="fu">strollur</span><span class="fu">::</span><span class="fu"><a href="https://mothur.org/strollur/reference/new_dataset.html" class="external-link">new_dataset</a></span><span class="op">(</span><span class="st">"rchime reference example"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">strollur</span><span class="fu">::</span><span class="fu"><a href="https://mothur.org/strollur/reference/add.html" class="external-link">add</a></span><span class="op">(</span><span class="va">strollur</span>, table <span class="op">=</span> <span class="va">fasta_data</span>, type <span class="op">=</span> <span class="st">"sequences"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Added 6084 sequences.</span></span>
-<span><span class="co">#&gt; [1] 6084</span></span>
+<span><span class="fu">strollur</span><span class="fu">::</span><span class="fu"><a href="https://mothur.org/strollur/reference/add.html" class="external-link">add</a></span><span class="op">(</span><span class="va">strollur</span>, table <span class="op">=</span> <span class="va">fasta_data</span>, type <span class="op">=</span> <span class="st">"sequence"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Added 6084 sequences.</span></span>
 <span><span class="fu">strollur</span><span class="fu">::</span><span class="fu"><a href="https://mothur.org/strollur/reference/assign.html" class="external-link">assign</a></span><span class="op">(</span><span class="va">strollur</span>, table <span class="op">=</span> <span class="va">abundance_data</span>, type <span class="op">=</span> <span class="st">"sequence_abundance"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Assigned 6084 sequence abundances.</span></span>
-<span><span class="co">#&gt; [1] 6084</span></span>
+<span><span class="co">#&gt; Assigned 6084 sequence abundances.</span></span>
 <span></span>
 <span><span class="va">strollur</span></span>
 <span><span class="co">#&gt; rchime reference example:</span></span>
@@ -162,17 +159,16 @@ object</a> containing the MiSeq_SOP sequences.</p>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">reference_data</span><span class="op">)</span></span>
 <span><span class="co">#&gt; 'data.frame':    14956 obs. of  2 variables:</span></span>
-<span><span class="co">#&gt;  $ sequence_names: chr  "DQ415841.1" "L02888.1" "AB037561.1" "AF355050.1" ...</span></span>
-<span><span class="co">#&gt;  $ sequences     : chr  "GTGCCAGCAGCCGCGGTAATACGGGGGGTGCAAGCGTTGTTCGGAATTATTGGGCGTAAAGAGCGTGTAGGCTGTCTGATGTGTCAGATGTGAAAGCCCTGGGCTTAACCC"| __truncated__ "GTGCCAGCAGCCGCGGTAATACGAGAGGGCTAGCGTTATTCGGAATTATTGGGCGTAAAGGGCGCGTAGGCTGGTTAATAAGTTAAAAGTGAAATCCCGAGGCTTAACCTT"| __truncated__ "GTGCCAGCAGCCGCGGTAATACGAAGGGTGCAAGCGTTAATCGGAATTACTGGGCGTAAAGCGCGCGTAGGTGGTTCAGCAAGTTGGATGTGAAATCCCCGGGCTCAACCT"| __truncated__ "GTGCCAGCAGCCGCGGTAATACGGAGGGTGCAAGCGTTATTCGGAATCACTGGGCGTAAAGGACGCGTAGGCGGGTTGATAAGTCAGATGTGAAATCCTACAGCTTAACTG"| __truncated__ ...</span></span>
+<span><span class="co">#&gt;  $ sequence_name: chr  "DQ415841.1" "L02888.1" "AB037561.1" "AF355050.1" ...</span></span>
+<span><span class="co">#&gt;  $ sequence     : chr  "GTGCCAGCAGCCGCGGTAATACGGGGGGTGCAAGCGTTGTTCGGAATTATTGGGCGTAAAGAGCGTGTAGGCTGTCTGATGTGTCAGATGTGAAAGCCCTGGGCTTAACCC"| __truncated__ "GTGCCAGCAGCCGCGGTAATACGAGAGGGCTAGCGTTATTCGGAATTATTGGGCGTAAAGGGCGCGTAGGCTGGTTAATAAGTTAAAAGTGAAATCCCGAGGCTTAACCTT"| __truncated__ "GTGCCAGCAGCCGCGGTAATACGAAGGGTGCAAGCGTTAATCGGAATTACTGGGCGTAAAGCGCGCGTAGGTGGTTCAGCAAGTTGGATGTGAAATCCCCGGGCTCAACCT"| __truncated__ "GTGCCAGCAGCCGCGGTAATACGGAGGGTGCAAGCGTTATTCGGAATCACTGGGCGTAAAGGACGCGTAGGCGGGTTGATAAGTCAGATGTGAAATCCTACAGCTTAACTG"| __truncated__ ...</span></span>
 <span></span>
-<span><span class="va">data_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="fu"><a href="../reference/rchime_example.html">rchime_example</a></span><span class="op">(</span><span class="st">"miseq_data_frame_by_sample.rds"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">data_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="fu"><a href="../reference/rchime_example.html">rchime_example</a></span><span class="op">(</span><span class="st">"miseq_data_frame.rds"</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">data_df</span><span class="op">)</span></span>
-<span><span class="co">#&gt; 'data.frame':    11039 obs. of  4 variables:</span></span>
-<span><span class="co">#&gt;  $ sequence_names: chr  "M00967_43_000000000-A3JHG_1_1101_10133_8460" "M00967_43_000000000-A3JHG_1_1101_10133_8460" "M00967_43_000000000-A3JHG_1_1101_10133_8460" "M00967_43_000000000-A3JHG_1_1101_10133_8460" ...</span></span>
-<span><span class="co">#&gt;  $ sequences     : chr  "TACGTAGGGGGCAAGCGTTATCCGGATTTACTGGGTGTAAAGGGAGCGTAGGCGGCCATGCAAGTCAGAAGTGAAAACCCGGGGCTCAACCCTGGGAGTGCTTTTGAAACT"| __truncated__ "TACGTAGGGGGCAAGCGTTATCCGGATTTACTGGGTGTAAAGGGAGCGTAGGCGGCCATGCAAGTCAGAAGTGAAAACCCGGGGCTCAACCCTGGGAGTGCTTTTGAAACT"| __truncated__ "TACGTAGGGGGCAAGCGTTATCCGGATTTACTGGGTGTAAAGGGAGCGTAGGCGGCCATGCAAGTCAGAAGTGAAAACCCGGGGCTCAACCCTGGGAGTGCTTTTGAAACT"| __truncated__ "TACGTAGGGGGCAAGCGTTATCCGGATTTACTGGGTGTAAAGGGAGCGTAGGCGGCCATGCAAGTCAGAAGTGAAAACCCGGGGCTCAACCCTGGGAGTGCTTTTGAAACT"| __truncated__ ...</span></span>
-<span><span class="co">#&gt;  $ samples       : chr  "F3D2" "F3D146" "F3D149" "F3D150" ...</span></span>
-<span><span class="co">#&gt;  $ abundances    : int  222 1 1 1 127 17 32 13 95 86 ...</span></span></code></pre></div>
+<span><span class="co">#&gt; 'data.frame':    6084 obs. of  3 variables:</span></span>
+<span><span class="co">#&gt;  $ sequence_name: chr  "M00967_43_000000000-A3JHG_1_1101_10133_8460" "M00967_43_000000000-A3JHG_1_1101_10134_24617" "M00967_43_000000000-A3JHG_1_1101_10331_23332" "M00967_43_000000000-A3JHG_1_1101_10340_12294" ...</span></span>
+<span><span class="co">#&gt;  $ sequence     : chr  "TACGTAGGGGGCAAGCGTTATCCGGATTTACTGGGTGTAAAGGGAGCGTAGGCGGCCATGCAAGTCAGAAGTGAAAACCCGGGGCTCAACCCTGGGAGTGCTTTTGAAACT"| __truncated__ "TACGTAGGGGGCAAGCGTTATCCGGATTTACTGGGTGTAAAGGGAGCGTAGGCGGCCATGCAAGTCAGAAGTGAAAACCCGGGGCTCAACCCTGGGAGTGCTTTTGAAACT"| __truncated__ "TACGGAGGATGCGAGCGTTATCCGGATTTATTGGGTTTAAAGGGAGCGCAGGCGGCATGGCAAGTCAGATGTGAAAGCCCGGGGCTCAACCCCGGGACTGCATTTGAAACT"| __truncated__ "TACGGAGGATGCGAGCGTTATCCGGATTTATTGGGTTTAAAGGGTGCGTAGGCGGGCTGTTAAGTCAGCGGTCAAATGTCGGGGCTCAACGCCGTCGAGCCGTTGAAACTG"| __truncated__ ...</span></span>
+<span><span class="co">#&gt;  $ abundance    : int  620 4 1 1 1 1 1 3 1 2 ...</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
@@ -183,9 +179,9 @@ chosen from the set of reference sequences. Let’s use the reference to
 remove the chimeras.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">strollur_results</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/rchime.html">rchime</a></span><span class="op">(</span><span class="va">strollur</span>, reference <span class="op">=</span> <span class="va">reference</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Added a chimera_report.</span></span>
+<span><span class="co">#&gt; Added a chimera_report.</span></span>
 <span><span class="co">#&gt; → rchime removed `4849` chimeras from your dataset.</span></span>
-<span><span class="co">#&gt; → It took `7.25036358833313` seconds to detect and remove the chimeras.</span></span>
+<span><span class="co">#&gt; → It took `8.47708582878113` seconds to detect and remove the chimeras.</span></span>
 <span></span>
 <span><span class="va">strollur</span></span>
 <span><span class="co">#&gt; rchime reference example:</span></span>
@@ -211,7 +207,7 @@ remove the chimeras.</p>
 <span></span>
 <span><span class="va">data_frame_results</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/rchime.html">rchime</a></span><span class="op">(</span><span class="va">data_df</span>, reference <span class="op">=</span> <span class="va">reference_data</span><span class="op">)</span></span>
 <span><span class="co">#&gt; → rchime detected `4849` chimeras in your dataset.</span></span>
-<span><span class="co">#&gt; → It took `12.400438785553` seconds to detect the chimeras.</span></span></code></pre></div>
+<span><span class="co">#&gt; → It took `8.50946164131165` seconds to detect the chimeras.</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="results">Results<a class="anchor" aria-label="anchor" href="#results"></a>

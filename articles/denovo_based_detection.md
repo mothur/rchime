@@ -16,17 +16,16 @@ sequence data from [mothur’s](https://mothur.org)
 ### Creating *[strollur](https://mothur.org/strollur)* objects
 
 ``` r
+
 fasta_data <- readRDS(rchime_example("miseq_fasta.rds"))
 abundance_data <- readRDS(rchime_example("miseq_abundance.rds"))
 
 strollur <- strollur::new_dataset("rchime denovo example")
 
-strollur::add(strollur, table = fasta_data, type = "sequences")
-#> ℹ Added 6084 sequences.
-#> [1] 6084
+strollur::add(strollur, table = fasta_data, type = "sequence")
+#> Added 6084 sequences.
 strollur::assign(strollur, table = abundance_data, type = "sequence_abundance")
-#> ℹ Assigned 6084 sequence abundances.
-#> [1] 6084
+#> Assigned 6084 sequence abundances.
 
 strollur
 #> rchime denovo example:
@@ -50,14 +49,15 @@ strollur
 ### Loading data.frames
 
 ``` r
+
 df <- readRDS(rchime_example("miseq_data_frame_by_sample.rds"))
 
 str(df)
 #> 'data.frame':    11039 obs. of  4 variables:
-#>  $ sequence_names: chr  "M00967_43_000000000-A3JHG_1_1101_10133_8460" "M00967_43_000000000-A3JHG_1_1101_10133_8460" "M00967_43_000000000-A3JHG_1_1101_10133_8460" "M00967_43_000000000-A3JHG_1_1101_10133_8460" ...
-#>  $ sequences     : chr  "TACGTAGGGGGCAAGCGTTATCCGGATTTACTGGGTGTAAAGGGAGCGTAGGCGGCCATGCAAGTCAGAAGTGAAAACCCGGGGCTCAACCCTGGGAGTGCTTTTGAAACT"| __truncated__ "TACGTAGGGGGCAAGCGTTATCCGGATTTACTGGGTGTAAAGGGAGCGTAGGCGGCCATGCAAGTCAGAAGTGAAAACCCGGGGCTCAACCCTGGGAGTGCTTTTGAAACT"| __truncated__ "TACGTAGGGGGCAAGCGTTATCCGGATTTACTGGGTGTAAAGGGAGCGTAGGCGGCCATGCAAGTCAGAAGTGAAAACCCGGGGCTCAACCCTGGGAGTGCTTTTGAAACT"| __truncated__ "TACGTAGGGGGCAAGCGTTATCCGGATTTACTGGGTGTAAAGGGAGCGTAGGCGGCCATGCAAGTCAGAAGTGAAAACCCGGGGCTCAACCCTGGGAGTGCTTTTGAAACT"| __truncated__ ...
-#>  $ samples       : chr  "F3D2" "F3D146" "F3D149" "F3D150" ...
-#>  $ abundances    : int  222 1 1 1 127 17 32 13 95 86 ...
+#>  $ sequence_name: chr  "M00967_43_000000000-A3JHG_1_1101_10133_8460" "M00967_43_000000000-A3JHG_1_1101_10133_8460" "M00967_43_000000000-A3JHG_1_1101_10133_8460" "M00967_43_000000000-A3JHG_1_1101_10133_8460" ...
+#>  $ sequence     : chr  "TACGTAGGGGGCAAGCGTTATCCGGATTTACTGGGTGTAAAGGGAGCGTAGGCGGCCATGCAAGTCAGAAGTGAAAACCCGGGGCTCAACCCTGGGAGTGCTTTTGAAACT"| __truncated__ "TACGTAGGGGGCAAGCGTTATCCGGATTTACTGGGTGTAAAGGGAGCGTAGGCGGCCATGCAAGTCAGAAGTGAAAACCCGGGGCTCAACCCTGGGAGTGCTTTTGAAACT"| __truncated__ "TACGTAGGGGGCAAGCGTTATCCGGATTTACTGGGTGTAAAGGGAGCGTAGGCGGCCATGCAAGTCAGAAGTGAAAACCCGGGGCTCAACCCTGGGAGTGCTTTTGAAACT"| __truncated__ "TACGTAGGGGGCAAGCGTTATCCGGATTTACTGGGTGTAAAGGGAGCGTAGGCGGCCATGCAAGTCAGAAGTGAAAACCCGGGGCTCAACCCTGGGAGTGCTTTTGAAACT"| __truncated__ ...
+#>  $ sample       : chr  "F3D2" "F3D146" "F3D149" "F3D150" ...
+#>  $ abundance    : int  222 1 1 1 127 17 32 13 95 86 ...
 ```
 
 ## Removing chimeras
@@ -77,11 +77,12 @@ samples in which they are flagged as chimeric. Let’s use the denovo
 method to remove the chimeras.
 
 ``` r
+
 strollur_results <- rchime(strollur, dereplicate = TRUE)
 #> ℹ The denovo method runs with a single processor.
-#> ℹ Added a chimera_report.
+#> Added a chimera_report.
 #> → rchime removed `10453` chimeras from your dataset.
-#> → It took `7.60661172866821` seconds to detect and remove the chimeras.
+#> → It took `9.1344587802887` seconds to detect and remove the chimeras.
 
 strollur
 #> rchime denovo example:
@@ -108,7 +109,7 @@ strollur
 data_frame_results <- rchime(df, dereplicate = TRUE)
 #> ℹ The denovo method runs with a single processor.
 #> → rchime detected `10453` chimeras in your dataset.
-#> → It took `7.54418039321899` seconds to detect the chimeras.
+#> → It took `9.12996387481689` seconds to detect the chimeras.
 ```
 
 ## Results
@@ -127,6 +128,7 @@ is a data.frame with a row for each sequence in your dataset. Let’s take
 a look at the first 5 chimeric sequences in the report:
 
 ``` r
+
 strollur_results$chimera_report[
   strollur_results$chimera_report$Chimeric_Status == "Y",
 ] |> head(n = 5)
@@ -168,6 +170,7 @@ Results also contains a list of the names of the chimeric sequences.
 Let’s get the names of the first 10 chimeras.
 
 ``` r
+
 strollur_results$chimeras |> head(n = 10)
 #>  [1] "M00967_43_000000000-A3JHG_1_1106_11629_14238"
 #>  [2] "M00967_43_000000000-A3JHG_1_1103_26580_14708"
@@ -184,7 +187,7 @@ strollur_results$chimeras |> head(n = 10)
 ### Set_abundance_values
 
 Results will only contain the set_abundance_values list when dereplicate
-= TRUE and you are not removing the chimeras automatically.
+= TRUE and you are NOT removing the chimeras automatically.
 set_abundance_values has three items: ‘sequence_names’, ‘abundances’ and
 ‘samples’. For each sequence in your dataset there will be an entry in
 sequence_names and abundances. The abundance values are parsed by
@@ -192,8 +195,9 @@ sample, and the order is given in set_abundance_values\$samples. Let’s
 look at the first two sequences abundances after detecting the chimeras:
 
 ``` r
+
 names(data_frame_results$set_abundance_values)
-#> [1] "sequence_names" "abundances"     "samples"
+#> [1] "sequence_name" "abundance"     "samples"
 
 data_frame_results$set_abundance_values$samples
 #>  [1] "F3D0"   "F3D1"   "F3D141" "F3D142" "F3D143" "F3D144" "F3D145" "F3D146"
@@ -205,31 +209,31 @@ sequences_names <- c(
   "M00967_43_000000000-A3JHG_1_1101_10133_8460"
 )
 
-df[df$sequence_names %in% sequences_names, c(1, 3, 4)]
-#>                                   sequence_names samples abundances
-#> 1    M00967_43_000000000-A3JHG_1_1101_10133_8460    F3D2        222
-#> 2    M00967_43_000000000-A3JHG_1_1101_10133_8460  F3D146          1
-#> 3    M00967_43_000000000-A3JHG_1_1101_10133_8460  F3D149          1
-#> 4    M00967_43_000000000-A3JHG_1_1101_10133_8460  F3D150          1
-#> 5    M00967_43_000000000-A3JHG_1_1101_10133_8460    F3D1        127
-#> 6    M00967_43_000000000-A3JHG_1_1101_10133_8460    F3D7         17
-#> 7    M00967_43_000000000-A3JHG_1_1101_10133_8460    F3D0         32
-#> 8    M00967_43_000000000-A3JHG_1_1101_10133_8460    F3D5         13
-#> 9    M00967_43_000000000-A3JHG_1_1101_10133_8460    F3D8         95
-#> 10   M00967_43_000000000-A3JHG_1_1101_10133_8460    F3D9         86
-#> 11   M00967_43_000000000-A3JHG_1_1101_10133_8460    F3D3          5
-#> 12   M00967_43_000000000-A3JHG_1_1101_10133_8460    F3D6         20
-#> 1092 M00967_43_000000000-A3JHG_1_1103_5171_14027    F3D0          5
-#> 1093 M00967_43_000000000-A3JHG_1_1103_5171_14027  F3D148          1
-#> 1094 M00967_43_000000000-A3JHG_1_1103_5171_14027    F3D2          4
-#> 1095 M00967_43_000000000-A3JHG_1_1103_5171_14027    F3D1          6
-#> 1096 M00967_43_000000000-A3JHG_1_1103_5171_14027  F3D142          1
+df[df$sequence_name %in% sequences_names, c(1, 3, 4)]
+#>                                    sequence_name sample abundance
+#> 1    M00967_43_000000000-A3JHG_1_1101_10133_8460   F3D2       222
+#> 2    M00967_43_000000000-A3JHG_1_1101_10133_8460 F3D146         1
+#> 3    M00967_43_000000000-A3JHG_1_1101_10133_8460 F3D149         1
+#> 4    M00967_43_000000000-A3JHG_1_1101_10133_8460 F3D150         1
+#> 5    M00967_43_000000000-A3JHG_1_1101_10133_8460   F3D1       127
+#> 6    M00967_43_000000000-A3JHG_1_1101_10133_8460   F3D7        17
+#> 7    M00967_43_000000000-A3JHG_1_1101_10133_8460   F3D0        32
+#> 8    M00967_43_000000000-A3JHG_1_1101_10133_8460   F3D5        13
+#> 9    M00967_43_000000000-A3JHG_1_1101_10133_8460   F3D8        95
+#> 10   M00967_43_000000000-A3JHG_1_1101_10133_8460   F3D9        86
+#> 11   M00967_43_000000000-A3JHG_1_1101_10133_8460   F3D3         5
+#> 12   M00967_43_000000000-A3JHG_1_1101_10133_8460   F3D6        20
+#> 1092 M00967_43_000000000-A3JHG_1_1103_5171_14027   F3D0         5
+#> 1093 M00967_43_000000000-A3JHG_1_1103_5171_14027 F3D148         1
+#> 1094 M00967_43_000000000-A3JHG_1_1103_5171_14027   F3D2         4
+#> 1095 M00967_43_000000000-A3JHG_1_1103_5171_14027   F3D1         6
+#> 1096 M00967_43_000000000-A3JHG_1_1103_5171_14027 F3D142         1
 
-data_frame_results$set_abundance_values$sequence_names[1:2]
+data_frame_results$set_abundance_values$sequence_name[1:2]
 #> [1] "M00967_43_000000000-A3JHG_1_1101_10133_8460" 
 #> [2] "M00967_43_000000000-A3JHG_1_1101_10134_24617"
 
-data_frame_results$set_abundance_values$abundances[1:2]
+data_frame_results$set_abundance_values$abundance[1:2]
 #> [[1]]
 #>  [1]  32 127   0   0   0   0   0   1   0   0   1   1 222   5  13  20  17  95  86
 #> [20]   0
@@ -247,24 +251,25 @@ example of a sequence that was found to be chimeric in some of the
 samples it is present in.
 
 ``` r
+
 df[
-  df$sequence_names %in% "M00967_43_000000000-A3JHG_1_1103_5171_14027",
+  df$sequence_name %in% "M00967_43_000000000-A3JHG_1_1103_5171_14027",
   c(1, 3, 4)
 ]
-#>                                   sequence_names samples abundances
-#> 1092 M00967_43_000000000-A3JHG_1_1103_5171_14027    F3D0          5
-#> 1093 M00967_43_000000000-A3JHG_1_1103_5171_14027  F3D148          1
-#> 1094 M00967_43_000000000-A3JHG_1_1103_5171_14027    F3D2          4
-#> 1095 M00967_43_000000000-A3JHG_1_1103_5171_14027    F3D1          6
-#> 1096 M00967_43_000000000-A3JHG_1_1103_5171_14027  F3D142          1
+#>                                    sequence_name sample abundance
+#> 1092 M00967_43_000000000-A3JHG_1_1103_5171_14027   F3D0         5
+#> 1093 M00967_43_000000000-A3JHG_1_1103_5171_14027 F3D148         1
+#> 1094 M00967_43_000000000-A3JHG_1_1103_5171_14027   F3D2         4
+#> 1095 M00967_43_000000000-A3JHG_1_1103_5171_14027   F3D1         6
+#> 1096 M00967_43_000000000-A3JHG_1_1103_5171_14027 F3D142         1
 
 data_frame_results$set_abundance_values$samples
 #>  [1] "F3D0"   "F3D1"   "F3D141" "F3D142" "F3D143" "F3D144" "F3D145" "F3D146"
 #>  [9] "F3D147" "F3D148" "F3D149" "F3D150" "F3D2"   "F3D3"   "F3D5"   "F3D6"  
 #> [17] "F3D7"   "F3D8"   "F3D9"   "Mock"
 
-data_frame_results$set_abundance_values$abundances[
-  data_frame_results$set_abundance_values$sequence_names %in%
+data_frame_results$set_abundance_values$abundance[
+  data_frame_results$set_abundance_values$sequence_name %in%
     "M00967_43_000000000-A3JHG_1_1103_5171_14027"
 ]
 #> [[1]]

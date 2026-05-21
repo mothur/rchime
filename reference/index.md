@@ -14,12 +14,10 @@ Detect and remove chimeric sequences
   :
 
   Detect and remove chimeras from your
-  [strollur](https://mothur.org/strollur/) dataset object using a denovo
-  approach or alternatively a reference model.
+  [strollur](https://mothur.org/strollur/) dataset object.
 
 - [`rchime(`*`<data.frame>`*`)`](http://mothur.org/rchime/reference/rchime.data.frame.md)
-  : Detect chimeras in your dataset object using a denovo approach or
-  alternatively a reference model.
+  : Detect chimeras in your data.frames.
 
 ## Utility Functions
 

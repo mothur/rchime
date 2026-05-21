@@ -6,29 +6,29 @@ detects chimeras in your data using a reference based approach.
 
 ``` r
 rchimeReference(
-  sequence_names,
-  sequences,
-  reference_names,
-  reference_sequences,
+  sequence_name,
+  sequence,
+  reference_name,
+  reference_sequence,
   options = NULL
 )
 ```
 
 ## Arguments
 
-- sequence_names, :
+- sequence_name, :
 
   vector of strings containing sequence names
 
-- sequences, :
+- sequence, :
 
   vector of strings containing sequence nucleotide data
 
-- reference_names, :
+- reference_name, :
 
   vector of strings containing reference sequences names
 
-- reference_sequences, :
+- reference_sequence, :
 
   vector of strings containing reference sequences
 
@@ -43,6 +43,7 @@ rchimeReference(
 ## Examples
 
 ``` r
+
 # Read in data.frames containing sequence data
 
 fasta_data <- readRDS(rchime_example("miseq_fasta.rds"))
@@ -50,8 +51,8 @@ reference_data <- readRDS(rchime_example("reference.rds"))
 
 # Detect chimeras
 
-results <- rchimeReference(sequence_names = fasta_data$sequence_names,
-                           sequences = fasta_data$sequences,
-                           reference_names = reference_data$sequence_names,
-                           reference_sequences = reference_data$sequences)
+results <- rchimeReference(sequence_name = fasta_data$sequence_name,
+                           sequence = fasta_data$sequence,
+                           reference_name = reference_data$sequence_name,
+                           reference_sequence = reference_data$sequence)
 ```

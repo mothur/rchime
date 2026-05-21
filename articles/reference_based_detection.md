@@ -22,14 +22,14 @@ object](https://mothur.org/strollur/reference/strollur.html) that
 contains our SILVA reference sequences.
 
 ``` r
+
 reference <- strollur::new_dataset("Silva V4 Region")
 
 strollur::add(reference,
   table = readRDS(rchime_example("reference.rds")),
-  type = "sequences"
+  type = "sequence"
 )
-#> ℹ Added 14956 sequences.
-#> [1] 14956
+#> Added 14956 sequences.
 
 reference
 #> Silva V4 Region:
@@ -53,17 +53,16 @@ object](https://mothur.org/strollur/reference/strollur.html) containing
 the MiSeq_SOP sequences.
 
 ``` r
+
 fasta_data <- readRDS(rchime_example("miseq_fasta.rds"))
 abundance_data <- readRDS(rchime_example("miseq_abundance.rds"))
 
 strollur <- strollur::new_dataset("rchime reference example")
 
-strollur::add(strollur, table = fasta_data, type = "sequences")
-#> ℹ Added 6084 sequences.
-#> [1] 6084
+strollur::add(strollur, table = fasta_data, type = "sequence")
+#> Added 6084 sequences.
 strollur::assign(strollur, table = abundance_data, type = "sequence_abundance")
-#> ℹ Assigned 6084 sequence abundances.
-#> [1] 6084
+#> Assigned 6084 sequence abundances.
 
 strollur
 #> rchime reference example:
@@ -87,21 +86,21 @@ strollur
 ### Loading data.frames
 
 ``` r
+
 reference_data <- readRDS(rchime_example("reference.rds"))
 
 str(reference_data)
 #> 'data.frame':    14956 obs. of  2 variables:
-#>  $ sequence_names: chr  "DQ415841.1" "L02888.1" "AB037561.1" "AF355050.1" ...
-#>  $ sequences     : chr  "GTGCCAGCAGCCGCGGTAATACGGGGGGTGCAAGCGTTGTTCGGAATTATTGGGCGTAAAGAGCGTGTAGGCTGTCTGATGTGTCAGATGTGAAAGCCCTGGGCTTAACCC"| __truncated__ "GTGCCAGCAGCCGCGGTAATACGAGAGGGCTAGCGTTATTCGGAATTATTGGGCGTAAAGGGCGCGTAGGCTGGTTAATAAGTTAAAAGTGAAATCCCGAGGCTTAACCTT"| __truncated__ "GTGCCAGCAGCCGCGGTAATACGAAGGGTGCAAGCGTTAATCGGAATTACTGGGCGTAAAGCGCGCGTAGGTGGTTCAGCAAGTTGGATGTGAAATCCCCGGGCTCAACCT"| __truncated__ "GTGCCAGCAGCCGCGGTAATACGGAGGGTGCAAGCGTTATTCGGAATCACTGGGCGTAAAGGACGCGTAGGCGGGTTGATAAGTCAGATGTGAAATCCTACAGCTTAACTG"| __truncated__ ...
+#>  $ sequence_name: chr  "DQ415841.1" "L02888.1" "AB037561.1" "AF355050.1" ...
+#>  $ sequence     : chr  "GTGCCAGCAGCCGCGGTAATACGGGGGGTGCAAGCGTTGTTCGGAATTATTGGGCGTAAAGAGCGTGTAGGCTGTCTGATGTGTCAGATGTGAAAGCCCTGGGCTTAACCC"| __truncated__ "GTGCCAGCAGCCGCGGTAATACGAGAGGGCTAGCGTTATTCGGAATTATTGGGCGTAAAGGGCGCGTAGGCTGGTTAATAAGTTAAAAGTGAAATCCCGAGGCTTAACCTT"| __truncated__ "GTGCCAGCAGCCGCGGTAATACGAAGGGTGCAAGCGTTAATCGGAATTACTGGGCGTAAAGCGCGCGTAGGTGGTTCAGCAAGTTGGATGTGAAATCCCCGGGCTCAACCT"| __truncated__ "GTGCCAGCAGCCGCGGTAATACGGAGGGTGCAAGCGTTATTCGGAATCACTGGGCGTAAAGGACGCGTAGGCGGGTTGATAAGTCAGATGTGAAATCCTACAGCTTAACTG"| __truncated__ ...
 
-data_df <- readRDS(rchime_example("miseq_data_frame_by_sample.rds"))
+data_df <- readRDS(rchime_example("miseq_data_frame.rds"))
 
 str(data_df)
-#> 'data.frame':    11039 obs. of  4 variables:
-#>  $ sequence_names: chr  "M00967_43_000000000-A3JHG_1_1101_10133_8460" "M00967_43_000000000-A3JHG_1_1101_10133_8460" "M00967_43_000000000-A3JHG_1_1101_10133_8460" "M00967_43_000000000-A3JHG_1_1101_10133_8460" ...
-#>  $ sequences     : chr  "TACGTAGGGGGCAAGCGTTATCCGGATTTACTGGGTGTAAAGGGAGCGTAGGCGGCCATGCAAGTCAGAAGTGAAAACCCGGGGCTCAACCCTGGGAGTGCTTTTGAAACT"| __truncated__ "TACGTAGGGGGCAAGCGTTATCCGGATTTACTGGGTGTAAAGGGAGCGTAGGCGGCCATGCAAGTCAGAAGTGAAAACCCGGGGCTCAACCCTGGGAGTGCTTTTGAAACT"| __truncated__ "TACGTAGGGGGCAAGCGTTATCCGGATTTACTGGGTGTAAAGGGAGCGTAGGCGGCCATGCAAGTCAGAAGTGAAAACCCGGGGCTCAACCCTGGGAGTGCTTTTGAAACT"| __truncated__ "TACGTAGGGGGCAAGCGTTATCCGGATTTACTGGGTGTAAAGGGAGCGTAGGCGGCCATGCAAGTCAGAAGTGAAAACCCGGGGCTCAACCCTGGGAGTGCTTTTGAAACT"| __truncated__ ...
-#>  $ samples       : chr  "F3D2" "F3D146" "F3D149" "F3D150" ...
-#>  $ abundances    : int  222 1 1 1 127 17 32 13 95 86 ...
+#> 'data.frame':    6084 obs. of  3 variables:
+#>  $ sequence_name: chr  "M00967_43_000000000-A3JHG_1_1101_10133_8460" "M00967_43_000000000-A3JHG_1_1101_10134_24617" "M00967_43_000000000-A3JHG_1_1101_10331_23332" "M00967_43_000000000-A3JHG_1_1101_10340_12294" ...
+#>  $ sequence     : chr  "TACGTAGGGGGCAAGCGTTATCCGGATTTACTGGGTGTAAAGGGAGCGTAGGCGGCCATGCAAGTCAGAAGTGAAAACCCGGGGCTCAACCCTGGGAGTGCTTTTGAAACT"| __truncated__ "TACGTAGGGGGCAAGCGTTATCCGGATTTACTGGGTGTAAAGGGAGCGTAGGCGGCCATGCAAGTCAGAAGTGAAAACCCGGGGCTCAACCCTGGGAGTGCTTTTGAAACT"| __truncated__ "TACGGAGGATGCGAGCGTTATCCGGATTTATTGGGTTTAAAGGGAGCGCAGGCGGCATGGCAAGTCAGATGTGAAAGCCCGGGGCTCAACCCCGGGACTGCATTTGAAACT"| __truncated__ "TACGGAGGATGCGAGCGTTATCCGGATTTATTGGGTTTAAAGGGTGCGTAGGCGGGCTGTTAAGTCAGCGGTCAAATGTCGGGGCTCAACGCCGTCGAGCCGTTGAAACTG"| __truncated__ ...
+#>  $ abundance    : int  620 4 1 1 1 1 1 3 1 2 ...
 ```
 
 ## Removing chimeras
@@ -111,10 +110,11 @@ chosen from the set of reference sequences. Let’s use the reference to
 remove the chimeras.
 
 ``` r
+
 strollur_results <- rchime(strollur, reference = reference)
-#> ℹ Added a chimera_report.
+#> Added a chimera_report.
 #> → rchime removed `4849` chimeras from your dataset.
-#> → It took `7.25036358833313` seconds to detect and remove the chimeras.
+#> → It took `8.47708582878113` seconds to detect and remove the chimeras.
 
 strollur
 #> rchime reference example:
@@ -140,7 +140,7 @@ strollur
 
 data_frame_results <- rchime(data_df, reference = reference_data)
 #> → rchime detected `4849` chimeras in your dataset.
-#> → It took `12.400438785553` seconds to detect the chimeras.
+#> → It took `8.50946164131165` seconds to detect the chimeras.
 ```
 
 ## Results
@@ -159,6 +159,7 @@ is a data.frame with a row for each sequence in your dataset. Let’s take
 a look at the first 5 chimeric sequences in the report:
 
 ``` r
+
 strollur_results$chimera_report[
   strollur_results$chimera_report$Chimeric_Status == "Y",
 ] |> head(n = 5)
@@ -188,6 +189,7 @@ Results also contains a list of the names of the chimeric sequences.
 Let’s get the names of the first 10 chimeras.
 
 ``` r
+
 strollur_results$chimeras |> head(n = 10)
 #>  [1] "M00967_43_000000000-A3JHG_1_2113_29036_16812"
 #>  [2] "M00967_43_000000000-A3JHG_1_2108_19952_9563" 

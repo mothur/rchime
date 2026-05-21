@@ -5,20 +5,20 @@ detects chimeras in your data using a denovo approach.
 ## Usage
 
 ``` r
-rchimeDenovoSingleSample(sequence_names, sequences, abundances, options = NULL)
+rchimeDenovoSingleSample(sequence_name, sequence, abundance, options = NULL)
 ```
 
 ## Arguments
 
-- sequence_names, :
+- sequence_name, :
 
   vector of strings containing sequence names
 
-- sequences, :
+- sequence, :
 
   vector of strings containing sequence nucleotide data
 
-- abundances, :
+- abundance, :
 
   vector of sequence abundances
 
@@ -33,6 +33,7 @@ rchimeDenovoSingleSample(sequence_names, sequences, abundances, options = NULL)
 ## Examples
 
 ``` r
+
 # Read in data.frames containing sequence and abundance data
 
 fasta_data <- readRDS(rchime_example("miseq_fasta.rds"))
@@ -40,7 +41,7 @@ abundance_data <- readRDS(rchime_example("single_sample_abundance.rds"))
 
 # Detect chimeras
 
-results <- rchimeDenovoSingleSample(sequence_names = fasta_data$sequence_names,
-                                    sequences = fasta_data$sequences,
-                                    abundances = abundance_data$abundances)
+results <- rchimeDenovoSingleSample(sequence_name = fasta_data$sequence_name,
+                                    sequence = fasta_data$sequence,
+                                    abundance = abundance_data$abundance)
 ```

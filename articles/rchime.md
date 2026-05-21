@@ -10,6 +10,7 @@ package uses code from the
 You can install the CRAN version with:
 
 ``` r
+
 install.packages("rchime")
 ```
 
@@ -17,8 +18,8 @@ You can install the development version of *rchime* from
 [GitHub](https://github.com/mothur/rchime) with:
 
 ``` r
-# install.packages("devtools")
-devtools::install_github("mothur/rchime")
+
+pak::pak("mothur/rchime")
 ```
 
 ## Tutorials to help you get started

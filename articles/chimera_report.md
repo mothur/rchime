@@ -33,6 +33,7 @@ with the denovo approach to generate the chimera report, and take a
 closer look.
 
 ``` r
+
 library(rchime)
 #> Loading required package: Rcpp
 #> Loading required package: strollur
@@ -47,18 +48,31 @@ abundance_data <- readRDS(rchime_example("miseq_abundance.rds"))
 
 data <- strollur::new_dataset("rchime denovo example")
 
-strollur::add(data, table = fasta_data, type = "sequences")
-#> ℹ Added 6084 sequences.
-#> [1] 6084
+strollur::add(data, table = fasta_data, type = "sequence")
+#> Added 6084 sequences.
 strollur::assign(data, table = abundance_data, type = "sequence_abundance")
-#> ℹ Assigned 6084 sequence abundances.
-#> [1] 6084
+#> Assigned 6084 sequence abundances.
 
 results <- rchime(data, dereplicate = TRUE)
 #> ℹ The denovo method runs with a single processor.
-#> ℹ Added a chimera_report.
+#> Added a chimera_report.
 #> → rchime removed `10453` chimeras from your dataset.
-#> → It took `7.56068420410156` seconds to detect and remove the chimeras.
+#> → It took `9.11566686630249` seconds to detect and remove the chimeras.
+
+
+results <- strollur::new_dataset("rchime denovo example") |>
+  strollur::add(table = fasta_data, type = "sequence") |>
+  strollur::assign(
+    table = abundance_data,
+    type = "sequence_abundance"
+  ) |>
+  rchime(dereplicate = TRUE)
+#> Added 6084 sequences.
+#> Assigned 6084 sequence abundances.
+#> ℹ The denovo method runs with a single processor.
+#> Added a chimera_report.
+#> → rchime removed `10453` chimeras from your dataset.
+#> → It took `9.07685470581055` seconds to detect and remove the chimeras.
 
 results$chimera_report[60:70, ]
 #>         Score                                        Query

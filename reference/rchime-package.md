@@ -13,3 +13,7 @@ Useful links:
 ## Author
 
 **Maintainer**: Sarah Westcott <swestcot@umich.edu>
+
+Authors:
+
+- Sarah Westcott <swestcot@umich.edu>

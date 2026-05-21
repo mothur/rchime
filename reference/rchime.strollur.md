@@ -1,4 +1,4 @@
-# Detect and remove chimeras from your [strollur](https://mothur.org/strollur/) dataset object using a denovo approach or alternatively a reference model.
+# Detect and remove chimeras from your [strollur](https://mothur.org/strollur/) dataset object.
 
 The [`rchime()`](http://mothur.org/rchime/reference/rchime.md) function
 allows you to detect and remove chimeras from your data using a denovo
@@ -27,7 +27,7 @@ rchime(
   silent = FALSE,
   remove_chimeras = TRUE,
   rchime_options = NULL,
-  table_names = NA
+  table_names = NULL
 )
 ```
 
@@ -68,7 +68,7 @@ rchime(
 
 - table_names, :
 
-  NA. Only used when `data` is a data.frame.
+  Only used when `data` is a data.frame. Default = NULL.
 
 ## Value
 
@@ -101,21 +101,23 @@ Sarah Westcott, <swestcot@umich.edu>
 ## Examples
 
 ``` r
+
 # Let's load a strollur object named "rchime denovo example"
 
 data_denovo <- strollur::load_dataset(
-                           rchime_example("strollur_multi_sample.rds"))
+  rchime_example("strollur_multi_sample.rds")
+)
 
 # Detect and remove chimeras from the dataset using denovo approach by sample
 # (recommended)
 
 chimera_report <- rchime(data_denovo, dereplicate = TRUE)
 #> ℹ The denovo method runs with a single processor.
-#> ℹ Added a chimera_report.
+#> Added a chimera_report.
 #> → rchime removed `10453` chimeras from your dataset.
-#> → It took `7.53303694725037` seconds to detect and remove the chimeras.
+#> → It took `9.09301161766052` seconds to detect and remove the chimeras.
 data_denovo
-#> rchime denovo example:
+#> rchime - strollur example:
 #> 
 #>             starts ends nbases ambigs polymers numns   numseqs
 #> Minimum:         1  249    249      0        3     0      1.00
@@ -140,29 +142,33 @@ data_denovo
 # Alternatively you can detect and remove chimeras using a reference
 
 data_reference <- strollur::load_dataset(
-                           rchime_example("strollur_multi_sample.rds"))
+  rchime_example("strollur_multi_sample.rds")
+)
 
 reference <- strollur::load_dataset(rchime_example("strollur_reference.rds"))
 
 chimera_report <- rchime(data_reference, reference = reference)
-#> ℹ Added a chimera_report.
-#> → rchime complete, no chimeras found.
-#> → It took `2.00232458114624` seconds to detect and remove the chimeras.
+#> Added a chimera_report.
+#> → rchime removed `5325` chimeras from your dataset.
+#> → It took `8.38780736923218` seconds to detect and remove the chimeras.
 data_reference
-#> rchime denovo example:
+#> rchime - strollur example:
 #> 
 #>             starts ends nbases ambigs polymers numns   numseqs
 #> Minimum:         1  249    249      0        3     0      1.00
-#> 2.5%-tile:       1  252    252      0        3     0   3217.38
-#> 25%-tile:        1  252    252      0        4     0  32164.75
-#> Median:          1  252    252      0        4     0  64328.50
-#> 75%-tile:        1  253    253      0        5     0  96492.25
-#> 97.5%-tile:      1  253    253      0        6     0 125439.62
-#> Maximum:         1  256    256      0        8     0 128655.00
+#> 2.5%-tile:       1  252    252      0        3     0   3084.25
+#> 25%-tile:        1  252    252      0        4     0  30833.50
+#> Median:          1  252    252      0        4     0  61666.00
+#> 75%-tile:        1  253    253      0        5     0  92498.50
+#> 97.5%-tile:      1  253    253      0        6     0 120247.75
+#> Maximum:         1  256    256      0        8     0 123330.00
 #> Mean:            1  252    252      0        4     0      0.00
+#> scrap_summary:
+#>       type      trash_code unique total
+#> 1 sequence chimeras_rchime   1662  5325
 #> 
-#> Number of unique seqs: 6084 
-#> Total number of seqs: 128655 
+#> Number of unique seqs: 4422 
+#> Total number of seqs: 123330 
 #> 
 #> Total number of samples: 20 
 #> Total number of custom reports: 1 

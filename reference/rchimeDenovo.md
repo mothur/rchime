@@ -6,21 +6,21 @@ sample.
 ## Usage
 
 ``` r
-rchimeDenovo(sequence_names, sequences, abundances, options = NULL)
+rchimeDenovo(sequence_name, sequence, abundance, options = NULL)
 ```
 
 ## Arguments
 
-- sequence_names, :
+- sequence_name, :
 
   2D vector of strings containing sequence names parsed by sample
 
-- sequences, :
+- sequence, :
 
   2D vector of strings containing sequence nucleotide data parsed by
   sample
 
-- abundances, :
+- abundance, :
 
   2D vector of sequence abundances parsed by sample
 
@@ -39,17 +39,18 @@ list()
 ## Examples
 
 ``` r
+
 # Read in data.frames containing sequence and abundance data
 
-sequence_names <- readRDS(rchime_example("miseq_names_by_sample.rds"))
-sequences <- readRDS(rchime_example("miseq_sequences_by_sample.rds"))
-abundances <- readRDS(rchime_example("miseq_abundance_by_sample.rds"))
+sequence_name <- readRDS(rchime_example("miseq_names_by_sample.rds"))
+sequence <- readRDS(rchime_example("miseq_sequences_by_sample.rds"))
+abundance <- readRDS(rchime_example("miseq_abundance_by_sample.rds"))
 
 # Detect chimeras
 
 options <- rchime_options(dereplicate = TRUE)
-results <- rchimeDenovo(sequence_names = sequence_names,
-                        sequences = sequences,
-                        abundances = abundances,
+results <- rchimeDenovo(sequence_name = sequence_name,
+                        sequence = sequence,
+                        abundance = abundance,
                         options)
 ```

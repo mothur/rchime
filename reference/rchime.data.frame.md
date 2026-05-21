@@ -1,4 +1,4 @@
-# Detect chimeras in your dataset object using a denovo approach or alternatively a reference model.
+# Detect chimeras in your data.frames.
 
 The [`rchime()`](http://mothur.org/rchime/reference/rchime.md) function
 allows you to detect chimeras from your data using a denovo approach or
@@ -25,10 +25,10 @@ rchime(
   reference = NULL,
   dereplicate = TRUE,
   silent = FALSE,
-  remove_chimeras = NA,
+  remove_chimeras = NULL,
   rchime_options = NULL,
-  table_names = list(sequence_name = "sequence_names", sequence = "sequences", abundance
-    = "abundances", sample = "samples")
+  table_names = list(sequence_name = "sequence_name", sequence = "sequence", abundance =
+    "abundance", sample = "sample")
 )
 ```
 
@@ -57,7 +57,7 @@ rchime(
 
 - remove_chimeras:
 
-  Boolean, NA. Only used when `data` is a strollur object.
+  Only used when `data` is a strollur object.
 
 - rchime_options:
 
@@ -70,24 +70,23 @@ rchime(
   named list used to indicate the names of the columns in the
   data.frame. Only used when `data` is a data.frame. By default:
 
-  table_names \<- list(sequence_name = "sequence_names", sequence =
-  "sequences" abundance = "abundances", sample = "samples")
+  table_names \<- list(sequence_name = "sequence_name", sequence =
+  "sequence" abundance = "abundance", sample = "sample")
 
   In table_names, 'sequence_name' is a string containing the name of the
   column in 'table' that contains the sequence names. Default column
-  name is 'sequence_names'.
+  name is 'sequence_name'.
 
   In table_names, 'sequence' is a string containing the name of the
   column in 'table' that contains the sequences. Default column name is
-  'sequences'.
+  'sequence'.
 
   In table_names, 'abundance' is a string containing the name of the
   column in 'table' that contains the abundances. Default column name is
-  'abundances'.
+  'abundance'.
 
   In table_names, 'sample' is a string containing the name of the column
-  in 'table' that contains the samples. Default column name is
-  'samples'.
+  in 'table' that contains the samples. Default column name is 'sample'.
 
 ## Value
 
@@ -118,6 +117,7 @@ Sarah Westcott, <swestcot@umich.edu>
 ## Examples
 
 ``` r
+
 # Detect chimeras from the dataset using denovo approach by sample
 # (recommended)
 
@@ -126,7 +126,7 @@ data <- readRDS(rchime_example("miseq_data_frame_by_sample.rds"))
 chimera_report <- rchime(data, dereplicate = TRUE)
 #> ℹ The denovo method runs with a single processor.
 #> → rchime detected `10453` chimeras in your dataset.
-#> → It took `7.67341446876526` seconds to detect the chimeras.
+#> → It took `9.13978219032288` seconds to detect the chimeras.
 
 # Alternatively you can detect chimeras using a reference
 
@@ -135,5 +135,5 @@ data <- readRDS(rchime_example("miseq_data_frame.rds"))
 
 chimera_report <- rchime(data, reference = reference)
 #> → rchime detected `4849` chimeras in your dataset.
-#> → It took `7.27279901504517` seconds to detect the chimeras.
+#> → It took `8.52422738075256` seconds to detect the chimeras.
 ```

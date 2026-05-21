@@ -20,6 +20,7 @@ package uses code from the
 You can install the CRAN version with:
 
 ``` r
+
 install.packages("rchime")
 ```
 
@@ -29,6 +30,7 @@ You can install the development version of rchime from
 [GitHub](https://github.com/mothur/rchime) with:
 
 ``` r
+
 # install.packages("devtools")
 devtools::install_github("mothur/rchime")
 ```
@@ -46,6 +48,7 @@ we will use the *denovo* method in
 remove the chimeras from the dataset.
 
 ``` r
+
 fasta_data <- readRDS(rchime_example("miseq_fasta.rds"))
 abundance_data <- readRDS(rchime_example("miseq_abundance.rds"))
 
