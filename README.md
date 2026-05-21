@@ -9,7 +9,7 @@
 [![Codecov test
 coverage](https://codecov.io/gh/mothur/rchime/graph/badge.svg)](https://app.codecov.io/gh/mothur/rchime)
 
-[![pkgdown](https://github.com/SchlossLab/rchime/actions/workflows/pkgdown.yaml/badge.svg)](https://github.com/SchlossLab/rchime/actions/workflows/pkgdown.yaml)
+[![pkgdown](https://github.com/mothur/rchime/actions/workflows/pkgdown.yaml/badge.svg)](https://github.com/mothur/rchime/actions/workflows/pkgdown.yaml)
 [![CRAN
 status](https://www.r-pkg.org/badges/version/rchime)](https://CRAN.R-project.org/package=rchime)
 <!-- badges: end -->
@@ -38,8 +38,7 @@ You can install the development version of rchime from
 [GitHub](https://github.com/mothur/rchime) with:
 
 ``` r
-# install.packages("devtools")
-devtools::install_github("mothur/rchime")
+pak::pak("mothur/rchime")
 ```
 
 ## Usage
@@ -58,19 +57,16 @@ abundance_data <- readRDS(rchime_example("miseq_abundance.rds"))
 
 data <- strollur::new_dataset("rchime denovo example")
 
-strollur::add(data, table = fasta_data, type = "sequences")
-#> ℹ Added 6084 sequences.
-#> [1] 6084
+strollur::add(data, table = fasta_data, type = "sequence")
+#> Added 6084 sequences.
 strollur::assign(data, table = abundance_data, type = "sequence_abundance")
-#> ℹ Assigned 6084 sequence abundances.
-#> [1] 6084
+#> Assigned 6084 sequence abundances.
 
 chimera_report <- rchime(data)
-#> 
-#> The denovo method runs with a single processor.
-#> ℹ Added a chimera_report.
+#> ℹ The denovo method runs with a single processor.
+#> Added a chimera_report.
 #> → rchime removed `10453` chimeras from your dataset.
-#> → It took `4.26860308647156` seconds to detect and remove the chimeras.
+#> → It took `4.20527505874634` seconds to detect and remove the chimeras.
 
 data
 #> rchime denovo example:
