@@ -28,7 +28,7 @@ reference <- strollur::new_dataset("Silva V4 Region")
 
 strollur::add(reference,
   table = readRDS(rchime_example("reference.rds")),
-  type = "sequences"
+  type = "sequence"
 )
 
 reference
@@ -42,7 +42,7 @@ abundance_data <- readRDS(rchime_example("miseq_abundance.rds"))
 
 strollur <- strollur::new_dataset("rchime reference example")
 
-strollur::add(strollur, table = fasta_data, type = "sequences")
+strollur::add(strollur, table = fasta_data, type = "sequence")
 strollur::assign(strollur, table = abundance_data, type = "sequence_abundance")
 
 strollur
@@ -55,7 +55,7 @@ reference_data <- readRDS(rchime_example("reference.rds"))
 
 str(reference_data)
 
-data_df <- readRDS(rchime_example("miseq_data_frame_by_sample.rds"))
+data_df <- readRDS(rchime_example("miseq_data_frame.rds"))
 
 str(data_df)
 ```

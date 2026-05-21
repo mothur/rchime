@@ -9,10 +9,10 @@
 //'
 //' @description detects chimeras in your data using a reference based approach.
 //'
-//' @param sequence_names, vector of strings containing sequence names
-//' @param sequences, vector of strings containing sequence nucleotide data
-//' @param reference_names, vector of strings containing reference sequences names
-//' @param reference_sequences, vector of strings containing reference sequences
+//' @param sequence_name, vector of strings containing sequence names
+//' @param sequence, vector of strings containing sequence nucleotide data
+//' @param reference_name, vector of strings containing reference sequences names
+//' @param reference_sequence, vector of strings containing reference sequences
 //' @param options list containing parameter options. Default = NULL.
 //'
 //' @examples
@@ -24,33 +24,33 @@
 //'
 //' # Detect chimeras
 //'
-//' results <- rchimeReference(sequence_names = fasta_data$sequence_names,
-//'                            sequences = fasta_data$sequences,
-//'                            reference_names = reference_data$sequence_names,
-//'                            reference_sequences = reference_data$sequences)
+//' results <- rchimeReference(sequence_name = fasta_data$sequence_name,
+//'                            sequence = fasta_data$sequence,
+//'                            reference_name = reference_data$sequence_name,
+//'                            reference_sequence = reference_data$sequence)
 //'
 //' @seealso [rchime()]
 //' @export
 //[[Rcpp::export]]
-Rcpp::List rchimeReference(std::vector<std::string> sequence_names,
-                           std::vector<std::string> sequences,
-                           std::vector<std::string> reference_names,
-                           std::vector<std::string> reference_sequences,
+Rcpp::List rchimeReference(std::vector<std::string> sequence_name,
+                           std::vector<std::string> sequence,
+                           std::vector<std::string> reference_name,
+                           std::vector<std::string> reference_sequence,
                            Rcpp::Nullable<Rcpp::List> options = R_NilValue) {
 
     // check vector lengths match
-    if (sequence_names.size() != sequences.size()) {
-        std::string message = "sequence_names must be the same length as sequences.";
-        message += " You provided " + toString(sequence_names.size());
-        message += " sequence names, and " + toString(sequences.size());
+    if (sequence_name.size() != sequence.size()) {
+        std::string message = "sequence_name must be the same length as sequence.";
+        message += " You provided " + toString(sequence_name.size());
+        message += " sequence names, and " + toString(sequence.size());
         message += " sequences.";
         throw Rcpp::exception(message.c_str());
     }
 
-    if (reference_names.size() != reference_sequences.size()) {
-        std::string message = "reference_names must be the same length as reference_sequences.";
-        message += " You provided " + toString(reference_names.size());
-        message += " reference names, and " + toString(reference_sequences.size());
+    if (reference_name.size() != reference_sequence.size()) {
+        std::string message = "reference_name must be the same length as reference_sequence.";
+        message += " You provided " + toString(reference_name.size());
+        message += " reference names, and " + toString(reference_sequence.size());
         message += " reference sequences.";
         throw Rcpp::exception(message.c_str());
     }
@@ -88,19 +88,19 @@ Rcpp::List rchimeReference(std::vector<std::string> sequence_names,
     }
 
     std::vector<std::vector<std::string>> seqNames;
-    seqNames.push_back(sequence_names);
+    seqNames.push_back(sequence_name);
     std::vector<std::vector<std::string>> seqs;
-    seqs.push_back(sequences);
+    seqs.push_back(sequence);
     std::vector<std::vector<float>> abunds;
-    std::vector<float> abundances(sequence_names.size(), 1);
+    std::vector<float> abundances(sequence_name.size(), 1);
     abunds.push_back(abundances);
 
     ChimeraVsearch* chimera = new ChimeraVsearch(seqNames, seqs, abunds,
                                                  optionsReference);
 
     // results contains chimera_report (data.frame) and chimeras (vector of names)
-    Rcpp::List results = chimera->removeChimeras(reference_names,
-                                                 reference_sequences);
+    Rcpp::List results = chimera->removeChimeras(reference_name,
+                                                 reference_sequence);
 
     delete chimera;
 
@@ -113,9 +113,9 @@ Rcpp::List rchimeReference(std::vector<std::string> sequence_names,
 //'
 //' @description detects chimeras in your data using a denovo approach.
 //'
-//' @param sequence_names, vector of strings containing sequence names
-//' @param sequences, vector of strings containing sequence nucleotide data
-//' @param abundances, vector of sequence abundances
+//' @param sequence_name, vector of strings containing sequence names
+//' @param sequence, vector of strings containing sequence nucleotide data
+//' @param abundance, vector of sequence abundances
 //' @param options list containing parameter options. Default = NULL.
 //'
 //' @examples
@@ -127,32 +127,32 @@ Rcpp::List rchimeReference(std::vector<std::string> sequence_names,
 //'
 //' # Detect chimeras
 //'
-//' results <- rchimeDenovoSingleSample(sequence_names = fasta_data$sequence_names,
-//'                                     sequences = fasta_data$sequences,
-//'                                     abundances = abundance_data$abundances)
+//' results <- rchimeDenovoSingleSample(sequence_name = fasta_data$sequence_name,
+//'                                     sequence = fasta_data$sequence,
+//'                                     abundance = abundance_data$abundance)
 //'
 //' @seealso [rchime()]
 //' @export
 //[[Rcpp::export]]
-Rcpp::List rchimeDenovoSingleSample(std::vector<std::string> sequence_names,
-                        std::vector<std::string> sequences,
-                        std::vector<float> abundances,
+Rcpp::List rchimeDenovoSingleSample(std::vector<std::string> sequence_name,
+                        std::vector<std::string> sequence,
+                        std::vector<float> abundance,
                         Rcpp::Nullable<Rcpp::List> options = R_NilValue) {
 
     // check vector lengths match
-    if (sequence_names.size() != sequences.size()) {
-        std::string message = "sequence_names must be the same length as sequences.";
-        message += " You provided " + toString(sequence_names.size());
-        message += " sequence names, and " + toString(sequences.size());
+    if (sequence_name.size() != sequence.size()) {
+        std::string message = "sequence_name must be the same length as sequence.";
+        message += " You provided " + toString(sequence_name.size());
+        message += " sequence names, and " + toString(sequence.size());
         message += " sequences.";
         throw Rcpp::exception(message.c_str());
     }
 
     // check vector lengths match
-    if (sequence_names.size() != abundances.size()) {
-        std::string message = "sequence_names must be the same length as abundances.";
-        message += " You provided " + toString(sequence_names.size());
-        message += " sequence names, and " + toString(abundances.size());
+    if (sequence_name.size() != abundance.size()) {
+        std::string message = "sequence_name must be the same length as abundance.";
+        message += " You provided " + toString(sequence_name.size());
+        message += " sequence names, and " + toString(abundance.size());
         message += " abundances.";
         throw Rcpp::exception(message.c_str());
     }
@@ -186,11 +186,11 @@ Rcpp::List rchimeDenovoSingleSample(std::vector<std::string> sequence_names,
     }
 
     std::vector<std::vector<std::string>> seqNames;
-    seqNames.push_back(sequence_names);
+    seqNames.push_back(sequence_name);
     std::vector<std::vector<std::string>> seqs;
-    seqs.push_back(sequences);
+    seqs.push_back(sequence);
     std::vector<std::vector<float>> abunds;
-    abunds.push_back(abundances);
+    abunds.push_back(abundance);
 
     ChimeraVsearch* chimera = new ChimeraVsearch(seqNames, seqs, abunds,
                                                  optionsDenovo);
@@ -206,25 +206,25 @@ Rcpp::List rchimeDenovoSingleSample(std::vector<std::string> sequence_names,
 //' @name rchimeDenovo
 //' @rdname rchimeDenovo
 //'
-//' @param sequence_names, 2D vector of strings containing sequence names parsed by sample
-//' @param sequences, 2D vector of strings containing sequence nucleotide data  parsed by sample
-//' @param abundances, 2D vector of sequence abundances parsed by sample
+//' @param sequence_name, 2D vector of strings containing sequence names parsed by sample
+//' @param sequence, 2D vector of strings containing sequence nucleotide data  parsed by sample
+//' @param abundance, 2D vector of sequence abundances parsed by sample
 //' @param options list containing parameter options. Default = NULL.
 //'
 //' @examples
 //'
 //' # Read in data.frames containing sequence and abundance data
 //'
-//' sequence_names <- readRDS(rchime_example("miseq_names_by_sample.rds"))
-//' sequences <- readRDS(rchime_example("miseq_sequences_by_sample.rds"))
-//' abundances <- readRDS(rchime_example("miseq_abundance_by_sample.rds"))
+//' sequence_name <- readRDS(rchime_example("miseq_names_by_sample.rds"))
+//' sequence <- readRDS(rchime_example("miseq_sequences_by_sample.rds"))
+//' abundance <- readRDS(rchime_example("miseq_abundance_by_sample.rds"))
 //'
 //' # Detect chimeras
 //'
 //' options <- rchime_options(dereplicate = TRUE)
-//' results <- rchimeDenovo(sequence_names = sequence_names,
-//'                         sequences = sequences,
-//'                         abundances = abundances,
+//' results <- rchimeDenovo(sequence_name = sequence_name,
+//'                         sequence = sequence,
+//'                         abundance = abundance,
 //'                         options)
 //'
 //' @seealso [rchime()]
@@ -232,20 +232,20 @@ Rcpp::List rchimeDenovoSingleSample(std::vector<std::string> sequence_names,
 //' @returns list()
 //' @export
 //[[Rcpp::export]]
-Rcpp::List rchimeDenovo(std::vector<std::vector<std::string>> sequence_names,
-                         std::vector<std::vector<std::string>> sequences,
-                         std::vector<std::vector<float>> abundances,
+Rcpp::List rchimeDenovo(std::vector<std::vector<std::string>> sequence_name,
+                         std::vector<std::vector<std::string>> sequence,
+                         std::vector<std::vector<float>> abundance,
                          Rcpp::Nullable<Rcpp::List> options = R_NilValue) {
 
     // check vector lengths match
-    if (sequence_names.size() != sequences.size()) {
-        std::string message = "sequence_names must be the same length as sequences.";
+    if (sequence_name.size() != sequence.size()) {
+        std::string message = "sequence_name must be the same length as sequence.";
         throw Rcpp::exception(message.c_str());
     }
 
     // check vector lengths match
-    if (sequence_names.size() != abundances.size()) {
-        std::string message = "sequence_names must be the same length as abundances.";
+    if (sequence_name.size() != abundance.size()) {
+        std::string message = "sequence_name must be the same length as abundance.";
         throw Rcpp::exception(message.c_str());
     }
 
@@ -277,9 +277,9 @@ Rcpp::List rchimeDenovo(std::vector<std::vector<std::string>> sequence_names,
         optionsDenovo.attr("names") = optionNames;
     }
 
-     ChimeraVsearch* chimera = new ChimeraVsearch(sequence_names,
-                                                  sequences,
-                                                  abundances,
+     ChimeraVsearch* chimera = new ChimeraVsearch(sequence_name,
+                                                  sequence,
+                                                  abundance,
                                                   optionsDenovo);
 
      Rcpp::List results = chimera->removeChimeras();

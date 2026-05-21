@@ -28,8 +28,7 @@ install.packages("rchime")
 You can install the development version of *rchime* from [GitHub](https://github.com/mothur/rchime) with:
 
 ```{r, eval = FALSE}
-# install.packages("devtools")
-devtools::install_github("mothur/rchime")
+pak::pak("mothur/rchime")
 ```
 
 

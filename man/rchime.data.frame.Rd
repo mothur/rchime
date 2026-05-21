@@ -2,17 +2,17 @@
 % Please edit documentation in R/rchime.R
 \name{rchime.data.frame}
 \alias{rchime.data.frame}
-\title{Detect chimeras in your dataset object using a denovo approach or
-alternatively a reference model.}
+\title{Detect chimeras in your data.frames.}
 \usage{
 \method{rchime}{data.frame}(
   data,
   reference = NULL,
   dereplicate = TRUE,
   silent = FALSE,
+  remove_chimeras = NULL,
   rchime_options = NULL,
-  table_names = list(sequence_name = "sequence_names", sequence = "sequences", abundance
-    = "abundances", sample = "samples")
+  table_names = list(sequence_name = "sequence_name", sequence = "sequence", abundance =
+    "abundance", sample = "sample")
 )
 }
 \arguments{
@@ -29,30 +29,32 @@ Default = TRUE.}
 
 \item{silent}{Boolean, suppress console outputs. Default = FALSE.}
 
+\item{remove_chimeras}{Only used when \code{data} is a strollur object.}
+
 \item{rchime_options}{List, You can fine tune the vsearch specific options
 using  the [\code{\link[=rchime_options]{rchime_options()}}] function. Default = NULL.}
 
 \item{table_names, }{named list used to indicate the names of the columns in
 the data.frame. Only used when \code{data} is a data.frame. By default:
 
-table_names <- list(sequence_name = "sequence_names",
-sequence = "sequences"
-abundance = "abundances",
-sample = "samples")
+table_names <- list(sequence_name = "sequence_name",
+sequence = "sequence"
+abundance = "abundance",
+sample = "sample")
 
 In table_names, 'sequence_name' is a string containing the name of the column
 in 'table' that contains the sequence names. Default column name is
-'sequence_names'.
+'sequence_name'.
 
 In table_names, 'sequence' is a string containing the name of the
 column in 'table' that contains the sequences. Default column name is
-'sequences'.
+'sequence'.
 
 In table_names, 'abundance' is a string containing the name of the column in
-'table' that contains the abundances. Default column name is 'abundances'.
+'table' that contains the abundances. Default column name is 'abundance'.
 
 In table_names, 'sample' is a string containing the name of the column in
-'table' that contains the samples. Default column name is 'samples'.}
+'table' that contains the samples. Default column name is 'sample'.}
 }
 \value{
 list() containing a chimera report, and vector of the chimeric

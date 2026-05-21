@@ -259,16 +259,14 @@ Rcpp::List ChimeraVsearch::removeChimeras() {
             resultsNames.push_back("set_abundance_values");
 
             Rcpp::List abundance_values = Rcpp::List::create(
-                Rcpp::Named("sequence_names") = getKeys(seqAbunds),
-                Rcpp::_("abundances") = newAbundances);
+                Rcpp::Named("sequence_name") = getKeys(seqAbunds),
+                Rcpp::_("abundance") = newAbundances);
 
             // add map to results
             denovoResults.push_back(abundance_values);
             denovoResults.attr("names") = resultsNames;
         }
-
     }
-
     return denovoResults;
 }
 /******************************************************************************/

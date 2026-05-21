@@ -9,8 +9,8 @@ test_that("test rchime - errors", {
 
   df <- data.frame(
     not_right_tag = c("seq1", "seq2"),
-    sequences = c("ATGC", "ATGC"),
-    abundances = c(100, 10)
+    sequence = c("ATGC", "ATGC"),
+    abundance = c(100, 10)
   )
 
   expect_error(rchime(data = df))

@@ -63,18 +63,17 @@ rchime <- function(data, reference = NULL, dereplicate = TRUE,
                    silent = FALSE, remove_chimeras = TRUE,
                    rchime_options = NULL,
                    table_names = list(
-                     sequence_name = "sequence_names",
-                     sequence = "sequences",
-                     abundance = "abundances",
-                     sample = "samples"
+                     sequence_name = "sequence_name",
+                     sequence = "sequence",
+                     abundance = "abundance",
+                     sample = "sample"
                    )) {
   UseMethod("rchime", data)
 }
 
 
 #' @title Detect and remove chimeras from your
-#' \href{https://mothur.org/strollur/}{strollur} dataset object using a denovo
-#' approach or alternatively a reference model.
+#' \href{https://mothur.org/strollur/}{strollur} dataset object.
 #' @name rchime.strollur
 #' @rdname rchime.strollur
 #' @description
@@ -118,6 +117,7 @@ rchime <- function(data, reference = NULL, dereplicate = TRUE,
 #' @param rchime_options List, You can fine tune the vsearch specific options
 #' using  the [[rchime_options()]] function. Default = NULL.
 #' @seealso [rchime_options()] to set vsearch specific parameters.
+#' @param table_names, Only used when `data` is a data.frame. Default = NULL.
 #'
 #' @return list() containing a chimera report, and vector of the chimeric
 #' sequence's names.
@@ -156,14 +156,14 @@ rchime <- function(data, reference = NULL, dereplicate = TRUE,
 #' @export
 rchime.strollur <- function(data, reference = NULL, dereplicate = TRUE,
                             silent = FALSE, remove_chimeras = TRUE,
-                            rchime_options = NULL) {
+                            rchime_options = NULL, table_names = NULL) {
   if (!("strollur" %in% class(data))) {
     stop("data must be a stroller::strollur object")
   }
 
   start_time <- Sys.time()
 
-  num_seqs <- strollur::count(data, type = "sequences")
+  num_seqs <- strollur::count(data, type = "sequence")
 
   parameters <- list(
     dereplicate = dereplicate,
@@ -200,7 +200,7 @@ rchime.strollur <- function(data, reference = NULL, dereplicate = TRUE,
     }
   }
 
-  num_samples <- strollur::count(data, type = "samples")
+  num_samples <- strollur::count(data, type = "sample")
   # inputs needed ->
   ## reference -> names, seqs abunds, refnames, refseqs
   ## denovo no groups -> names, seqs, abunds
@@ -217,9 +217,9 @@ rchime.strollur <- function(data, reference = NULL, dereplicate = TRUE,
 
     # reference -> names, seqs abunds, refnames, refseqs
     results <- rchimeReference(
-      strollur::names(data, type = "sequences"),
+      strollur::names(data, type = "sequence"),
       strollur::xdev_get_sequences(data, degap = TRUE),
-      strollur::names(reference, type = "sequences"),
+      strollur::names(reference, type = "sequence"),
       strollur::xdev_get_sequences(reference, degap = TRUE),
       parameters
     )
@@ -231,9 +231,9 @@ rchime.strollur <- function(data, reference = NULL, dereplicate = TRUE,
     if (num_samples == 0) {
       # denovo no groups -> names, seqs, abunds
       results <- rchimeDenovoSingleSample(
-        strollur::names(data, type = "sequences"),
+        strollur::names(data, type = "sequence"),
         strollur::xdev_get_sequences(data, degap = TRUE),
-        strollur::xdev_abundance(data)$abundances,
+        strollur::xdev_abundance(data)$abundance,
         parameters
       )
     } else {
@@ -242,7 +242,7 @@ rchime.strollur <- function(data, reference = NULL, dereplicate = TRUE,
         strollur::xdev_get_by_sample(data),
         strollur::xdev_get_by_sample(
           data,
-          type = "sequences",
+          type = "sequence",
           degap = TRUE
         ),
         strollur::xdev_get_abundances_by_sample(data),
@@ -254,7 +254,7 @@ rchime.strollur <- function(data, reference = NULL, dereplicate = TRUE,
   # add chimera report to data
   strollur::add(data,
     table = results$chimera_report,
-    type = "reports",
+    type = "report",
     report_type = "chimera_report",
     table_names = list(sequence_name = "Query"),
     verbose = !silent
@@ -267,8 +267,8 @@ rchime.strollur <- function(data, reference = NULL, dereplicate = TRUE,
       # set abundances parsed by sample
       strollur::xdev_set_abundances(
         data,
-        results$set_abundance_values$sequence_names,
-        results$set_abundance_values$abundances,
+        results$set_abundance_values$sequence_name,
+        results$set_abundance_values$abundance,
         "rchime-chimeras"
       )
       results[["set_abundance_values"]] <- NULL
@@ -289,7 +289,7 @@ rchime.strollur <- function(data, reference = NULL, dereplicate = TRUE,
 
   if (!silent) {
     if (remove_chimeras) {
-      after_count <- strollur::count(data, type = "sequences")
+      after_count <- strollur::count(data, type = "sequence")
       if (after_count < num_seqs) {
         message <- paste(
           "rchime removed {.var {num_seqs-after_count}}",
@@ -310,9 +310,9 @@ rchime.strollur <- function(data, reference = NULL, dereplicate = TRUE,
         after_count <- sum(unlist(results$set_abundance_values$abundances))
       } else {
         # number of chimeras removed
-        df <- strollur::abundance(data, type = "sequences")
-        num_chimeras <- sum(df$abundances[
-          df$sequence_names %in% results$chimeras
+        df <- strollur::abundance(data, type = "sequence")
+        num_chimeras <- sum(df$abundance[
+          df$sequence_name %in% results$chimeras
         ])
 
         after_count <- num_seqs - num_chimeras
@@ -335,8 +335,7 @@ rchime.strollur <- function(data, reference = NULL, dereplicate = TRUE,
 }
 
 # =============================================================================#
-#' @title Detect chimeras in your dataset object using a denovo approach or
-#'   alternatively a reference model.
+#' @title Detect chimeras in your data.frames.
 #' @name rchime.data.frame
 #' @rdname rchime.data.frame
 #' @description
@@ -374,29 +373,30 @@ rchime.strollur <- function(data, reference = NULL, dereplicate = TRUE,
 #'  only flagged in the sample they are found to be chimeric in.
 #'  Default = TRUE.
 #' @param silent Boolean, suppress console outputs. Default = FALSE.
+#' @param remove_chimeras Only used when `data` is a strollur object.
 #' @param rchime_options List, You can fine tune the vsearch specific options
 #' using  the [[rchime_options()]] function. Default = NULL.
 #' @param table_names, named list used to indicate the names of the columns in
 #' the data.frame. Only used when `data` is a data.frame. By default:
 #'
-#' table_names <- list(sequence_name = "sequence_names",
-#'                     sequence = "sequences"
-#'                     abundance = "abundances",
-#'                     sample = "samples")
+#' table_names <- list(sequence_name = "sequence_name",
+#'                     sequence = "sequence"
+#'                     abundance = "abundance",
+#'                     sample = "sample")
 #'
 #' In table_names, 'sequence_name' is a string containing the name of the column
 #' in 'table' that contains the sequence names. Default column name is
-#' 'sequence_names'.
+#' 'sequence_name'.
 #'
 #' In table_names, 'sequence' is a string containing the name of the
 #' column in 'table' that contains the sequences. Default column name is
-#'  'sequences'.
+#'  'sequence'.
 #'
 #' In table_names, 'abundance' is a string containing the name of the column in
-#' 'table' that contains the abundances. Default column name is 'abundances'.
+#' 'table' that contains the abundances. Default column name is 'abundance'.
 #'
 #' In table_names, 'sample' is a string containing the name of the column in
-#' 'table' that contains the samples. Default column name is 'samples'.
+#' 'table' that contains the samples. Default column name is 'sample'.
 #'
 #' @seealso [rchime_options()] to set vsearch specific parameters.
 #'
@@ -425,12 +425,13 @@ rchime.strollur <- function(data, reference = NULL, dereplicate = TRUE,
 #' @import cli
 #' @export
 rchime.data.frame <- function(data, reference = NULL, dereplicate = TRUE,
-                              silent = FALSE, rchime_options = NULL,
+                              silent = FALSE, remove_chimeras = NULL,
+                              rchime_options = NULL,
                               table_names = list(
-                                sequence_name = "sequence_names",
-                                sequence = "sequences",
-                                abundance = "abundances",
-                                sample = "samples"
+                                sequence_name = "sequence_name",
+                                sequence = "sequence",
+                                abundance = "abundance",
+                                sample = "sample"
                               )) {
   if (!("data.frame" %in% class(data))) {
     stop("data must be a data.frame object")
@@ -439,10 +440,10 @@ rchime.data.frame <- function(data, reference = NULL, dereplicate = TRUE,
   start_time <- Sys.time()
 
   default_tn <- list(
-    sequence_name = "sequence_names",
-    abundance = "abundances",
-    sample = "samples",
-    sequence = "sequences"
+    sequence_name = "sequence_name",
+    abundance = "abundance",
+    sample = "sample",
+    sequence = "sequence"
   )
 
   table_names <- modifyList(default_tn, table_names)
@@ -495,7 +496,7 @@ rchime.data.frame <- function(data, reference = NULL, dereplicate = TRUE,
         table_names[["sequence_name"]],
         table_names[["sequence"]]
       )]),
-      type = "sequences",
+      type = "sequence",
       table_names = table_names, verbose = FALSE
     )
 
@@ -506,7 +507,7 @@ rchime.data.frame <- function(data, reference = NULL, dereplicate = TRUE,
       table_names = table_names, verbose = FALSE
     )
 
-    num_samples <- strollur::count(strollur_data, type = "samples")
+    num_samples <- strollur::count(strollur_data, type = "sample")
   }
 
   # inputs needed ->
@@ -565,7 +566,7 @@ rchime.data.frame <- function(data, reference = NULL, dereplicate = TRUE,
         strollur::xdev_get_by_sample(strollur_data),
         strollur::xdev_get_by_sample(
           strollur_data,
-          type = "sequences",
+          type = "sequence",
           degap = TRUE
         ),
         strollur::xdev_get_abundances_by_sample(strollur_data),
@@ -574,9 +575,8 @@ rchime.data.frame <- function(data, reference = NULL, dereplicate = TRUE,
 
       if (dereplicate) {
         # add sample names to updated abundance info
-        sample_names <- strollur::names(strollur_data, type = "samples")
-        name <- "set_abundance_values"
-        results[[name]][["samples"]] <- sample_names
+        sample_names <- strollur::names(strollur_data, type = "sample")
+        results$set_abundance_values[["samples"]] <- sample_names
       }
     }
   }
@@ -584,8 +584,8 @@ rchime.data.frame <- function(data, reference = NULL, dereplicate = TRUE,
   if (!silent) {
     # report detected
     if ((dereplicate) && (num_samples != 0)) {
-      after_count <- sum(unlist(results$set_abundance_values$abundances))
-      num_seqs <- strollur::count(strollur_data, type = "sequences")
+      after_count <- sum(unlist(results$set_abundance_values$abundance))
+      num_seqs <- strollur::count(strollur_data, type = "sequence")
     } else {
       # number of chimeras removed
       if (table_names[["abundance"]] %in% names(data)) {
@@ -621,10 +621,10 @@ rchime.data.frame <- function(data, reference = NULL, dereplicate = TRUE,
 rchime.default <- function(data, reference = NULL, dereplicate = TRUE,
                            silent = FALSE, remove_chimeras = TRUE,
                            rchime_options = NULL, table_names = list(
-                             sequence_name = "sequence_names",
-                             sequence = "sequences",
-                             abundance = "abundances",
-                             sample = "samples"
+                             sequence_name = "sequence_name",
+                             sequence = "sequence",
+                             abundance = "abundance",
+                             sample = "sample"
                            )) {
   stop("data must be a strollur object or a data.frame")
 }

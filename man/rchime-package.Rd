@@ -20,5 +20,10 @@ Useful links:
 \author{
 \strong{Maintainer}: Sarah Westcott \email{swestcot@umich.edu}
 
+Authors:
+\itemize{
+  \item Sarah Westcott \email{swestcot@umich.edu}
+}
+
 }
 \keyword{internal}

@@ -8,3 +8,4 @@ src/*.dll
 .vscode/tasks.json
 inst/doc
 docs
+.positai

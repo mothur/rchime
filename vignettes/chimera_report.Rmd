@@ -49,10 +49,19 @@ abundance_data <- readRDS(rchime_example("miseq_abundance.rds"))
 
 data <- strollur::new_dataset("rchime denovo example")
 
-strollur::add(data, table = fasta_data, type = "sequences")
+strollur::add(data, table = fasta_data, type = "sequence")
 strollur::assign(data, table = abundance_data, type = "sequence_abundance")
 
 results <- rchime(data, dereplicate = TRUE)
+
+
+results <- strollur::new_dataset("rchime denovo example") |>
+  strollur::add(table = fasta_data, type = "sequence") |>
+  strollur::assign(
+    table = abundance_data,
+    type = "sequence_abundance"
+  ) |>
+  rchime(dereplicate = TRUE)
 
 results$chimera_report[60:70, ]
 ```

@@ -5,21 +5,21 @@
 \title{Detects chimeras using a reference based approach}
 \usage{
 rchimeReference(
-  sequence_names,
-  sequences,
-  reference_names,
-  reference_sequences,
+  sequence_name,
+  sequence,
+  reference_name,
+  reference_sequence,
   options = NULL
 )
 }
 \arguments{
-\item{sequence_names, }{vector of strings containing sequence names}
+\item{sequence_name, }{vector of strings containing sequence names}
 
-\item{sequences, }{vector of strings containing sequence nucleotide data}
+\item{sequence, }{vector of strings containing sequence nucleotide data}
 
-\item{reference_names, }{vector of strings containing reference sequences names}
+\item{reference_name, }{vector of strings containing reference sequences names}
 
-\item{reference_sequences, }{vector of strings containing reference sequences}
+\item{reference_sequence, }{vector of strings containing reference sequences}
 
 \item{options}{list containing parameter options. Default = NULL.}
 }
@@ -35,10 +35,10 @@ reference_data <- readRDS(rchime_example("reference.rds"))
 
 # Detect chimeras
 
-results <- rchimeReference(sequence_names = fasta_data$sequence_names,
-                           sequences = fasta_data$sequences,
-                           reference_names = reference_data$sequence_names,
-                           reference_sequences = reference_data$sequences)
+results <- rchimeReference(sequence_name = fasta_data$sequence_name,
+                           sequence = fasta_data$sequence,
+                           reference_name = reference_data$sequence_name,
+                           reference_sequence = reference_data$sequence)
 
 }
 \seealso{
