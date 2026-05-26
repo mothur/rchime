@@ -50,6 +50,17 @@
 #' the data.frame. Only used when `data` is a data.frame.
 #' @seealso [rchime_options()] to set vsearch specific parameters.
 #'
+#' @examples
+#'
+#' # Using a strollur object named "rchime denovo example"
+#'
+#' data_denovo <- strollur::load_dataset(
+#'   rchime_example("strollur_multi_sample.rds")
+#' )
+#'
+#' chimera_report <- rchime(data_denovo)
+#' data_denovo
+#'
 #' @return list() containing a chimera report, and vector of the chimeric
 #' sequence's names.
 #'

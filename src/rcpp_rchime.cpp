@@ -221,11 +221,9 @@ Rcpp::List rchimeDenovoSingleSample(std::vector<std::string> sequence_name,
 //'
 //' # Detect chimeras
 //'
-//' options <- rchime_options(dereplicate = TRUE)
 //' results <- rchimeDenovo(sequence_name = sequence_name,
 //'                         sequence = sequence,
-//'                         abundance = abundance,
-//'                         options)
+//'                         abundance = abundance)
 //'
 //' @seealso [rchime()]
 //' @description detects chimeras from your data using a denovo method processing by sample.

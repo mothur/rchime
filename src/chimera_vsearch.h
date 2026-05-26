@@ -62,24 +62,6 @@ struct chimeraData {
     // outputs
     std::vector<std::vector<ChimeHit2>> results;
 
-    // // denovo by sample only
-    // vector<set<string>> chimeras;
-    //
-    // // denovo by sample - each processor gets assigned multiple samples
-    // chimeraData(std::vector<std::vector<std::string>>* names,
-    //             std::vector<std::vector<std::string>>* sequences,
-    //             std::vector<std::vector<float>>* abundances,
-    //             int s, int e) {
-    //
-    //     start = s;
-    //     stop = e;
-    //
-    //     pNames = names;
-    //     pSequences = sequences;
-    //     pAbundances = abundances;
-    //     results.resize(stop-start);
-    // }
-
     // reference - each processor gets assigned part of names and sequences
     chimeraData(std::vector<std::vector<std::string>>* names,
                 std::vector<std::vector<std::string>>* sequences,

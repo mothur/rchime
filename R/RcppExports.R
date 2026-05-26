@@ -82,11 +82,9 @@ rchimeDenovoSingleSample <- function(sequence_name, sequence, abundance, options
 #'
 #' # Detect chimeras
 #'
-#' options <- rchime_options(dereplicate = TRUE)
 #' results <- rchimeDenovo(sequence_name = sequence_name,
 #'                         sequence = sequence,
-#'                         abundance = abundance,
-#'                         options)
+#'                         abundance = abundance)
 #'
 #' @seealso [rchime()]
 #' @description detects chimeras from your data using a denovo method processing by sample.
