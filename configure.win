@@ -1,8 +1,0 @@
-#!/bin/sh
-
-# Use Rscript to get the flags from the package
-XSIMD_FLAGS=`"${R_HOME}/bin/Rscript" -e "cat(RcppXsimd::getSSEFlags(), RcppXsimd::getNEONFlags())"`
-
-# Replace the placeholder in Makevars.in to generate Makevars.win
-# We use "|" as a delimiter for sed in case flags contain slashes
-sed -e "s|@XSIMD_FLAGS@|${XSIMD_FLAGS}|" -e "s|@WIN_FLAGS@|-D_HAS_STD_BYTE=0|" src/Makevars.in > src/Makevars.win

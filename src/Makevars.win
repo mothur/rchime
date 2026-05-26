@@ -1,3 +1,9 @@
-# Get SSE/NEON flags and append the Windows-specific byte fix
-PKG_CXXFLAGS = @XSIMD_FLAGS@
--D_HAS_STD_BYTE=0
+# Default flags for standard Windows x86_64 targets
+XSIMD_WINDOWS_FLAGS = -msse2 -msse3 -mssse3 -msse4.1 -msse4.2
+
+# Safely strip Intel-specific flags if building for Windows ARM64 (aarch64)
+ifeq ($(TARGET),aarch64-w64-mingw32)
+  XSIMD_WINDOWS_FLAGS =
+endif
+
+PKG_CXXFLAGS = $(XSIMD_WINDOWS_FLAGS) -D_HAS_STD_BYTE=0

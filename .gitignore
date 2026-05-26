@@ -9,3 +9,6 @@ src/*.dll
 inst/doc
 docs
 .positai
+
+# R configuration artifacts
+/src/Makevars
