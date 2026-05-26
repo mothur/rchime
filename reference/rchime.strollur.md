@@ -115,7 +115,7 @@ chimera_report <- rchime(data_denovo, dereplicate = TRUE)
 #> ℹ The denovo method runs with a single processor.
 #> Added a chimera_report.
 #> → rchime removed `10453` chimeras from your dataset.
-#> → It took `7.50114059448242` seconds to detect and remove the chimeras.
+#> → It took `7.90602588653564` seconds to detect and remove the chimeras.
 data_denovo
 #> rchime - strollur example:
 #> 
@@ -150,7 +150,7 @@ reference <- strollur::load_dataset(rchime_example("strollur_reference.rds"))
 chimera_report <- rchime(data_reference, reference = reference)
 #> Added a chimera_report.
 #> → rchime removed `5325` chimeras from your dataset.
-#> → It took `7.07422304153442` seconds to detect and remove the chimeras.
+#> → It took `7.26305222511292` seconds to detect and remove the chimeras.
 data_reference
 #> rchime - strollur example:
 #> 
