@@ -1,0 +1,5 @@
+The rchime package as a whole is distributed under GPL (>= 3). The rchime package includes code from the following open source software projects:
+
+* vsearch: GPL version:3
+
+Full copies of the license agreements used by the open source projects are included in individual source files.
