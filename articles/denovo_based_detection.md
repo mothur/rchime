@@ -30,15 +30,25 @@ strollur::assign(strollur, table = abundance_data, type = "sequence_abundance")
 strollur
 #> rchime denovo example:
 #> 
+#>             starts     ends   nbases ambigs polymers numns    numseqs
+#> Minimum:         1 249.0000 249.0000      0 3.000000     0      1.000
+#> 2.5%-tile:       1 252.0000 252.0000      0 4.000000     0   3217.375
+#> 25%-tile:        1 252.0000 252.0000      0 4.000000     0  32164.750
+#> Median:          1 253.0000 253.0000      0 4.000000     0  64328.500
+#> 75%-tile:        1 253.0000 253.0000      0 5.000000     0  96492.250
+#> 97.5%-tile:      1 254.0000 254.0000      0 6.000000     0 125439.625
+#> Maximum:         1 256.0000 256.0000      0 8.000000     0 128656.000
+#> Mean:            1 252.6816 252.6816      0 4.489152     0  64328.500
+#> data frame with 0 columns and 0 rows
 #>             starts ends nbases ambigs polymers numns   numseqs
 #> Minimum:         1  249    249      0        3     0      1.00
-#> 2.5%-tile:       1  252    252      0        3     0   3217.38
+#> 2.5%-tile:       1  252    252      0        4     0   3217.38
 #> 25%-tile:        1  252    252      0        4     0  32164.75
-#> Median:          1  252    252      0        4     0  64328.50
+#> Median:          1  253    253      0        4     0  64328.50
 #> 75%-tile:        1  253    253      0        5     0  96492.25
-#> 97.5%-tile:      1  253    253      0        6     0 125439.62
-#> Maximum:         1  256    256      0        8     0 128655.00
-#> Mean:            1  252    252      0        4     0      0.00
+#> 97.5%-tile:      1  254    254      0        6     0 125439.62
+#> Maximum:         1  256    256      0        8     0 128656.00
+#> Mean:            1  252    252      0        4     0  64328.50
 #> 
 #> Number of unique seqs: 6084 
 #> Total number of seqs: 128655 
@@ -82,20 +92,49 @@ strollur_results <- rchime(strollur, dereplicate = TRUE)
 #> ℹ The denovo method runs with a single processor.
 #> Added a chimera_report.
 #> → rchime removed `10453` chimeras from your dataset.
-#> → It took `7.67152333259583` seconds to detect and remove the chimeras.
+#> → It took `7.74231672286987` seconds to detect and remove the chimeras.
 
 strollur
 #> rchime denovo example:
 #> 
+#>             starts    ends  nbases ambigs polymers numns   numseqs
+#> Minimum:         1 249.000 249.000      0 3.000000     0      1.00
+#> 2.5%-tile:       1 252.000 252.000      0 4.000000     0   2956.05
+#> 25%-tile:        1 252.000 252.000      0 4.000000     0  29551.50
+#> Median:          1 253.000 253.000      0 4.000000     0  59102.00
+#> 75%-tile:        1 253.000 253.000      0 5.000000     0  88652.50
+#> 97.5%-tile:      1 254.000 254.000      0 6.000000     0 115247.95
+#> Maximum:         1 256.000 256.000      0 8.000000     0 118203.00
+#> Mean:            1 252.734 252.734      0 4.508814     0  59102.00
+#>        Score      QM       QA        QB       QAB        QT        LY
+#> 1 0.00000000  -1.000  -1.0000  -1.00000  -1.00000  -1.00000 -1.000000
+#> 2 0.00000000  -1.000  -1.0000  -1.00000  -1.00000  -1.00000 -1.000000
+#> 3 0.00000000  -1.000  -1.0000  -1.00000  -1.00000  -1.00000 -1.000000
+#> 4 1.00000000  94.000  88.0000  90.00000  86.00000  93.00000  2.000000
+#> 5 1.00000000  99.000  97.0000  95.00000  93.00000  99.00000 11.000000
+#> 6 1.00000000 100.000  99.0000  99.00000  98.00000  99.00000 28.000000
+#> 7 1.00000000 100.000 100.0000 100.00000 100.00000 100.00000 56.000000
+#> 8 0.09925736  57.589  55.3966  55.46117  53.62182  56.94022  5.783253
+#>           LN        LA        RY         RN        RA        Div
+#> 1 -1.0000000 -1.000000 -1.000000 -1.0000000 -1.000000 -1.0000000
+#> 2 -1.0000000 -1.000000 -1.000000 -1.0000000 -1.000000 -1.0000000
+#> 3 -1.0000000 -1.000000 -1.000000 -1.0000000 -1.000000 -1.0000000
+#> 4  0.0000000  0.000000  2.000000  0.0000000  0.000000  1.0000000
+#> 5  0.0000000  1.000000  7.000000  0.0000000  1.000000  1.0000000
+#> 6  8.0000000 15.000000 43.000000  7.0000000 11.000000  3.0000000
+#> 7 23.0000000 35.000000 70.000000 19.0000000 42.000000  5.0000000
+#> 8  0.4463141  1.403846  5.811699  0.3173077  1.060096  0.2481356
+#>       type      trash_code unique total
+#> 1 sequence rchime-chimeras   3588 10453
 #>             starts ends nbases ambigs polymers numns   numseqs
 #> Minimum:         1  249    249      0        3     0      1.00
-#> 2.5%-tile:       1  252    252      0        3     0   2956.05
+#> 2.5%-tile:       1  252    252      0        4     0   2956.05
 #> 25%-tile:        1  252    252      0        4     0  29551.50
-#> Median:          1  252    252      0        4     0  59102.00
+#> Median:          1  253    253      0        4     0  59102.00
 #> 75%-tile:        1  253    253      0        5     0  88652.50
-#> 97.5%-tile:      1  253    253      0        6     0 115247.95
-#> Maximum:         1  256    256      0        8     0 118202.00
-#> Mean:            1  252    252      0        4     0      0.00
+#> 97.5%-tile:      1  254    254      0        6     0 115247.95
+#> Maximum:         1  256    256      0        8     0 118203.00
+#> Mean:            1  252    252      0        4     0  59102.00
 #> scrap_summary:
 #>       type      trash_code unique total
 #> 1 sequence rchime-chimeras   3588 10453
@@ -109,7 +148,7 @@ strollur
 data_frame_results <- rchime(df, dereplicate = TRUE)
 #> ℹ The denovo method runs with a single processor.
 #> → rchime detected `10453` chimeras in your dataset.
-#> → It took `7.86150217056274` seconds to detect the chimeras.
+#> → It took `7.61431884765625` seconds to detect the chimeras.
 ```
 
 ## Results
