@@ -1,0 +1,52 @@
+# Package Citation
+bibentry(
+  bibtype = "Manual",
+  title = "rchime: Detect and Remove Chimeras from Amplicon Sequence Data",
+  author = person("Sarah", "Westcott", , "swestcot@umich.edu",
+                    role = c("aut", "cre"),
+                    comment = c(ORCID = "0009-0001-1529-8247"),
+  year = "2026",
+  note = "R package version 0.1.0",
+  url = "https://mothur.org/rchime",
+  textVersion = "Sarah Westcott (2026). rchime: Detect and Remove Chimeras
+  from Amplicon Sequence Data. R package version 0.1.0."
+)
+
+# Reference 1: VSEARCH
+bibentry(
+  bibtype = "Article",
+  title = "VSEARCH: a versatile open source tool for metagenomics",
+  author = c(
+    person("Torbjørn", "Rognes"),
+    person("Tomáš", "Flouri"),
+    person("Ben", "Nichols"),
+    person("Christopher", "Quince"),
+    person("Frédéric", "Mahé")
+  ),
+  journal = "PeerJ",
+  year = "2016",
+  volume = "4",
+  pages = "e2584",
+  doi = "10.7717/peerj.2584",
+  textVersion = "Rognes, T., Flouri, T., Nichols, B., Quince, C., & Mahé, F. (2016). VSEARCH: a versatile open source tool for metagenomics. PeerJ, 4, e2584. doi: 10.7717/peerj.2584"
+)
+
+# Reference 2: UCHIME
+bibentry(
+  bibtype = "Article",
+  title = "UCHIME improves sensitivity and speed of chimera detection",
+  author = c(
+    person("Robert C.", "Edgar"),
+    person("Brian J.", "Haas"),
+    person("Jose C.", "Clemente"),
+    person("Christopher", "Quince"),
+    person("Rob", "Knight")
+  ),
+  journal = "Bioinformatics",
+  year = "2011",
+  volume = "27",
+  number = "16",
+  pages = "2194--2200",
+  doi = "10.1093/bioinformatics/btr381",
+  textVersion = "Edgar, R. C., Haas, B. J., Clemente, J. C., Quince, C., & Knight, R. (2011). UCHIME improves sensitivity and speed of chimera detection. Bioinformatics, 27(16), 2194-2200. doi: 10.1093/bioinformatics/btr381"
+)
