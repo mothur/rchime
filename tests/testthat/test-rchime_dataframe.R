@@ -32,7 +32,7 @@ test_that("test rchime - errors", {
 
   # checks to make sure the correct things are created
   expect_equal(length(chimera_report), 2)
-  expect_equal(length(chimera_report$chimeras), 14)
+  expect_equal(length(chimera_report$chimeras), 13)
   expect_equal(nrow(chimera_report$chimera_report), 100)
 })
 

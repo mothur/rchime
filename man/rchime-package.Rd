@@ -3,26 +3,37 @@
 \docType{package}
 \name{rchime-package}
 \alias{rchime-package}
-\title{rchime: R package for chimera detection}
+\title{rchime: Detect and Remove Chimeras from Amplicon Sequence Analysis Data}
 \description{
 \if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
 
-A package for detecting and removing chimeras.
+Detect and remove chimeras from your Amplicon Sequence Analysis using reference based or denovo approaches.
 }
 \seealso{
 Useful links:
 \itemize{
   \item \url{https://mothur.org/rchime}
+  \item \url{https://github.com/mothur/rchime/}
   \item Report bugs at \url{https://github.com/mothur/rchime/issues}
 }
 
 }
 \author{
-\strong{Maintainer}: Sarah Westcott \email{swestcot@umich.edu}
+\strong{Maintainer}: Sarah Westcott \email{swestcot@umich.edu} (\href{https://orcid.org/0009-0001-1529-8247}{ORCID})
 
 Authors:
 \itemize{
-  \item Sarah Westcott \email{swestcot@umich.edu}
+  \item Sarah Westcott \email{swestcot@umich.edu} (\href{https://orcid.org/0009-0001-1529-8247}{ORCID})
+}
+
+Other contributors:
+\itemize{
+  \item Pat Schloss \email{pschloss@umich.edu} (\href{https://orcid.org/0000-0002-6935-4275}{ORCID}) [copyright holder]
+  \item Torbjorn Rognes \email{torognes@ifi.uio.no} [copyright holder]
+  \item Frederic Mahe \email{mahe@rhrk.uni-kl.de} [copyright holder]
+  \item Tomas Flouri \email{tomas.flouri@h-its.org} [copyright holder]
+  \item Christopher Quince \email{c.quince@warwick.ac.uk} [copyright holder]
+  \item Ben Nichols \email{b.nichols.1@research.gla.ac.uk} [copyright holder]
 }
 
 }

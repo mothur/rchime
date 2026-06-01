@@ -31,11 +31,9 @@ abundance <- readRDS(rchime_example("miseq_abundance_by_sample.rds"))
 
 # Detect chimeras
 
-options <- rchime_options(dereplicate = TRUE)
 results <- rchimeDenovo(sequence_name = sequence_name,
                         sequence = sequence,
-                        abundance = abundance,
-                        options)
+                        abundance = abundance)
 
 }
 \seealso{

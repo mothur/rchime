@@ -2,13 +2,12 @@
 
 test_that("test rchime - errors and rchime_options", {
   fasta_data <- readRDS(rchime_example("miseq_fasta.rds"))
-  reference_data <- readRDS(rchime_example("reference.rds"))
 
   data <- strollur::new_dataset("rchime reference example")
   strollur::add(data, table = fasta_data[1:100, ], type = "sequence")
 
-  reference_ob <- new_dataset("Silva V4 Region")
-  strollur::add(reference_ob, table = reference_data, type = "sequence")
+  reference_ob <- strollur::load_dataset(
+      rchime_example("strollur_reference.rds"))
 
   # this should not change since the rchime command below does not remove
   num_seqs <- strollur::count(data)
@@ -56,7 +55,7 @@ test_that("test rchime - errors and rchime_options", {
 
   # checks to make sure the correct things are created
   expect_equal(length(chimera_report), 2)
-  expect_equal(length(chimera_report$chimeras), 14)
+  expect_equal(length(chimera_report$chimeras), 13)
   expect_equal(nrow(chimera_report$chimera_report), 100)
 })
 

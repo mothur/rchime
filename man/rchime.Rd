@@ -66,6 +66,18 @@ as chimeric.
 This function uses code from the
 \href{https://github.com/torognes/vsearch}{vsearch} tools.
 }
+\examples{
+
+# Using a strollur object named "rchime denovo example"
+
+data_denovo <- strollur::load_dataset(
+  rchime_example("strollur_multi_sample.rds")
+)
+
+chimera_report <- rchime(data_denovo)
+data_denovo
+
+}
 \references{
 Rognes T, Flouri T, Nichols B, Quince C, Mahé F. (2016) VSEARCH: a
 versatile open source tool for metagenomics. PeerJ 4:e2584.
