@@ -91,8 +91,8 @@ reference_data <- readRDS(rchime_example("reference.rds"))
 
 str(reference_data)
 #> 'data.frame':    14956 obs. of  2 variables:
-#>  $ sequence_name: chr  "DQ415841.1" "L02888.1" "AB037561.1" "AF355050.1" ...
-#>  $ sequence     : chr  "GTGCCAGCAGCCGCGGTAATACGGGGGGTGCAAGCGTTGTTCGGAATTATTGGGCGTAAAGAGCGTGTAGGCTGTCTGATGTGTCAGATGTGAAAGCCCTGGGCTTAACCC"| __truncated__ "GTGCCAGCAGCCGCGGTAATACGAGAGGGCTAGCGTTATTCGGAATTATTGGGCGTAAAGGGCGCGTAGGCTGGTTAATAAGTTAAAAGTGAAATCCCGAGGCTTAACCTT"| __truncated__ "GTGCCAGCAGCCGCGGTAATACGAAGGGTGCAAGCGTTAATCGGAATTACTGGGCGTAAAGCGCGCGTAGGTGGTTCAGCAAGTTGGATGTGAAATCCCCGGGCTCAACCT"| __truncated__ "GTGCCAGCAGCCGCGGTAATACGGAGGGTGCAAGCGTTATTCGGAATCACTGGGCGTAAAGGACGCGTAGGCGGGTTGATAAGTCAGATGTGAAATCCTACAGCTTAACTG"| __truncated__ ...
+#>  $ sequence_name: chr  "AB000389.1" "AB000699.1" "AB000700.1" "AB000701.1" ...
+#>  $ sequence     : chr  "GTGCCAGCAGCCGCGGTAATACGGAGGGTGCGAGCGTTAATCGGAATTACTGGGCGTAAAGCGTACGCAGGCGGTTTGTTAAGCGAGATGTGAAAGCCCCGGGCTCAACCT"| __truncated__ "GTGCCAGCAGCCGCGGTAATACGTAGGGTGCGAGCGTTAATCGGAATTACTGGGCGTAAAGGGTGCGCAGGTGGTTTTGTAAGTCAGATGTGAAATCCCCGGGCTTAACCT"| __truncated__ "GTGCCAGCAGCCGCGGTAATACGTAGGGTGCGAGCGTTAATCGGAATTACTGGGCGTAAAGGGTGCGCAGGCGGTTTTGTAAGTCAGATGTGAAATCCCCGGGCTTAACCT"| __truncated__ "GTGCCAGCAGCCGCGGTAATACGTAGGGTGCGAGCGTTAATCGGAATTACTGGGCGTAAAGGGTGCGCAGGCGGCCTTGTAAGTCAGATGTGAAAGCCCCGGGCTTAACCT"| __truncated__ ...
 
 data_df <- readRDS(rchime_example("miseq_data_frame.rds"))
 
@@ -113,35 +113,35 @@ remove the chimeras.
 
 strollur_results <- rchime(strollur, reference = reference)
 #> Added a chimera_report.
-#> → rchime removed `4849` chimeras from your dataset.
-#> → It took `7.64427733421326` seconds to detect and remove the chimeras.
+#> → rchime removed `5325` chimeras from your dataset.
+#> → It took `7.23357725143433` seconds to detect and remove the chimeras.
 
 strollur
 #> rchime reference example:
 #> 
 #>             starts ends nbases ambigs polymers numns   numseqs
 #> Minimum:         1  249    249      0        3     0      1.00
-#> 2.5%-tile:       1  252    252      0        4     0   3096.15
-#> 25%-tile:        1  252    252      0        4     0  30952.50
-#> Median:          1  253    253      0        4     0  61904.00
-#> 75%-tile:        1  253    253      0        5     0  92855.50
-#> 97.5%-tile:      1  254    254      0        6     0 120711.85
-#> Maximum:         1  256    256      0        8     0 123807.00
-#> Mean:            1  252    252      0        4     0  61904.00
+#> 2.5%-tile:       1  252    252      0        4     0   3084.25
+#> 25%-tile:        1  252    252      0        4     0  30833.50
+#> Median:          1  253    253      0        4     0  61666.00
+#> 75%-tile:        1  253    253      0        5     0  92498.50
+#> 97.5%-tile:      1  254    254      0        6     0 120247.75
+#> Maximum:         1  256    256      0        8     0 123331.00
+#> Mean:            1  252    252      0        4     0  61666.00
 #> 
 #> scrap_summary:
 #>       type      trash_code unique total
-#> 1 sequence chimeras_rchime   1676  4849
+#> 1 sequence chimeras_rchime   1662  5325
 #> 
-#> Number of unique seqs: 4408 
-#> Total number of seqs: 123806 
+#> Number of unique seqs: 4422 
+#> Total number of seqs: 123330 
 #> 
 #> Total number of samples: 20 
 #> Total number of custom reports: 1
 
 data_frame_results <- rchime(data_df, reference = reference_data)
-#> → rchime detected `4849` chimeras in your dataset.
-#> → It took `7.46007227897644` seconds to detect the chimeras.
+#> → rchime detected `5325` chimeras in your dataset.
+#> → It took `7.37561345100403` seconds to detect the chimeras.
 ```
 
 ## Results
@@ -166,22 +166,22 @@ strollur_results$chimera_report[
 ] |> head(n = 5)
 #>        Score                                        Query    ParentA    ParentB
 #> 4  0.3599476 M00967_43_000000000-A3JHG_1_2113_29036_16812 AJ404681.1 AJ400237.1
-#> 11 1.0186117  M00967_43_000000000-A3JHG_1_2108_19952_9563 AJ400267.1 AJ400236.1
-#> 14 1.7641129  M00967_43_000000000-A3JHG_1_2107_6538_14332 AJ400267.1 AY230766.1
-#> 16 2.7742347 M00967_43_000000000-A3JHG_1_1102_22525_13142 AJ400236.1 EU006128.1
-#> 18 1.5735035 M00967_43_000000000-A3JHG_1_2108_19687_26893 AB021164.1 AJ400267.1
+#> 11 1.0186117  M00967_43_000000000-A3JHG_1_2108_19952_9563 AJ400266.1 AJ400236.1
+#> 14 1.9978295  M00967_43_000000000-A3JHG_1_2107_6538_14332 AJ400266.1 AB043866.1
+#> 16 2.7742347 M00967_43_000000000-A3JHG_1_1102_22525_13142 AJ400236.1 AB021159.1
+#> 18 1.6945423 M00967_43_000000000-A3JHG_1_2108_19687_26893 AB021159.1 AJ400267.1
 #>    Top_Parent        QM       QA       QB      QAB       QT LY LN LA RY RN RA
 #> 4  AJ404681.1  94.82072 92.03187 86.85259 85.25896 92.03187 22  2 11  7  0  0
-#> 11 AJ400267.1  98.80000 95.20000 91.60000 89.20000 95.20000 18  0  3  9  0  0
-#> 14 AJ400267.1  97.93388 92.97521 77.68595 71.48760 92.97521 49  0  0 15  3  2
+#> 11 AJ400266.1  98.80000 95.20000 91.60000 89.20000 95.20000 18  0  3  9  0  0
+#> 14 AJ400266.1  98.34711 93.38843 76.03306 69.83471 93.38843 54  0  0 15  3  1
 #> 16 AJ400236.1 100.00000 95.00000 87.91667 82.91667 95.00000 29  0  0 12  0  0
-#> 18 AB021164.1  98.38710 93.14516 85.48387 80.64516 93.14516 33  1  0 13  0  3
+#> 18 AB021159.1  98.38710 92.74194 85.48387 80.24194 92.74194 33  1  0 14  0  3
 #>         Div Chimeric_Status
 #> 4  2.788845               Y
 #> 11 3.600000               Y
 #> 14 4.958678               Y
 #> 16 5.000000               Y
-#> 18 5.241935               Y
+#> 18 5.645161               Y
 ```
 
 ### Chimeras
@@ -198,8 +198,8 @@ strollur_results$chimeras |> head(n = 10)
 #>  [4] "M00967_43_000000000-A3JHG_1_1102_22525_13142"
 #>  [5] "M00967_43_000000000-A3JHG_1_2108_19687_26893"
 #>  [6] "M00967_43_000000000-A3JHG_1_2113_21308_17042"
-#>  [7] "M00967_43_000000000-A3JHG_1_2101_14896_3554" 
-#>  [8] "M00967_43_000000000-A3JHG_1_1109_10514_23344"
-#>  [9] "M00967_43_000000000-A3JHG_1_1108_17549_23127"
+#>  [7] "M00967_43_000000000-A3JHG_1_2104_24539_15751"
+#>  [8] "M00967_43_000000000-A3JHG_1_2101_14896_3554" 
+#>  [9] "M00967_43_000000000-A3JHG_1_1109_10514_23344"
 #> [10] "M00967_43_000000000-A3JHG_1_1102_4170_17056"
 ```
