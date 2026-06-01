@@ -7,7 +7,8 @@ test_that("test rchime - errors and rchime_options", {
   strollur::add(data, table = fasta_data[1:100, ], type = "sequence")
 
   reference_ob <- strollur::load_dataset(
-      rchime_example("strollur_reference.rds"))
+    rchime_example("strollur_reference.rds")
+  )
 
   # this should not change since the rchime command below does not remove
   num_seqs <- strollur::count(data)
