@@ -76,17 +76,6 @@ data_denovo <- strollur::load_dataset(
 chimera_report <- rchime(data_denovo, dereplicate = TRUE)
 data_denovo
 
-# Alternatively you can detect and remove chimeras using a reference
-
-data_reference <- strollur::load_dataset(
-  rchime_example("strollur_multi_sample.rds")
-)
-
-reference <- strollur::load_dataset(rchime_example("strollur_reference.rds"))
-
-chimera_report <- rchime(data_reference, reference = reference)
-data_reference
-
 }
 \references{
 Rognes T, Flouri T, Nichols B, Quince C, Mahé F. (2016) VSEARCH: a

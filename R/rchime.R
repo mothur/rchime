@@ -152,17 +152,6 @@ rchime <- function(data, reference = NULL, dereplicate = TRUE,
 #' chimera_report <- rchime(data_denovo, dereplicate = TRUE)
 #' data_denovo
 #'
-#' # Alternatively you can detect and remove chimeras using a reference
-#'
-#' data_reference <- strollur::load_dataset(
-#'   rchime_example("strollur_multi_sample.rds")
-#' )
-#'
-#' reference <- strollur::load_dataset(rchime_example("strollur_reference.rds"))
-#'
-#' chimera_report <- rchime(data_reference, reference = reference)
-#' data_reference
-#'
 #' @import cli
 #' @export
 rchime.strollur <- function(data, reference = NULL, dereplicate = TRUE,
@@ -425,13 +414,6 @@ rchime.strollur <- function(data, reference = NULL, dereplicate = TRUE,
 #' data <- readRDS(rchime_example("miseq_data_frame_by_sample.rds"))
 #'
 #' chimera_report <- rchime(data, dereplicate = TRUE)
-#'
-#' # Alternatively you can detect chimeras using a reference
-#'
-#' reference <- readRDS(rchime_example("reference.rds"))
-#' data <- readRDS(rchime_example("miseq_data_frame.rds"))
-#'
-#' chimera_report <- rchime(data, reference = reference)
 #'
 #' @import cli
 #' @export

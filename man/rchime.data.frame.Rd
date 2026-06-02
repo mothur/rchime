@@ -87,13 +87,6 @@ data <- readRDS(rchime_example("miseq_data_frame_by_sample.rds"))
 
 chimera_report <- rchime(data, dereplicate = TRUE)
 
-# Alternatively you can detect chimeras using a reference
-
-reference <- readRDS(rchime_example("reference.rds"))
-data <- readRDS(rchime_example("miseq_data_frame.rds"))
-
-chimera_report <- rchime(data, reference = reference)
-
 }
 \references{
 Rognes T, Flouri T, Nichols B, Quince C, Mahé F. (2016) VSEARCH: a
