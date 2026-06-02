@@ -8,16 +8,6 @@
 - **Pat Schloss**. Copyright holder.
   [](https://orcid.org/0000-0002-6935-4275)
 
-- **Torbjorn Rognes**. Copyright holder.
-
-- **Frederic Mahe**. Copyright holder.
-
-- **Tomas Flouri**. Copyright holder.
-
-- **Christopher Quince**. Copyright holder.
-
-- **Ben Nichols**. Copyright holder.
-
 ## Citation
 
 Source:
@@ -31,7 +21,7 @@ Sequence Data. R package version 0.1.0.
       author = {Sarah Westcott},
       year = {2026},
       note = {R package version 0.1.0},
-      url = {https://mothur.org/rchime},
+      url = {https://mothur.org/rchime/},
     }
 
 Rognes, T., Flouri, T., Nichols, B., Quince, C., & Mahé, F. (2016).

@@ -13,7 +13,7 @@ data.frames as inputs. Let’s look at examples of both data types using
 sequence data from [mothur’s](https://mothur.org)
 [MiSeq_SOP](https://mothur.org/wiki/miseq_sop/) example analysis.
 
-### Creating *[strollur](https://mothur.org/strollur)* objects
+### Creating *[strollur](https://mothur.org/strollur/)* objects
 
 ``` r
 
@@ -82,7 +82,7 @@ strollur_results <- rchime(strollur, dereplicate = TRUE)
 #> ℹ The denovo method runs with a single processor.
 #> Added a chimera_report.
 #> → rchime removed `10453` chimeras from your dataset.
-#> → It took `9.1758987903595` seconds to detect and remove the chimeras.
+#> → It took `7.77191281318665` seconds to detect and remove the chimeras.
 
 strollur
 #> rchime denovo example:
@@ -110,7 +110,7 @@ strollur
 data_frame_results <- rchime(df, dereplicate = TRUE)
 #> ℹ The denovo method runs with a single processor.
 #> → rchime detected `10453` chimeras in your dataset.
-#> → It took `9.12615847587585` seconds to detect the chimeras.
+#> → It took `7.73326468467712` seconds to detect the chimeras.
 ```
 
 ## Results

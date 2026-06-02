@@ -15,7 +15,7 @@ SILVA reference sequences trimmed to our region of interest as the
 reference. *rchime* is designed to be flexible and you can use any
 reference you choose.
 
-### Creating *[strollur](https://mothur.org/strollur)* objects
+### Creating *[strollur](https://mothur.org/strollur/)* objects
 
 Let’s create a [strollur
 object](https://mothur.org/strollur/reference/strollur.html) that
@@ -114,7 +114,7 @@ remove the chimeras.
 strollur_results <- rchime(strollur, reference = reference)
 #> Added a chimera_report.
 #> → rchime removed `5325` chimeras from your dataset.
-#> → It took `8.35751008987427` seconds to detect and remove the chimeras.
+#> → It took `4.12931799888611` seconds to detect and remove the chimeras.
 
 strollur
 #> rchime reference example:
@@ -141,7 +141,7 @@ strollur
 
 data_frame_results <- rchime(data_df, reference = reference_data)
 #> → rchime detected `5325` chimeras in your dataset.
-#> → It took `8.42456984519958` seconds to detect the chimeras.
+#> → It took `4.14281177520752` seconds to detect the chimeras.
 ```
 
 ## Results

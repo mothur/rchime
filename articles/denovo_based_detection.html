@@ -91,8 +91,7 @@ objects</a> or data.frames as inputs. Let’s look at examples of both
 data types using sequence data from <a href="https://mothur.org" class="external-link">mothur’s</a> <a href="https://mothur.org/wiki/miseq_sop/" class="external-link">MiSeq_SOP</a> example
 analysis.</p>
 <div class="section level3">
-<h3 id="creating-strollur-objects">Creating <em><a href="https://mothur.org/strollur" class="external-link">strollur</a></em>
-objects<a class="anchor" aria-label="anchor" href="#creating-strollur-objects"></a>
+<h3 id="creating-strollur-objects">Creating <em><a href="https://mothur.org/strollur/" class="external-link">strollur</a></em> objects<a class="anchor" aria-label="anchor" href="#creating-strollur-objects"></a>
 </h3>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fasta_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="fu"><a href="../reference/rchime_example.html">rchime_example</a></span><span class="op">(</span><span class="st">"miseq_fasta.rds"</span><span class="op">)</span><span class="op">)</span></span>
@@ -159,7 +158,7 @@ chimeras.</p>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> The denovo method runs with a single processor.</span></span>
 <span><span class="co">#&gt; Added a chimera_report.</span></span>
 <span><span class="co">#&gt; → rchime removed `10453` chimeras from your dataset.</span></span>
-<span><span class="co">#&gt; → It took `9.1758987903595` seconds to detect and remove the chimeras.</span></span>
+<span><span class="co">#&gt; → It took `7.77191281318665` seconds to detect and remove the chimeras.</span></span>
 <span></span>
 <span><span class="va">strollur</span></span>
 <span><span class="co">#&gt; rchime denovo example:</span></span>
@@ -187,7 +186,7 @@ chimeras.</p>
 <span><span class="va">data_frame_results</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/rchime.html">rchime</a></span><span class="op">(</span><span class="va">df</span>, dereplicate <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> The denovo method runs with a single processor.</span></span>
 <span><span class="co">#&gt; → rchime detected `10453` chimeras in your dataset.</span></span>
-<span><span class="co">#&gt; → It took `9.12615847587585` seconds to detect the chimeras.</span></span></code></pre></div>
+<span><span class="co">#&gt; → It took `7.73326468467712` seconds to detect the chimeras.</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="results">Results<a class="anchor" aria-label="anchor" href="#results"></a>

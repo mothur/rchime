@@ -1,8 +1,6 @@
 # rchime
 
 [![pkgdown](https://github.com/mothur/rchime/actions/workflows/pkgdown.yaml/badge.svg)](https://github.com/mothur/rchime/actions/workflows/pkgdown.yaml)
-[![CRAN
-status](https://www.r-pkg.org/badges/version/rchime)](https://CRAN.R-project.org/package=rchime)
 
 ## Overview
 
@@ -62,40 +60,11 @@ chimera_report <- rchime(data)
 #> ℹ The denovo method runs with a single processor.
 #> Added a chimera_report.
 #> → rchime removed `10453` chimeras from your dataset.
-#> → It took `4.21876096725464` seconds to detect and remove the chimeras.
+#> → It took `117.158166885376` seconds to detect and remove the chimeras.
 
 data
 #> rchime denovo example:
 #> 
-#>             starts    ends  nbases ambigs polymers numns   numseqs
-#> Minimum:         1 249.000 249.000      0 3.000000     0      1.00
-#> 2.5%-tile:       1 252.000 252.000      0 4.000000     0   2956.05
-#> 25%-tile:        1 252.000 252.000      0 4.000000     0  29551.50
-#> Median:          1 253.000 253.000      0 4.000000     0  59102.00
-#> 75%-tile:        1 253.000 253.000      0 5.000000     0  88652.50
-#> 97.5%-tile:      1 254.000 254.000      0 6.000000     0 115247.95
-#> Maximum:         1 256.000 256.000      0 8.000000     0 118203.00
-#> Mean:            1 252.734 252.734      0 4.508814     0  59102.00
-#>        Score      QM       QA        QB       QAB        QT        LY
-#> 1 0.00000000  -1.000  -1.0000  -1.00000  -1.00000  -1.00000 -1.000000
-#> 2 0.00000000  -1.000  -1.0000  -1.00000  -1.00000  -1.00000 -1.000000
-#> 3 0.00000000  -1.000  -1.0000  -1.00000  -1.00000  -1.00000 -1.000000
-#> 4 1.00000000  94.000  88.0000  90.00000  86.00000  93.00000  2.000000
-#> 5 1.00000000  99.000  97.0000  95.00000  93.00000  99.00000 11.000000
-#> 6 1.00000000 100.000  99.0000  99.00000  98.00000  99.00000 28.000000
-#> 7 1.00000000 100.000 100.0000 100.00000 100.00000 100.00000 56.000000
-#> 8 0.09925736  57.589  55.3966  55.46117  53.62182  56.94022  5.783253
-#>           LN        LA        RY         RN        RA        Div
-#> 1 -1.0000000 -1.000000 -1.000000 -1.0000000 -1.000000 -1.0000000
-#> 2 -1.0000000 -1.000000 -1.000000 -1.0000000 -1.000000 -1.0000000
-#> 3 -1.0000000 -1.000000 -1.000000 -1.0000000 -1.000000 -1.0000000
-#> 4  0.0000000  0.000000  2.000000  0.0000000  0.000000  1.0000000
-#> 5  0.0000000  1.000000  7.000000  0.0000000  1.000000  1.0000000
-#> 6  8.0000000 15.000000 43.000000  7.0000000 11.000000  3.0000000
-#> 7 23.0000000 35.000000 70.000000 19.0000000 42.000000  5.0000000
-#> 8  0.4463141  1.403846  5.811699  0.3173077  1.060096  0.2481356
-#>       type      trash_code unique total
-#> 1 sequence rchime-chimeras   3588 10453
 #>             starts ends nbases ambigs polymers numns   numseqs
 #> Minimum:         1  249    249      0        3     0      1.00
 #> 2.5%-tile:       1  252    252      0        4     0   2956.05
@@ -105,6 +74,7 @@ data
 #> 97.5%-tile:      1  254    254      0        6     0 115247.95
 #> Maximum:         1  256    256      0        8     0 118203.00
 #> Mean:            1  252    252      0        4     0  59102.00
+#> 
 #> scrap_summary:
 #>       type      trash_code unique total
 #> 1 sequence rchime-chimeras   3588 10453
