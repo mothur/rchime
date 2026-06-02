@@ -21,7 +21,7 @@ knitr::opts_chunk$set(
 [![Codecov test coverage](https://codecov.io/gh/mothur/rchime/graph/badge.svg)](https://app.codecov.io/gh/mothur/rchime)
 
 [![pkgdown](https://github.com/mothur/rchime/actions/workflows/pkgdown.yaml/badge.svg)](https://github.com/mothur/rchime/actions/workflows/pkgdown.yaml)
-[![CRAN status](https://www.r-pkg.org/badges/version/rchime)](https://CRAN.R-project.org/package=rchime)
+<!-- [![CRAN status](https://www.r-pkg.org/badges/version/rchime)](https://CRAN.R-project.org/package=rchime) -->
 <!-- badges: end -->
 
 ## Overview 

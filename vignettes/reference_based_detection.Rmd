@@ -19,7 +19,7 @@ knitr::opts_chunk$set(
 
 The `rchime()` function allows you to detect and remove chimeras from your dataset using a referenced based approach. `rchime()` can be used with [strollur objects](https://mothur.org/strollur/reference/strollur.html) or data.frames as inputs. Let's look at examples of both data types using sequence data from [mothur's](https://mothur.org) [MiSeq_SOP](https://mothur.org/wiki/miseq_sop/) example analysis, and SILVA reference sequences trimmed to our region of interest as the reference. *rchime* is designed to be flexible and you can use any reference you choose. 
 
-### Creating *[strollur](https://mothur.org/strollur)* objects
+### Creating *[strollur](https://mothur.org/strollur/)* objects
 
 Let's create a [strollur object](https://mothur.org/strollur/reference/strollur.html) that contains our SILVA reference sequences.
 

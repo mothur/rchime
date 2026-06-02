@@ -7,7 +7,7 @@ bibentry(
                     comment = c(ORCID = "0009-0001-1529-8247")),
   year = "2026",
   note = "R package version 0.1.0",
-  url = "https://mothur.org/rchime",
+  url = "https://mothur.org/rchime/",
   textVersion = "Sarah Westcott (2026). rchime: Detect and Remove Chimeras
   from Amplicon Sequence Data. R package version 0.1.0."
 )

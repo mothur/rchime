@@ -12,8 +12,8 @@ Detect and remove chimeras from your Amplicon Sequence Analysis using reference 
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://mothur.org/rchime}
-  \item \url{https://github.com/mothur/rchime/}
+  \item \url{https://github.com/mothur/rchime}
+  \item \url{https://mothur.org/rchime/}
   \item Report bugs at \url{https://github.com/mothur/rchime/issues}
 }
 
@@ -29,11 +29,6 @@ Authors:
 Other contributors:
 \itemize{
   \item Pat Schloss \email{pschloss@umich.edu} (\href{https://orcid.org/0000-0002-6935-4275}{ORCID}) [copyright holder]
-  \item Torbjorn Rognes \email{torognes@ifi.uio.no} [copyright holder]
-  \item Frederic Mahe \email{mahe@rhrk.uni-kl.de} [copyright holder]
-  \item Tomas Flouri \email{tomas.flouri@h-its.org} [copyright holder]
-  \item Christopher Quince \email{c.quince@warwick.ac.uk} [copyright holder]
-  \item Ben Nichols \email{b.nichols.1@research.gla.ac.uk} [copyright holder]
 }
 
 }
