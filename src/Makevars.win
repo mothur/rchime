@@ -1,5 +1,5 @@
 # Default flags for standard Windows x86_64 targets
-XSIMD_WINDOWS_FLAGS = -msse2 -msse3 -mssse3 -msse4.1 -msse4.2
+XSIMD_WINDOWS_FLAGS = -msse2
 
 # Safely strip Intel-specific flags if building for Windows ARM64 (aarch64)
 ifeq ($(TARGET),aarch64-w64-mingw32)
