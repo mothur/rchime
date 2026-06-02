@@ -15,7 +15,7 @@ Authors@R: c(
   person("Ben", "Nichols", , "b.nichols.1@research.gla.ac.uk", role = c("cph")))
 Maintainer: Schloss Lab <pschloss@umich.edu>
 Description: Detect and remove chimeras from your Amplicon Sequence Analysis using reference based or denovo approaches. 
-URL: https://mothur.org/rchime, https://github.com/mothur/rchime/
+URL: https://mothur.org/rchime, https://github.com/mothur/rchime
 BugReports: https://github.com/mothur/rchime/issues
 License: GPL (>= 3)
 Roxygen: list(markdown = TRUE)              
