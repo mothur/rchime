@@ -115,7 +115,7 @@ chimera_report <- rchime(data_denovo, dereplicate = TRUE)
 #> ℹ The denovo method runs with a single processor.
 #> Added a chimera_report.
 #> → rchime removed `10453` chimeras from your dataset.
-#> → It took `7.71244359016418` seconds to detect and remove the chimeras.
+#> → It took `7.45185351371765` seconds to detect and remove the chimeras.
 data_denovo
 #>             starts ends nbases ambigs polymers numns   numseqs
 #> Minimum:         1  249    249      0        3     0      1.00
@@ -133,40 +133,6 @@ data_denovo
 #> 
 #> Number of unique seqs: 2496 
 #> Total number of seqs: 118202 
-#> 
-#> Total number of samples: 20 
-#> Total number of custom reports: 1 
-#> 
-
-# Alternatively you can detect and remove chimeras using a reference
-
-data_reference <- strollur::load_dataset(
-  rchime_example("strollur_multi_sample.rds")
-)
-
-reference <- strollur::load_dataset(rchime_example("strollur_reference.rds"))
-
-chimera_report <- rchime(data_reference, reference = reference)
-#> Added a chimera_report.
-#> → rchime removed `5325` chimeras from your dataset.
-#> → It took `4.06459760665894` seconds to detect and remove the chimeras.
-data_reference
-#>             starts ends nbases ambigs polymers numns   numseqs
-#> Minimum:         1  249    249      0        3     0      1.00
-#> 2.5%-tile:       1  252    252      0        4     0   3084.25
-#> 25%-tile:        1  252    252      0        4     0  30833.50
-#> Median:          1  253    253      0        4     0  61666.00
-#> 75%-tile:        1  253    253      0        5     0  92498.50
-#> 97.5%-tile:      1  254    254      0        6     0 120247.75
-#> Maximum:         1  256    256      0        8     0 123331.00
-#> Mean:            1  252    252      0        4     0  61666.00
-#> 
-#> scrap_summary:
-#>       type      trash_code unique total
-#> 1 sequence chimeras_rchime   1662  5325
-#> 
-#> Number of unique seqs: 4422 
-#> Total number of seqs: 123330 
 #> 
 #> Total number of samples: 20 
 #> Total number of custom reports: 1 
