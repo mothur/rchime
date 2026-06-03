@@ -121,10 +121,10 @@ Sarah Westcott, <swestcot@umich.edu>
 # Detect chimeras from the dataset using denovo approach by sample
 # (recommended)
 
-data <- readRDS(rchime_example("miseq_data_frame_by_sample.rds"))
+data <- readRDS(rchime_example("miseq_data_frame_by_sample_small.rds"))
 
-chimera_report <- rchime(data, dereplicate = TRUE)
+chimera_report <- rchime(data)
 #> ℹ The denovo method runs with a single processor.
-#> → rchime detected `10453` chimeras in your dataset.
-#> → It took `7.46529316902161` seconds to detect the chimeras.
+#> → rchime detected `128` chimeras in your dataset.
+#> → It took `0.482063055038452` seconds to detect the chimeras.
 ```

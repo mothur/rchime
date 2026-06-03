@@ -39,9 +39,9 @@ rchimeDenovoSingleSample(sequence_name, sequence, abundance, options = NULL)
 fasta_data <- readRDS(rchime_example("miseq_fasta.rds"))
 abundance_data <- readRDS(rchime_example("single_sample_abundance.rds"))
 
-# Detect chimeras
+# Detect chimeras in first 100 sequences
 
-results <- rchimeDenovoSingleSample(sequence_name = fasta_data$sequence_name,
-                                    sequence = fasta_data$sequence,
-                                    abundance = abundance_data$abundance)
+results <- rchimeDenovoSingleSample(sequence_name = fasta_data$sequence_name[1:100],
+                                    sequence = fasta_data$sequence[1:100],
+                                    abundance = abundance_data$abundance[1:100])
 ```

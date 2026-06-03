@@ -32,13 +32,13 @@ strollur
 #> 
 #>             starts ends nbases ambigs polymers numns   numseqs
 #> Minimum:         1  249    249      0        3     0      1.00
-#> 2.5%-tile:       1  252    252      0        4     0   3217.38
-#> 25%-tile:        1  252    252      0        4     0  32164.75
-#> Median:          1  253    253      0        4     0  64328.50
-#> 75%-tile:        1  253    253      0        5     0  96492.25
-#> 97.5%-tile:      1  254    254      0        6     0 125439.62
-#> Maximum:         1  256    256      0        8     0 128656.00
-#> Mean:            1  252    252      0        4     0  64328.50
+#> 2.5%-tile:       1  252    252      0        4     0   3216.38
+#> 25%-tile:        1  252    252      0        4     0  32163.75
+#> Median:          1  253    253      0        4     0  64327.50
+#> 75%-tile:        1  253    253      0        5     0  96491.25
+#> 97.5%-tile:      1  254    254      0        6     0 125438.62
+#> Maximum:         1  256    256      0        8     0 128655.00
+#> Mean:            1  252    252      0        4     0  64327.64
 #> 
 #> Number of unique seqs: 6084 
 #> Total number of seqs: 128655 
@@ -82,20 +82,20 @@ strollur_results <- rchime(strollur, dereplicate = TRUE)
 #> ℹ The denovo method runs with a single processor.
 #> Added a chimera_report.
 #> → rchime removed `10453` chimeras from your dataset.
-#> → It took `7.48603415489197` seconds to detect and remove the chimeras.
+#> → It took `7.75072455406189` seconds to detect and remove the chimeras.
 
 strollur
 #> rchime denovo example:
 #> 
 #>             starts ends nbases ambigs polymers numns   numseqs
 #> Minimum:         1  249    249      0        3     0      1.00
-#> 2.5%-tile:       1  252    252      0        4     0   2956.05
-#> 25%-tile:        1  252    252      0        4     0  29551.50
-#> Median:          1  253    253      0        4     0  59102.00
-#> 75%-tile:        1  253    253      0        5     0  88652.50
-#> 97.5%-tile:      1  254    254      0        6     0 115247.95
-#> Maximum:         1  256    256      0        8     0 118203.00
-#> Mean:            1  252    252      0        4     0  59102.00
+#> 2.5%-tile:       1  252    252      0        4     0   2955.05
+#> 25%-tile:        1  252    252      0        4     0  29550.50
+#> Median:          1  253    253      0        4     0  59101.00
+#> 75%-tile:        1  253    253      0        5     0  88651.50
+#> 97.5%-tile:      1  254    254      0        6     0 115246.95
+#> Maximum:         1  256    256      0        8     0 118202.00
+#> Mean:            1  252    252      0        4     0  59101.14
 #> 
 #> scrap_summary:
 #>       type      trash_code unique total
@@ -110,7 +110,7 @@ strollur
 data_frame_results <- rchime(df, dereplicate = TRUE)
 #> ℹ The denovo method runs with a single processor.
 #> → rchime detected `10453` chimeras in your dataset.
-#> → It took `7.49922561645508` seconds to detect the chimeras.
+#> → It took `7.73943686485291` seconds to detect the chimeras.
 ```
 
 ## Results

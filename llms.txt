@@ -60,20 +60,20 @@ chimera_report <- rchime(data)
 #> ℹ The denovo method runs with a single processor.
 #> Added a chimera_report.
 #> → rchime removed `10453` chimeras from your dataset.
-#> → It took `117.158166885376` seconds to detect and remove the chimeras.
+#> → It took `4.24204802513123` seconds to detect and remove the chimeras.
 
 data
 #> rchime denovo example:
 #> 
 #>             starts ends nbases ambigs polymers numns   numseqs
 #> Minimum:         1  249    249      0        3     0      1.00
-#> 2.5%-tile:       1  252    252      0        4     0   2956.05
-#> 25%-tile:        1  252    252      0        4     0  29551.50
-#> Median:          1  253    253      0        4     0  59102.00
-#> 75%-tile:        1  253    253      0        5     0  88652.50
-#> 97.5%-tile:      1  254    254      0        6     0 115247.95
-#> Maximum:         1  256    256      0        8     0 118203.00
-#> Mean:            1  252    252      0        4     0  59102.00
+#> 2.5%-tile:       1  252    252      0        4     0   2955.05
+#> 25%-tile:        1  252    252      0        4     0  29550.50
+#> Median:          1  253    253      0        4     0  59101.00
+#> 75%-tile:        1  253    253      0        5     0  88651.50
+#> 97.5%-tile:      1  254    254      0        6     0 115246.95
+#> Maximum:         1  256    256      0        8     0 118202.00
+#> Mean:            1  252    252      0        4     0  59101.14
 #> 
 #> scrap_summary:
 #>       type      trash_code unique total
@@ -89,9 +89,8 @@ data
 ## References
 
 Many thanks for the great work of the
-*[uchime](https://www.drive5.com/usearch/manual/chimeras.html)* and
-*[vsearch](https://github.com/torognes/vsearch/graphs/contributors)*
-teams!
+*[vsearch](https://github.com/torognes/vsearch/graphs/contributors)* and
+*[uchime](https://www.drive5.com/usearch/manual/chimeras.html)* teams!
 
 - Rognes T, Flouri T, Nichols B, Quince C, Mahé F. (2016) VSEARCH: a
   versatile open source tool for metagenomics. PeerJ 4:e2584. doi:

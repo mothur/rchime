@@ -165,37 +165,38 @@ Bioinformatics 27:2194.</p>
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Let's load a strollur object named "rchime denovo example"</span></span></span>
+<span class="r-in"><span><span class="co"># Let's load a strollur object with 500 sequences</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">data_denovo</span> <span class="op">&lt;-</span> <span class="fu">strollur</span><span class="fu">::</span><span class="fu"><a href="https://mothur.org/strollur/reference/load_dataset.html" class="external-link">load_dataset</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>  <span class="fu"><a href="rchime_example.html">rchime_example</a></span><span class="op">(</span><span class="st">"strollur_multi_sample.rds"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu">strollur</span><span class="fu">::</span><span class="fu"><a href="https://mothur.org/strollur/reference/load_dataset.html" class="external-link">load_dataset</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>                    <span class="fu"><a href="rchime_example.html">rchime_example</a></span><span class="op">(</span><span class="st">"strollur_multi_sample_small.rds"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Detect and remove chimeras from the dataset using denovo approach by sample</span></span></span>
 <span class="r-in"><span><span class="co"># (recommended)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">chimera_report</span> <span class="op">&lt;-</span> <span class="fu"><a href="rchime.html">rchime</a></span><span class="op">(</span><span class="va">data_denovo</span>, dereplicate <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">chimera_report</span> <span class="op">&lt;-</span> <span class="fu"><a href="rchime.html">rchime</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> The denovo method runs with a single processor.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Added a chimera_report.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → rchime removed `10453` chimeras from your dataset.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → It took `7.45185351371765` seconds to detect and remove the chimeras.</span>
-<span class="r-in"><span><span class="va">data_denovo</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>             starts ends nbases ambigs polymers numns   numseqs</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Minimum:         1  249    249      0        3     0      1.00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2.5%-tile:       1  252    252      0        4     0   2956.05</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 25%-tile:        1  252    252      0        4     0  29551.50</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Median:          1  253    253      0        4     0  59102.00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 75%-tile:        1  253    253      0        5     0  88652.50</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 97.5%-tile:      1  254    254      0        6     0 115247.95</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Maximum:         1  256    256      0        8     0 118203.00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Mean:            1  252    252      0        4     0  59102.00</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → rchime removed `128` chimeras from your dataset.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → It took `0.477541923522949` seconds to detect and remove the chimeras.</span>
+<span class="r-in"><span><span class="va">data</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> multi sample - 500 sequences:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             starts ends nbases ambigs polymers numns numseqs</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Minimum:         1  250    250      0        3     0    1.00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.5%-tile:       1  252    252      0        4     0  167.20</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 25%-tile:        1  252    252      0        4     0 1672.00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Median:          1  253    253      0        4     0 3344.00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 75%-tile:        1  253    253      0        5     0 5016.00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 97.5%-tile:      1  253    253      0        6     0 6520.80</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Maximum:         1  255    255      0        6     0 6688.00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Mean:            1  252    252      0        4     0 3344.14</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> scrap_summary:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       type      trash_code unique total</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 sequence rchime-chimeras   3588 10453</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 sequence rchime-chimeras     90   128</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Number of unique seqs: 2496 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Total number of seqs: 118202 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Number of unique seqs: 410 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Total number of seqs: 6688 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Total number of samples: 20 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Total number of custom reports: 1 </span>

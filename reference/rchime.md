@@ -103,34 +103,36 @@ Sarah Westcott, <swestcot@umich.edu>
 
 ``` r
 
-# Using a strollur object named "rchime denovo example"
+# Let's use a strollur object with 100 sequences
 
-data_denovo <- strollur::load_dataset(
-  rchime_example("strollur_multi_sample.rds")
+data <- strollur::load_dataset(
+  rchime_example("strollur_multi_sample_tiny.rds")
 )
 
-chimera_report <- rchime(data_denovo)
+chimera_report <- rchime(data)
 #> ℹ The denovo method runs with a single processor.
 #> Added a chimera_report.
-#> → rchime removed `10453` chimeras from your dataset.
-#> → It took `7.48911595344543` seconds to detect and remove the chimeras.
-data_denovo
-#>             starts ends nbases ambigs polymers numns   numseqs
-#> Minimum:         1  249    249      0        3     0      1.00
-#> 2.5%-tile:       1  252    252      0        4     0   2956.05
-#> 25%-tile:        1  252    252      0        4     0  29551.50
-#> Median:          1  253    253      0        4     0  59102.00
-#> 75%-tile:        1  253    253      0        5     0  88652.50
-#> 97.5%-tile:      1  254    254      0        6     0 115247.95
-#> Maximum:         1  256    256      0        8     0 118203.00
-#> Mean:            1  252    252      0        4     0  59102.00
+#> → rchime removed `1` chimeras from your dataset.
+#> → It took `0.172775745391846` seconds to detect and remove the chimeras.
+data
+#> rchime denovo example - 100 sequences:
+#> 
+#>             starts ends nbases ambigs polymers numns numseqs
+#> Minimum:         1  251    251      0        3     0    1.00
+#> 2.5%-tile:       1  251    251      0        4     0   51.68
+#> 25%-tile:        1  252    252      0        4     0  516.75
+#> Median:          1  253    253      0        5     0 1033.50
+#> 75%-tile:        1  253    253      0        5     0 1550.25
+#> 97.5%-tile:      1  253    253      0        6     0 2015.33
+#> Maximum:         1  255    255      0        8     0 2067.00
+#> Mean:            1  252    252      0        4     0 1033.64
 #> 
 #> scrap_summary:
 #>       type      trash_code unique total
-#> 1 sequence rchime-chimeras   3588 10453
+#> 1 sequence rchime-chimeras      1     1
 #> 
-#> Number of unique seqs: 2496 
-#> Total number of seqs: 118202 
+#> Number of unique seqs: 99 
+#> Total number of seqs: 2067 
 #> 
 #> Total number of samples: 20 
 #> Total number of custom reports: 1 

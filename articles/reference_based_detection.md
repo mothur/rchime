@@ -36,13 +36,13 @@ reference
 #> 
 #>             starts ends nbases ambigs polymers numns  numseqs
 #> Minimum:         1  270    270      0        3     0     1.00
-#> 2.5%-tile:       1  292    292      0        4     0   374.90
-#> 25%-tile:        1  293    293      0        4     0  3740.00
-#> Median:          1  293    293      0        4     0  7479.00
-#> 75%-tile:        1  293    293      0        5     0 11218.00
-#> 97.5%-tile:      1  294    294      1        6     1 14583.10
-#> Maximum:         1  351    351      5        9     5 14957.00
-#> Mean:            1  292    292      0        4     0  7479.00
+#> 2.5%-tile:       1  292    292      0        4     0   373.90
+#> 25%-tile:        1  293    293      0        4     0  3739.00
+#> Median:          1  293    293      0        4     0  7478.00
+#> 75%-tile:        1  293    293      0        5     0 11217.00
+#> 97.5%-tile:      1  294    294      1        6     1 14582.10
+#> Maximum:         1  351    351      5        9     5 14956.00
+#> Mean:            1  292    292      0        4     0  7478.14
 #> 
 #> Number of unique seqs: 14956 
 #> Total number of seqs: 14956
@@ -69,13 +69,13 @@ strollur
 #> 
 #>             starts ends nbases ambigs polymers numns   numseqs
 #> Minimum:         1  249    249      0        3     0      1.00
-#> 2.5%-tile:       1  252    252      0        4     0   3217.38
-#> 25%-tile:        1  252    252      0        4     0  32164.75
-#> Median:          1  253    253      0        4     0  64328.50
-#> 75%-tile:        1  253    253      0        5     0  96492.25
-#> 97.5%-tile:      1  254    254      0        6     0 125439.62
-#> Maximum:         1  256    256      0        8     0 128656.00
-#> Mean:            1  252    252      0        4     0  64328.50
+#> 2.5%-tile:       1  252    252      0        4     0   3216.38
+#> 25%-tile:        1  252    252      0        4     0  32163.75
+#> Median:          1  253    253      0        4     0  64327.50
+#> 75%-tile:        1  253    253      0        5     0  96491.25
+#> 97.5%-tile:      1  254    254      0        6     0 125438.62
+#> Maximum:         1  256    256      0        8     0 128655.00
+#> Mean:            1  252    252      0        4     0  64327.64
 #> 
 #> Number of unique seqs: 6084 
 #> Total number of seqs: 128655 
@@ -114,20 +114,20 @@ remove the chimeras.
 strollur_results <- rchime(strollur, reference = reference)
 #> Added a chimera_report.
 #> → rchime removed `5325` chimeras from your dataset.
-#> → It took `4.1162223815918` seconds to detect and remove the chimeras.
+#> → It took `4.07705736160278` seconds to detect and remove the chimeras.
 
 strollur
 #> rchime reference example:
 #> 
 #>             starts ends nbases ambigs polymers numns   numseqs
 #> Minimum:         1  249    249      0        3     0      1.00
-#> 2.5%-tile:       1  252    252      0        4     0   3084.25
-#> 25%-tile:        1  252    252      0        4     0  30833.50
-#> Median:          1  253    253      0        4     0  61666.00
-#> 75%-tile:        1  253    253      0        5     0  92498.50
-#> 97.5%-tile:      1  254    254      0        6     0 120247.75
-#> Maximum:         1  256    256      0        8     0 123331.00
-#> Mean:            1  252    252      0        4     0  61666.00
+#> 2.5%-tile:       1  252    252      0        4     0   3083.25
+#> 25%-tile:        1  252    252      0        4     0  30832.50
+#> Median:          1  253    253      0        4     0  61665.00
+#> 75%-tile:        1  253    253      0        5     0  92497.50
+#> 97.5%-tile:      1  254    254      0        6     0 120246.75
+#> Maximum:         1  256    256      0        8     0 123330.00
+#> Mean:            1  252    252      0        4     0  61665.14
 #> 
 #> scrap_summary:
 #>       type      trash_code unique total
@@ -141,7 +141,7 @@ strollur
 
 data_frame_results <- rchime(data_df, reference = reference_data)
 #> → rchime detected `5325` chimeras in your dataset.
-#> → It took `4.17423462867737` seconds to detect the chimeras.
+#> → It took `4.13908672332764` seconds to detect the chimeras.
 ```
 
 ## Results
