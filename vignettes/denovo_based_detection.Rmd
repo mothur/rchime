@@ -45,14 +45,14 @@ str(df)
 
 When removing chimeras using the denovo method, the potential parents are chosen from more abundant sequences in your dataset. 
 
-Before we remove the chimeras let's discuss the `dereplicate` parameter. If your dataset includes sample assignments, we recommend setting the `dereplicate` parameter to `TRUE`. When `dereplicate` = `FALSE`, if a sequence is flagged as chimeric in one sample, it is removed from all samples. Our experience suggests that this is a bit aggressive since we’ve seen rare sequences get flagged as chimeric when they’re the most abundant sequence in another sample. For a more conservative approach, set `dereplicate` = `TRUE` which will only remove sequences from the samples in which they are flagged as chimeric. Let's use the denovo method to remove the chimeras.
+Before we remove the chimeras let's discuss the `dereplicate` parameter. When `dereplicate=FALSE`, if a sequence is flagged as chimeric in one sample, it is removed from all samples. Our experience suggests that this is a bit aggressive since we’ve seen rare sequences get flagged as chimeric when they’re the most abundant sequence in another sample. For a more conservative approach, we recommend using the default `dereplicate=TRUE` which will only remove sequences from the samples in which they are flagged as chimeric. Let's use the denovo method to remove the chimeras.
 
 ```{r}
-strollur_results <- rchime(strollur, dereplicate = TRUE)
+strollur_results <- rchime(strollur)
 
 strollur
 
-data_frame_results <- rchime(df, dereplicate = TRUE)
+data_frame_results <- rchime(df)
 ```
 
 ## Results
@@ -98,7 +98,9 @@ data_frame_results$set_abundance_values$sequence_name[1:2]
 data_frame_results$set_abundance_values$abundance[1:2]
 ```
 
-We can see that the abundances for sequence M00967_43_000000000-A3JHG_1_1101_10133_8460 remain the same meaning it was not chimeric in any sample it was present in. We can see that sequence M00967_43_000000000-A3JHG_1_1101_10134_24617 was found to be chimeric in every sample it was included in. Now let's look at an example of a sequence that was found to be chimeric in some of the samples it is present in.
+We can see that the abundances for sequence M00967_43_000000000-A3JHG_1_1101_10133_8460 remain the same meaning it was not chimeric in any sample it was present in. We can see that sequence M00967_43_000000000-A3JHG_1_1101_10134_24617 was found to be chimeric in every sample it was included in. 
+
+Now let's look at an example of a sequence that was found to be chimeric in some of the samples it is present in.
 
 ```{r}
 df[

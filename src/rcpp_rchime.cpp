@@ -30,7 +30,8 @@
 //'                            reference_sequence = reference_data$sequence)
 //'
 //' @seealso [rchime()]
-//' @export
+//' @keywords internal
+//' @noRd
 //[[Rcpp::export]]
 Rcpp::List rchimeReference(std::vector<std::string> sequence_name,
                            std::vector<std::string> sequence,
@@ -132,7 +133,8 @@ Rcpp::List rchimeReference(std::vector<std::string> sequence_name,
 //'                                     abundance = abundance_data$abundance[1:100])
 //'
 //' @seealso [rchime()]
-//' @export
+//' @keywords internal
+//' @noRd
 //[[Rcpp::export]]
 Rcpp::List rchimeDenovoSingleSample(std::vector<std::string> sequence_name,
                         std::vector<std::string> sequence,
@@ -228,7 +230,8 @@ Rcpp::List rchimeDenovoSingleSample(std::vector<std::string> sequence_name,
 //' @seealso [rchime()]
 //' @description detects chimeras from your data using a denovo method processing by sample.
 //' @returns list()
-//' @export
+//' @keywords internal
+//' @noRd
 //[[Rcpp::export]]
 Rcpp::List rchimeDenovo(std::vector<std::vector<std::string>> sequence_name,
                          std::vector<std::vector<std::string>> sequence,

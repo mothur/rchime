@@ -14,7 +14,4 @@ reference:
   contents:
   - rchime_options
   - rchime_example
-  - rchimeDenovo
-  - rchimeDenovoSingleSample
-  - rchimeReference
 
