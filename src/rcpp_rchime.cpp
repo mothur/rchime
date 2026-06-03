@@ -22,10 +22,10 @@
 //' fasta_data <- readRDS(rchime_example("miseq_fasta.rds"))
 //' reference_data <- readRDS(rchime_example("reference.rds"))
 //'
-//' # Detect chimeras
+//' # Detect chimeras in first 100 sequences
 //'
-//' results <- rchimeReference(sequence_name = fasta_data$sequence_name,
-//'                            sequence = fasta_data$sequence,
+//' results <- rchimeReference(sequence_name = fasta_data$sequence_name[1:100],
+//'                            sequence = fasta_data$sequence[1:100],
 //'                            reference_name = reference_data$sequence_name,
 //'                            reference_sequence = reference_data$sequence)
 //'
@@ -125,11 +125,11 @@ Rcpp::List rchimeReference(std::vector<std::string> sequence_name,
 //' fasta_data <- readRDS(rchime_example("miseq_fasta.rds"))
 //' abundance_data <- readRDS(rchime_example("single_sample_abundance.rds"))
 //'
-//' # Detect chimeras
+//' # Detect chimeras in first 100 sequences
 //'
-//' results <- rchimeDenovoSingleSample(sequence_name = fasta_data$sequence_name,
-//'                                     sequence = fasta_data$sequence,
-//'                                     abundance = abundance_data$abundance)
+//' results <- rchimeDenovoSingleSample(sequence_name = fasta_data$sequence_name[1:100],
+//'                                     sequence = fasta_data$sequence[1:100],
+//'                                     abundance = abundance_data$abundance[1:100])
 //'
 //' @seealso [rchime()]
 //' @export
@@ -174,14 +174,14 @@ Rcpp::List rchimeDenovoSingleSample(std::vector<std::string> sequence_name,
         if (!opts_list.containsElementNamed("dereplicate")) {
             std::vector<std::string> newNames = opts_list.attr("names");
             newNames.push_back("dereplicate");
-            opts_list.push_back(false);
+            opts_list.push_back(true);
             opts_list.attr("names") = newNames;
         }
         optionsDenovo = opts_list;
     }else{
         std::vector<std::string> optionNames = {"processors", "dereplicate"};
         optionsDenovo.push_back(1);
-        optionsDenovo.push_back(false);
+        optionsDenovo.push_back(true);
         optionsDenovo.attr("names") = optionNames;
     }
 
@@ -219,11 +219,11 @@ Rcpp::List rchimeDenovoSingleSample(std::vector<std::string> sequence_name,
 //' sequence <- readRDS(rchime_example("miseq_sequences_by_sample.rds"))
 //' abundance <- readRDS(rchime_example("miseq_abundance_by_sample.rds"))
 //'
-//' # Detect chimeras
+//' # Detect chimeras in first sample
 //'
-//' results <- rchimeDenovo(sequence_name = sequence_name,
-//'                         sequence = sequence,
-//'                         abundance = abundance)
+//' results <- rchimeDenovo(sequence_name = sequence_name[1],
+//'                         sequence = sequence[1],
+//'                         abundance = abundance[1])
 //'
 //' @seealso [rchime()]
 //' @description detects chimeras from your data using a denovo method processing by sample.
@@ -264,14 +264,14 @@ Rcpp::List rchimeDenovo(std::vector<std::vector<std::string>> sequence_name,
         if (!opts_list.containsElementNamed("dereplicate")) {
             std::vector<std::string> newNames = opts_list.attr("names");
             newNames.push_back("dereplicate");
-            opts_list.push_back(false);
+            opts_list.push_back(true);
             opts_list.attr("names") = newNames;
         }
         optionsDenovo = opts_list;
     }else{
         std::vector<std::string> optionNames = {"processors", "dereplicate"};
         optionsDenovo.push_back(1);
-        optionsDenovo.push_back(false);
+        optionsDenovo.push_back(true);
         optionsDenovo.attr("names") = optionNames;
     }
 

@@ -33,10 +33,10 @@ detects chimeras in your data using a reference based approach.
 fasta_data <- readRDS(rchime_example("miseq_fasta.rds"))
 reference_data <- readRDS(rchime_example("reference.rds"))
 
-# Detect chimeras
+# Detect chimeras in first 100 sequences
 
-results <- rchimeReference(sequence_name = fasta_data$sequence_name,
-                           sequence = fasta_data$sequence,
+results <- rchimeReference(sequence_name = fasta_data$sequence_name[1:100],
+                           sequence = fasta_data$sequence[1:100],
                            reference_name = reference_data$sequence_name,
                            reference_sequence = reference_data$sequence)
 

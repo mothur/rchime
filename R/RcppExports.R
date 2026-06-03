@@ -20,10 +20,10 @@
 #' fasta_data <- readRDS(rchime_example("miseq_fasta.rds"))
 #' reference_data <- readRDS(rchime_example("reference.rds"))
 #'
-#' # Detect chimeras
+#' # Detect chimeras in first 100 sequences
 #'
-#' results <- rchimeReference(sequence_name = fasta_data$sequence_name,
-#'                            sequence = fasta_data$sequence,
+#' results <- rchimeReference(sequence_name = fasta_data$sequence_name[1:100],
+#'                            sequence = fasta_data$sequence[1:100],
 #'                            reference_name = reference_data$sequence_name,
 #'                            reference_sequence = reference_data$sequence)
 #'
@@ -51,11 +51,11 @@ rchimeReference <- function(sequence_name, sequence, reference_name, reference_s
 #' fasta_data <- readRDS(rchime_example("miseq_fasta.rds"))
 #' abundance_data <- readRDS(rchime_example("single_sample_abundance.rds"))
 #'
-#' # Detect chimeras
+#' # Detect chimeras in first 100 sequences
 #'
-#' results <- rchimeDenovoSingleSample(sequence_name = fasta_data$sequence_name,
-#'                                     sequence = fasta_data$sequence,
-#'                                     abundance = abundance_data$abundance)
+#' results <- rchimeDenovoSingleSample(sequence_name = fasta_data$sequence_name[1:100],
+#'                                     sequence = fasta_data$sequence[1:100],
+#'                                     abundance = abundance_data$abundance[1:100])
 #'
 #' @seealso [rchime()]
 #' @export
@@ -80,11 +80,11 @@ rchimeDenovoSingleSample <- function(sequence_name, sequence, abundance, options
 #' sequence <- readRDS(rchime_example("miseq_sequences_by_sample.rds"))
 #' abundance <- readRDS(rchime_example("miseq_abundance_by_sample.rds"))
 #'
-#' # Detect chimeras
+#' # Detect chimeras in first sample
 #'
-#' results <- rchimeDenovo(sequence_name = sequence_name,
-#'                         sequence = sequence,
-#'                         abundance = abundance)
+#' results <- rchimeDenovo(sequence_name = sequence_name[1],
+#'                         sequence = sequence[1],
+#'                         abundance = abundance[1])
 #'
 #' @seealso [rchime()]
 #' @description detects chimeras from your data using a denovo method processing by sample.

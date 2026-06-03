@@ -64,17 +64,16 @@ This function uses code from the
 }
 \examples{
 
-# Let's load a strollur object named "rchime denovo example"
+# Let's load a strollur object with 500 sequences
 
-data_denovo <- strollur::load_dataset(
-  rchime_example("strollur_multi_sample.rds")
-)
+data <- strollur::load_dataset(
+                    rchime_example("strollur_multi_sample_small.rds"))
 
 # Detect and remove chimeras from the dataset using denovo approach by sample
 # (recommended)
 
-chimera_report <- rchime(data_denovo, dereplicate = TRUE)
-data_denovo
+chimera_report <- rchime(data)
+data
 
 }
 \references{

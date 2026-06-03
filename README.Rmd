@@ -67,7 +67,9 @@ data
 
 ## References
 
-Many thanks for the great work of the *[uchime](https://www.drive5.com/usearch/manual/chimeras.html)* and *[vsearch](https://github.com/torognes/vsearch/graphs/contributors)* teams! 
+Many thanks for the great work of the
+*[vsearch](https://github.com/torognes/vsearch/graphs/contributors)* and
+*[uchime](https://www.drive5.com/usearch/manual/chimeras.html)* teams!
 
   * Rognes T, Flouri T, Nichols B, Quince C, Mahé F. (2016) VSEARCH: a
     versatile open source tool for metagenomics. PeerJ 4:e2584.

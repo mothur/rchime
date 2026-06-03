@@ -68,14 +68,14 @@ This function uses code from the
 }
 \examples{
 
-# Using a strollur object named "rchime denovo example"
+# Let's use a strollur object with 100 sequences
 
-data_denovo <- strollur::load_dataset(
-  rchime_example("strollur_multi_sample.rds")
+data <- strollur::load_dataset(
+  rchime_example("strollur_multi_sample_tiny.rds")
 )
 
-chimera_report <- rchime(data_denovo)
-data_denovo
+chimera_report <- rchime(data)
+data
 
 }
 \references{

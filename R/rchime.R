@@ -52,14 +52,14 @@
 #'
 #' @examples
 #'
-#' # Using a strollur object named "rchime denovo example"
+#' # Let's use a strollur object with 100 sequences
 #'
-#' data_denovo <- strollur::load_dataset(
-#'   rchime_example("strollur_multi_sample.rds")
+#' data <- strollur::load_dataset(
+#'   rchime_example("strollur_multi_sample_tiny.rds")
 #' )
 #'
-#' chimera_report <- rchime(data_denovo)
-#' data_denovo
+#' chimera_report <- rchime(data)
+#' data
 #'
 #' @return list() containing a chimera report, and vector of the chimeric
 #' sequence's names.
@@ -140,17 +140,17 @@ rchime <- function(data, reference = NULL, dereplicate = TRUE,
 #' @author Sarah Westcott, \email{swestcot@@umich.edu}
 #' @examples
 #'
-#' # Let's load a strollur object named "rchime denovo example"
+#' # Let's load a strollur object with 500 sequences
 #'
-#' data_denovo <- strollur::load_dataset(
-#'   rchime_example("strollur_multi_sample.rds")
+#' data <- strollur::load_dataset(
+#'   rchime_example("strollur_multi_sample_small.rds")
 #' )
 #'
 #' # Detect and remove chimeras from the dataset using denovo approach by sample
 #' # (recommended)
 #'
-#' chimera_report <- rchime(data_denovo, dereplicate = TRUE)
-#' data_denovo
+#' chimera_report <- rchime(data)
+#' data
 #'
 #' @import cli
 #' @export
@@ -411,9 +411,9 @@ rchime.strollur <- function(data, reference = NULL, dereplicate = TRUE,
 #' # Detect chimeras from the dataset using denovo approach by sample
 #' # (recommended)
 #'
-#' data <- readRDS(rchime_example("miseq_data_frame_by_sample.rds"))
+#' data <- readRDS(rchime_example("miseq_data_frame_by_sample_small.rds"))
 #'
-#' chimera_report <- rchime(data, dereplicate = TRUE)
+#' chimera_report <- rchime(data)
 #'
 #' @import cli
 #' @export

@@ -83,9 +83,9 @@ This function uses code from the
 # Detect chimeras from the dataset using denovo approach by sample
 # (recommended)
 
-data <- readRDS(rchime_example("miseq_data_frame_by_sample.rds"))
+data <- readRDS(rchime_example("miseq_data_frame_by_sample_small.rds"))
 
-chimera_report <- rchime(data, dereplicate = TRUE)
+chimera_report <- rchime(data)
 
 }
 \references{

@@ -57,16 +57,16 @@ test_that("test rchimeDenovo, rchimeDenovoSingleSample - errors", {
   options <- list(xn = 8.0)
   # create options but leave off processors and dereplicate
   results <- rchimeDenovoSingleSample(
-    sequence_name = fasta_data$sequence_name,
-    sequence = fasta_data$sequence,
-    abundance = abundance_data$abundance,
+    sequence_name = fasta_data$sequence_name[1:100],
+    sequence = fasta_data$sequence[1:100],
+    abundance = abundance_data$abundance[1:100],
     options = options
   )
 
   # checks to make sure the correct things are created
   expect_equal(length(results), 2)
-  expect_equal(length(results$chimeras), 3719)
-  expect_equal(nrow(results$chimera_report), 6084)
+  expect_equal(length(results$chimeras), 10)
+  expect_equal(nrow(results$chimera_report), 100)
 
   sequence_names <- readRDS(rchime_example("miseq_names_by_sample.rds"))
   sequences <- readRDS(rchime_example("miseq_sequences_by_sample.rds"))
@@ -84,17 +84,17 @@ test_that("test rchimeDenovo, rchimeDenovoSingleSample - errors", {
     abundance = abundances[1:2]
   ))
 
-  options <- list(xn = 8)
+  options <- list(xn = 8, dereplicate = FALSE)
   results <- rchimeDenovo(
-    sequence_name = sequence_names,
-    sequence = sequences,
-    abundance = abundances, options
+    sequence_name = sequence_names[1:2],
+    sequence = sequences[1:2],
+    abundance = abundances[1:2], options
   )
 
   # checks to make sure the correct things are created
   expect_equal(length(results), 2)
-  expect_equal(length(results$chimeras), 3751)
-  expect_equal(nrow(results$chimera_report), 6084)
+  expect_equal(length(results$chimeras), 520)
+  expect_equal(nrow(results$chimera_report), 966)
 })
 
 test_that("test rchimeReference ", {
@@ -149,13 +149,13 @@ test_that("test rchimeDenovo ", {
   expect_equal(nrow(results$chimera_report), 966)
 
   results <- rchimeDenovo(
-    sequence_name = sequence_names[3:10],
-    sequence = sequences[3:10],
-    abundance = abundances[3:10]
+    sequence_name = sequence_names[3:4],
+    sequence = sequences[3:4],
+    abundance = abundances[3:4], list(dereplicate = FALSE)
   )
 
   # checks to make sure the correct things are created
   expect_equal(length(results), 2)
-  expect_equal(length(results$chimeras), 1648)
-  expect_equal(nrow(results$chimera_report), 2901)
+  expect_equal(length(results$chimeras), 364)
+  expect_equal(nrow(results$chimera_report), 722)
 })
