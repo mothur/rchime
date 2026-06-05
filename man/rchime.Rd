@@ -3,7 +3,7 @@
 \name{rchime}
 \alias{rchime}
 \title{Detect and remove chimeras from your
-\href{https://mothur.org/strollur/}{strollur} dataset object or data.frame
+\href{https://mothur.org/strollur/}{strollur} object or data.frame
 using a denovo approach or alternatively a reference model.}
 \usage{
 rchime(
@@ -24,12 +24,14 @@ a data.frame containing your sequence data.}
 \item{reference}{a \href{https://mothur.org/strollur/}{strollur} dataset
 object or a data.frame containing reference sequence data.}
 
-\item{dereplicate, }{Boolean, The dereplicate option allows you to remove
-chimeras by sample. For example, if dereplicate parameter is FALSE, then if
-one group finds the sequence to be chimeric, it will be removed from all
-groups. If dereplicate is set to TRUE, sequences found to be chimeric are
-only removed from the sample they are found to be chimeric in.
-Default = TRUE.}
+\item{dereplicate}{logical. The dereplicate option allows you to remove
+chimeras by sample. When \code{dereplicate=FALSE}, if a sequence is flagged as
+chimeric in one sample, it is removed from all samples. Our experience
+suggests that this is a bit aggressive since we’ve seen rare sequences get
+flagged as chimeric when they’re the most abundant sequence in another
+sample. For a more conservative approach, we recommend using the default
+\code{dereplicate=TRUE} which will only remove sequences from the samples in
+which they are flagged as chimeric.}
 
 \item{silent}{Boolean, suppress console outputs. Default = FALSE.}
 
@@ -55,13 +57,7 @@ The \code{rchime()} function allows you to detect and remove chimeras from your
 data using a denovo approach or alternatively a reference model.
 
 Our preferred way of doing this is to use the abundant sequences as our
-reference (denovo). In addition, if a sequence is flagged as chimeric in one
-sample, and (dereplicate=FALSE) then sequence is removed from all samples.
-Our experience suggests that this is a bit aggressive since we’ve seen rare
-sequences get flagged as chimeric when they’re the most abundant sequence in
-another sample. For a more conservative approach, set (dereplicate=TRUE)
-which will only remove sequences from the samples in which they are flagged
-as chimeric.
+reference (denovo).
 
 This function uses code from the
 \href{https://github.com/torognes/vsearch}{vsearch} tools.
