@@ -66,23 +66,22 @@ When removing chimeras using the denovo method, the potential parents
 are chosen from more abundant sequences in your dataset.
 
 Before we remove the chimeras let’s discuss the `dereplicate` parameter.
-If your dataset includes sample assignments, we recommend setting the
-`dereplicate` parameter to `TRUE`. When `dereplicate` = `FALSE`, if a
-sequence is flagged as chimeric in one sample, it is removed from all
-samples. Our experience suggests that this is a bit aggressive since
-we’ve seen rare sequences get flagged as chimeric when they’re the most
-abundant sequence in another sample. For a more conservative approach,
-set `dereplicate` = `TRUE` which will only remove sequences from the
-samples in which they are flagged as chimeric. Let’s use the denovo
-method to remove the chimeras.
+When `dereplicate=FALSE`, if a sequence is flagged as chimeric in one
+sample, it is removed from all samples. Our experience suggests that
+this is a bit aggressive since we’ve seen rare sequences get flagged as
+chimeric when they’re the most abundant sequence in another sample. For
+a more conservative approach, we recommend using the default
+`dereplicate=TRUE` which will only remove sequences from the samples in
+which they are flagged as chimeric. Let’s use the denovo method to
+remove the chimeras.
 
 ``` r
 
-strollur_results <- rchime(strollur, dereplicate = TRUE)
+strollur_results <- rchime(strollur)
 #> ℹ The denovo method runs with a single processor.
 #> Added a chimera_report.
 #> → rchime removed `10453` chimeras from your dataset.
-#> → It took `7.75072455406189` seconds to detect and remove the chimeras.
+#> → It took `7.79567623138428` seconds to detect and remove the chimeras.
 
 strollur
 #> rchime denovo example:
@@ -107,10 +106,10 @@ strollur
 #> Total number of samples: 20 
 #> Total number of custom reports: 1
 
-data_frame_results <- rchime(df, dereplicate = TRUE)
+data_frame_results <- rchime(df)
 #> ℹ The denovo method runs with a single processor.
 #> → rchime detected `10453` chimeras in your dataset.
-#> → It took `7.73943686485291` seconds to detect the chimeras.
+#> → It took `7.77154898643494` seconds to detect the chimeras.
 ```
 
 ## Results
@@ -247,9 +246,10 @@ We can see that the abundances for sequence
 M00967_43_000000000-A3JHG_1_1101_10133_8460 remain the same meaning it
 was not chimeric in any sample it was present in. We can see that
 sequence M00967_43_000000000-A3JHG_1_1101_10134_24617 was found to be
-chimeric in every sample it was included in. Now let’s look at an
-example of a sequence that was found to be chimeric in some of the
-samples it is present in.
+chimeric in every sample it was included in.
+
+Now let’s look at an example of a sequence that was found to be chimeric
+in some of the samples it is present in.
 
 ``` r
 

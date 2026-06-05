@@ -1,16 +1,10 @@
-# Detect and remove chimeras from your [strollur](https://mothur.org/strollur/) dataset object or data.frame using a denovo approach or alternatively a reference model.
+# Detect and remove chimeras from your [strollur](https://mothur.org/strollur/) object or data.frame using a denovo approach or alternatively a reference model.
 
 The `rchime()` function allows you to detect and remove chimeras from
 your data using a denovo approach or alternatively a reference model.
 
 Our preferred way of doing this is to use the abundant sequences as our
-reference (denovo). In addition, if a sequence is flagged as chimeric in
-one sample, and (dereplicate=FALSE) then sequence is removed from all
-samples. Our experience suggests that this is a bit aggressive since
-we’ve seen rare sequences get flagged as chimeric when they’re the most
-abundant sequence in another sample. For a more conservative approach,
-set (dereplicate=TRUE) which will only remove sequences from the samples
-in which they are flagged as chimeric.
+reference (denovo).
 
 This function uses code from the
 [vsearch](https://github.com/torognes/vsearch) tools.
@@ -42,14 +36,16 @@ rchime(
   a [strollur](https://mothur.org/strollur/) dataset object or a
   data.frame containing reference sequence data.
 
-- dereplicate, :
+- dereplicate:
 
-  Boolean, The dereplicate option allows you to remove chimeras by
-  sample. For example, if dereplicate parameter is FALSE, then if one
-  group finds the sequence to be chimeric, it will be removed from all
-  groups. If dereplicate is set to TRUE, sequences found to be chimeric
-  are only removed from the sample they are found to be chimeric in.
-  Default = TRUE.
+  logical. The dereplicate option allows you to remove chimeras by
+  sample. When `dereplicate=FALSE`, if a sequence is flagged as chimeric
+  in one sample, it is removed from all samples. Our experience suggests
+  that this is a bit aggressive since we’ve seen rare sequences get
+  flagged as chimeric when they’re the most abundant sequence in another
+  sample. For a more conservative approach, we recommend using the
+  default `dereplicate=TRUE` which will only remove sequences from the
+  samples in which they are flagged as chimeric.
 
 - silent:
 
@@ -113,7 +109,7 @@ chimera_report <- rchime(data)
 #> ℹ The denovo method runs with a single processor.
 #> Added a chimera_report.
 #> → rchime removed `1` chimeras from your dataset.
-#> → It took `0.172775745391846` seconds to detect and remove the chimeras.
+#> → It took `0.186153411865234` seconds to detect and remove the chimeras.
 data
 #> rchime denovo example - 100 sequences:
 #> 

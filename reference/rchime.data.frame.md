@@ -5,13 +5,7 @@ allows you to detect chimeras from your data using a denovo approach or
 alternatively a reference model.
 
 Our preferred way of doing this is to use the abundant sequences as our
-reference (denovo). In addition, if a sequence is flagged as chimeric in
-one sample, and (dereplicate=FALSE) then sequence is removed from all
-samples. Our experience suggests that this is a bit aggressive since
-we’ve seen rare sequences get flagged as chimeric when they’re the most
-abundant sequence in another sample. For a more conservative approach,
-set (dereplicate=TRUE) which will only remove sequences from the samples
-in which they are flagged as chimeric.
+reference (denovo).
 
 This function uses code from the
 [vsearch](https://github.com/torognes/vsearch) tools.
@@ -42,14 +36,16 @@ rchime(
 
   a data.frame containing reference sequence data.
 
-- dereplicate, :
+- dereplicate:
 
-  Boolean, The dereplicate option allows you to flag chimeras by sample.
-  For example, if dereplicate parameter is FALSE, then if one group
-  finds the sequence to be chimeric, it will be flagged in all groups.
-  If dereplicate is set to TRUE, sequences found to be chimeric are only
-  flagged in the sample they are found to be chimeric in. Default =
-  TRUE.
+  logical. The dereplicate option allows you to flag chimeras by sample.
+  When `dereplicate=FALSE`, if a sequence is flagged as chimeric in one
+  sample, it is removed from all samples. Our experience suggests that
+  this is a bit aggressive since we’ve seen rare sequences get flagged
+  as chimeric when they’re the most abundant sequence in another sample.
+  For a more conservative approach, we recommend using the default
+  `dereplicate=TRUE` which will only remove sequences from the samples
+  in which they are flagged as chimeric.
 
 - silent:
 
@@ -126,5 +122,5 @@ data <- readRDS(rchime_example("miseq_data_frame_by_sample_small.rds"))
 chimera_report <- rchime(data)
 #> ℹ The denovo method runs with a single processor.
 #> → rchime detected `128` chimeras in your dataset.
-#> → It took `0.482063055038452` seconds to detect the chimeras.
+#> → It took `0.51378345489502` seconds to detect the chimeras.
 ```

@@ -142,23 +142,20 @@ analysis.</p>
 <p>When removing chimeras using the denovo method, the potential parents
 are chosen from more abundant sequences in your dataset.</p>
 <p>Before we remove the chimeras let’s discuss the
-<code>dereplicate</code> parameter. If your dataset includes sample
-assignments, we recommend setting the <code>dereplicate</code> parameter
-to <code>TRUE</code>. When <code>dereplicate</code> =
-<code>FALSE</code>, if a sequence is flagged as chimeric in one sample,
-it is removed from all samples. Our experience suggests that this is a
-bit aggressive since we’ve seen rare sequences get flagged as chimeric
-when they’re the most abundant sequence in another sample. For a more
-conservative approach, set <code>dereplicate</code> = <code>TRUE</code>
-which will only remove sequences from the samples in which they are
-flagged as chimeric. Let’s use the denovo method to remove the
-chimeras.</p>
+<code>dereplicate</code> parameter. When <code>dereplicate=FALSE</code>,
+if a sequence is flagged as chimeric in one sample, it is removed from
+all samples. Our experience suggests that this is a bit aggressive since
+we’ve seen rare sequences get flagged as chimeric when they’re the most
+abundant sequence in another sample. For a more conservative approach,
+we recommend using the default <code>dereplicate=TRUE</code> which will
+only remove sequences from the samples in which they are flagged as
+chimeric. Let’s use the denovo method to remove the chimeras.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">strollur_results</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/rchime.html">rchime</a></span><span class="op">(</span><span class="va">strollur</span>, dereplicate <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">strollur_results</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/rchime.html">rchime</a></span><span class="op">(</span><span class="va">strollur</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> The denovo method runs with a single processor.</span></span>
 <span><span class="co">#&gt; Added a chimera_report.</span></span>
 <span><span class="co">#&gt; → rchime removed `10453` chimeras from your dataset.</span></span>
-<span><span class="co">#&gt; → It took `7.75072455406189` seconds to detect and remove the chimeras.</span></span>
+<span><span class="co">#&gt; → It took `7.79567623138428` seconds to detect and remove the chimeras.</span></span>
 <span></span>
 <span><span class="va">strollur</span></span>
 <span><span class="co">#&gt; rchime denovo example:</span></span>
@@ -183,10 +180,10 @@ chimeras.</p>
 <span><span class="co">#&gt; Total number of samples: 20 </span></span>
 <span><span class="co">#&gt; Total number of custom reports: 1</span></span>
 <span></span>
-<span><span class="va">data_frame_results</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/rchime.html">rchime</a></span><span class="op">(</span><span class="va">df</span>, dereplicate <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="va">data_frame_results</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/rchime.html">rchime</a></span><span class="op">(</span><span class="va">df</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> The denovo method runs with a single processor.</span></span>
 <span><span class="co">#&gt; → rchime detected `10453` chimeras in your dataset.</span></span>
-<span><span class="co">#&gt; → It took `7.73943686485291` seconds to detect the chimeras.</span></span></code></pre></div>
+<span><span class="co">#&gt; → It took `7.77154898643494` seconds to detect the chimeras.</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="results">Results<a class="anchor" aria-label="anchor" href="#results"></a>
@@ -315,9 +312,9 @@ chimeras:</p>
 M00967_43_000000000-A3JHG_1_1101_10133_8460 remain the same meaning it
 was not chimeric in any sample it was present in. We can see that
 sequence M00967_43_000000000-A3JHG_1_1101_10134_24617 was found to be
-chimeric in every sample it was included in. Now let’s look at an
-example of a sequence that was found to be chimeric in some of the
-samples it is present in.</p>
+chimeric in every sample it was included in.</p>
+<p>Now let’s look at an example of a sequence that was found to be
+chimeric in some of the samples it is present in.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">df</span><span class="op">[</span></span>
 <span>  <span class="va">df</span><span class="op">$</span><span class="va">sequence_name</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="st">"M00967_43_000000000-A3JHG_1_1103_5171_14027"</span>,</span>
