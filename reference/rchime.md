@@ -109,7 +109,7 @@ chimera_report <- rchime(data)
 #> ℹ The denovo method runs with a single processor.
 #> Added a chimera_report.
 #> → rchime removed `1` chimeras from your dataset.
-#> → It took `0.186153411865234` seconds to detect and remove the chimeras.
+#> → It took `0.184051513671875` seconds to detect and remove the chimeras.
 data
 #> rchime denovo example - 100 sequences:
 #> 

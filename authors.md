@@ -8,6 +8,19 @@
 - **Pat Schloss**. Copyright holder.
   [](https://orcid.org/0000-0002-6935-4275)
 
+- **Pat Schloss**. Copyright holder.
+  [](https://orcid.org/0000-0002-6935-4275)
+
+- **Torbjorn Rognes**. Copyright holder.
+
+- **Frederic Mahe**. Copyright holder.
+
+- **Tomas Flouri**. Copyright holder.
+
+- **Christopher Quince**. Copyright holder.
+
+- **Ben Nichols**. Copyright holder.
+
 ## Citation
 
 Source:
