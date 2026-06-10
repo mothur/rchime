@@ -2,10 +2,9 @@
 
 ## Authors
 
-- **Sarah Westcott**. Author, maintainer.
-  [](https://orcid.org/0009-0001-1529-8247)
+- **Sarah Westcott**. Author. [](https://orcid.org/0009-0001-1529-8247)
 
-- **Pat Schloss**. Copyright holder.
+- **Pat Schloss**. Copyright holder, maintainer.
   [](https://orcid.org/0000-0002-6935-4275)
 
 - **Pat Schloss**. Copyright holder.
