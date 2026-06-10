@@ -4,9 +4,9 @@ Title: Detect and Remove Chimeras from Amplicon Sequence Analysis Data
 Version: 0.1.0
 Date: 2026-06-02
 Authors@R: c(
-  person("Sarah", "Westcott", , "swestcot@umich.edu", role = c("aut", "cre"),
+  person("Sarah", "Westcott", , "swestcot@umich.edu", role = c("aut"),
   comment = c(ORCID = "0009-0001-1529-8247")),
-  person("Pat", "Schloss", , "pschloss@umich.edu", role = c("cph"),
+  person("Pat", "Schloss", , "pschloss@umich.edu", role = c("cph", "cre"),
   comment = c(ORCID = "0000-0002-6935-4275")),
   person("Pat", "Schloss", , "pschloss@umich.edu", role = c("cph"),
   comment = c(ORCID = "0000-0002-6935-4275")),
@@ -15,7 +15,7 @@ Authors@R: c(
   person("Tomas", "Flouri", , "tomas.flouri@h-its.org", role = c("cph")),
   person("Christopher", "Quince", , "c.quince@warwick.ac.uk", role = c("cph")),
   person("Ben", "Nichols", , "b.nichols.1@research.gla.ac.uk", role = c("cph")))
-Maintainer: Sarah Westcott <swestcot@umich.edu>
+Maintainer: Pat Schloss <pschloss@umich.edu>
 Description: Detect and remove chimeras from your Amplicon Sequence Analysis using reference based or denovo approaches. 
 URL: https://github.com/mothur/rchime, https://mothur.org/rchime/ 
 BugReports: https://github.com/mothur/rchime/issues
