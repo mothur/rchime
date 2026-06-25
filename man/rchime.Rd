@@ -42,7 +42,7 @@ Only used when \code{data} is a strollur object.}
 using  the [\code{\link[=rchime_options]{rchime_options()}}] function. Default = NULL.}
 
 \item{table_names, }{named list used to indicate the names of the columns in
-the data.frame. Only used when \code{data} is a data.frame.}
+the data.frame. Only used when \code{data} or \code{reference} are a data.frames.}
 }
 \value{
 list() containing a chimera report, and vector of the chimeric

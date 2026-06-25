@@ -2,7 +2,7 @@
 
 test_that("test rchimeReference - errors", {
   fasta_data <- readRDS(rchime_example("miseq_fasta.rds"))
-  reference_data <- readRDS(rchime_example("reference.rds"))
+  reference_data <- silva_gold()
 
   # not equal sizes
   expect_error(rchimeReference(
@@ -32,7 +32,7 @@ test_that("test rchimeReference - errors", {
 
   # checks to make sure the correct things are created
   expect_equal(length(results), 2)
-  expect_equal(length(results$chimeras), 24)
+  expect_equal(length(results$chimeras), 12)
   expect_equal(nrow(results$chimera_report), 100)
 })
 
@@ -99,7 +99,7 @@ test_that("test rchimeDenovo, rchimeDenovoSingleSample - errors", {
 
 test_that("test rchimeReference ", {
   fasta_data <- readRDS(rchime_example("miseq_fasta.rds"))
-  reference_data <- readRDS(rchime_example("reference.rds"))
+  reference_data <- silva_gold()
 
   results <- rchimeReference(
     sequence_name = fasta_data$sequence_name[1:100],
@@ -110,7 +110,7 @@ test_that("test rchimeReference ", {
 
   # checks to make sure the correct things are created
   expect_equal(length(results), 2)
-  expect_equal(length(results$chimeras), 24)
+  expect_equal(length(results$chimeras), 12)
   expect_equal(nrow(results$chimera_report), 100)
 })
 

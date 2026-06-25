@@ -12,7 +12,7 @@
   silent = FALSE,
   remove_chimeras = TRUE,
   rchime_options = NULL,
-  table_names = NULL
+  table_names = list(sequence_name = "sequence_name", sequence = "sequence")
 )
 }
 \arguments{
@@ -20,7 +20,7 @@
 containing your sequence data.}
 
 \item{reference}{a \href{https://mothur.org/strollur/}{strollur} dataset
-object containing reference sequence data.}
+object or a data.frame containing reference sequence data.}
 
 \item{dereplicate}{logical. The dereplicate option allows you to remove
 chimeras by sample. When \code{dereplicate=FALSE}, if a sequence is flagged as
@@ -38,7 +38,18 @@ which they are flagged as chimeric.}
 \item{rchime_options}{List, You can fine tune the vsearch specific options
 using  the [\code{\link[=rchime_options]{rchime_options()}}] function. Default = NULL.}
 
-\item{table_names, }{Only used when \code{data} is a data.frame. Default = NULL.}
+\item{table_names, }{Only used when \code{reference} is a data.frame. By default:
+
+table_names <- list(sequence_name = "sequence_name",
+sequence = "sequence")
+
+In table_names, 'sequence_name' is a string containing the name of the column
+in 'table' that contains the sequence names. Default column name is
+'sequence_name'.
+
+In table_names, 'sequence' is a string containing the name of the
+column in 'table' that contains the sequences. Default column name is
+'sequence'.}
 }
 \value{
 list() containing a chimera report, and vector of the chimeric

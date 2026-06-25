@@ -19,7 +19,7 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Sarah Westcott \email{swestcot@umich.edu} (\href{https://orcid.org/0009-0001-1529-8247}{ORCID})
+\strong{Maintainer}: Pat Schloss \email{pschloss@umich.edu} (\href{https://orcid.org/0000-0002-6935-4275}{ORCID}) [copyright holder]
 
 Authors:
 \itemize{
@@ -29,6 +29,11 @@ Authors:
 Other contributors:
 \itemize{
   \item Pat Schloss \email{pschloss@umich.edu} (\href{https://orcid.org/0000-0002-6935-4275}{ORCID}) [copyright holder]
+  \item Torbjorn Rognes \email{torognes@ifi.uio.no} [copyright holder]
+  \item Frederic Mahe \email{mahe@rhrk.uni-kl.de} [copyright holder]
+  \item Tomas Flouri \email{tomas.flouri@h-its.org} [copyright holder]
+  \item Christopher Quince \email{c.quince@warwick.ac.uk} [copyright holder]
+  \item Ben Nichols \email{b.nichols.1@research.gla.ac.uk} [copyright holder]
 }
 
 }

@@ -18,7 +18,7 @@
 #' # Read in data.frames containing sequence data
 #'
 #' fasta_data <- readRDS(rchime_example("miseq_fasta.rds"))
-#' reference_data <- readRDS(rchime_example("reference.rds"))
+#' reference_data <- silva_gold()
 #'
 #' # Detect chimeras in first 100 sequences
 #'

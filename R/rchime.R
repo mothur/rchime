@@ -6,7 +6,6 @@
 #' @title Detect and remove chimeras from your
 #'   \href{https://mothur.org/strollur/}{strollur} object or data.frame
 #'   using a denovo approach or alternatively a reference model.
-
 #' @description
 #' The `rchime()` function allows you to detect and remove chimeras from your
 #' data using a denovo approach or alternatively a reference model.
@@ -45,7 +44,7 @@
 #' @param rchime_options List, You can fine tune the vsearch specific options
 #' using  the [[rchime_options()]] function. Default = NULL.
 #' @param table_names, named list used to indicate the names of the columns in
-#' the data.frame. Only used when `data` is a data.frame.
+#' the data.frame. Only used when `data` or `reference` are a data.frames.
 #' @seealso [rchime_options()] to set vsearch specific parameters.
 #'
 #' @examples
@@ -108,7 +107,7 @@ rchime <- function(data, reference = NULL, dereplicate = TRUE,
 #' @param data a \href{https://mothur.org/strollur/}{strollur} dataset object
 #' containing your sequence data.
 #' @param reference a \href{https://mothur.org/strollur/}{strollur} dataset
-#' object containing reference sequence data.
+#' object or a data.frame containing reference sequence data.
 #' @param dereplicate logical. The dereplicate option allows you to remove
 #'  chimeras by sample. When `dereplicate=FALSE`, if a sequence is flagged as
 #'   chimeric in one sample, it is removed from all samples. Our experience
@@ -122,7 +121,18 @@ rchime <- function(data, reference = NULL, dereplicate = TRUE,
 #' @param rchime_options List, You can fine tune the vsearch specific options
 #' using  the [[rchime_options()]] function. Default = NULL.
 #' @seealso [rchime_options()] to set vsearch specific parameters.
-#' @param table_names, Only used when `data` is a data.frame. Default = NULL.
+#' @param table_names, Only used when `reference` is a data.frame. By default:
+#'
+#' table_names <- list(sequence_name = "sequence_name",
+#'                     sequence = "sequence")
+#'
+#' In table_names, 'sequence_name' is a string containing the name of the column
+#' in 'table' that contains the sequence names. Default column name is
+#' 'sequence_name'.
+#'
+#' In table_names, 'sequence' is a string containing the name of the
+#' column in 'table' that contains the sequences. Default column name is
+#'  'sequence'.
 #'
 #' @return list() containing a chimera report, and vector of the chimeric
 #' sequence's names.
@@ -150,7 +160,11 @@ rchime <- function(data, reference = NULL, dereplicate = TRUE,
 #' @export
 rchime.strollur <- function(data, reference = NULL, dereplicate = TRUE,
                             silent = FALSE, remove_chimeras = TRUE,
-                            rchime_options = NULL, table_names = NULL) {
+                            rchime_options = NULL,
+                            table_names = list(
+                                sequence_name = "sequence_name",
+                                sequence = "sequence")
+                            ) {
   if (!("strollur" %in% class(data))) {
     stop("data must be a stroller::strollur object")
   }
@@ -195,28 +209,48 @@ rchime.strollur <- function(data, reference = NULL, dereplicate = TRUE,
   }
 
   num_samples <- strollur::count(data, type = "sample")
-  # inputs needed ->
-  ## reference -> names, seqs abunds, refnames, refseqs
-  ## denovo no groups -> names, seqs, abunds
-  ## denovo with groups -> names, seqs and abunds parsed by sample
 
   results <- NULL
 
   if (!is.null(reference)) {
-    if (!("strollur" %in% class(reference))) {
-      stop("reference must be a strollur object")
+    if (!("strollur" %in% class(reference)) &&
+        !("data.frame" %in% class(reference))) {
+      stop("reference must be a strollur object or data.frame")
     }
 
     dereplicate <- FALSE
 
     # reference -> names, seqs abunds, refnames, refseqs
-    results <- rchimeReference(
-      strollur::names(data, type = "sequence"),
-      strollur::xdev_get_sequences(data, degap = TRUE),
-      strollur::names(reference, type = "sequence"),
-      strollur::xdev_get_sequences(reference, degap = TRUE),
-      parameters
-    )
+    if ("strollur" %in% class(reference)) {
+        results <- rchimeReference(
+        strollur::names(data, type = "sequence"),
+        strollur::xdev_get_sequences(data, degap = TRUE),
+        strollur::names(reference, type = "sequence"),
+        strollur::xdev_get_sequences(reference, degap = TRUE),
+        parameters
+        )
+    }else {
+        default_tn <- list(
+            sequence_name = "sequence_name",
+            sequence = "sequence"
+        )
+
+        table_names <- modifyList(default_tn, table_names)
+
+        results <- rchimeReference(
+            strollur::names(data, type = "sequence"),
+            strollur::xdev_get_sequences(data, degap = TRUE),
+            fill_required_parameters(
+                reference,
+                table_names[["sequence_name"]]
+            ),
+            gsub("[.-]", "", fill_required_parameters(
+                reference,
+                table_names[["sequence"]]
+            )),
+            parameters
+        )
+    }
   } else {
     if (!silent) {
       message <- "The denovo method runs with a single processor.\n\n"
@@ -492,11 +526,6 @@ rchime.data.frame <- function(data, reference = NULL, dereplicate = TRUE,
 
     num_samples <- strollur::count(strollur_data, type = "sample")
   }
-
-  # inputs needed ->
-  ## reference -> names, seqs abunds, refnames, refseqs
-  ## denovo no groups -> names, seqs, abunds
-  ## denovo with groups -> names, seqs and abunds parsed by sample
 
   results <- NULL
 
