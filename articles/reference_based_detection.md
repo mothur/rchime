@@ -82,7 +82,7 @@ str(reference)
 strollur_results <- rchime(strollur, reference = reference)
 #> Added a chimera_report.
 #> → rchime removed `1037` chimeras from your dataset.
-#> → It took `11.7775225639343` seconds to detect and remove the chimeras.
+#> → It took `11.8943347930908` seconds to detect and remove the chimeras.
 
 strollur
 #> rchime reference example:
@@ -109,7 +109,7 @@ strollur
 
 data_frame_results <- rchime(data_df, reference = reference)
 #> → rchime detected `1037` chimeras in your dataset.
-#> → It took `11.6933929920197` seconds to detect the chimeras.
+#> → It took `11.8837945461273` seconds to detect the chimeras.
 ```
 
 ## Results

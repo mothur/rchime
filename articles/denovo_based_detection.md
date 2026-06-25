@@ -81,7 +81,7 @@ strollur_results <- rchime(strollur)
 #> ℹ The denovo method runs with a single processor.
 #> Added a chimera_report.
 #> → rchime removed `10453` chimeras from your dataset.
-#> → It took `7.5415313243866` seconds to detect and remove the chimeras.
+#> → It took `7.74714016914368` seconds to detect and remove the chimeras.
 
 strollur
 #> rchime denovo example:
@@ -109,7 +109,7 @@ strollur
 data_frame_results <- rchime(df)
 #> ℹ The denovo method runs with a single processor.
 #> → rchime detected `10453` chimeras in your dataset.
-#> → It took `7.56900811195374` seconds to detect the chimeras.
+#> → It took `7.74418568611145` seconds to detect the chimeras.
 ```
 
 ## Results

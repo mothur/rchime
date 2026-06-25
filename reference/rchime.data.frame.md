@@ -122,5 +122,5 @@ data <- readRDS(rchime_example("miseq_data_frame_by_sample_small.rds"))
 chimera_report <- rchime(data)
 #> ℹ The denovo method runs with a single processor.
 #> → rchime detected `128` chimeras in your dataset.
-#> → It took `0.525151252746582` seconds to detect the chimeras.
+#> → It took `0.516948938369751` seconds to detect the chimeras.
 ```
