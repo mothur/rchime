@@ -214,7 +214,7 @@ rchime.strollur <- function(data, reference = NULL, dereplicate = TRUE,
 
   if (!is.null(reference)) {
     if (!("strollur" %in% class(reference)) &&
-      !("data.frame" %in% class(reference))) {
+          !("data.frame" %in% class(reference))) {
       stop("reference must be a strollur object or data.frame")
     }
 
