@@ -74,7 +74,7 @@ reference (denovo).</p>
 <span>  silent <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  remove_chimeras <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  rchime_options <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  table_names <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>  table_names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>sequence_name <span class="op">=</span> <span class="st">"sequence_name"</span>, sequence <span class="op">=</span> <span class="st">"sequence"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -89,7 +89,7 @@ containing your sequence data.</p></dd>
 
 <dt id="arg-reference">reference<a class="anchor" aria-label="anchor" href="#arg-reference"></a></dt>
 <dd><p>a <a href="https://mothur.org/strollur/" class="external-link">strollur</a> dataset
-object containing reference sequence data.</p></dd>
+object or a data.frame containing reference sequence data.</p></dd>
 
 
 <dt id="arg-dereplicate">dereplicate<a class="anchor" aria-label="anchor" href="#arg-dereplicate"></a></dt>
@@ -117,7 +117,15 @@ using  the [<code><a href="rchime_options.html">rchime_options()</a></code>] fun
 
 
 <dt id="arg-table-names-">table_names, <a class="anchor" aria-label="anchor" href="#arg-table-names-"></a></dt>
-<dd><p>Only used when <code>data</code> is a data.frame. Default = NULL.</p></dd>
+<dd><p>Only used when <code>reference</code> is a data.frame. By default:</p>
+<p>table_names &lt;- list(sequence_name = "sequence_name",
+sequence = "sequence")</p>
+<p>In table_names, 'sequence_name' is a string containing the name of the column
+in 'table' that contains the sequence names. Default column name is
+'sequence_name'.</p>
+<p>In table_names, 'sequence' is a string containing the name of the
+column in 'table' that contains the sequences. Default column name is
+'sequence'.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -162,7 +170,7 @@ Bioinformatics 27:2194.</p>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> The denovo method runs with a single processor.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Added a chimera_report.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → rchime removed `128` chimeras from your dataset.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → It took `0.486441850662231` seconds to detect and remove the chimeras.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → It took `0.506592750549316` seconds to detect and remove the chimeras.</span>
 <span class="r-in"><span><span class="va">data</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> multi sample - 500 sequences:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>

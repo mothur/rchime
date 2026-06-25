@@ -21,7 +21,7 @@ rchime(
   silent = FALSE,
   remove_chimeras = TRUE,
   rchime_options = NULL,
-  table_names = NULL
+  table_names = list(sequence_name = "sequence_name", sequence = "sequence")
 )
 ```
 
@@ -34,8 +34,8 @@ rchime(
 
 - reference:
 
-  a [strollur](https://mothur.org/strollur/) dataset object containing
-  reference sequence data.
+  a [strollur](https://mothur.org/strollur/) dataset object or a
+  data.frame containing reference sequence data.
 
 - dereplicate:
 
@@ -64,7 +64,18 @@ rchime(
 
 - table_names, :
 
-  Only used when `data` is a data.frame. Default = NULL.
+  Only used when `reference` is a data.frame. By default:
+
+  table_names \<- list(sequence_name = "sequence_name", sequence =
+  "sequence")
+
+  In table_names, 'sequence_name' is a string containing the name of the
+  column in 'table' that contains the sequence names. Default column
+  name is 'sequence_name'.
+
+  In table_names, 'sequence' is a string containing the name of the
+  column in 'table' that contains the sequences. Default column name is
+  'sequence'.
 
 ## Value
 
@@ -111,7 +122,7 @@ chimera_report <- rchime(data)
 #> ℹ The denovo method runs with a single processor.
 #> Added a chimera_report.
 #> → rchime removed `128` chimeras from your dataset.
-#> → It took `0.486441850662231` seconds to detect and remove the chimeras.
+#> → It took `0.506592750549316` seconds to detect and remove the chimeras.
 data
 #> multi sample - 500 sequences:
 #> 

@@ -65,7 +65,7 @@ rchime(
 - table_names, :
 
   named list used to indicate the names of the columns in the
-  data.frame. Only used when `data` is a data.frame.
+  data.frame. Only used when `data` or `reference` are a data.frames.
 
 ## Value
 
@@ -109,7 +109,7 @@ chimera_report <- rchime(data)
 #> ℹ The denovo method runs with a single processor.
 #> Added a chimera_report.
 #> → rchime removed `1` chimeras from your dataset.
-#> → It took `0.193159103393555` seconds to detect and remove the chimeras.
+#> → It took `0.178573369979858` seconds to detect and remove the chimeras.
 data
 #> rchime denovo example - 100 sequences:
 #> 

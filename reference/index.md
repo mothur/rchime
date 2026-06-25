@@ -32,3 +32,6 @@ helper functions
 
 - [`rchime_example()`](http://mothur.org/rchime/reference/rchime_example.md)
   : Get path to rchime example files
+
+- [`silva_gold()`](http://mothur.org/rchime/reference/silva_gold.md) :
+  silva_gold

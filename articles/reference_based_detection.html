@@ -88,41 +88,15 @@ chimeras from your dataset using a referenced based approach.
 <code><a href="../reference/rchime.html">rchime()</a></code> can be used with <a href="https://mothur.org/strollur/reference/strollur.html" class="external-link">strollur
 objects</a> or data.frames as inputs. Let’s look at examples of both
 data types using sequence data from <a href="https://mothur.org" class="external-link">mothur’s</a> <a href="https://mothur.org/wiki/miseq_sop/" class="external-link">MiSeq_SOP</a> example
-analysis, and SILVA reference sequences trimmed to our region of
-interest as the reference. <em>rchime</em> is designed to be flexible
-and you can use any reference you choose.</p>
+analysis, and the <code><a href="../reference/silva_gold.html">silva_gold()</a></code> reference sequences.
+<em>rchime</em> is designed to be flexible and you can use any reference
+you choose.</p>
 <div class="section level3">
 <h3 id="creating-strollur-objects">Creating <em><a href="https://mothur.org/strollur/" class="external-link">strollur</a></em> objects<a class="anchor" aria-label="anchor" href="#creating-strollur-objects"></a>
 </h3>
 <p>Let’s create a <a href="https://mothur.org/strollur/reference/strollur.html" class="external-link">strollur
-object</a> that contains our SILVA reference sequences.</p>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">reference</span> <span class="op">&lt;-</span> <span class="fu">strollur</span><span class="fu">::</span><span class="fu"><a href="https://mothur.org/strollur/reference/new_dataset.html" class="external-link">new_dataset</a></span><span class="op">(</span><span class="st">"Silva V4 Region"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu">strollur</span><span class="fu">::</span><span class="fu"><a href="https://mothur.org/strollur/reference/add.html" class="external-link">add</a></span><span class="op">(</span><span class="va">reference</span>,</span>
-<span>  table <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="fu"><a href="../reference/rchime_example.html">rchime_example</a></span><span class="op">(</span><span class="st">"reference.rds"</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>  type <span class="op">=</span> <span class="st">"sequence"</span></span>
-<span><span class="op">)</span></span>
-<span><span class="co">#&gt; Added 14956 sequences.</span></span>
-<span></span>
-<span><span class="va">reference</span></span>
-<span><span class="co">#&gt; Silva V4 Region:</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;             starts ends nbases ambigs polymers numns  numseqs</span></span>
-<span><span class="co">#&gt; Minimum:         1  270    270      0        3     0     1.00</span></span>
-<span><span class="co">#&gt; 2.5%-tile:       1  292    292      0        4     0   373.90</span></span>
-<span><span class="co">#&gt; 25%-tile:        1  293    293      0        4     0  3739.00</span></span>
-<span><span class="co">#&gt; Median:          1  293    293      0        4     0  7478.00</span></span>
-<span><span class="co">#&gt; 75%-tile:        1  293    293      0        5     0 11217.00</span></span>
-<span><span class="co">#&gt; 97.5%-tile:      1  294    294      1        6     1 14582.10</span></span>
-<span><span class="co">#&gt; Maximum:         1  351    351      5        9     5 14956.00</span></span>
-<span><span class="co">#&gt; Mean:            1  292    292      0        4     0  7478.14</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Number of unique seqs: 14956 </span></span>
-<span><span class="co">#&gt; Total number of seqs: 14956</span></span></code></pre></div>
-<p>Let’s create a <a href="https://mothur.org/strollur/reference/strollur.html" class="external-link">strollur
 object</a> containing the MiSeq_SOP sequences.</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fasta_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="fu"><a href="../reference/rchime_example.html">rchime_example</a></span><span class="op">(</span><span class="st">"miseq_fasta.rds"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">abundance_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="fu"><a href="../reference/rchime_example.html">rchime_example</a></span><span class="op">(</span><span class="st">"miseq_abundance.rds"</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
@@ -154,15 +128,8 @@ object</a> containing the MiSeq_SOP sequences.</p>
 <div class="section level3">
 <h3 id="loading-data-frames">Loading data.frames<a class="anchor" aria-label="anchor" href="#loading-data-frames"></a>
 </h3>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">reference_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="fu"><a href="../reference/rchime_example.html">rchime_example</a></span><span class="op">(</span><span class="st">"reference.rds"</span><span class="op">)</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">reference_data</span><span class="op">)</span></span>
-<span><span class="co">#&gt; 'data.frame':    14956 obs. of  2 variables:</span></span>
-<span><span class="co">#&gt;  $ sequence_name: chr  "AB000389.1" "AB000699.1" "AB000700.1" "AB000701.1" ...</span></span>
-<span><span class="co">#&gt;  $ sequence     : chr  "GTGCCAGCAGCCGCGGTAATACGGAGGGTGCGAGCGTTAATCGGAATTACTGGGCGTAAAGCGTACGCAGGCGGTTTGTTAAGCGAGATGTGAAAGCCCCGGGCTCAACCT"| __truncated__ "GTGCCAGCAGCCGCGGTAATACGTAGGGTGCGAGCGTTAATCGGAATTACTGGGCGTAAAGGGTGCGCAGGTGGTTTTGTAAGTCAGATGTGAAATCCCCGGGCTTAACCT"| __truncated__ "GTGCCAGCAGCCGCGGTAATACGTAGGGTGCGAGCGTTAATCGGAATTACTGGGCGTAAAGGGTGCGCAGGCGGTTTTGTAAGTCAGATGTGAAATCCCCGGGCTTAACCT"| __truncated__ "GTGCCAGCAGCCGCGGTAATACGTAGGGTGCGAGCGTTAATCGGAATTACTGGGCGTAAAGGGTGCGCAGGCGGCCTTGTAAGTCAGATGTGAAAGCCCCGGGCTTAACCT"| __truncated__ ...</span></span>
-<span></span>
-<span><span class="va">data_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="fu"><a href="../reference/rchime_example.html">rchime_example</a></span><span class="op">(</span><span class="st">"miseq_data_frame.rds"</span><span class="op">)</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">data_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="fu"><a href="../reference/rchime_example.html">rchime_example</a></span><span class="op">(</span><span class="st">"miseq_data_frame.rds"</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">data_df</span><span class="op">)</span></span>
 <span><span class="co">#&gt; 'data.frame':    6084 obs. of  3 variables:</span></span>
@@ -177,38 +144,44 @@ object</a> containing the MiSeq_SOP sequences.</p>
 <p>When removing chimeras using a reference, the potential parents are
 chosen from the set of reference sequences. Let’s use the reference to
 remove the chimeras.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">strollur_results</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/rchime.html">rchime</a></span><span class="op">(</span><span class="va">strollur</span>, reference <span class="op">=</span> <span class="va">reference</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">reference</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/silva_gold.html">silva_gold</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">reference</span><span class="op">)</span></span>
+<span><span class="co">#&gt; 'data.frame':    5181 obs. of  2 variables:</span></span>
+<span><span class="co">#&gt;  $ sequence_name: chr  "7000004128189528" "7000004128189537" "7000004128189547" "7000004128189554" ...</span></span>
+<span><span class="co">#&gt;  $ sequence     : chr  "GACGAACGCTGGCGGCGTGCTTAACACATGCAAGTCGAGCGGAAAGGCCCTTCGGGGTACTCGAGCGGCGAACGGGTGAGTAACACGTGGGCAACCTACCCCCAGCACCGG"| __truncated__ "GATGAACGCTGGCGGTATGCTTAACACATGCAAGTCGAACGGAATCTTCGGATTTAGTGGCGGACGGGTGAGTAACGCGTGAGAATCTAGCTCTAGGTCGGGGACAACCAC"| __truncated__ "ATTGAACGCTGGCGGCATGCCTTACACATGCAAGTCGAACGGTAACAGGTCTTCGGATGCTGACGAGTGGCGAACGGGTGAGTAATACATCGGAACGTGCCCGATCGTGGG"| __truncated__ "GATGAACGCTGGCGGCGTGCCTAATACATGCAAGTCGAACGAAGCATCTTCGGATGCTTAGTGGCGAACGGGTGAGTAACACGTAGATAACCTACCTTTAACTCGAGGATA"| __truncated__ ...</span></span>
+<span></span>
+<span><span class="va">strollur_results</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/rchime.html">rchime</a></span><span class="op">(</span><span class="va">strollur</span>, reference <span class="op">=</span> <span class="va">reference</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Added a chimera_report.</span></span>
-<span><span class="co">#&gt; → rchime removed `5325` chimeras from your dataset.</span></span>
-<span><span class="co">#&gt; → It took `4.12445139884949` seconds to detect and remove the chimeras.</span></span>
+<span><span class="co">#&gt; → rchime removed `1037` chimeras from your dataset.</span></span>
+<span><span class="co">#&gt; → It took `11.7775225639343` seconds to detect and remove the chimeras.</span></span>
 <span></span>
 <span><span class="va">strollur</span></span>
 <span><span class="co">#&gt; rchime reference example:</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;             starts ends nbases ambigs polymers numns   numseqs</span></span>
 <span><span class="co">#&gt; Minimum:         1  249    249      0        3     0      1.00</span></span>
-<span><span class="co">#&gt; 2.5%-tile:       1  252    252      0        4     0   3083.25</span></span>
-<span><span class="co">#&gt; 25%-tile:        1  252    252      0        4     0  30832.50</span></span>
-<span><span class="co">#&gt; Median:          1  253    253      0        4     0  61665.00</span></span>
-<span><span class="co">#&gt; 75%-tile:        1  253    253      0        5     0  92497.50</span></span>
-<span><span class="co">#&gt; 97.5%-tile:      1  254    254      0        6     0 120246.75</span></span>
-<span><span class="co">#&gt; Maximum:         1  256    256      0        8     0 123330.00</span></span>
-<span><span class="co">#&gt; Mean:            1  252    252      0        4     0  61665.14</span></span>
+<span><span class="co">#&gt; 2.5%-tile:       1  252    252      0        4     0   3190.45</span></span>
+<span><span class="co">#&gt; 25%-tile:        1  252    252      0        4     0  31904.50</span></span>
+<span><span class="co">#&gt; Median:          1  253    253      0        4     0  63809.00</span></span>
+<span><span class="co">#&gt; 75%-tile:        1  253    253      0        5     0  95713.50</span></span>
+<span><span class="co">#&gt; 97.5%-tile:      1  254    254      0        6     0 124427.55</span></span>
+<span><span class="co">#&gt; Maximum:         1  256    256      0        8     0 127618.00</span></span>
+<span><span class="co">#&gt; Mean:            1  252    252      0        4     0  63809.14</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; scrap_summary:</span></span>
 <span><span class="co">#&gt;       type      trash_code unique total</span></span>
-<span><span class="co">#&gt; 1 sequence chimeras_rchime   1662  5325</span></span>
+<span><span class="co">#&gt; 1 sequence chimeras_rchime    787  1037</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Number of unique seqs: 4422 </span></span>
-<span><span class="co">#&gt; Total number of seqs: 123330 </span></span>
+<span><span class="co">#&gt; Number of unique seqs: 5297 </span></span>
+<span><span class="co">#&gt; Total number of seqs: 127618 </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Total number of samples: 20 </span></span>
 <span><span class="co">#&gt; Total number of custom reports: 1</span></span>
 <span></span>
-<span><span class="va">data_frame_results</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/rchime.html">rchime</a></span><span class="op">(</span><span class="va">data_df</span>, reference <span class="op">=</span> <span class="va">reference_data</span><span class="op">)</span></span>
-<span><span class="co">#&gt; → rchime detected `5325` chimeras in your dataset.</span></span>
-<span><span class="co">#&gt; → It took `4.19270873069763` seconds to detect the chimeras.</span></span></code></pre></div>
+<span><span class="va">data_frame_results</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/rchime.html">rchime</a></span><span class="op">(</span><span class="va">data_df</span>, reference <span class="op">=</span> <span class="va">reference</span><span class="op">)</span></span>
+<span><span class="co">#&gt; → rchime detected `1037` chimeras in your dataset.</span></span>
+<span><span class="co">#&gt; → It took `11.6933929920197` seconds to detect the chimeras.</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="results">Results<a class="anchor" aria-label="anchor" href="#results"></a>
@@ -224,46 +197,46 @@ returned.</p>
 <p>The <a href="https://mothur.org/rchime/articles/chimera_report.html" class="external-link">chimera_report</a>
 is a data.frame with a row for each sequence in your dataset. Let’s take
 a look at the first 5 chimeric sequences in the report:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">strollur_results</span><span class="op">$</span><span class="va">chimera_report</span><span class="op">[</span></span>
 <span>  <span class="va">strollur_results</span><span class="op">$</span><span class="va">chimera_report</span><span class="op">$</span><span class="va">Chimeric_Status</span> <span class="op">==</span> <span class="st">"Y"</span>,</span>
 <span><span class="op">]</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span>
-<span><span class="co">#&gt;        Score                                        Query    ParentA    ParentB</span></span>
-<span><span class="co">#&gt; 4  0.3599476 M00967_43_000000000-A3JHG_1_2113_29036_16812 AJ404681.1 AJ400237.1</span></span>
-<span><span class="co">#&gt; 11 1.0186117  M00967_43_000000000-A3JHG_1_2108_19952_9563 AJ400266.1 AJ400236.1</span></span>
-<span><span class="co">#&gt; 14 1.9978295  M00967_43_000000000-A3JHG_1_2107_6538_14332 AJ400266.1 AB043866.1</span></span>
-<span><span class="co">#&gt; 16 2.7742347 M00967_43_000000000-A3JHG_1_1102_22525_13142 AJ400236.1 AB021159.1</span></span>
-<span><span class="co">#&gt; 18 1.6945423 M00967_43_000000000-A3JHG_1_2108_19687_26893 AB021159.1 AJ400267.1</span></span>
-<span><span class="co">#&gt;    Top_Parent        QM       QA       QB      QAB       QT LY LN LA RY RN RA</span></span>
-<span><span class="co">#&gt; 4  AJ404681.1  94.82072 92.03187 86.85259 85.25896 92.03187 22  2 11  7  0  0</span></span>
-<span><span class="co">#&gt; 11 AJ400266.1  98.80000 95.20000 91.60000 89.20000 95.20000 18  0  3  9  0  0</span></span>
-<span><span class="co">#&gt; 14 AJ400266.1  98.34711 93.38843 76.03306 69.83471 93.38843 54  0  0 15  3  1</span></span>
-<span><span class="co">#&gt; 16 AJ400236.1 100.00000 95.00000 87.91667 82.91667 95.00000 29  0  0 12  0  0</span></span>
-<span><span class="co">#&gt; 18 AB021159.1  98.38710 92.74194 85.48387 80.24194 92.74194 33  1  0 14  0  3</span></span>
-<span><span class="co">#&gt;         Div Chimeric_Status</span></span>
-<span><span class="co">#&gt; 4  2.788845               Y</span></span>
-<span><span class="co">#&gt; 11 3.600000               Y</span></span>
-<span><span class="co">#&gt; 14 4.958678               Y</span></span>
-<span><span class="co">#&gt; 16 5.000000               Y</span></span>
-<span><span class="co">#&gt; 18 5.645161               Y</span></span></code></pre></div>
+<span><span class="co">#&gt;        Score                                        Query          ParentA</span></span>
+<span><span class="co">#&gt; 14 0.3524927  M00967_43_000000000-A3JHG_1_2107_6538_14332       S000013923</span></span>
+<span><span class="co">#&gt; 18 0.4054292 M00967_43_000000000-A3JHG_1_2108_19687_26893       S000008023</span></span>
+<span><span class="co">#&gt; 21 0.3314002 M00967_43_000000000-A3JHG_1_2113_21308_17042       S000015682</span></span>
+<span><span class="co">#&gt; 23 0.3266551  M00967_43_000000000-A3JHG_1_2110_13110_1977       S000260075</span></span>
+<span><span class="co">#&gt; 30 0.6744335 M00967_43_000000000-A3JHG_1_1109_10514_23344 7000004128490675</span></span>
+<span><span class="co">#&gt;             ParentB       Top_Parent       QM       QA       QB      QAB</span></span>
+<span><span class="co">#&gt; 14       S000022285       S000022285 89.03509 80.70175 82.01754 77.63158</span></span>
+<span><span class="co">#&gt; 18 7000004128504291       S000008023 94.82072 93.22709 77.29084 77.68924</span></span>
+<span><span class="co">#&gt; 21       S000017014       S000015682 97.98387 96.37097 85.88710 84.67742</span></span>
+<span><span class="co">#&gt; 23 7000004128191216       S000260075 95.93496 94.30894 79.26829 76.42276</span></span>
+<span><span class="co">#&gt; 30 7000004131498332 7000004128490675 94.42231 88.84462 77.68924 74.10359</span></span>
+<span><span class="co">#&gt;          QT LY LN LA RY RN RA      Div Chimeric_Status</span></span>
+<span><span class="co">#&gt; 14 82.01754 22  6 14 19  0  5 7.017544               Y</span></span>
+<span><span class="co">#&gt; 18 93.22709 46  2 10  4  0  1 1.593625               Y</span></span>
+<span><span class="co">#&gt; 21 96.37097 32  2  0  4  0  3 1.612903               Y</span></span>
+<span><span class="co">#&gt; 23 94.30894 45  4  6  4  0  0 1.626016               Y</span></span>
+<span><span class="co">#&gt; 30 88.84462 45  3  3 15  1  7 5.577689               Y</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="chimeras">Chimeras<a class="anchor" aria-label="anchor" href="#chimeras"></a>
 </h3>
 <p>Results also contains a list of the names of the chimeric sequences.
 Let’s get the names of the first 10 chimeras.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">strollur_results</span><span class="op">$</span><span class="va">chimeras</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span>
-<span><span class="co">#&gt;  [1] "M00967_43_000000000-A3JHG_1_2113_29036_16812"</span></span>
-<span><span class="co">#&gt;  [2] "M00967_43_000000000-A3JHG_1_2108_19952_9563" </span></span>
-<span><span class="co">#&gt;  [3] "M00967_43_000000000-A3JHG_1_2107_6538_14332" </span></span>
-<span><span class="co">#&gt;  [4] "M00967_43_000000000-A3JHG_1_1102_22525_13142"</span></span>
-<span><span class="co">#&gt;  [5] "M00967_43_000000000-A3JHG_1_2108_19687_26893"</span></span>
-<span><span class="co">#&gt;  [6] "M00967_43_000000000-A3JHG_1_2113_21308_17042"</span></span>
-<span><span class="co">#&gt;  [7] "M00967_43_000000000-A3JHG_1_2104_24539_15751"</span></span>
-<span><span class="co">#&gt;  [8] "M00967_43_000000000-A3JHG_1_2101_14896_3554" </span></span>
-<span><span class="co">#&gt;  [9] "M00967_43_000000000-A3JHG_1_1109_10514_23344"</span></span>
-<span><span class="co">#&gt; [10] "M00967_43_000000000-A3JHG_1_1102_4170_17056"</span></span></code></pre></div>
+<span><span class="co">#&gt;  [1] "M00967_43_000000000-A3JHG_1_2107_6538_14332" </span></span>
+<span><span class="co">#&gt;  [2] "M00967_43_000000000-A3JHG_1_2108_19687_26893"</span></span>
+<span><span class="co">#&gt;  [3] "M00967_43_000000000-A3JHG_1_2113_21308_17042"</span></span>
+<span><span class="co">#&gt;  [4] "M00967_43_000000000-A3JHG_1_2110_13110_1977" </span></span>
+<span><span class="co">#&gt;  [5] "M00967_43_000000000-A3JHG_1_1109_10514_23344"</span></span>
+<span><span class="co">#&gt;  [6] "M00967_43_000000000-A3JHG_1_2111_20856_13433"</span></span>
+<span><span class="co">#&gt;  [7] "M00967_43_000000000-A3JHG_1_1110_15964_18711"</span></span>
+<span><span class="co">#&gt;  [8] "M00967_43_000000000-A3JHG_1_2101_14761_24747"</span></span>
+<span><span class="co">#&gt;  [9] "M00967_43_000000000-A3JHG_1_1114_20514_18980"</span></span>
+<span><span class="co">#&gt; [10] "M00967_43_000000000-A3JHG_1_1113_26305_21260"</span></span></code></pre></div>
 </div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

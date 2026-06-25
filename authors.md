@@ -7,9 +7,6 @@
 - **Pat Schloss**. Copyright holder, maintainer.
   [](https://orcid.org/0000-0002-6935-4275)
 
-- **Pat Schloss**. Copyright holder.
-  [](https://orcid.org/0000-0002-6935-4275)
-
 - **Torbjorn Rognes**. Copyright holder.
 
 - **Frederic Mahe**. Copyright holder.

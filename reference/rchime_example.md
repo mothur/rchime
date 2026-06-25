@@ -20,6 +20,6 @@ rchime_example(file = NULL)
 ``` r
 rchime_example()
 #> [1] "/home/runner/work/_temp/Library/rchime/extdata"
-rchime_example("reference.rds")
-#> [1] "/home/runner/work/_temp/Library/rchime/extdata/reference.rds"
+rchime_example("silva.gold.rds")
+#> [1] "/home/runner/work/_temp/Library/rchime/extdata/silva.gold.rds"
 ```

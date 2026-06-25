@@ -11,42 +11,11 @@ objects](https://mothur.org/strollur/reference/strollur.html) or
 data.frames as inputs. Let’s look at examples of both data types using
 sequence data from [mothur’s](https://mothur.org)
 [MiSeq_SOP](https://mothur.org/wiki/miseq_sop/) example analysis, and
-SILVA reference sequences trimmed to our region of interest as the
-reference. *rchime* is designed to be flexible and you can use any
-reference you choose.
+the [`silva_gold()`](http://mothur.org/rchime/reference/silva_gold.md)
+reference sequences. *rchime* is designed to be flexible and you can use
+any reference you choose.
 
 ### Creating *[strollur](https://mothur.org/strollur/)* objects
-
-Let’s create a [strollur
-object](https://mothur.org/strollur/reference/strollur.html) that
-contains our SILVA reference sequences.
-
-``` r
-
-reference <- strollur::new_dataset("Silva V4 Region")
-
-strollur::add(reference,
-  table = readRDS(rchime_example("reference.rds")),
-  type = "sequence"
-)
-#> Added 14956 sequences.
-
-reference
-#> Silva V4 Region:
-#> 
-#>             starts ends nbases ambigs polymers numns  numseqs
-#> Minimum:         1  270    270      0        3     0     1.00
-#> 2.5%-tile:       1  292    292      0        4     0   373.90
-#> 25%-tile:        1  293    293      0        4     0  3739.00
-#> Median:          1  293    293      0        4     0  7478.00
-#> 75%-tile:        1  293    293      0        5     0 11217.00
-#> 97.5%-tile:      1  294    294      1        6     1 14582.10
-#> Maximum:         1  351    351      5        9     5 14956.00
-#> Mean:            1  292    292      0        4     0  7478.14
-#> 
-#> Number of unique seqs: 14956 
-#> Total number of seqs: 14956
-```
 
 Let’s create a [strollur
 object](https://mothur.org/strollur/reference/strollur.html) containing
@@ -87,13 +56,6 @@ strollur
 
 ``` r
 
-reference_data <- readRDS(rchime_example("reference.rds"))
-
-str(reference_data)
-#> 'data.frame':    14956 obs. of  2 variables:
-#>  $ sequence_name: chr  "AB000389.1" "AB000699.1" "AB000700.1" "AB000701.1" ...
-#>  $ sequence     : chr  "GTGCCAGCAGCCGCGGTAATACGGAGGGTGCGAGCGTTAATCGGAATTACTGGGCGTAAAGCGTACGCAGGCGGTTTGTTAAGCGAGATGTGAAAGCCCCGGGCTCAACCT"| __truncated__ "GTGCCAGCAGCCGCGGTAATACGTAGGGTGCGAGCGTTAATCGGAATTACTGGGCGTAAAGGGTGCGCAGGTGGTTTTGTAAGTCAGATGTGAAATCCCCGGGCTTAACCT"| __truncated__ "GTGCCAGCAGCCGCGGTAATACGTAGGGTGCGAGCGTTAATCGGAATTACTGGGCGTAAAGGGTGCGCAGGCGGTTTTGTAAGTCAGATGTGAAATCCCCGGGCTTAACCT"| __truncated__ "GTGCCAGCAGCCGCGGTAATACGTAGGGTGCGAGCGTTAATCGGAATTACTGGGCGTAAAGGGTGCGCAGGCGGCCTTGTAAGTCAGATGTGAAAGCCCCGGGCTTAACCT"| __truncated__ ...
-
 data_df <- readRDS(rchime_example("miseq_data_frame.rds"))
 
 str(data_df)
@@ -111,37 +73,43 @@ remove the chimeras.
 
 ``` r
 
+reference <- silva_gold()
+str(reference)
+#> 'data.frame':    5181 obs. of  2 variables:
+#>  $ sequence_name: chr  "7000004128189528" "7000004128189537" "7000004128189547" "7000004128189554" ...
+#>  $ sequence     : chr  "GACGAACGCTGGCGGCGTGCTTAACACATGCAAGTCGAGCGGAAAGGCCCTTCGGGGTACTCGAGCGGCGAACGGGTGAGTAACACGTGGGCAACCTACCCCCAGCACCGG"| __truncated__ "GATGAACGCTGGCGGTATGCTTAACACATGCAAGTCGAACGGAATCTTCGGATTTAGTGGCGGACGGGTGAGTAACGCGTGAGAATCTAGCTCTAGGTCGGGGACAACCAC"| __truncated__ "ATTGAACGCTGGCGGCATGCCTTACACATGCAAGTCGAACGGTAACAGGTCTTCGGATGCTGACGAGTGGCGAACGGGTGAGTAATACATCGGAACGTGCCCGATCGTGGG"| __truncated__ "GATGAACGCTGGCGGCGTGCCTAATACATGCAAGTCGAACGAAGCATCTTCGGATGCTTAGTGGCGAACGGGTGAGTAACACGTAGATAACCTACCTTTAACTCGAGGATA"| __truncated__ ...
+
 strollur_results <- rchime(strollur, reference = reference)
 #> Added a chimera_report.
-#> → rchime removed `5325` chimeras from your dataset.
-#> → It took `4.12445139884949` seconds to detect and remove the chimeras.
+#> → rchime removed `1037` chimeras from your dataset.
+#> → It took `11.7775225639343` seconds to detect and remove the chimeras.
 
 strollur
 #> rchime reference example:
 #> 
 #>             starts ends nbases ambigs polymers numns   numseqs
 #> Minimum:         1  249    249      0        3     0      1.00
-#> 2.5%-tile:       1  252    252      0        4     0   3083.25
-#> 25%-tile:        1  252    252      0        4     0  30832.50
-#> Median:          1  253    253      0        4     0  61665.00
-#> 75%-tile:        1  253    253      0        5     0  92497.50
-#> 97.5%-tile:      1  254    254      0        6     0 120246.75
-#> Maximum:         1  256    256      0        8     0 123330.00
-#> Mean:            1  252    252      0        4     0  61665.14
+#> 2.5%-tile:       1  252    252      0        4     0   3190.45
+#> 25%-tile:        1  252    252      0        4     0  31904.50
+#> Median:          1  253    253      0        4     0  63809.00
+#> 75%-tile:        1  253    253      0        5     0  95713.50
+#> 97.5%-tile:      1  254    254      0        6     0 124427.55
+#> Maximum:         1  256    256      0        8     0 127618.00
+#> Mean:            1  252    252      0        4     0  63809.14
 #> 
 #> scrap_summary:
 #>       type      trash_code unique total
-#> 1 sequence chimeras_rchime   1662  5325
+#> 1 sequence chimeras_rchime    787  1037
 #> 
-#> Number of unique seqs: 4422 
-#> Total number of seqs: 123330 
+#> Number of unique seqs: 5297 
+#> Total number of seqs: 127618 
 #> 
 #> Total number of samples: 20 
 #> Total number of custom reports: 1
 
-data_frame_results <- rchime(data_df, reference = reference_data)
-#> → rchime detected `5325` chimeras in your dataset.
-#> → It took `4.19270873069763` seconds to detect the chimeras.
+data_frame_results <- rchime(data_df, reference = reference)
+#> → rchime detected `1037` chimeras in your dataset.
+#> → It took `11.6933929920197` seconds to detect the chimeras.
 ```
 
 ## Results
@@ -164,24 +132,24 @@ a look at the first 5 chimeric sequences in the report:
 strollur_results$chimera_report[
   strollur_results$chimera_report$Chimeric_Status == "Y",
 ] |> head(n = 5)
-#>        Score                                        Query    ParentA    ParentB
-#> 4  0.3599476 M00967_43_000000000-A3JHG_1_2113_29036_16812 AJ404681.1 AJ400237.1
-#> 11 1.0186117  M00967_43_000000000-A3JHG_1_2108_19952_9563 AJ400266.1 AJ400236.1
-#> 14 1.9978295  M00967_43_000000000-A3JHG_1_2107_6538_14332 AJ400266.1 AB043866.1
-#> 16 2.7742347 M00967_43_000000000-A3JHG_1_1102_22525_13142 AJ400236.1 AB021159.1
-#> 18 1.6945423 M00967_43_000000000-A3JHG_1_2108_19687_26893 AB021159.1 AJ400267.1
-#>    Top_Parent        QM       QA       QB      QAB       QT LY LN LA RY RN RA
-#> 4  AJ404681.1  94.82072 92.03187 86.85259 85.25896 92.03187 22  2 11  7  0  0
-#> 11 AJ400266.1  98.80000 95.20000 91.60000 89.20000 95.20000 18  0  3  9  0  0
-#> 14 AJ400266.1  98.34711 93.38843 76.03306 69.83471 93.38843 54  0  0 15  3  1
-#> 16 AJ400236.1 100.00000 95.00000 87.91667 82.91667 95.00000 29  0  0 12  0  0
-#> 18 AB021159.1  98.38710 92.74194 85.48387 80.24194 92.74194 33  1  0 14  0  3
-#>         Div Chimeric_Status
-#> 4  2.788845               Y
-#> 11 3.600000               Y
-#> 14 4.958678               Y
-#> 16 5.000000               Y
-#> 18 5.645161               Y
+#>        Score                                        Query          ParentA
+#> 14 0.3524927  M00967_43_000000000-A3JHG_1_2107_6538_14332       S000013923
+#> 18 0.4054292 M00967_43_000000000-A3JHG_1_2108_19687_26893       S000008023
+#> 21 0.3314002 M00967_43_000000000-A3JHG_1_2113_21308_17042       S000015682
+#> 23 0.3266551  M00967_43_000000000-A3JHG_1_2110_13110_1977       S000260075
+#> 30 0.6744335 M00967_43_000000000-A3JHG_1_1109_10514_23344 7000004128490675
+#>             ParentB       Top_Parent       QM       QA       QB      QAB
+#> 14       S000022285       S000022285 89.03509 80.70175 82.01754 77.63158
+#> 18 7000004128504291       S000008023 94.82072 93.22709 77.29084 77.68924
+#> 21       S000017014       S000015682 97.98387 96.37097 85.88710 84.67742
+#> 23 7000004128191216       S000260075 95.93496 94.30894 79.26829 76.42276
+#> 30 7000004131498332 7000004128490675 94.42231 88.84462 77.68924 74.10359
+#>          QT LY LN LA RY RN RA      Div Chimeric_Status
+#> 14 82.01754 22  6 14 19  0  5 7.017544               Y
+#> 18 93.22709 46  2 10  4  0  1 1.593625               Y
+#> 21 96.37097 32  2  0  4  0  3 1.612903               Y
+#> 23 94.30894 45  4  6  4  0  0 1.626016               Y
+#> 30 88.84462 45  3  3 15  1  7 5.577689               Y
 ```
 
 ### Chimeras
@@ -192,14 +160,14 @@ Let’s get the names of the first 10 chimeras.
 ``` r
 
 strollur_results$chimeras |> head(n = 10)
-#>  [1] "M00967_43_000000000-A3JHG_1_2113_29036_16812"
-#>  [2] "M00967_43_000000000-A3JHG_1_2108_19952_9563" 
-#>  [3] "M00967_43_000000000-A3JHG_1_2107_6538_14332" 
-#>  [4] "M00967_43_000000000-A3JHG_1_1102_22525_13142"
-#>  [5] "M00967_43_000000000-A3JHG_1_2108_19687_26893"
-#>  [6] "M00967_43_000000000-A3JHG_1_2113_21308_17042"
-#>  [7] "M00967_43_000000000-A3JHG_1_2104_24539_15751"
-#>  [8] "M00967_43_000000000-A3JHG_1_2101_14896_3554" 
-#>  [9] "M00967_43_000000000-A3JHG_1_1109_10514_23344"
-#> [10] "M00967_43_000000000-A3JHG_1_1102_4170_17056"
+#>  [1] "M00967_43_000000000-A3JHG_1_2107_6538_14332" 
+#>  [2] "M00967_43_000000000-A3JHG_1_2108_19687_26893"
+#>  [3] "M00967_43_000000000-A3JHG_1_2113_21308_17042"
+#>  [4] "M00967_43_000000000-A3JHG_1_2110_13110_1977" 
+#>  [5] "M00967_43_000000000-A3JHG_1_1109_10514_23344"
+#>  [6] "M00967_43_000000000-A3JHG_1_2111_20856_13433"
+#>  [7] "M00967_43_000000000-A3JHG_1_1110_15964_18711"
+#>  [8] "M00967_43_000000000-A3JHG_1_2101_14761_24747"
+#>  [9] "M00967_43_000000000-A3JHG_1_1114_20514_18980"
+#> [10] "M00967_43_000000000-A3JHG_1_1113_26305_21260"
 ```

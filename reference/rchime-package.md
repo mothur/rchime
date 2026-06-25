@@ -15,8 +15,8 @@ Useful links:
 
 ## Author
 
-**Maintainer**: Sarah Westcott <swestcot@umich.edu>
-([ORCID](https://orcid.org/0009-0001-1529-8247))
+**Maintainer**: Pat Schloss <pschloss@umich.edu>
+([ORCID](https://orcid.org/0000-0002-6935-4275)) \[copyright holder\]
 
 Authors:
 
@@ -27,3 +27,13 @@ Other contributors:
 
 - Pat Schloss <pschloss@umich.edu>
   ([ORCID](https://orcid.org/0000-0002-6935-4275)) \[copyright holder\]
+
+- Torbjorn Rognes <torognes@ifi.uio.no> \[copyright holder\]
+
+- Frederic Mahe <mahe@rhrk.uni-kl.de> \[copyright holder\]
+
+- Tomas Flouri <tomas.flouri@h-its.org> \[copyright holder\]
+
+- Christopher Quince <c.quince@warwick.ac.uk> \[copyright holder\]
+
+- Ben Nichols <b.nichols.1@research.gla.ac.uk> \[copyright holder\]
