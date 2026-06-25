@@ -17,22 +17,9 @@ knitr::opts_chunk$set(
 
 ## Overview
 
-The `rchime()` function allows you to detect and remove chimeras from your dataset using a referenced based approach. `rchime()` can be used with [strollur objects](https://mothur.org/strollur/reference/strollur.html) or data.frames as inputs. Let's look at examples of both data types using sequence data from [mothur's](https://mothur.org) [MiSeq_SOP](https://mothur.org/wiki/miseq_sop/) example analysis, and SILVA reference sequences trimmed to our region of interest as the reference. *rchime* is designed to be flexible and you can use any reference you choose. 
+The `rchime()` function allows you to detect and remove chimeras from your dataset using a referenced based approach. `rchime()` can be used with [strollur objects](https://mothur.org/strollur/reference/strollur.html) or data.frames as inputs. Let's look at examples of both data types using sequence data from [mothur's](https://mothur.org) [MiSeq_SOP](https://mothur.org/wiki/miseq_sop/) example analysis, and the `silva_gold()` reference sequences. *rchime* is designed to be flexible and you can use any reference you choose. 
 
 ### Creating *[strollur](https://mothur.org/strollur/)* objects
-
-Let's create a [strollur object](https://mothur.org/strollur/reference/strollur.html) that contains our SILVA reference sequences.
-
-```{r}
-reference <- strollur::new_dataset("Silva V4 Region")
-
-strollur::add(reference,
-  table = readRDS(rchime_example("reference.rds")),
-  type = "sequence"
-)
-
-reference
-```
 
 Let's create a [strollur object](https://mothur.org/strollur/reference/strollur.html) containing the MiSeq_SOP sequences.
 
@@ -51,10 +38,6 @@ strollur
 ### Loading data.frames
 
 ```{r}
-reference_data <- readRDS(rchime_example("reference.rds"))
-
-str(reference_data)
-
 data_df <- readRDS(rchime_example("miseq_data_frame.rds"))
 
 str(data_df)
@@ -65,11 +48,14 @@ str(data_df)
 When removing chimeras using a reference, the potential parents are chosen from the set of reference sequences. Let's use the reference to remove the chimeras.
 
 ```{r}
+reference <- silva_gold()
+str(reference)
+
 strollur_results <- rchime(strollur, reference = reference)
 
 strollur
 
-data_frame_results <- rchime(data_df, reference = reference_data)
+data_frame_results <- rchime(data_df, reference = reference)
 ```
 
 ## Results

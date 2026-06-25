@@ -162,9 +162,9 @@ rchime.strollur <- function(data, reference = NULL, dereplicate = TRUE,
                             silent = FALSE, remove_chimeras = TRUE,
                             rchime_options = NULL,
                             table_names = list(
-                                sequence_name = "sequence_name",
-                                sequence = "sequence")
-                            ) {
+                              sequence_name = "sequence_name",
+                              sequence = "sequence"
+                            )) {
   if (!("strollur" %in% class(data))) {
     stop("data must be a stroller::strollur object")
   }
@@ -222,34 +222,34 @@ rchime.strollur <- function(data, reference = NULL, dereplicate = TRUE,
 
     # reference -> names, seqs abunds, refnames, refseqs
     if ("strollur" %in% class(reference)) {
-        results <- rchimeReference(
+      results <- rchimeReference(
         strollur::names(data, type = "sequence"),
         strollur::xdev_get_sequences(data, degap = TRUE),
         strollur::names(reference, type = "sequence"),
         strollur::xdev_get_sequences(reference, degap = TRUE),
         parameters
-        )
-    }else {
-        default_tn <- list(
-            sequence_name = "sequence_name",
-            sequence = "sequence"
-        )
+      )
+    } else {
+      default_tn <- list(
+        sequence_name = "sequence_name",
+        sequence = "sequence"
+      )
 
-        table_names <- modifyList(default_tn, table_names)
+      table_names <- modifyList(default_tn, table_names)
 
-        results <- rchimeReference(
-            strollur::names(data, type = "sequence"),
-            strollur::xdev_get_sequences(data, degap = TRUE),
-            fill_required_parameters(
-                reference,
-                table_names[["sequence_name"]]
-            ),
-            gsub("[.-]", "", fill_required_parameters(
-                reference,
-                table_names[["sequence"]]
-            )),
-            parameters
-        )
+      results <- rchimeReference(
+        strollur::names(data, type = "sequence"),
+        strollur::xdev_get_sequences(data, degap = TRUE),
+        fill_required_parameters(
+          reference,
+          table_names[["sequence_name"]]
+        ),
+        gsub("[.-]", "", fill_required_parameters(
+          reference,
+          table_names[["sequence"]]
+        )),
+        parameters
+      )
     }
   } else {
     if (!silent) {

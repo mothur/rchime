@@ -63,8 +63,9 @@ test_that("test rchime by reference - strollur", {
   data <- strollur::load_dataset(rchime_example("strollur_miseq_tiny.rds"))
 
   chimera_report <- rchime(data,
-                           reference = silva_gold(),
-                           remove_chimeras = FALSE)
+    reference = silva_gold(),
+    remove_chimeras = FALSE
+  )
 
   # checks to make sure the correct things are created
   expect_equal(length(chimera_report), 2)

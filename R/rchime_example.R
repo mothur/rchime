@@ -7,7 +7,7 @@
 #' @export
 #' @examples
 #' rchime_example()
-#' rchime_example("silva_gold.rds")
+#' rchime_example("silva.gold.rds")
 rchime_example <- function(file = NULL) {
   path <- ""
 
