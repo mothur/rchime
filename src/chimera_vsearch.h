@@ -88,7 +88,6 @@ class ChimeraVsearch {
 
 public:
 
-    // dereplicate, processors, silent
     ChimeraVsearch(std::vector<std::vector<std::string>>& sequenceNames,
                    std::vector<std::vector<std::string>>& sequences,
                    std::vector<std::vector<float>>& abundances,

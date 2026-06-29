@@ -17,7 +17,6 @@ test_that("test rchime - errors and rchime_options", {
   chimera_report <- rchime(data,
     reference = reference_ob,
     remove_chimeras = FALSE,
-    silent = FALSE,
     rchime_options = options
   )
 
@@ -50,7 +49,7 @@ test_that("test rchime - errors and rchime_options", {
   chimera_report <- rchime(data,
     reference = reference_ob,
     rchime_options = options,
-    silent = TRUE
+    verbose = FALSE
   )
 
   # checks to make sure the correct things are created
@@ -145,7 +144,7 @@ test_that("test rchime denovo - strollur - single sample ", {
     rchime_example("strollur_single_sample_tiny.rds")
   )
 
-  chimera_report <- rchime(data, silent = TRUE)
+  chimera_report <- rchime(data, verbose = FALSE)
 
   # checks to make sure the correct things are created
   expect_equal(length(chimera_report), 2)
@@ -157,7 +156,7 @@ test_that("test rchime denovo -strollur/mulitple samples, dereplicate = TRUE", {
   data <- strollur::load_dataset(
     rchime_example("strollur_multi_sample_small.rds")
   )
-  chimera_report <- rchime(data, silent = TRUE)
+  chimera_report <- rchime(data, verbose = FALSE)
 
   # checks to make sure the correct things are created
   expect_equal(length(chimera_report), 2)
@@ -262,7 +261,7 @@ test_that("test rchime denovo strollur/mulitple samples, dereplicate = FALSE", {
   )
 
   options <- rchime_options(dereplicate = FALSE)
-  chimera_report <- rchime(data, silent = TRUE, rchime_options = options)
+  chimera_report <- rchime(data, verbose = FALSE, rchime_options = options)
 
   # checks to make sure the correct things are created
   expect_equal(length(chimera_report), 2)

@@ -27,7 +27,7 @@ test_that("test rchime - errors", {
     data = fasta_data[1:100, ],
     reference = reference_data,
     rchime_options = options,
-    silent = TRUE
+    verbose = FALSE
   )
 
   # checks to make sure the correct things are created
@@ -105,7 +105,7 @@ test_that("test rchime denovo - strollur - single sample ", {
 
   data <- readRDS(rchime_example("miseq_data_frame.rds"))
 
-  chimera_report <- rchime(data, silent = TRUE)
+  chimera_report <- rchime(data, verbose = FALSE)
 
   # checks to make sure the correct things are created
   expect_equal(length(chimera_report), 2)
@@ -115,7 +115,7 @@ test_that("test rchime denovo - strollur - single sample ", {
 
 test_that("test rchime denovo -strollur/mulitple samples, dereplicate = TRUE", {
   data <- readRDS(rchime_example("miseq_data_frame_by_sample_small.rds"))
-  chimera_report <- rchime(data, dereplicate = TRUE, silent = TRUE)
+  chimera_report <- rchime(data, dereplicate = TRUE, verbose = FALSE)
 
   # checks to make sure the correct things are created
   expect_equal(length(chimera_report), 3)
@@ -208,7 +208,7 @@ test_that("test rchime denovo strollur/mulitple samples, dereplicate = FALSE", {
   data <- readRDS(rchime_example("miseq_data_frame_by_sample_small.rds"))
 
   options <- rchime_options(dereplicate = FALSE)
-  chimera_report <- rchime(data, silent = TRUE, rchime_options = options)
+  chimera_report <- rchime(data, verbose = FALSE, rchime_options = options)
 
   # checks to make sure the correct things are created
   expect_equal(length(chimera_report), 2)

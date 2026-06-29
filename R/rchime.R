@@ -38,11 +38,11 @@
 #'   sample. For a more conservative approach, we recommend using the default
 #'   `dereplicate=TRUE` which will only remove sequences from the samples in
 #'   which they are flagged as chimeric.
-#' @param remove_chimeras Boolean, remove chimeras from dataset. Default = TRUE.
-#'   Only used when `data` is a strollur object.
-#' @param silent Boolean, suppress console outputs. Default = FALSE.
+#' @param remove_chimeras Boolean, remove chimeras from dataset. Default =
+#'   `TRUE`. Only used when `data` is a strollur object.
+#' @param verbose logical, allow console outputs. Default = `TRUE`.
 #' @param rchime_options List, You can fine tune the vsearch specific options
-#' using  the [[rchime_options()]] function. Default = NULL.
+#' using  the [[rchime_options()]] function. Default = `NULL`.
 #' @param table_names, named list used to indicate the names of the columns in
 #' the data.frame. Only used when `data` or `reference` are a data.frames.
 #' @seealso [rchime_options()] to set vsearch specific parameters.
@@ -68,7 +68,7 @@
 #' @author Sarah Westcott, \email{swestcot@@umich.edu}
 #' @export
 rchime <- function(data, reference = NULL, dereplicate = TRUE,
-                   silent = FALSE, remove_chimeras = TRUE,
+                   verbose = TRUE, remove_chimeras = TRUE,
                    rchime_options = NULL,
                    table_names = list(
                      sequence_name = "sequence_name",
@@ -116,8 +116,9 @@ rchime <- function(data, reference = NULL, dereplicate = TRUE,
 #'   sample. For a more conservative approach, we recommend using the default
 #'   `dereplicate=TRUE` which will only remove sequences from the samples in
 #'   which they are flagged as chimeric.
-#' @param remove_chimeras Boolean, remove chimeras from dataset. Default = TRUE.
-#' @param silent Boolean, suppress console outputs. Default = FALSE.
+#' @param remove_chimeras logical, remove chimeras from dataset. Default =
+#'   `TRUE`.
+#' @param verbose logical, allow console outputs. Default = `TRUE`.
 #' @param rchime_options List, You can fine tune the vsearch specific options
 #' using  the [[rchime_options()]] function. Default = NULL.
 #' @seealso [rchime_options()] to set vsearch specific parameters.
@@ -159,7 +160,7 @@ rchime <- function(data, reference = NULL, dereplicate = TRUE,
 #' @import cli
 #' @export
 rchime.strollur <- function(data, reference = NULL, dereplicate = TRUE,
-                            silent = FALSE, remove_chimeras = TRUE,
+                            verbose = TRUE, remove_chimeras = TRUE,
                             rchime_options = NULL,
                             table_names = list(
                               sequence_name = "sequence_name",
@@ -252,7 +253,7 @@ rchime.strollur <- function(data, reference = NULL, dereplicate = TRUE,
       )
     }
   } else {
-    if (!silent) {
+    if (verbose) {
       message <- "The denovo method runs with a single processor.\n\n"
       cli::cli_alert_info(message)
     }
@@ -285,7 +286,7 @@ rchime.strollur <- function(data, reference = NULL, dereplicate = TRUE,
     type = "report",
     report_type = "chimera_report",
     table_names = list(sequence_name = "Query"),
-    verbose = !silent
+    verbose = verbose
   )
 
   # remove chimeras
@@ -315,7 +316,7 @@ rchime.strollur <- function(data, reference = NULL, dereplicate = TRUE,
     }
   }
 
-  if (!silent) {
+  if (verbose) {
     if (remove_chimeras) {
       after_count <- strollur::count(data, type = "sequence")
       if (after_count < num_seqs) {
@@ -396,7 +397,7 @@ rchime.strollur <- function(data, reference = NULL, dereplicate = TRUE,
 #'   sample. For a more conservative approach, we recommend using the default
 #'   `dereplicate=TRUE` which will only remove sequences from the samples in
 #'   which they are flagged as chimeric.
-#' @param silent Boolean, suppress console outputs. Default = FALSE.
+#' @param verbose logical, allow console outputs. Default = `TRUE`.
 #' @param remove_chimeras Only used when `data` is a strollur object.
 #' @param rchime_options List, You can fine tune the vsearch specific options
 #' using  the [[rchime_options()]] function. Default = NULL.
@@ -442,7 +443,7 @@ rchime.strollur <- function(data, reference = NULL, dereplicate = TRUE,
 #' @import cli
 #' @export
 rchime.data.frame <- function(data, reference = NULL, dereplicate = TRUE,
-                              silent = FALSE, remove_chimeras = NULL,
+                              verbose = TRUE, remove_chimeras = NULL,
                               rchime_options = NULL,
                               table_names = list(
                                 sequence_name = "sequence_name",
@@ -557,7 +558,7 @@ rchime.data.frame <- function(data, reference = NULL, dereplicate = TRUE,
       parameters
     )
   } else {
-    if (!silent) {
+    if (verbose) {
       message <- "The denovo method runs with a single processor.\n\n"
       cli::cli_alert_info(message)
     }
@@ -593,7 +594,7 @@ rchime.data.frame <- function(data, reference = NULL, dereplicate = TRUE,
     }
   }
 
-  if (!silent) {
+  if (verbose) {
     # report detected
     if ((dereplicate) && (num_samples != 0)) {
       after_count <- sum(unlist(results$set_abundance_values$abundance))
@@ -631,7 +632,7 @@ rchime.data.frame <- function(data, reference = NULL, dereplicate = TRUE,
 # =============================================================================#
 #' @export
 rchime.default <- function(data, reference = NULL, dereplicate = TRUE,
-                           silent = FALSE, remove_chimeras = TRUE,
+                           verbose = TRUE, remove_chimeras = TRUE,
                            rchime_options = NULL, table_names = list(
                              sequence_name = "sequence_name",
                              sequence = "sequence",

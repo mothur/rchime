@@ -28,7 +28,6 @@ Authors:
 
 Other contributors:
 \itemize{
-  \item Pat Schloss \email{pschloss@umich.edu} (\href{https://orcid.org/0000-0002-6935-4275}{ORCID}) [copyright holder]
   \item Torbjorn Rognes \email{torognes@ifi.uio.no} [copyright holder]
   \item Frederic Mahe \email{mahe@rhrk.uni-kl.de} [copyright holder]
   \item Tomas Flouri \email{tomas.flouri@h-its.org} [copyright holder]

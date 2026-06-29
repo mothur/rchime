@@ -9,7 +9,7 @@
   data,
   reference = NULL,
   dereplicate = TRUE,
-  silent = FALSE,
+  verbose = TRUE,
   remove_chimeras = TRUE,
   rchime_options = NULL,
   table_names = list(sequence_name = "sequence_name", sequence = "sequence")
@@ -31,9 +31,10 @@ sample. For a more conservative approach, we recommend using the default
 \code{dereplicate=TRUE} which will only remove sequences from the samples in
 which they are flagged as chimeric.}
 
-\item{silent}{Boolean, suppress console outputs. Default = FALSE.}
+\item{verbose}{logical, allow console outputs. Default = \code{TRUE}.}
 
-\item{remove_chimeras}{Boolean, remove chimeras from dataset. Default = TRUE.}
+\item{remove_chimeras}{logical, remove chimeras from dataset. Default =
+\code{TRUE}.}
 
 \item{rchime_options}{List, You can fine tune the vsearch specific options
 using  the [\code{\link[=rchime_options]{rchime_options()}}] function. Default = NULL.}
