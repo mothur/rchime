@@ -25,9 +25,7 @@ Imports:
     parallelly,
     RcppThread,
     utils
-Depends: Rcpp, R (>= 4.5.0), strollur
-Remotes: 
-    mothur/strollur
+Depends: Rcpp, R (>= 4.5.0), strollur(>= 0.1.2)
 Suggests: 
     knitr,
     rmarkdown,
