@@ -16,7 +16,7 @@ rchime(
   data,
   reference = NULL,
   dereplicate = TRUE,
-  silent = FALSE,
+  verbose = TRUE,
   remove_chimeras = TRUE,
   rchime_options = NULL,
   table_names = list(sequence_name = "sequence_name", sequence = "sequence", abundance =
@@ -47,20 +47,20 @@ rchime(
   default `dereplicate=TRUE` which will only remove sequences from the
   samples in which they are flagged as chimeric.
 
-- silent:
+- verbose:
 
-  Boolean, suppress console outputs. Default = FALSE.
+  logical, allow console outputs. Default = `TRUE`.
 
 - remove_chimeras:
 
-  Boolean, remove chimeras from dataset. Default = TRUE. Only used when
-  `data` is a strollur object.
+  Boolean, remove chimeras from dataset. Default = `TRUE`. Only used
+  when `data` is a strollur object.
 
 - rchime_options:
 
   List, You can fine tune the vsearch specific options using the
   \[[`rchime_options()`](http://mothur.org/rchime/reference/rchime_options.md)\]
-  function. Default = NULL.
+  function. Default = `NULL`.
 
 - table_names, :
 
@@ -109,7 +109,7 @@ chimera_report <- rchime(data)
 #> ℹ The denovo method runs with a single processor.
 #> Added a chimera_report.
 #> → rchime removed `1` chimeras from your dataset.
-#> → It took `0.184472799301147` seconds to detect and remove the chimeras.
+#> → It took `0.178561925888062` seconds to detect and remove the chimeras.
 data
 #> rchime denovo example - 100 sequences:
 #> 

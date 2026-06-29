@@ -18,7 +18,7 @@ rchime(
   data,
   reference = NULL,
   dereplicate = TRUE,
-  silent = FALSE,
+  verbose = TRUE,
   remove_chimeras = TRUE,
   rchime_options = NULL,
   table_names = list(sequence_name = "sequence_name", sequence = "sequence")
@@ -48,13 +48,13 @@ rchime(
   default `dereplicate=TRUE` which will only remove sequences from the
   samples in which they are flagged as chimeric.
 
-- silent:
+- verbose:
 
-  Boolean, suppress console outputs. Default = FALSE.
+  logical, allow console outputs. Default = `TRUE`.
 
 - remove_chimeras:
 
-  Boolean, remove chimeras from dataset. Default = TRUE.
+  logical, remove chimeras from dataset. Default = `TRUE`.
 
 - rchime_options:
 
@@ -122,7 +122,7 @@ chimera_report <- rchime(data)
 #> ℹ The denovo method runs with a single processor.
 #> Added a chimera_report.
 #> → rchime removed `128` chimeras from your dataset.
-#> → It took `0.516316175460815` seconds to detect and remove the chimeras.
+#> → It took `0.500089168548584` seconds to detect and remove the chimeras.
 data
 #> multi sample - 500 sequences:
 #> 

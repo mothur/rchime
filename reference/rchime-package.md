@@ -25,9 +25,6 @@ Authors:
 
 Other contributors:
 
-- Pat Schloss <pschloss@umich.edu>
-  ([ORCID](https://orcid.org/0000-0002-6935-4275)) \[copyright holder\]
-
 - Torbjorn Rognes <torognes@ifi.uio.no> \[copyright holder\]
 
 - Frederic Mahe <mahe@rhrk.uni-kl.de> \[copyright holder\]

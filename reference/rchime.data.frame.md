@@ -18,7 +18,7 @@ rchime(
   data,
   reference = NULL,
   dereplicate = TRUE,
-  silent = FALSE,
+  verbose = TRUE,
   remove_chimeras = NULL,
   rchime_options = NULL,
   table_names = list(sequence_name = "sequence_name", sequence = "sequence", abundance =
@@ -47,9 +47,9 @@ rchime(
   `dereplicate=TRUE` which will only remove sequences from the samples
   in which they are flagged as chimeric.
 
-- silent:
+- verbose:
 
-  Boolean, suppress console outputs. Default = FALSE.
+  logical, allow console outputs. Default = `TRUE`.
 
 - remove_chimeras:
 
@@ -122,5 +122,5 @@ data <- readRDS(rchime_example("miseq_data_frame_by_sample_small.rds"))
 chimera_report <- rchime(data)
 #> ℹ The denovo method runs with a single processor.
 #> → rchime detected `128` chimeras in your dataset.
-#> → It took `0.516948938369751` seconds to detect the chimeras.
+#> → It took `0.49864935874939` seconds to detect the chimeras.
 ```
