@@ -751,6 +751,8 @@ auto Vsearch_Searchcore::joinhits(struct searchinfo_s * si_plus,
   free_rejected_alignments(si_minus);
 
   /* last, sort the hits */
-  std::qsort(hits.data(), counter, sizeof(struct hit), hit_compare_byid);
+  if (counter > 0 && hits.data() != nullptr) {
+    std::qsort(hits.data(), counter, sizeof(struct hit), hit_compare_byid);
+  }
 }
 /******************************************************************************/

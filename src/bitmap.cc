@@ -68,17 +68,26 @@ auto Vsearch_Bitmap::init(unsigned int const size) -> struct bitmap_s *
   constexpr auto divider = 8U;
   constexpr auto padding = divider - 1U;
   const auto minimal_size = (size + padding) / divider;
+
+  // Pad the allocation up to the next multiple of 16 bytes to satisfy SSSE3 vector reads
+  const auto padded_size = ((minimal_size + 15U) / 16U) * 16U;
+
   auto * a_bitmap = static_cast<struct bitmap_s *>(util.xmalloc(sizeof(struct bitmap_s)));
   a_bitmap->size = size;
-  a_bitmap->bitmap = static_cast<unsigned char *>(util.xmalloc(minimal_size));
+  a_bitmap->bitmap = static_cast<unsigned char *>(util.xmalloc(padded_size));
   return a_bitmap;
 }
 /******************************************************************************/
 auto Vsearch_Bitmap::reset_all(struct bitmap_s * a_bitmap) -> void
 {
-  constexpr auto n_bits_in_a_byte = 8U;
-  const auto size_in_bytes = (a_bitmap->size + n_bits_in_a_byte - 1) / n_bits_in_a_byte;
-  std::memset(a_bitmap->bitmap, 0, size_in_bytes);
+    constexpr auto divider = 8U;
+    constexpr auto padding = divider - 1U;
+    const auto minimal_size = (a_bitmap->size + padding) / divider;
+
+    // Pad the allocation up to the next multiple of 16 bytes to satisfy SSSE3 vector reads
+    const auto padded_size = ((minimal_size + 15U) / 16U) * 16U;
+
+    std::memset(a_bitmap->bitmap, 0, padded_size);
 }
 
 /******************************************************************************/
