@@ -208,10 +208,30 @@ void Vsearch_Cpu::increment_counters_from_bitmap_sse2(count_t * counters,
 
   auto * p = (unsigned short *) (bitmap);
   auto * q = (__m128i *) (counters);
-  const auto r = (totalbits + 15) / 16;
+  //const auto r = (totalbits + 15) / 16;
 
-  for (auto j = 0U; j < r; j++)
-    {
+  // 1. Calculate how many blocks can be processed via SIMD without over-reading.
+  // We can only load a 16-byte block if there are at least 16 bytes remaining.
+  // The total size of the bitmap array in bytes is: (totalbits + 7) / 8
+  unsigned int const total_bytes = (totalbits + 7U) / 8U;
+  unsigned int simd_iterations = 0U;
+
+  if (total_bytes >= 16U) {
+      // Each SIMD loop advances 'p' by 16 bytes (since sizeof(__m128i) is 16).
+      // So we can run until the remaining space is less than 16 bytes.
+      simd_iterations = ((total_bytes - 16U) / 2U) + 1U;
+  }
+
+  // Ensure we don't accidentally overshoot totalbits chunks
+  unsigned int const max_chunks = (totalbits + 15U) / 16U;
+  if (simd_iterations > max_chunks) {
+      simd_iterations = max_chunks;
+  }
+
+  unsigned int j = 0U;
+
+  // 2. Optimized SIMD Loop for safe blocks
+  for (; j < simd_iterations; j++) {
       const auto xmm0 = _mm_loadu_si128((__m128i *) p++);
 #if defined(__SSSE3__) || defined(SSSE3) || defined(SIMDE_VERSION)
       const auto xmm1 = _mm_shuffle_epi8(xmm0, c1);
@@ -229,6 +249,22 @@ void Vsearch_Cpu::increment_counters_from_bitmap_sse2(count_t * counters,
       *q = _mm_subs_epi16(*q, xmm5);
       ++q;
     }
+
+  // 3. Precise Scalar Fallback Loop for the remaining tail sequences
+  // This explicitly reads bit-by-bit, strictly respecting ASan boundaries.
+  unsigned int const processed_elements = j * 16U;
+  auto * counters_scalar = (unsigned short *) q;
+
+  for (auto i = processed_elements; i < totalbits; ++i)
+  {
+      if (bitmap[i >> 3U] & (1U << (i & 7U)))
+      {
+          if (counters_scalar[i - processed_elements] < 65535U) // Check saturation limit
+          {
+              counters_scalar[i - processed_elements]++;
+          }
+      }
+  }
 }
 
 #else
