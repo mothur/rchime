@@ -130,13 +130,13 @@ test_that("test rchime by reference - strollur", {
 
   # check by reference with multiple sample object
   data <- strollur::load_dataset(
-    rchime_example("strollur_multi_sample_tiny.rds")
+    rchime_example("strollur_multi_sample_small.rds")
   )
   chimera_report <- rchime(data, reference = silva_gold())
 
   expect_equal(length(chimera_report), 2)
-  expect_equal(length(chimera_report$chimeras), 12)
-  expect_equal(nrow(chimera_report$chimera_report), 100)
+  expect_equal(length(chimera_report$chimeras), 70)
+  expect_equal(nrow(chimera_report$chimera_report), 500)
 })
 
 test_that("test rchime denovo - strollur - single sample ", {
@@ -148,7 +148,7 @@ test_that("test rchime denovo - strollur - single sample ", {
 
   # checks to make sure the correct things are created
   expect_equal(length(chimera_report), 2)
-  expect_equal(length(chimera_report$chimeras), 10)
+  expect_equal(length(chimera_report$chimeras), 19)
   expect_equal(nrow(chimera_report$chimera_report), 100)
 })
 

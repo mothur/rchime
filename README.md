@@ -11,6 +11,7 @@ coverage](https://codecov.io/gh/mothur/rchime/graph/badge.svg)](https://app.code
 
 [![pkgdown](https://github.com/mothur/rchime/actions/workflows/pkgdown.yaml/badge.svg)](https://github.com/mothur/rchime/actions/workflows/pkgdown.yaml)
 <!-- [![CRAN status](https://www.r-pkg.org/badges/version/rchime)](https://CRAN.R-project.org/package=rchime) -->
+<!--[![CRAN downloads](https://cranlogs.r-pkg.org/badges/rchime)](https://CRAN.R-project.org/package=rchime) -->
 <!-- badges: end -->
 
 ## Overview
@@ -63,9 +64,9 @@ strollur::assign(data, table = abundance_data, type = "sequence_abundance")
 
 chimera_report <- rchime(data)
 #> ℹ The denovo method runs with a single processor.
-#> Added a chimera_report.
+#> Added a chimera_report report.
 #> → rchime removed `10453` chimeras from your dataset.
-#> → It took `4.33471512794495` seconds to detect and remove the chimeras.
+#> → It took `4.23106694221497` seconds to detect and remove the chimeras.
 
 data
 #> rchime denovo example:
