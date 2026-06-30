@@ -182,7 +182,11 @@ auto Vsearch_DBIndex::prepare() -> void
       kmerhash[i] = sum;
       if (kmercount[i] >= bitmap_mincount)
         {
-          kmerbitmap[i] = bitmap->init(seqcount + 127); // pad for xmm
+          // Calculate a size that is cleanly aligned to 16-byte blocks
+          // to completely satisfy ASan container-overflow checks.
+          // pad for xmm
+          unsigned int aligned_seqcount = ((seqcount + 127 + 15) / 16) * 16;
+          kmerbitmap[i] = bitmap->init(aligned_seqcount);
           bitmap->reset_all(kmerbitmap[i]);
         }
       else
