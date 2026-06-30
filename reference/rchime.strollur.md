@@ -120,11 +120,11 @@ data <- strollur::load_dataset(
 
 chimera_report <- rchime(data)
 #> ℹ The denovo method runs with a single processor.
-#> Added a chimera_report.
+#> Added a chimera_report report.
 #> → rchime removed `128` chimeras from your dataset.
-#> → It took `0.500089168548584` seconds to detect and remove the chimeras.
+#> → It took `0.492601633071899` seconds to detect and remove the chimeras.
 data
-#> multi sample - 500 sequences:
+#> miseq_multi_sample - 500:
 #> 
 #>             starts ends nbases ambigs polymers numns numseqs
 #> Minimum:         1  250    250      0        3     0    1.00

@@ -55,9 +55,9 @@ strollur::assign(data, table = abundance_data, type = "sequence_abundance")
 
 results <- rchime(data, dereplicate = TRUE)
 #> ℹ The denovo method runs with a single processor.
-#> Added a chimera_report.
+#> Added a chimera_report report.
 #> → rchime removed `10453` chimeras from your dataset.
-#> → It took `7.61661958694458` seconds to detect and remove the chimeras.
+#> → It took `7.51209139823914` seconds to detect and remove the chimeras.
 
 
 results <- strollur::new_dataset("rchime denovo example") |>
@@ -70,9 +70,9 @@ results <- strollur::new_dataset("rchime denovo example") |>
 #> Added 6084 sequences.
 #> Assigned 6084 sequence abundances.
 #> ℹ The denovo method runs with a single processor.
-#> Added a chimera_report.
+#> Added a chimera_report report.
 #> → rchime removed `10453` chimeras from your dataset.
-#> → It took `7.48763918876648` seconds to detect and remove the chimeras.
+#> → It took `7.45971846580505` seconds to detect and remove the chimeras.
 
 results$chimera_report[60:70, ]
 #>         Score                                        Query
