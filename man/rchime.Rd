@@ -64,10 +64,10 @@ This function uses code from the
 }
 \examples{
 
-# Let's use a strollur object with 100 sequences
+# Let's use a strollur object with 500 sequences
 
 data <- strollur::load_dataset(
-  rchime_example("strollur_multi_sample_tiny.rds")
+  rchime_example("strollur_multi_sample_small.rds")
 )
 
 chimera_report <- rchime(data)
