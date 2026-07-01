@@ -1,7 +1,5 @@
 # rchime
 
-[![pkgdown](https://github.com/mothur/rchime/actions/workflows/pkgdown.yaml/badge.svg)](https://github.com/mothur/rchime/actions/workflows/pkgdown.yaml)
-
 ## Overview
 
 The *rchime* package allows you to detect and remove chimeras from your
@@ -60,7 +58,7 @@ chimera_report <- rchime(data)
 #> ℹ The denovo method runs with a single processor.
 #> Added a chimera_report report.
 #> → rchime removed `10453` chimeras from your dataset.
-#> → It took `4.23106694221497` seconds to detect and remove the chimeras.
+#> → It took `4.22217392921448` seconds to detect and remove the chimeras.
 
 data
 #> rchime denovo example:
