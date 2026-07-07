@@ -50,11 +50,10 @@ jobs:
           upload-snapshots: true
           build_args: 'c("--no-manual","--compact-vignettes=gs+qpdf")'
 
- # New parallel job block dedicated to testing on a native Debian OS container
+  # New parallel job block dedicated to testing on a native Debian OS container
   Debian-check:
     runs-on: ubuntu-latest
     container:
-      # Official rocker image built directly on top of Debian Stable
       image: rocker/r-ver:latest
 
     name: debian-linux (release)
@@ -62,8 +61,9 @@ jobs:
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
       R_KEEP_PKG_SOURCE: yes
-      # Triggers your configure file's conditional block to strip non-portable flags!
       _R_CHECK_LIMIT_CORES_: "true"
+      # Forces R-lib actions to utilize isolated library pathways
+      R_LIBS_USER: "/usr/local/lib/R/site-library"
 
     steps:
       - name: Install System Dependencies
@@ -77,6 +77,16 @@ jobs:
             pandoc
 
       - uses: actions/checkout@v4
+
+      # FIX STEP: Purges conflicting package footprints and bootstraps pak natively
+      - name: Bootstrap Clean Package Installer
+        run: |
+          Rscript -e '
+            if (file.exists("/usr/local/lib/R/site-library/pak")) {
+              unlink("/usr/local/lib/R/site-library/pak", recursive = TRUE)
+            }
+            install.packages("pak", repos = sprintf("https://github.io", "cran", R.version$os))
+          '
 
       # Uses standard R-lib tools to load and resolve package dependencies inside the Debian layer
       - uses: r-lib/actions/setup-r-dependencies@v2
