@@ -49,3 +49,42 @@ jobs:
         with:
           upload-snapshots: true
           build_args: 'c("--no-manual","--compact-vignettes=gs+qpdf")'
+
+ # New parallel job block dedicated to testing on a native Debian OS container
+  Debian-check:
+    runs-on: ubuntu-latest
+    container:
+      # Official rocker image built directly on top of Debian Stable
+      image: rocker/r-ver:latest
+
+    name: debian-linux (release)
+
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+      R_KEEP_PKG_SOURCE: yes
+      # Triggers your configure file's conditional block to strip non-portable flags!
+      _R_CHECK_LIMIT_CORES_: "true"
+
+    steps:
+      - name: Install System Dependencies
+        run: |
+          apt-get update
+          apt-get install -y --no-install-recommends \
+            libcurl4-openssl-dev \
+            libssl-dev \
+            libxml2-dev \
+            git \
+            pandoc
+
+      - uses: actions/checkout@v4
+
+      # Uses standard R-lib tools to load and resolve package dependencies inside the Debian layer
+      - uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          extra-packages: any::rcmdcheck, mothur/strollur, any::RcppXsimd
+          needs: check
+
+      - uses: r-lib/actions/check-r-package@v2
+        with:
+          upload-snapshots: true
+          build_args: 'c("--no-manual","--compact-vignettes=gs+qpdf")'
