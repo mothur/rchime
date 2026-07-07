@@ -204,7 +204,7 @@ test_that("test rchime de novo -data.frame/mult samples, dereplicate = TRUE", {
   expect_equal(chimera_report$chimera_report[[7, 16]], 5)
 })
 
-test_that("test rchime de novo strollur/mulitple samples, dereplicate = FALSE", {
+test_that("test rchime de novo strollur/mulitple samples, dereplicate FALSE", {
   data <- readRDS(rchime_example("miseq_data_frame_by_sample_small.rds"))
 
   options <- rchime_options(dereplicate = FALSE)

@@ -151,8 +151,8 @@ rchime <- function(data, reference = NULL, dereplicate = TRUE,
 #'   rchime_example("strollur_multi_sample_small.rds")
 #' )
 #'
-#' # Detect and remove chimeras from the dataset using de novo approach by sample
-#' # (recommended)
+#' # Detect and remove chimeras from the dataset using de novo approach by
+#' # sample (recommended)
 #'
 #' chimera_report <- rchime(data)
 #' data

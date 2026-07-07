@@ -152,7 +152,7 @@ test_that("test rchime de novo - strollur - single sample ", {
   expect_equal(nrow(chimera_report$chimera_report), 100)
 })
 
-test_that("test rchime de novo -strollur/mulitple samples, dereplicate = TRUE", {
+test_that("test rchime de novo -strollur/mulitple samples, dereplicate TRUE", {
   data <- strollur::load_dataset(
     rchime_example("strollur_multi_sample_small.rds")
   )
