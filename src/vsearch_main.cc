@@ -1431,7 +1431,7 @@ auto Vsearch_Main::vmain(std::vector<std::string>& sequenceNames,
    }
 #endif
 
-  // are we running with a reference, or denovo
+  // are we running with a reference, or de novo
   uchimeDeNovo = (refNames.size() == 0);
 
   queryNames = &sequenceNames;

@@ -4,7 +4,7 @@
 \alias{rchime}
 \title{Detect and remove chimeras from your
 \href{https://mothur.org/strollur/}{strollur} object or data.frame
-using a denovo approach or alternatively a reference model.}
+using a de novo approach or alternatively a reference model.}
 \usage{
 rchime(
   data,
@@ -54,10 +54,10 @@ is added.
 }
 \description{
 The \code{rchime()} function allows you to detect and remove chimeras from your
-data using a denovo approach or alternatively a reference model.
+data using a de novo approach or alternatively a reference model.
 
 Our preferred way of doing this is to use the abundant sequences as our
-reference (denovo).
+reference (de novo).
 
 This function uses code from the
 \href{https://github.com/torognes/vsearch}{vsearch} tools.

@@ -1,3 +1,12 @@
+## Resubmission - 0.1.0
+
+- Updates date field.
+    - The Date field is over a month old.
+- Corrects misspelled denovo to de novo.
+    - Possibly misspelled words in DESCRIPTION:
+        - Amplicon (3:40, 17:51)
+        - denovo (17:103)
+
 ## Initial Submission - 0.1.0
 
 Intial CRAN submission.

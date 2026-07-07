@@ -18,8 +18,8 @@
 #'  only removed from the sample they are found to be chimeric in.
 #'  Default = `TRUE`.
 #'
-#' @param abskew Float, the minimum abundance skew (denovo only). Default = 2.0.
-#'               abskew <- min (abund(parent1), abund(parent2)) / abund(query)
+#' @param abskew Float, the minimum abundance skew (de novo only).
+#'  Default = 2.0. abskew <- min (abund(parent1), abund(parent2)) / abund(query)
 #' @param minh Float, Mininum score to report chimera. Default 0.28. Values from
 #'     0.1 to 5 might be reasonable. Lower values increase sensitivity
 #'    but may report more false positives. If you decrease --xn,

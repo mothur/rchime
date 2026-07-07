@@ -1,8 +1,8 @@
 ---
-title: "Denovo Chimera Detection"
+title: "De novo Chimera Detection"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Denovo Chimera Detection}
+  %\VignetteIndexEntry{De novo Chimera Detection}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -17,7 +17,7 @@ knitr::opts_chunk$set(
 
 ## Overview
 
-The `rchime()` function allows you to detect and remove chimeric sequences using the dataset as it's own reference (denovo). The denovo approach is our preferred method for removing chimeras. `rchime()` can be used with [strollur objects](https://mothur.org/strollur/reference/strollur.html) or data.frames as inputs. Let's look at examples of both data types using sequence data from [mothur's](https://mothur.org) [MiSeq_SOP](https://mothur.org/wiki/miseq_sop/) example analysis. 
+The `rchime()` function allows you to detect and remove chimeric sequences using the dataset as it's own reference (de novo). The denovo approach is our preferred method for removing chimeras. `rchime()` can be used with [strollur objects](https://mothur.org/strollur/reference/strollur.html) or data.frames as inputs. Let's look at examples of both data types using sequence data from [mothur's](https://mothur.org) [MiSeq_SOP](https://mothur.org/wiki/miseq_sop/) example analysis. 
 
 ### Creating *[strollur](https://mothur.org/strollur/)* objects
 
@@ -25,7 +25,7 @@ The `rchime()` function allows you to detect and remove chimeric sequences using
 fasta_data <- readRDS(rchime_example("miseq_fasta.rds"))
 abundance_data <- readRDS(rchime_example("miseq_abundance.rds"))
 
-strollur <- strollur::new_dataset("rchime denovo example")
+strollur <- strollur::new_dataset("rchime de novo example")
 
 strollur::add(strollur, table = fasta_data, type = "sequence")
 strollur::assign(strollur, table = abundance_data, type = "sequence_abundance")
@@ -43,9 +43,9 @@ str(df)
 
 ## Removing chimeras
 
-When removing chimeras using the denovo method, the potential parents are chosen from more abundant sequences in your dataset. 
+When removing chimeras using the de novo method, the potential parents are chosen from more abundant sequences in your dataset. 
 
-Before we remove the chimeras let's discuss the `dereplicate` parameter. When `dereplicate=FALSE`, if a sequence is flagged as chimeric in one sample, it is removed from all samples. Our experience suggests that this is a bit aggressive since we’ve seen rare sequences get flagged as chimeric when they’re the most abundant sequence in another sample. For a more conservative approach, we recommend using the default `dereplicate=TRUE` which will only remove sequences from the samples in which they are flagged as chimeric. Let's use the denovo method to remove the chimeras.
+Before we remove the chimeras let's discuss the `dereplicate` parameter. When `dereplicate=FALSE`, if a sequence is flagged as chimeric in one sample, it is removed from all samples. Our experience suggests that this is a bit aggressive since we’ve seen rare sequences get flagged as chimeric when they’re the most abundant sequence in another sample. For a more conservative approach, we recommend using the default `dereplicate=TRUE` which will only remove sequences from the samples in which they are flagged as chimeric. Let's use the de novo method to remove the chimeras.
 
 ```{r}
 strollur_results <- rchime(strollur)

@@ -139,7 +139,7 @@ test_that("test rchime by reference - strollur", {
   expect_equal(nrow(chimera_report$chimera_report), 500)
 })
 
-test_that("test rchime denovo - strollur - single sample ", {
+test_that("test rchime de novo - strollur - single sample ", {
   data <- strollur::load_dataset(
     rchime_example("strollur_single_sample_tiny.rds")
   )
@@ -152,7 +152,7 @@ test_that("test rchime denovo - strollur - single sample ", {
   expect_equal(nrow(chimera_report$chimera_report), 100)
 })
 
-test_that("test rchime denovo -strollur/mulitple samples, dereplicate = TRUE", {
+test_that("test rchime de novo -strollur/mulitple samples, dereplicate = TRUE", {
   data <- strollur::load_dataset(
     rchime_example("strollur_multi_sample_small.rds")
   )
@@ -255,7 +255,7 @@ test_that("test rchime denovo -strollur/mulitple samples, dereplicate = TRUE", {
   expect_equal(chimera_report$chimera_report[[7, 16]], 5)
 })
 
-test_that("test rchime denovo strollur/mulitple samples, dereplicate = FALSE", {
+test_that("test rchime de novo strollur/mulitple samples, dereplicate FALSE", {
   data <- strollur::load_dataset(
     rchime_example("strollur_multi_sample_small.rds")
   )

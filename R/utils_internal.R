@@ -2,6 +2,8 @@
 #'
 #' This function generates and saves the .rds strollur objects to inst/extdata.
 #' @return Invisible NULL
+#' @noRd
+#' @keywords internal
 generate_strollur_objects <- function() {
   output_dir <- "/Users/swestcot/Desktop/rchime/inst/extdata"
 

@@ -26,8 +26,8 @@ groups. If dereplicate is set to TRUE, sequences found to be chimeric are
 only removed from the sample they are found to be chimeric in.
 Default = \code{TRUE}.}
 
-\item{abskew}{Float, the minimum abundance skew (denovo only). Default = 2.0.
-abskew <- min (abund(parent1), abund(parent2)) / abund(query)}
+\item{abskew}{Float, the minimum abundance skew (de novo only).
+Default = 2.0. abskew <- min (abund(parent1), abund(parent2)) / abund(query)}
 
 \item{minh}{Float, Mininum score to report chimera. Default 0.28. Values from
 0.1 to 5 might be reasonable. Lower values increase sensitivity

@@ -5,13 +5,13 @@
 #' @rdname rchime
 #' @title Detect and remove chimeras from your
 #'   \href{https://mothur.org/strollur/}{strollur} object or data.frame
-#'   using a denovo approach or alternatively a reference model.
+#'   using a de novo approach or alternatively a reference model.
 #' @description
 #' The `rchime()` function allows you to detect and remove chimeras from your
-#' data using a denovo approach or alternatively a reference model.
+#' data using a de novo approach or alternatively a reference model.
 #'
 #' Our preferred way of doing this is to use the abundant sequences as our
-#' reference (denovo).
+#' reference (de novo).
 #'
 #' This function uses code from the
 #'  \href{https://github.com/torognes/vsearch}{vsearch} tools.
@@ -86,10 +86,10 @@ rchime <- function(data, reference = NULL, dereplicate = TRUE,
 #' @rdname rchime.strollur
 #' @description
 #' The `rchime()` function allows you to detect and remove chimeras from your
-#' data using a denovo approach or alternatively a reference model.
+#' data using a de novo approach or alternatively a reference model.
 #'
 #' Our preferred way of doing this is to use the abundant sequences as our
-#' reference (denovo).
+#' reference (de novo).
 #'
 #' This function uses code from the
 #'  \href{https://github.com/torognes/vsearch}{vsearch} tools.
@@ -151,7 +151,7 @@ rchime <- function(data, reference = NULL, dereplicate = TRUE,
 #'   rchime_example("strollur_multi_sample_small.rds")
 #' )
 #'
-#' # Detect and remove chimeras from the dataset using denovo approach by sample
+#' # Detect and remove chimeras from the dataset using de novo approach by sample
 #' # (recommended)
 #'
 #' chimera_report <- rchime(data)
@@ -254,11 +254,11 @@ rchime.strollur <- function(data, reference = NULL, dereplicate = TRUE,
     }
   } else {
     if (verbose) {
-      message <- "The denovo method runs with a single processor.\n\n"
+      message <- "The de novo method runs with a single processor.\n\n"
       cli::cli_alert_info(message)
     }
     if (num_samples == 0) {
-      # denovo no groups -> names, seqs, abunds
+      # de novo no groups -> names, seqs, abunds
       results <- rchimeDenovoSingleSample(
         strollur::names(data, type = "sequence"),
         strollur::xdev_get_sequences(data, degap = TRUE),
@@ -266,7 +266,7 @@ rchime.strollur <- function(data, reference = NULL, dereplicate = TRUE,
         parameters
       )
     } else {
-      # denovo with groups -> names, seqs and abunds parsed by sample
+      # de novo with groups -> names, seqs and abunds parsed by sample
       results <- rchimeDenovo(
         strollur::xdev_get_by_sample(data),
         strollur::xdev_get_by_sample(
@@ -369,10 +369,10 @@ rchime.strollur <- function(data, reference = NULL, dereplicate = TRUE,
 #' @rdname rchime.data.frame
 #' @description
 #' The `rchime()` function allows you to detect chimeras from your
-#' data using a denovo approach or alternatively a reference model.
+#' data using a de novo approach or alternatively a reference model.
 #'
 #' Our preferred way of doing this is to use the abundant sequences as our
-#' reference (denovo).
+#' reference (de novo).
 #'
 #' This function uses code from the
 #'  \href{https://github.com/torognes/vsearch}{vsearch} tools.
@@ -433,7 +433,7 @@ rchime.strollur <- function(data, reference = NULL, dereplicate = TRUE,
 #' @author Sarah Westcott, \email{swestcot@@umich.edu}
 #' @examples
 #'
-#' # Detect chimeras from the dataset using denovo approach by sample
+#' # Detect chimeras from the dataset using de novo approach by sample
 #' # (recommended)
 #'
 #' data <- readRDS(rchime_example("miseq_data_frame_by_sample_small.rds"))
@@ -559,11 +559,11 @@ rchime.data.frame <- function(data, reference = NULL, dereplicate = TRUE,
     )
   } else {
     if (verbose) {
-      message <- "The denovo method runs with a single processor.\n\n"
+      message <- "The de novo method runs with a single processor.\n\n"
       cli::cli_alert_info(message)
     }
     if (num_samples == 0) {
-      # denovo no groups -> names, seqs, abunds
+      # de novo no groups -> names, seqs, abunds
       results <- rchimeDenovoSingleSample(
         fill_required_parameters(data, table_names[["sequence_name"]]),
         gsub("[.-]", "", fill_required_parameters(
@@ -574,7 +574,7 @@ rchime.data.frame <- function(data, reference = NULL, dereplicate = TRUE,
         parameters
       )
     } else {
-      # denovo with groups -> names, seqs and abunds parsed by sample
+      # de novo with groups -> names, seqs and abunds parsed by sample
       results <- rchimeDenovo(
         strollur::xdev_get_by_sample(strollur_data),
         strollur::xdev_get_by_sample(

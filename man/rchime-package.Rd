@@ -7,7 +7,7 @@
 \description{
 \if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
 
-Detect and remove chimeras from your Amplicon Sequence Analysis using reference based or denovo approaches.
+Detect and remove chimeras from your Amplicon Sequence Analysis using reference based or de novo approaches.
 }
 \seealso{
 Useful links:

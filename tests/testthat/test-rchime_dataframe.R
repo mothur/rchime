@@ -100,7 +100,7 @@ test_that("test rchime by reference - data.frame", {
   expect_equal(chimera_report$chimera_report[[3, 16]], 23)
 })
 
-test_that("test rchime denovo - data.frame - single sample ", {
+test_that("test rchime de novo - data.frame - single sample ", {
   # no need to check dereplicate since one sample
 
   data <- readRDS(rchime_example("miseq_data_frame.rds"))
@@ -113,7 +113,7 @@ test_that("test rchime denovo - data.frame - single sample ", {
   expect_equal(nrow(chimera_report$chimera_report), 100)
 })
 
-test_that("test rchime denovo -data.frame/mult samples, dereplicate = TRUE", {
+test_that("test rchime de novo -data.frame/mult samples, dereplicate = TRUE", {
   data <- readRDS(rchime_example("miseq_data_frame_by_sample_small.rds"))
   chimera_report <- rchime(data, dereplicate = TRUE, verbose = FALSE)
 
@@ -204,7 +204,7 @@ test_that("test rchime denovo -data.frame/mult samples, dereplicate = TRUE", {
   expect_equal(chimera_report$chimera_report[[7, 16]], 5)
 })
 
-test_that("test rchime denovo strollur/mulitple samples, dereplicate = FALSE", {
+test_that("test rchime de novo strollur/mulitple samples, dereplicate = FALSE", {
   data <- readRDS(rchime_example("miseq_data_frame_by_sample_small.rds"))
 
   options <- rchime_options(dereplicate = FALSE)

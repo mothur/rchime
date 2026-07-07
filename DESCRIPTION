@@ -2,7 +2,7 @@ Package: rchime
 Type: Package
 Title: Detect and Remove Chimeras from Amplicon Sequence Analysis Data 
 Version: 0.1.0
-Date: 2026-06-02
+Date: 2026-07-07
 Authors@R: c(
   person("Sarah", "Westcott", , "swestcot@umich.edu", role = c("aut"),
   comment = c(ORCID = "0009-0001-1529-8247")),
@@ -14,7 +14,7 @@ Authors@R: c(
   person("Christopher", "Quince", , "c.quince@warwick.ac.uk", role = c("cph")),
   person("Ben", "Nichols", , "b.nichols.1@research.gla.ac.uk", role = c("cph")))
 Maintainer: Pat Schloss <pschloss@umich.edu>
-Description: Detect and remove chimeras from your Amplicon Sequence Analysis using reference based or denovo approaches. 
+Description: Detect and remove chimeras from your Amplicon Sequence Analysis using reference based or de novo approaches. 
 URL: https://github.com/mothur/rchime, https://mothur.org/rchime/ 
 BugReports: https://github.com/mothur/rchime/issues
 License: GPL (>= 3)

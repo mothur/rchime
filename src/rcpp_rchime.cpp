@@ -108,11 +108,11 @@ Rcpp::List rchimeReference(std::vector<std::string> sequence_name,
     return results;
 }
 // ============================================================================
-//' @title Detects chimeras using a denovo approach
+//' @title Detects chimeras using a de novo approach
 //' @name rchimeDenovoSingleSample
 //' @rdname rchimeDenovoSingleSample
 //'
-//' @description detects chimeras in your data using a denovo approach.
+//' @description detects chimeras in your data using a de novo approach.
 //'
 //' @param sequence_name, vector of strings containing sequence names
 //' @param sequence, vector of strings containing sequence nucleotide data
@@ -204,7 +204,7 @@ Rcpp::List rchimeDenovoSingleSample(std::vector<std::string> sequence_name,
     return results;
 }
 // ============================================================================
-//' @title Detects chimeras using a denovo method processing by sample.
+//' @title Detects chimeras using a de novo method processing by sample.
 //' @name rchimeDenovo
 //' @rdname rchimeDenovo
 //'
@@ -228,7 +228,7 @@ Rcpp::List rchimeDenovoSingleSample(std::vector<std::string> sequence_name,
 //'                         abundance = abundance[1])
 //'
 //' @seealso [rchime()]
-//' @description detects chimeras from your data using a denovo method processing by sample.
+//' @description detects chimeras from your data using a de novo method processing by sample.
 //' @returns list()
 //' @keywords internal
 //' @noRd

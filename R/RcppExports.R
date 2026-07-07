@@ -34,11 +34,11 @@ rchimeReference <- function(sequence_name, sequence, reference_name, reference_s
     .Call(`_rchime_rchimeReference`, sequence_name, sequence, reference_name, reference_sequence, options)
 }
 
-#' @title Detects chimeras using a denovo approach
+#' @title Detects chimeras using a de novo approach
 #' @name rchimeDenovoSingleSample
 #' @rdname rchimeDenovoSingleSample
 #'
-#' @description detects chimeras in your data using a denovo approach.
+#' @description detects chimeras in your data using a de novo approach.
 #'
 #' @param sequence_name, vector of strings containing sequence names
 #' @param sequence, vector of strings containing sequence nucleotide data
@@ -65,7 +65,7 @@ rchimeDenovoSingleSample <- function(sequence_name, sequence, abundance, options
     .Call(`_rchime_rchimeDenovoSingleSample`, sequence_name, sequence, abundance, options)
 }
 
-#' @title Detects chimeras using a denovo method processing by sample.
+#' @title Detects chimeras using a de novo method processing by sample.
 #' @name rchimeDenovo
 #' @rdname rchimeDenovo
 #'
@@ -89,7 +89,7 @@ rchimeDenovoSingleSample <- function(sequence_name, sequence, abundance, options
 #'                         abundance = abundance[1])
 #'
 #' @seealso [rchime()]
-#' @description detects chimeras from your data using a denovo method processing by sample.
+#' @description detects chimeras from your data using a de novo method processing by sample.
 #' @returns list()
 #' @keywords internal
 #' @noRd

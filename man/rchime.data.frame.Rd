@@ -66,17 +66,17 @@ returned.
 }
 \description{
 The \code{rchime()} function allows you to detect chimeras from your
-data using a denovo approach or alternatively a reference model.
+data using a de novo approach or alternatively a reference model.
 
 Our preferred way of doing this is to use the abundant sequences as our
-reference (denovo).
+reference (de novo).
 
 This function uses code from the
 \href{https://github.com/torognes/vsearch}{vsearch} tools.
 }
 \examples{
 
-# Detect chimeras from the dataset using denovo approach by sample
+# Detect chimeras from the dataset using de novo approach by sample
 # (recommended)
 
 data <- readRDS(rchime_example("miseq_data_frame_by_sample_small.rds"))

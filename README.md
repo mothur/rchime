@@ -18,8 +18,8 @@ coverage](https://codecov.io/gh/mothur/rchime/graph/badge.svg)](https://app.code
 ## Overview
 
 The *rchime* package allows you to detect and remove chimeras from your
-dataset using a denovo approach or alternatively a reference model. This
-package uses code from the
+dataset using a de novo approach or alternatively a reference model.
+This package uses code from the
 [vsearch](https://github.com/torognes/vsearch) tools.
 
 - `rchime()` detect and remove chimeras from your
@@ -49,14 +49,14 @@ objects or data.frames as inputs. Let’s create a
 [strollur::strollur](https://mothur.org/strollur/reference/strollur.html)
 object using files from [mothur’s](https://mothur.org)
 [Miseq_SOP](https://mothur.org/wiki/miseq_sop/) example analysis. Then
-we will use the *denovo* method in `rchime()` to detect and remove the
+we will use the *de novo* method in `rchime()` to detect and remove the
 chimeras from the dataset.
 
 ``` r
 fasta_data <- readRDS(rchime_example("miseq_fasta.rds"))
 abundance_data <- readRDS(rchime_example("miseq_abundance.rds"))
 
-data <- strollur::new_dataset("rchime denovo example")
+data <- strollur::new_dataset("rchime de novo example")
 
 strollur::add(data, table = fasta_data, type = "sequence")
 #> Added 6084 sequences.
@@ -67,10 +67,10 @@ chimera_report <- rchime(data)
 #> ℹ The denovo method runs with a single processor.
 #> Added a chimera_report report.
 #> → rchime removed `10453` chimeras from your dataset.
-#> → It took `4.22217392921448` seconds to detect and remove the chimeras.
+#> → It took `4.26320099830627` seconds to detect and remove the chimeras.
 
 data
-#> rchime denovo example:
+#> rchime de novo example:
 #> 
 #>             starts ends nbases ambigs polymers numns   numseqs
 #> Minimum:         1  249    249      0        3     0      1.00
