@@ -1,9 +1,2 @@
-# Default flags for standard Windows x86_64 targets
-XSIMD_WINDOWS_FLAGS = -msse2
-
-# Safely strip Intel-specific flags if building for Windows ARM64 (aarch64)
-ifeq ($(TARGET),aarch64-w64-mingw32)
-  XSIMD_WINDOWS_FLAGS =
-endif
-
-PKG_CXXFLAGS = $(XSIMD_WINDOWS_FLAGS) -D_HAS_STD_BYTE=0
+# src/Makevars.win
+PKG_CXXFLAGS = -D_HAS_STD_BYTE=0

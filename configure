@@ -1,9 +1,15 @@
 #!/bin/sh
 
-# Get SIMD flags from RcppXsimd
-XSIMD_FLAGS=`"${R_HOME}/bin/Rscript" -e "cat(RcppXsimd::getSSEFlags(), RcppXsimd::getNEONFlags())"`
+# Detect standard R check environments
+if [ -n "$_R_CHECK_LIMIT_CORES_" ] || [ "$NOT_CRAN" = "false" ]; then
+    # CRAN compliance mode: Clear all non-portable flags entirely
+    XSIMD_FLAGS=""
+else
+    # Local development mode: Optimize for the current hardware architecture
+    XSIMD_FLAGS=`"${R_HOME}/bin/Rscript" -e "cat(RcppXsimd::getSSEFlags(), RcppXsimd::getNEONFlags())"`
+fi
 
-# Substitute the single placeholder and output to src/Makevars
+# Substitute the placeholder and output to src/Makevars
 sed -e "s|@XSIMD_FLAGS@|${XSIMD_FLAGS}|" src/Makevars.in > src/Makevars
 
 exit 0
