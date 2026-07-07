@@ -1,7 +1,7 @@
 # rchime: Detect and Remove Chimeras from Amplicon Sequence Analysis Data
 
 Detect and remove chimeras from your Amplicon Sequence Analysis using
-reference based or denovo approaches.
+reference based or de novo approaches.
 
 ## See also
 

@@ -5,7 +5,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Denovo Chimera Detection • rchime</title>
+<title>De novo Chimera Detection • rchime</title>
 <!-- favicons --><link rel="icon" type="image/png" sizes="96x96" href="../favicon-96x96.png">
 <link rel="icon" type="”image/svg+xml”" href="../favicon.svg">
 <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
@@ -15,7 +15,7 @@
 <link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Denovo Chimera Detection">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="De novo Chimera Detection">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -40,7 +40,7 @@
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
 <li><a class="dropdown-item" href="../articles/chimera_report.html">chimera_report</a></li>
-    <li><a class="dropdown-item" href="../articles/denovo_based_detection.html">Denovo Chimera Detection</a></li>
+    <li><a class="dropdown-item" href="../articles/denovo_based_detection.html">De novo Chimera Detection</a></li>
     <li><a class="dropdown-item" href="../articles/reference_based_detection.html">Reference Based Chimera Detection</a></li>
   </ul>
 </li>
@@ -71,7 +71,7 @@
 
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
-      <img src="../logo.png" class="logo" alt=""><h1>Denovo Chimera Detection</h1>
+      <img src="../logo.png" class="logo" alt=""><h1>De novo Chimera Detection</h1>
             
       
       <small class="dont-index">Source: <a href="https://github.com/mothur/rchime/blob/main/vignettes/denovo_based_detection.Rmd" class="external-link"><code>vignettes/denovo_based_detection.Rmd</code></a></small>
@@ -84,8 +84,8 @@
 <h2 id="overview">Overview<a class="anchor" aria-label="anchor" href="#overview"></a>
 </h2>
 <p>The <code><a href="../reference/rchime.html">rchime()</a></code> function allows you to detect and remove
-chimeric sequences using the dataset as it’s own reference (denovo). The
-denovo approach is our preferred method for removing chimeras.
+chimeric sequences using the dataset as it’s own reference (de novo).
+The denovo approach is our preferred method for removing chimeras.
 <code><a href="../reference/rchime.html">rchime()</a></code> can be used with <a href="https://mothur.org/strollur/reference/strollur.html" class="external-link">strollur
 objects</a> or data.frames as inputs. Let’s look at examples of both
 data types using sequence data from <a href="https://mothur.org" class="external-link">mothur’s</a> <a href="https://mothur.org/wiki/miseq_sop/" class="external-link">MiSeq_SOP</a> example
@@ -97,7 +97,7 @@ analysis.</p>
 <code class="sourceCode R"><span><span class="va">fasta_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="fu"><a href="../reference/rchime_example.html">rchime_example</a></span><span class="op">(</span><span class="st">"miseq_fasta.rds"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">abundance_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="fu"><a href="../reference/rchime_example.html">rchime_example</a></span><span class="op">(</span><span class="st">"miseq_abundance.rds"</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">strollur</span> <span class="op">&lt;-</span> <span class="fu">strollur</span><span class="fu">::</span><span class="fu"><a href="https://mothur.org/strollur/reference/new_dataset.html" class="external-link">new_dataset</a></span><span class="op">(</span><span class="st">"rchime denovo example"</span><span class="op">)</span></span>
+<span><span class="va">strollur</span> <span class="op">&lt;-</span> <span class="fu">strollur</span><span class="fu">::</span><span class="fu"><a href="https://mothur.org/strollur/reference/new_dataset.html" class="external-link">new_dataset</a></span><span class="op">(</span><span class="st">"rchime de novo example"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">strollur</span><span class="fu">::</span><span class="fu"><a href="https://mothur.org/strollur/reference/add.html" class="external-link">add</a></span><span class="op">(</span><span class="va">strollur</span>, table <span class="op">=</span> <span class="va">fasta_data</span>, type <span class="op">=</span> <span class="st">"sequence"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Added 6084 sequences.</span></span>
@@ -105,7 +105,7 @@ analysis.</p>
 <span><span class="co">#&gt; Assigned 6084 sequence abundances.</span></span>
 <span></span>
 <span><span class="va">strollur</span></span>
-<span><span class="co">#&gt; rchime denovo example:</span></span>
+<span><span class="co">#&gt; rchime de novo example:</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;             starts ends nbases ambigs polymers numns   numseqs</span></span>
 <span><span class="co">#&gt; Minimum:         1  249    249      0        3     0      1.00</span></span>
@@ -139,8 +139,8 @@ analysis.</p>
 <div class="section level2">
 <h2 id="removing-chimeras">Removing chimeras<a class="anchor" aria-label="anchor" href="#removing-chimeras"></a>
 </h2>
-<p>When removing chimeras using the denovo method, the potential parents
-are chosen from more abundant sequences in your dataset.</p>
+<p>When removing chimeras using the de novo method, the potential
+parents are chosen from more abundant sequences in your dataset.</p>
 <p>Before we remove the chimeras let’s discuss the
 <code>dereplicate</code> parameter. When <code>dereplicate=FALSE</code>,
 if a sequence is flagged as chimeric in one sample, it is removed from
@@ -149,16 +149,16 @@ we’ve seen rare sequences get flagged as chimeric when they’re the most
 abundant sequence in another sample. For a more conservative approach,
 we recommend using the default <code>dereplicate=TRUE</code> which will
 only remove sequences from the samples in which they are flagged as
-chimeric. Let’s use the denovo method to remove the chimeras.</p>
+chimeric. Let’s use the de novo method to remove the chimeras.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">strollur_results</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/rchime.html">rchime</a></span><span class="op">(</span><span class="va">strollur</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> The denovo method runs with a single processor.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> The de novo method runs with a single processor.</span></span>
 <span><span class="co">#&gt; Added a chimera_report report.</span></span>
 <span><span class="co">#&gt; → rchime removed `10453` chimeras from your dataset.</span></span>
-<span><span class="co">#&gt; → It took `7.93417930603027` seconds to detect and remove the chimeras.</span></span>
+<span><span class="co">#&gt; → It took `7.74534749984741` seconds to detect and remove the chimeras.</span></span>
 <span></span>
 <span><span class="va">strollur</span></span>
-<span><span class="co">#&gt; rchime denovo example:</span></span>
+<span><span class="co">#&gt; rchime de novo example:</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;             starts ends nbases ambigs polymers numns   numseqs</span></span>
 <span><span class="co">#&gt; Minimum:         1  249    249      0        3     0      1.00</span></span>
@@ -181,9 +181,9 @@ chimeric. Let’s use the denovo method to remove the chimeras.</p>
 <span><span class="co">#&gt; Total number of custom reports: 1</span></span>
 <span></span>
 <span><span class="va">data_frame_results</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/rchime.html">rchime</a></span><span class="op">(</span><span class="va">df</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> The denovo method runs with a single processor.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> The de novo method runs with a single processor.</span></span>
 <span><span class="co">#&gt; → rchime detected `10453` chimeras in your dataset.</span></span>
-<span><span class="co">#&gt; → It took `7.92766094207764` seconds to detect the chimeras.</span></span></code></pre></div>
+<span><span class="co">#&gt; → It took `7.65978693962097` seconds to detect the chimeras.</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="results">Results<a class="anchor" aria-label="anchor" href="#results"></a>

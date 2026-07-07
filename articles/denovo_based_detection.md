@@ -1,11 +1,11 @@
-# Denovo Chimera Detection
+# De novo Chimera Detection
 
 ## Overview
 
 The [`rchime()`](http://mothur.org/rchime/reference/rchime.md) function
 allows you to detect and remove chimeric sequences using the dataset as
-it’s own reference (denovo). The denovo approach is our preferred method
-for removing chimeras.
+it’s own reference (de novo). The denovo approach is our preferred
+method for removing chimeras.
 [`rchime()`](http://mothur.org/rchime/reference/rchime.md) can be used
 with [strollur
 objects](https://mothur.org/strollur/reference/strollur.html) or
@@ -20,7 +20,7 @@ sequence data from [mothur’s](https://mothur.org)
 fasta_data <- readRDS(rchime_example("miseq_fasta.rds"))
 abundance_data <- readRDS(rchime_example("miseq_abundance.rds"))
 
-strollur <- strollur::new_dataset("rchime denovo example")
+strollur <- strollur::new_dataset("rchime de novo example")
 
 strollur::add(strollur, table = fasta_data, type = "sequence")
 #> Added 6084 sequences.
@@ -28,7 +28,7 @@ strollur::assign(strollur, table = abundance_data, type = "sequence_abundance")
 #> Assigned 6084 sequence abundances.
 
 strollur
-#> rchime denovo example:
+#> rchime de novo example:
 #> 
 #>             starts ends nbases ambigs polymers numns   numseqs
 #> Minimum:         1  249    249      0        3     0      1.00
@@ -62,7 +62,7 @@ str(df)
 
 ## Removing chimeras
 
-When removing chimeras using the denovo method, the potential parents
+When removing chimeras using the de novo method, the potential parents
 are chosen from more abundant sequences in your dataset.
 
 Before we remove the chimeras let’s discuss the `dereplicate` parameter.
@@ -72,19 +72,19 @@ this is a bit aggressive since we’ve seen rare sequences get flagged as
 chimeric when they’re the most abundant sequence in another sample. For
 a more conservative approach, we recommend using the default
 `dereplicate=TRUE` which will only remove sequences from the samples in
-which they are flagged as chimeric. Let’s use the denovo method to
+which they are flagged as chimeric. Let’s use the de novo method to
 remove the chimeras.
 
 ``` r
 
 strollur_results <- rchime(strollur)
-#> ℹ The denovo method runs with a single processor.
+#> ℹ The de novo method runs with a single processor.
 #> Added a chimera_report report.
 #> → rchime removed `10453` chimeras from your dataset.
-#> → It took `7.93417930603027` seconds to detect and remove the chimeras.
+#> → It took `7.74534749984741` seconds to detect and remove the chimeras.
 
 strollur
-#> rchime denovo example:
+#> rchime de novo example:
 #> 
 #>             starts ends nbases ambigs polymers numns   numseqs
 #> Minimum:         1  249    249      0        3     0      1.00
@@ -107,9 +107,9 @@ strollur
 #> Total number of custom reports: 1
 
 data_frame_results <- rchime(df)
-#> ℹ The denovo method runs with a single processor.
+#> ℹ The de novo method runs with a single processor.
 #> → rchime detected `10453` chimeras in your dataset.
-#> → It took `7.92766094207764` seconds to detect the chimeras.
+#> → It took `7.65978693962097` seconds to detect the chimeras.
 ```
 
 ## Results

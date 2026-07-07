@@ -37,8 +37,8 @@ rchime_options(
 
 - abskew:
 
-  Float, the minimum abundance skew (denovo only). Default = 2.0. abskew
-  \<- min (abund(parent1), abund(parent2)) / abund(query)
+  Float, the minimum abundance skew (de novo only). Default = 2.0.
+  abskew \<- min (abund(parent1), abund(parent2)) / abund(query)
 
 - minh:
 

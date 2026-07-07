@@ -29,7 +29,7 @@ Here’s a brief description of the various columns.
 ## Example
 
 Let’s run [`rchime()`](http://mothur.org/rchime/reference/rchime.md)
-with the denovo approach to generate the chimera report, and take a
+with the de novo approach to generate the chimera report, and take a
 closer look.
 
 ``` r
@@ -46,7 +46,7 @@ library(rchime)
 fasta_data <- readRDS(rchime_example("miseq_fasta.rds"))
 abundance_data <- readRDS(rchime_example("miseq_abundance.rds"))
 
-data <- strollur::new_dataset("rchime denovo example")
+data <- strollur::new_dataset("rchime de novo example")
 
 strollur::add(data, table = fasta_data, type = "sequence")
 #> Added 6084 sequences.
@@ -54,13 +54,13 @@ strollur::assign(data, table = abundance_data, type = "sequence_abundance")
 #> Assigned 6084 sequence abundances.
 
 results <- rchime(data, dereplicate = TRUE)
-#> ℹ The denovo method runs with a single processor.
+#> ℹ The de novo method runs with a single processor.
 #> Added a chimera_report report.
 #> → rchime removed `10453` chimeras from your dataset.
-#> → It took `7.92858123779297` seconds to detect and remove the chimeras.
+#> → It took `7.77272272109985` seconds to detect and remove the chimeras.
 
 
-results <- strollur::new_dataset("rchime denovo example") |>
+results <- strollur::new_dataset("rchime de novo example") |>
   strollur::add(table = fasta_data, type = "sequence") |>
   strollur::assign(
     table = abundance_data,
@@ -69,10 +69,10 @@ results <- strollur::new_dataset("rchime denovo example") |>
   rchime(dereplicate = TRUE)
 #> Added 6084 sequences.
 #> Assigned 6084 sequence abundances.
-#> ℹ The denovo method runs with a single processor.
+#> ℹ The de novo method runs with a single processor.
 #> Added a chimera_report report.
 #> → rchime removed `10453` chimeras from your dataset.
-#> → It took `7.8780210018158` seconds to detect and remove the chimeras.
+#> → It took `7.84106063842773` seconds to detect and remove the chimeras.
 
 results$chimera_report[60:70, ]
 #>         Score                                        Query

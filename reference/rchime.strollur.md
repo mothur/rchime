@@ -1,11 +1,11 @@
 # Detect and remove chimeras from your [strollur](https://mothur.org/strollur/) dataset object.
 
 The [`rchime()`](http://mothur.org/rchime/reference/rchime.md) function
-allows you to detect and remove chimeras from your data using a denovo
+allows you to detect and remove chimeras from your data using a de novo
 approach or alternatively a reference model.
 
 Our preferred way of doing this is to use the abundant sequences as our
-reference (denovo).
+reference (de novo).
 
 This function uses code from the
 [vsearch](https://github.com/torognes/vsearch) tools.
@@ -115,14 +115,14 @@ data <- strollur::load_dataset(
   rchime_example("strollur_multi_sample_small.rds")
 )
 
-# Detect and remove chimeras from the dataset using denovo approach by sample
+# Detect and remove chimeras from the dataset using de novo approach by sample
 # (recommended)
 
 chimera_report <- rchime(data)
-#> ℹ The denovo method runs with a single processor.
+#> ℹ The de novo method runs with a single processor.
 #> Added a chimera_report report.
 #> → rchime removed `128` chimeras from your dataset.
-#> → It took `0.510642766952515` seconds to detect and remove the chimeras.
+#> → It took `0.513816356658936` seconds to detect and remove the chimeras.
 data
 #> multi_sample - 500 sequences:
 #> 

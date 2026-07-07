@@ -40,7 +40,7 @@
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
 <li><a class="dropdown-item" href="../articles/chimera_report.html">chimera_report</a></li>
-    <li><a class="dropdown-item" href="../articles/denovo_based_detection.html">Denovo Chimera Detection</a></li>
+    <li><a class="dropdown-item" href="../articles/denovo_based_detection.html">De novo Chimera Detection</a></li>
     <li><a class="dropdown-item" href="../articles/reference_based_detection.html">Reference Based Chimera Detection</a></li>
   </ul>
 </li>
@@ -109,7 +109,7 @@ various columns.</p>
 <div class="section level2">
 <h2 id="example">Example<a class="anchor" aria-label="anchor" href="#example"></a>
 </h2>
-<p>Let’s run <code><a href="../reference/rchime.html">rchime()</a></code> with the denovo approach to generate
+<p>Let’s run <code><a href="../reference/rchime.html">rchime()</a></code> with the de novo approach to generate
 the chimera report, and take a closer look.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/mothur/rchime" class="external-link">rchime</a></span><span class="op">)</span></span>
@@ -124,7 +124,7 @@ the chimera report, and take a closer look.</p>
 <span><span class="va">fasta_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="fu"><a href="../reference/rchime_example.html">rchime_example</a></span><span class="op">(</span><span class="st">"miseq_fasta.rds"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">abundance_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="fu"><a href="../reference/rchime_example.html">rchime_example</a></span><span class="op">(</span><span class="st">"miseq_abundance.rds"</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu">strollur</span><span class="fu">::</span><span class="fu"><a href="https://mothur.org/strollur/reference/new_dataset.html" class="external-link">new_dataset</a></span><span class="op">(</span><span class="st">"rchime denovo example"</span><span class="op">)</span></span>
+<span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu">strollur</span><span class="fu">::</span><span class="fu"><a href="https://mothur.org/strollur/reference/new_dataset.html" class="external-link">new_dataset</a></span><span class="op">(</span><span class="st">"rchime de novo example"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">strollur</span><span class="fu">::</span><span class="fu"><a href="https://mothur.org/strollur/reference/add.html" class="external-link">add</a></span><span class="op">(</span><span class="va">data</span>, table <span class="op">=</span> <span class="va">fasta_data</span>, type <span class="op">=</span> <span class="st">"sequence"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Added 6084 sequences.</span></span>
@@ -132,13 +132,13 @@ the chimera report, and take a closer look.</p>
 <span><span class="co">#&gt; Assigned 6084 sequence abundances.</span></span>
 <span></span>
 <span><span class="va">results</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/rchime.html">rchime</a></span><span class="op">(</span><span class="va">data</span>, dereplicate <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> The denovo method runs with a single processor.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> The de novo method runs with a single processor.</span></span>
 <span><span class="co">#&gt; Added a chimera_report report.</span></span>
 <span><span class="co">#&gt; → rchime removed `10453` chimeras from your dataset.</span></span>
-<span><span class="co">#&gt; → It took `7.92858123779297` seconds to detect and remove the chimeras.</span></span>
+<span><span class="co">#&gt; → It took `7.77272272109985` seconds to detect and remove the chimeras.</span></span>
 <span></span>
 <span></span>
-<span><span class="va">results</span> <span class="op">&lt;-</span> <span class="fu">strollur</span><span class="fu">::</span><span class="fu"><a href="https://mothur.org/strollur/reference/new_dataset.html" class="external-link">new_dataset</a></span><span class="op">(</span><span class="st">"rchime denovo example"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span><span class="va">results</span> <span class="op">&lt;-</span> <span class="fu">strollur</span><span class="fu">::</span><span class="fu"><a href="https://mothur.org/strollur/reference/new_dataset.html" class="external-link">new_dataset</a></span><span class="op">(</span><span class="st">"rchime de novo example"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">strollur</span><span class="fu">::</span><span class="fu"><a href="https://mothur.org/strollur/reference/add.html" class="external-link">add</a></span><span class="op">(</span>table <span class="op">=</span> <span class="va">fasta_data</span>, type <span class="op">=</span> <span class="st">"sequence"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">strollur</span><span class="fu">::</span><span class="fu"><a href="https://mothur.org/strollur/reference/assign.html" class="external-link">assign</a></span><span class="op">(</span></span>
 <span>    table <span class="op">=</span> <span class="va">abundance_data</span>,</span>
@@ -147,10 +147,10 @@ the chimera report, and take a closer look.</p>
 <span>  <span class="fu"><a href="../reference/rchime.html">rchime</a></span><span class="op">(</span>dereplicate <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Added 6084 sequences.</span></span>
 <span><span class="co">#&gt; Assigned 6084 sequence abundances.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> The denovo method runs with a single processor.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> The de novo method runs with a single processor.</span></span>
 <span><span class="co">#&gt; Added a chimera_report report.</span></span>
 <span><span class="co">#&gt; → rchime removed `10453` chimeras from your dataset.</span></span>
-<span><span class="co">#&gt; → It took `7.8780210018158` seconds to detect and remove the chimeras.</span></span>
+<span><span class="co">#&gt; → It took `7.84106063842773` seconds to detect and remove the chimeras.</span></span>
 <span></span>
 <span><span class="va">results</span><span class="op">$</span><span class="va">chimera_report</span><span class="op">[</span><span class="fl">60</span><span class="op">:</span><span class="fl">70</span>, <span class="op">]</span></span>
 <span><span class="co">#&gt;         Score                                        Query</span></span>

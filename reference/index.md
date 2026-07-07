@@ -8,7 +8,7 @@ Detect and remove chimeric sequences
 
   Detect and remove chimeras from your
   [strollur](https://mothur.org/strollur/) object or data.frame using a
-  denovo approach or alternatively a reference model.
+  de novo approach or alternatively a reference model.
 
 - [`rchime(`*`<strollur>`*`)`](http://mothur.org/rchime/reference/rchime.strollur.md)
   :

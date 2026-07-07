@@ -16,8 +16,8 @@
 <script src="deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Detect and Remove Chimeras from Amplicon Sequence Analysis Data">
-<meta name="description" content="Detect and remove chimeras from your Amplicon Sequence Analysis using reference based or denovo approaches.">
-<meta property="og:description" content="Detect and remove chimeras from your Amplicon Sequence Analysis using reference based or denovo approaches.">
+<meta name="description" content="Detect and remove chimeras from your Amplicon Sequence Analysis using reference based or de novo approaches.">
+<meta property="og:description" content="Detect and remove chimeras from your Amplicon Sequence Analysis using reference based or de novo approaches.">
 <meta property="og:image" content="http://mothur.org/rchime/logo.png">
 </head>
 <body>
@@ -43,7 +43,7 @@
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
 <li><a class="dropdown-item" href="articles/chimera_report.html">chimera_report</a></li>
-    <li><a class="dropdown-item" href="articles/denovo_based_detection.html">Denovo Chimera Detection</a></li>
+    <li><a class="dropdown-item" href="articles/denovo_based_detection.html">De novo Chimera Detection</a></li>
     <li><a class="dropdown-item" href="articles/reference_based_detection.html">Reference Based Chimera Detection</a></li>
   </ul>
 </li>
@@ -80,7 +80,7 @@
 <div class="section level2">
 <h2 id="overview">Overview<a class="anchor" aria-label="anchor" href="#overview"></a>
 </h2>
-<p>The <em>rchime</em> package allows you to detect and remove chimeras from your dataset using a denovo approach or alternatively a reference model. This package uses code from the <a href="https://github.com/torognes/vsearch" class="external-link">vsearch</a> tools.</p>
+<p>The <em>rchime</em> package allows you to detect and remove chimeras from your dataset using a de novo approach or alternatively a reference model. This package uses code from the <a href="https://github.com/torognes/vsearch" class="external-link">vsearch</a> tools.</p>
 <ul>
 <li>
 <code><a href="reference/rchime.html">rchime()</a></code> detect and remove chimeras from your <a href="https://mothur.org/strollur/" class="external-link">strollur</a> dataset object or data.frame</li>
@@ -103,12 +103,12 @@
 <div class="section level2">
 <h2 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a>
 </h2>
-<p>The <code><a href="reference/rchime.html">rchime()</a></code> function accepts <a href="https://mothur.org/strollur/" class="external-link">strollur</a> objects or data.frames as inputs. Let’s create a <a href="https://mothur.org/strollur/reference/strollur.html" class="external-link">strollur::strollur</a> object using files from <a href="https://mothur.org" class="external-link">mothur’s</a> <a href="https://mothur.org/wiki/miseq_sop/" class="external-link">Miseq_SOP</a> example analysis. Then we will use the <em>denovo</em> method in <code><a href="reference/rchime.html">rchime()</a></code> to detect and remove the chimeras from the dataset.</p>
+<p>The <code><a href="reference/rchime.html">rchime()</a></code> function accepts <a href="https://mothur.org/strollur/" class="external-link">strollur</a> objects or data.frames as inputs. Let’s create a <a href="https://mothur.org/strollur/reference/strollur.html" class="external-link">strollur::strollur</a> object using files from <a href="https://mothur.org" class="external-link">mothur’s</a> <a href="https://mothur.org/wiki/miseq_sop/" class="external-link">Miseq_SOP</a> example analysis. Then we will use the <em>de novo</em> method in <code><a href="reference/rchime.html">rchime()</a></code> to detect and remove the chimeras from the dataset.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fasta_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="fu"><a href="reference/rchime_example.html">rchime_example</a></span><span class="op">(</span><span class="st">"miseq_fasta.rds"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">abundance_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="fu"><a href="reference/rchime_example.html">rchime_example</a></span><span class="op">(</span><span class="st">"miseq_abundance.rds"</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu">strollur</span><span class="fu">::</span><span class="fu"><a href="https://mothur.org/strollur/reference/new_dataset.html" class="external-link">new_dataset</a></span><span class="op">(</span><span class="st">"rchime denovo example"</span><span class="op">)</span></span>
+<span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu">strollur</span><span class="fu">::</span><span class="fu"><a href="https://mothur.org/strollur/reference/new_dataset.html" class="external-link">new_dataset</a></span><span class="op">(</span><span class="st">"rchime de novo example"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">strollur</span><span class="fu">::</span><span class="fu"><a href="https://mothur.org/strollur/reference/add.html" class="external-link">add</a></span><span class="op">(</span><span class="va">data</span>, table <span class="op">=</span> <span class="va">fasta_data</span>, type <span class="op">=</span> <span class="st">"sequence"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Added 6084 sequences.</span></span>
@@ -119,10 +119,10 @@
 <span><span class="co">#&gt; ℹ The denovo method runs with a single processor.</span></span>
 <span><span class="co">#&gt; Added a chimera_report report.</span></span>
 <span><span class="co">#&gt; → rchime removed `10453` chimeras from your dataset.</span></span>
-<span><span class="co">#&gt; → It took `4.22217392921448` seconds to detect and remove the chimeras.</span></span>
+<span><span class="co">#&gt; → It took `4.26320099830627` seconds to detect and remove the chimeras.</span></span>
 <span></span>
 <span><span class="va">data</span></span>
-<span><span class="co">#&gt; rchime denovo example:</span></span>
+<span><span class="co">#&gt; rchime de novo example:</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;             starts ends nbases ambigs polymers numns   numseqs</span></span>
 <span><span class="co">#&gt; Minimum:         1  249    249      0        3     0      1.00</span></span>

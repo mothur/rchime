@@ -1,11 +1,11 @@
 # Detect chimeras in your data.frames.
 
 The [`rchime()`](http://mothur.org/rchime/reference/rchime.md) function
-allows you to detect chimeras from your data using a denovo approach or
+allows you to detect chimeras from your data using a de novo approach or
 alternatively a reference model.
 
 Our preferred way of doing this is to use the abundant sequences as our
-reference (denovo).
+reference (de novo).
 
 This function uses code from the
 [vsearch](https://github.com/torognes/vsearch) tools.
@@ -114,13 +114,13 @@ Sarah Westcott, <swestcot@umich.edu>
 
 ``` r
 
-# Detect chimeras from the dataset using denovo approach by sample
+# Detect chimeras from the dataset using de novo approach by sample
 # (recommended)
 
 data <- readRDS(rchime_example("miseq_data_frame_by_sample_small.rds"))
 
 chimera_report <- rchime(data)
-#> ℹ The denovo method runs with a single processor.
+#> ℹ The de novo method runs with a single processor.
 #> → rchime detected `128` chimeras in your dataset.
-#> → It took `0.514412879943848` seconds to detect the chimeras.
+#> → It took `0.517354488372803` seconds to detect the chimeras.
 ```

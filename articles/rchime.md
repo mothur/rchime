@@ -1,8 +1,8 @@
 # Getting Started
 
 The *rchime* package allows you to detect and remove chimeras from your
-dataset using a denovo approach or alternatively a reference model. This
-package uses code from the
+dataset using a de novo approach or alternatively a reference model.
+This package uses code from the
 [vsearch](https://github.com/torognes/vsearch) tools.
 
 ## Installing rchime
@@ -24,7 +24,7 @@ pak::pak("mothur/rchime")
 
 ## Tutorials to help you get started
 
-- [Denovo based chimera
+- [De novo based chimera
   detection](https://mothur.org/rchime/articles/denovo_based_detection.html)
 - [Reference based chimera
   detection](https://mothur.org/rchime/articles/reference_based_detection.html)
