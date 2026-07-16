@@ -4,6 +4,8 @@
 #' directory. This function make them easy to access.
 #'
 #' @param file Name of file. If `NULL`, the example files will be listed.
+#'
+#' @return string, full path to file requested
 #' @export
 #' @examples
 #' rchime_example()

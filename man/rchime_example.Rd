@@ -9,6 +9,9 @@ rchime_example(file = NULL)
 \arguments{
 \item{file}{Name of file. If \code{NULL}, the example files will be listed.}
 }
+\value{
+string, full path to file requested
+}
 \description{
 rchime comes bundled with some example files in its \code{inst/extdata}
 directory. This function make them easy to access.

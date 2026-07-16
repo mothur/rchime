@@ -1,5 +1,11 @@
 ## Resubmission - 0.1.0
 
+- Updates description field adding details about implementation and including 
+    references to the work of Rognes et al. (2016) and Edgar,R.C. et al. (2011)
+- Adds return value to rchime_example function.   
+
+## Resubmission - 0.1.0
+
 - Updates date field.
     - The Date field is over a month old.
 - Corrects misspelled denovo to de novo.
