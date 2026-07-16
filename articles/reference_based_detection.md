@@ -38,13 +38,13 @@ strollur
 #> 
 #>             starts ends nbases ambigs polymers numns   numseqs
 #> Minimum:         1  249    249      0        3     0      1.00
-#> 2.5%-tile:       1  252    252      0        4     0   3216.38
-#> 25%-tile:        1  252    252      0        4     0  32163.75
-#> Median:          1  253    253      0        4     0  64327.50
-#> 75%-tile:        1  253    253      0        5     0  96491.25
-#> 97.5%-tile:      1  254    254      0        6     0 125438.62
+#> 2.5%-tile:       1  252    252      0        4     0   3217.35
+#> 25%-tile:        1  252    252      0        4     0  32164.50
+#> Median:          1  253    253      0        4     0  64328.00
+#> 75%-tile:        1  253    253      0        5     0  96491.50
+#> 97.5%-tile:      1  254    254      0        6     0 125438.65
 #> Maximum:         1  256    256      0        8     0 128655.00
-#> Mean:            1  252    252      0        4     0  64327.64
+#> Mean:            1  252    252      0        4     0  64328.00
 #> 
 #> Number of unique seqs: 6084 
 #> Total number of seqs: 128655 
@@ -82,20 +82,20 @@ str(reference)
 strollur_results <- rchime(strollur, reference = reference)
 #> Added a chimera_report report.
 #> → rchime removed `1037` chimeras from your dataset.
-#> → It took `11.7843747138977` seconds to detect and remove the chimeras.
+#> → It took `11.6649737358093` seconds to detect and remove the chimeras.
 
 strollur
 #> rchime reference example:
 #> 
 #>             starts ends nbases ambigs polymers numns   numseqs
 #> Minimum:         1  249    249      0        3     0      1.00
-#> 2.5%-tile:       1  252    252      0        4     0   3190.45
-#> 25%-tile:        1  252    252      0        4     0  31904.50
-#> Median:          1  253    253      0        4     0  63809.00
-#> 75%-tile:        1  253    253      0        5     0  95713.50
-#> 97.5%-tile:      1  254    254      0        6     0 124427.55
+#> 2.5%-tile:       1  252    252      0        4     0   3191.43
+#> 25%-tile:        1  252    252      0        4     0  31905.25
+#> Median:          1  253    253      0        4     0  63809.50
+#> 75%-tile:        1  253    253      0        5     0  95713.75
+#> 97.5%-tile:      1  254    254      0        6     0 124427.57
 #> Maximum:         1  256    256      0        8     0 127618.00
-#> Mean:            1  252    252      0        4     0  63809.14
+#> Mean:            1  252    252      0        4     0  63809.50
 #> 
 #> scrap_summary:
 #>       type      trash_code unique total
@@ -109,7 +109,7 @@ strollur
 
 data_frame_results <- rchime(data_df, reference = reference)
 #> → rchime detected `1037` chimeras in your dataset.
-#> → It took `11.7512540817261` seconds to detect the chimeras.
+#> → It took `11.9090452194214` seconds to detect the chimeras.
 ```
 
 ## Results

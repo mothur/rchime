@@ -15,6 +15,10 @@ rchime_example(file = NULL)
 
   Name of file. If `NULL`, the example files will be listed.
 
+## Value
+
+string, full path to file requested
+
 ## Examples
 
 ``` r

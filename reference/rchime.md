@@ -109,19 +109,19 @@ chimera_report <- rchime(data)
 #> ℹ The de novo method runs with a single processor.
 #> Added a chimera_report report.
 #> → rchime removed `128` chimeras from your dataset.
-#> → It took `0.536513566970825` seconds to detect and remove the chimeras.
+#> → It took `0.520607233047485` seconds to detect and remove the chimeras.
 data
 #> multi_sample - 500 sequences:
 #> 
 #>             starts ends nbases ambigs polymers numns numseqs
 #> Minimum:         1  250    250      0        3     0    1.00
-#> 2.5%-tile:       1  252    252      0        4     0  167.20
-#> 25%-tile:        1  252    252      0        4     0 1672.00
-#> Median:          1  253    253      0        4     0 3344.00
-#> 75%-tile:        1  253    253      0        5     0 5016.00
-#> 97.5%-tile:      1  253    253      0        6     0 6520.80
+#> 2.5%-tile:       1  252    252      0        4     0  168.18
+#> 25%-tile:        1  252    252      0        4     0 1672.75
+#> Median:          1  253    253      0        4     0 3344.50
+#> 75%-tile:        1  253    253      0        5     0 5016.25
+#> 97.5%-tile:      1  253    253      0        6     0 6520.82
 #> Maximum:         1  255    255      0        6     0 6688.00
-#> Mean:            1  252    252      0        4     0 3344.14
+#> Mean:            1  252    252      0        4     0 3344.50
 #> 
 #> scrap_summary:
 #>       type      trash_code unique total

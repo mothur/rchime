@@ -1,7 +1,12 @@
 # rchime: Detect and Remove Chimeras from Amplicon Sequence Analysis Data
 
-Detect and remove chimeras from your Amplicon Sequence Analysis using
-reference based or de novo approaches.
+Detect and remove chimeras from your amplicon sequence analysis using
+reference-based or de novo approaches. The 'rchime' package implements
+the 'VSEARCH' algorithms described in Rognes et al. (2016)
+[doi:10.7717/peerj.2584](https://doi.org/10.7717/peerj.2584) . 'VSEARCH'
+builds on the work of Edgar,R.C. et al. (2011)
+[doi:10.1093/bioinformatics/btr381](https://doi.org/10.1093/bioinformatics/btr381)
+.
 
 ## See also
 
