@@ -9,8 +9,10 @@
 [![Codecov test
 coverage](https://codecov.io/gh/mothur/rchime/graph/badge.svg)](https://app.codecov.io/gh/mothur/rchime)
 [![pkgdown](https://github.com/mothur/rchime/actions/workflows/pkgdown.yaml/badge.svg)](https://github.com/mothur/rchime/actions/workflows/pkgdown.yaml)
-<!-- [![CRAN status](https://www.r-pkg.org/badges/version/rchime)](https://CRAN.R-project.org/package=rchime) -->
-<!--[![CRAN downloads](https://cranlogs.r-pkg.org/badges/rchime)](https://CRAN.R-project.org/package=rchime) -->
+[![CRAN
+status](https://www.r-pkg.org/badges/version/rchime)](https://CRAN.R-project.org/package=rchime)
+[![CRAN
+downloads](https://cranlogs.r-pkg.org/badges/rchime)](https://CRAN.R-project.org/package=rchime)
 [![](https://img.shields.io/badge/ORCID-Patrick%20Schloss-A6CE39.svg)](https://orcid.org/0000-0002-6935-4275)
 [![](https://img.shields.io/badge/ORCID-Sarah%20Westcott-A6CE39.svg)](https://orcid.org/0009-0001-1529-8247)
 <!-- badges: end -->
@@ -63,31 +65,30 @@ strollur::add(data, table = fasta_data, type = "sequence")
 strollur::assign(data, table = abundance_data, type = "sequence_abundance")
 #> Assigned 6084 sequence abundances.
 
-chimera_report <- rchime(data)
-#> ℹ The denovo method runs with a single processor.
-#> Added a chimera_report report.
-#> → rchime removed `10453` chimeras from your dataset.
-#> → It took `4.26320099830627` seconds to detect and remove the chimeras.
+rchime(data)
+#> ℹ The de novo method runs with a single processor.
+#> → rchime removed `10039` chimeras from your dataset.
+#> → It took `4.30051493644714` seconds to detect and remove the chimeras.
 
 data
 #> rchime de novo example:
 #> 
 #>             starts ends nbases ambigs polymers numns   numseqs
 #> Minimum:         1  249    249      0        3     0      1.00
-#> 2.5%-tile:       1  252    252      0        4     0   2955.05
-#> 25%-tile:        1  252    252      0        4     0  29550.50
-#> Median:          1  253    253      0        4     0  59101.00
-#> 75%-tile:        1  253    253      0        5     0  88651.50
-#> 97.5%-tile:      1  254    254      0        6     0 115246.95
-#> Maximum:         1  256    256      0        8     0 118202.00
-#> Mean:            1  252    252      0        4     0  59101.14
+#> 2.5%-tile:       1  252    252      0        4     0   2965.40
+#> 25%-tile:        1  252    252      0        4     0  29654.00
+#> Median:          1  253    253      0        4     0  59308.00
+#> 75%-tile:        1  253    253      0        5     0  88962.00
+#> 97.5%-tile:      1  254    254      0        6     0 115650.60
+#> Maximum:         1  256    256      0        8     0 118616.00
+#> Mean:            1  252    252      0        4     0  59308.14
 #> 
 #> scrap_summary:
 #>       type      trash_code unique total
-#> 1 sequence rchime-chimeras   3588 10453
+#> 1 sequence rchime_chimeras   3332 10039
 #> 
-#> Number of unique seqs: 2496 
-#> Total number of seqs: 118202 
+#> Number of unique seqs: 2752 
+#> Total number of seqs: 118616 
 #> 
 #> Total number of samples: 20 
 #> Total number of custom reports: 1

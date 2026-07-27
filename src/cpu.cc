@@ -79,13 +79,25 @@ void Vsearch_Cpu::increment_counters_from_bitmap(count_t * counters,
 
   unsigned short * p = (unsigned short *) (bitmap);
   int16x8_t * q = (int16x8_t *) (counters);
+  unsigned int const total_bytes = (totalbits + 7U) / 8U;
   const auto r = (totalbits + 15) / 16;
 
   for (auto j = 0U; j < r; j++)
     {
-      // load and duplicate short
-      uint16x8_t r0 = vdupq_n_u16(*p);
-      ++p;
+      unsigned short current_short_val = 0U;
+      unsigned int remaining_bytes = (total_bytes > j * 2U) ? (total_bytes - j * 2U) : 0U;
+
+      if (remaining_bytes >= 2U) {
+          std::memcpy(&current_short_val, p, 2);
+      } else if (remaining_bytes == 1U) {
+          std::memcpy(&current_short_val, p, 1);
+      }
+
+      p += 2;
+
+      // load and duplicate short safely
+      uint16x8_t r0 = vdupq_n_u16(current_short_val);
+
 
       // cast to bytes
       uint8x16_t r1 = vreinterpretq_u8_u16(r0);
@@ -138,8 +150,20 @@ void Vsearch_Cpu::increment_counters_from_bitmap(count_t * counters,
     {
       __vector unsigned char r0;
 
-      std::memcpy(&r0, p, 2);
-      ++p;
+      unsigned int remaining_bytes = (total_bytes > j * 2U) ? (total_bytes - j * 2U) : 0U;
+
+      if (remaining_bytes >= 2U) {
+          std::memcpy(&r0, p, 2);
+      } else if (remaining_bytes == 1U) {
+          unsigned char safe_buffer[2] = { *p, 0x00 };
+          std::memcpy(&r0, safe_buffer, 2);
+      } else {
+          unsigned char safe_buffer[2] = { 0x00, 0x00 };
+          std::memcpy(&r0, safe_buffer, 2);
+      }
+
+      p += 2; // Advance by 2 bytes (equivalent to ++p on an unsigned short pointer)
+
       __vector unsigned char r1 = vec_perm(r0, r0, c1);
       __vector unsigned char r2 = vec_or(r1, c2);
       __vector __bool char r3 = vec_cmpeq(r2, c3);
