@@ -70,60 +70,59 @@
 #ifdef __aarch64__
 
 void Vsearch_Cpu::increment_counters_from_bitmap(count_t * counters,
-                                    unsigned char * bitmap,
-                                    unsigned int totalbits)
+                                                 unsigned char * bitmap,
+                                                 unsigned int totalbits)
 {
-  const uint8x16_t c1 =
-    { 0x01, 0x01, 0x02, 0x02, 0x04, 0x04, 0x08, 0x08,
-      0x10, 0x10, 0x20, 0x20, 0x40, 0x40, 0x80, 0x80 };
+    const uint8x16_t c1 =
+        { 0x01, 0x01, 0x02, 0x02, 0x04, 0x04, 0x08, 0x08,
+          0x10, 0x10, 0x20, 0x20, 0x40, 0x40, 0x80, 0x80 };
 
-  unsigned short * p = (unsigned short *) (bitmap);
-  int16x8_t * q = (int16x8_t *) (counters);
-  unsigned int const total_bytes = (totalbits + 7U) / 8U;
-  const auto r = (totalbits + 15) / 16;
+    auto * p = (unsigned short *) (bitmap);
+    auto * q = (int16x8_t *) (counters);
 
-  for (auto j = 0U; j < r; j++)
+    unsigned int const total_bytes = (totalbits + 7U) / 8U;
+    unsigned int simd_iterations = 0U;
+
+    if (total_bytes >= 2U) {
+        simd_iterations = ((total_bytes - 2U) / 2U) + 1U;
+    }
+
+    unsigned int const max_chunks = (totalbits + 15U) / 16U;
+    if (simd_iterations > max_chunks) {
+        simd_iterations = max_chunks;
+    }
+
+    unsigned int j = 0U;
+
+    for (; j < simd_iterations; j++) {
+        uint16x8_t r0 = vdupq_n_u16(*p);
+        ++p;
+
+        uint8x16_t r1 = vreinterpretq_u8_u16(r0);
+        uint8x16_t r2 = vtstq_u8(r1, c1);
+        uint8x16_t r3 = vtrn1q_u8(r2, r2);
+        uint8x16_t r4 = vtrn2q_u8(r2, r2);
+        int16x8_t r5 = vreinterpretq_s16_u8(r3);
+        int16x8_t r6 = vreinterpretq_s16_u8(r4);
+
+        *q = vqsubq_s16(*q, r5);
+        ++q;
+        *q = vqsubq_s16(*q, r6);
+        ++q;
+    }
+
+    unsigned int const processed_elements = j * 16U;
+    auto * counters_scalar = (unsigned short *) q;
+
+    for (auto i = processed_elements; i < totalbits; ++i)
     {
-      unsigned short current_short_val = 0U;
-      unsigned int remaining_bytes = (total_bytes > j * 2U) ? (total_bytes - j * 2U) : 0U;
-
-      if (remaining_bytes >= 2U) {
-          std::memcpy(&current_short_val, p, 2);
-      } else if (remaining_bytes == 1U) {
-          std::memcpy(&current_short_val, p, 1);
-      }
-
-      p += 2;
-
-      // load and duplicate short safely
-      uint16x8_t r0 = vdupq_n_u16(current_short_val);
-
-
-      // cast to bytes
-      uint8x16_t r1 = vreinterpretq_u8_u16(r0);
-
-      // bit test with mask giving 0x00 or 0xff
-      uint8x16_t r2 = vtstq_u8(r1, c1);
-
-      // transpose to duplicate even bytes
-      uint8x16_t r3 = vtrn1q_u8(r2, r2);
-
-      // transpose to duplicate odd bytes
-      uint8x16_t r4 = vtrn2q_u8(r2, r2);
-
-      // cast to signed 0x0000 or 0xffff
-      int16x8_t r5 = vreinterpretq_s16_u8(r3);
-
-      // cast to signed 0x0000 or 0xffff
-      int16x8_t r6 = vreinterpretq_s16_u8(r4);
-
-      // subtract signed 0 or -1 (i.e add 0 or 1) with saturation to counter
-      *q = vqsubq_s16(*q, r5);
-      ++q;
-
-      // subtract signed 0 or 1 (i.e. add 0 or 1) with saturation to counter
-      *q = vqsubq_s16(*q, r6);
-      ++q;
+        if (bitmap[i >> 3U] & (1U << (i & 7U)))
+        {
+            if (counters_scalar[i - processed_elements] < 65535U)
+            {
+                counters_scalar[i - processed_elements]++;
+            }
+        }
     }
 }
 
