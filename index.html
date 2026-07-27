@@ -115,31 +115,30 @@
 <span><span class="fu">strollur</span><span class="fu">::</span><span class="fu"><a href="https://mothur.org/strollur/reference/assign.html" class="external-link">assign</a></span><span class="op">(</span><span class="va">data</span>, table <span class="op">=</span> <span class="va">abundance_data</span>, type <span class="op">=</span> <span class="st">"sequence_abundance"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Assigned 6084 sequence abundances.</span></span>
 <span></span>
-<span><span class="va">chimera_report</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/rchime.html">rchime</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span></span>
-<span><span class="co">#&gt; ℹ The denovo method runs with a single processor.</span></span>
-<span><span class="co">#&gt; Added a chimera_report report.</span></span>
-<span><span class="co">#&gt; → rchime removed `10453` chimeras from your dataset.</span></span>
-<span><span class="co">#&gt; → It took `4.26320099830627` seconds to detect and remove the chimeras.</span></span>
+<span><span class="fu"><a href="reference/rchime.html">rchime</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span></span>
+<span><span class="co">#&gt; ℹ The de novo method runs with a single processor.</span></span>
+<span><span class="co">#&gt; → rchime removed `10039` chimeras from your dataset.</span></span>
+<span><span class="co">#&gt; → It took `4.30051493644714` seconds to detect and remove the chimeras.</span></span>
 <span></span>
 <span><span class="va">data</span></span>
 <span><span class="co">#&gt; rchime de novo example:</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;             starts ends nbases ambigs polymers numns   numseqs</span></span>
 <span><span class="co">#&gt; Minimum:         1  249    249      0        3     0      1.00</span></span>
-<span><span class="co">#&gt; 2.5%-tile:       1  252    252      0        4     0   2955.05</span></span>
-<span><span class="co">#&gt; 25%-tile:        1  252    252      0        4     0  29550.50</span></span>
-<span><span class="co">#&gt; Median:          1  253    253      0        4     0  59101.00</span></span>
-<span><span class="co">#&gt; 75%-tile:        1  253    253      0        5     0  88651.50</span></span>
-<span><span class="co">#&gt; 97.5%-tile:      1  254    254      0        6     0 115246.95</span></span>
-<span><span class="co">#&gt; Maximum:         1  256    256      0        8     0 118202.00</span></span>
-<span><span class="co">#&gt; Mean:            1  252    252      0        4     0  59101.14</span></span>
+<span><span class="co">#&gt; 2.5%-tile:       1  252    252      0        4     0   2965.40</span></span>
+<span><span class="co">#&gt; 25%-tile:        1  252    252      0        4     0  29654.00</span></span>
+<span><span class="co">#&gt; Median:          1  253    253      0        4     0  59308.00</span></span>
+<span><span class="co">#&gt; 75%-tile:        1  253    253      0        5     0  88962.00</span></span>
+<span><span class="co">#&gt; 97.5%-tile:      1  254    254      0        6     0 115650.60</span></span>
+<span><span class="co">#&gt; Maximum:         1  256    256      0        8     0 118616.00</span></span>
+<span><span class="co">#&gt; Mean:            1  252    252      0        4     0  59308.14</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; scrap_summary:</span></span>
 <span><span class="co">#&gt;       type      trash_code unique total</span></span>
-<span><span class="co">#&gt; 1 sequence rchime-chimeras   3588 10453</span></span>
+<span><span class="co">#&gt; 1 sequence rchime_chimeras   3332 10039</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Number of unique seqs: 2496 </span></span>
-<span><span class="co">#&gt; Total number of seqs: 118202 </span></span>
+<span><span class="co">#&gt; Number of unique seqs: 2752 </span></span>
+<span><span class="co">#&gt; Total number of seqs: 118616 </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Total number of samples: 20 </span></span>
 <span><span class="co">#&gt; Total number of custom reports: 1</span></span></code></pre></div>
@@ -204,6 +203,8 @@
 <li><a href="https://github.com/mothur/rchime/actions/workflows/R-CMD-check.yaml" class="external-link"><img src="https://github.com/mothur/rchime/actions/workflows/R-CMD-check.yaml/badge.svg" alt="R-CMD-check"></a></li>
 <li><a href="https://app.codecov.io/gh/mothur/rchime" class="external-link"><img src="https://codecov.io/gh/mothur/rchime/graph/badge.svg" alt="Codecov test coverage"></a></li>
 <li><a href="https://github.com/mothur/rchime/actions/workflows/pkgdown.yaml" class="external-link"><img src="https://github.com/mothur/rchime/actions/workflows/pkgdown.yaml/badge.svg" alt="pkgdown"></a></li>
+<li><a href="https://CRAN.R-project.org/package=rchime" class="external-link"><img src="https://www.r-pkg.org/badges/version/rchime" alt="CRAN status"></a></li>
+<li><a href="https://CRAN.R-project.org/package=rchime" class="external-link"><img src="https://cranlogs.r-pkg.org/badges/rchime" alt="CRAN downloads"></a></li>
 <li><a href="https://orcid.org/0000-0002-6935-4275" class="external-link"><img src="https://img.shields.io/badge/ORCID-Patrick%20Schloss-A6CE39.svg"></a></li>
 <li><a href="https://orcid.org/0009-0001-1529-8247" class="external-link"><img src="https://img.shields.io/badge/ORCID-Sarah%20Westcott-A6CE39.svg"></a></li>
 </ul>
