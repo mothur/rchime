@@ -2,11 +2,32 @@
 % Please edit documentation in R/rchime.R
 \name{rchime}
 \alias{rchime}
-\title{Detect and remove chimeras from your
-\href{https://mothur.org/strollur/}{strollur} object or data.frame
-using a de novo approach or alternatively a reference model.}
+\alias{rchime.strollur}
+\alias{rchime.data.frame}
+\title{rchime}
 \usage{
 rchime(
+  data,
+  reference = NULL,
+  dereplicate = TRUE,
+  verbose = TRUE,
+  remove_chimeras = TRUE,
+  rchime_options = NULL,
+  table_names = list(sequence_name = "sequence_name", sequence = "sequence", abundance =
+    "abundance", sample = "sample")
+)
+
+\method{rchime}{strollur}(
+  data,
+  reference = NULL,
+  dereplicate = TRUE,
+  verbose = TRUE,
+  remove_chimeras = TRUE,
+  rchime_options = NULL,
+  table_names = list(sequence_name = "sequence_name", sequence = "sequence")
+)
+
+\method{rchime}{data.frame}(
   data,
   reference = NULL,
   dereplicate = TRUE,
@@ -36,21 +57,27 @@ which they are flagged as chimeric.}
 \item{verbose}{logical, allow console outputs. Default = \code{TRUE}.}
 
 \item{remove_chimeras}{Boolean, remove chimeras from dataset. Default =
-\code{TRUE}. Only used when \code{data} is a strollur object.}
+\code{TRUE}.}
 
 \item{rchime_options}{List, You can fine tune the vsearch specific options
 using  the [\code{\link[=rchime_options]{rchime_options()}}] function. Default = \code{NULL}.}
 
 \item{table_names, }{named list used to indicate the names of the columns in
-the data.frame. Only used when \code{data} or \code{reference} are a data.frames.}
+the data.frame. Only used when \code{data} or \code{reference} are a data.frames.
+Default = table_names <- list(sequence_name = "sequence_name",
+sequence = "sequence")
+
+In table_names, 'sequence_name' is a string containing the name of the column
+in 'table' that contains the sequence names. Default column name is
+'sequence_name'.
+
+In table_names, 'sequence' is a string containing the name of the
+column in 'table' that contains the sequences. Default column name is
+'sequence'.}
 }
 \value{
-list() containing a chimera report, and vector of the chimeric
-sequence's names.
-
-The \href{https://mothur.org/strollur/}{strollur} dataset object will also be
-updated. The sequences flagged as chimeric are removed and the chimera report
-is added.
+data a
+\href{https://mothur.org/strollur/reference/strollur.html}{strollur object}
 }
 \description{
 The \code{rchime()} function allows you to detect and remove chimeras from your
@@ -70,7 +97,16 @@ data <- strollur::load_dataset(
   rchime_example("strollur_multi_sample_small.rds")
 )
 
-chimera_report <- rchime(data)
+rchime(data)
+data
+
+
+# Detect and remove chimeras from the dataset using de novo approach by
+# sample (recommended)
+
+table <- readRDS(rchime_example("miseq_data_frame_by_sample_small.rds"))
+
+data <- rchime(data = table)
 data
 
 }

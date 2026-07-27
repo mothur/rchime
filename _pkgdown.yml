@@ -7,8 +7,6 @@ reference:
   desc: Detect and remove chimeric sequences
   contents:
   - rchime
-  - rchime.strollur
-  - rchime.data.frame
 - title: Utility Functions
   desc: helper functions
   contents:
