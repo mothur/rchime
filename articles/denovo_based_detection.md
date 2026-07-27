@@ -79,9 +79,8 @@ remove the chimeras.
 
 strollur_results <- rchime(strollur)
 #> ℹ The de novo method runs with a single processor.
-#> Added a chimera_report report.
 #> → rchime removed `10453` chimeras from your dataset.
-#> → It took `7.69486594200134` seconds to detect and remove the chimeras.
+#> → It took `7.71095013618469` seconds to detect and remove the chimeras.
 
 strollur
 #> rchime de novo example:
@@ -98,7 +97,7 @@ strollur
 #> 
 #> scrap_summary:
 #>       type      trash_code unique total
-#> 1 sequence rchime-chimeras   3588 10453
+#> 1 sequence rchime_chimeras   3588 10453
 #> 
 #> Number of unique seqs: 2496 
 #> Total number of seqs: 118202 
@@ -108,8 +107,8 @@ strollur
 
 data_frame_results <- rchime(df)
 #> ℹ The de novo method runs with a single processor.
-#> → rchime detected `10453` chimeras in your dataset.
-#> → It took `7.64017701148987` seconds to detect the chimeras.
+#> → rchime removed `10453` chimeras from your dataset.
+#> → It took `7.73366379737854` seconds to detect and remove the chimeras.
 ```
 
 ## Results
@@ -132,36 +131,7 @@ a look at the first 5 chimeric sequences in the report:
 strollur_results$chimera_report[
   strollur_results$chimera_report$Chimeric_Status == "Y",
 ] |> head(n = 5)
-#>        Score                                        Query
-#> 66 0.3805621 M00967_43_000000000-A3JHG_1_1106_11629_14238
-#> 70 0.5261480 M00967_43_000000000-A3JHG_1_1103_26580_14708
-#> 80 0.5580357 M00967_43_000000000-A3JHG_1_2101_21700_24164
-#> 89 0.3348214 M00967_43_000000000-A3JHG_1_1112_23980_19089
-#> 91 0.6377551 M00967_43_000000000-A3JHG_1_2110_20944_24019
-#>                                         ParentA
-#> 66 M00967_43_000000000-A3JHG_1_1107_15750_18592
-#> 70 M00967_43_000000000-A3JHG_1_2110_12856_16229
-#> 80 M00967_43_000000000-A3JHG_1_1113_11294_24024
-#> 89 M00967_43_000000000-A3JHG_1_1107_15750_18592
-#> 91 M00967_43_000000000-A3JHG_1_2101_22400_13416
-#>                                         ParentB
-#> 66 M00967_43_000000000-A3JHG_1_2101_22400_13416
-#> 70 M00967_43_000000000-A3JHG_1_1107_15750_18592
-#> 80 M00967_43_000000000-A3JHG_1_2110_12856_16229
-#> 89 M00967_43_000000000-A3JHG_1_1109_25348_18015
-#> 91  M00967_43_000000000-A3JHG_1_1112_6862_18037
-#>                                      Top_Parent        QM       QA       QB
-#> 66 M00967_43_000000000-A3JHG_1_1107_15750_18592  99.60317 98.01587 94.44444
-#> 70 M00967_43_000000000-A3JHG_1_2110_12856_16229 100.00000 97.61905 95.63492
-#> 80 M00967_43_000000000-A3JHG_1_1113_11294_24024 100.00000 98.01587 94.44444
-#> 89 M00967_43_000000000-A3JHG_1_1107_15750_18592 100.00000 98.80952 94.44444
-#> 91 M00967_43_000000000-A3JHG_1_2101_22400_13416 100.00000 98.01587 93.65079
-#>         QAB       QT LY LN LA RY RN RA      Div Chimeric_Status
-#> 66 93.25397 98.01587 13  0  0  4  0  1 1.587302               Y
-#> 70 93.25397 97.61905 11  0  0  6  0  0 2.380952               Y
-#> 80 92.46032 98.01587 14  0  0  5  0  0 1.984127               Y
-#> 89 93.25397 98.80952 14  0  0  3  0  0 1.190476               Y
-#> 91 91.66667 98.01587 16  0  0  5  0  0 1.984127               Y
+#> NULL
 ```
 
 ### Chimeras
@@ -172,16 +142,7 @@ Let’s get the names of the first 10 chimeras.
 ``` r
 
 strollur_results$chimeras |> head(n = 10)
-#>  [1] "M00967_43_000000000-A3JHG_1_1106_11629_14238"
-#>  [2] "M00967_43_000000000-A3JHG_1_1103_26580_14708"
-#>  [3] "M00967_43_000000000-A3JHG_1_2101_21700_24164"
-#>  [4] "M00967_43_000000000-A3JHG_1_1112_23980_19089"
-#>  [5] "M00967_43_000000000-A3JHG_1_2110_20944_24019"
-#>  [6] "M00967_43_000000000-A3JHG_1_2107_23359_13368"
-#>  [7] "M00967_43_000000000-A3JHG_1_1101_15516_19920"
-#>  [8] "M00967_43_000000000-A3JHG_1_1103_19656_27166"
-#>  [9] "M00967_43_000000000-A3JHG_1_1112_15051_19857"
-#> [10] "M00967_43_000000000-A3JHG_1_2108_16511_16075"
+#> NULL
 ```
 
 ### Set_abundance_values
@@ -197,12 +158,10 @@ look at the first two sequences abundances after detecting the chimeras:
 ``` r
 
 names(data_frame_results$set_abundance_values)
-#> [1] "sequence_name" "abundance"     "samples"
+#> NULL
 
 data_frame_results$set_abundance_values$samples
-#>  [1] "F3D0"   "F3D1"   "F3D141" "F3D142" "F3D143" "F3D144" "F3D145" "F3D146"
-#>  [9] "F3D147" "F3D148" "F3D149" "F3D150" "F3D2"   "F3D3"   "F3D5"   "F3D6"  
-#> [17] "F3D7"   "F3D8"   "F3D9"   "Mock"
+#> NULL
 
 sequences_names <- c(
   "M00967_43_000000000-A3JHG_1_1103_5171_14027",
@@ -230,16 +189,10 @@ df[df$sequence_name %in% sequences_names, c(1, 3, 4)]
 #> 1096 M00967_43_000000000-A3JHG_1_1103_5171_14027 F3D142         1
 
 data_frame_results$set_abundance_values$sequence_name[1:2]
-#> [1] "M00967_43_000000000-A3JHG_1_1101_10133_8460" 
-#> [2] "M00967_43_000000000-A3JHG_1_1101_10134_24617"
+#> NULL
 
 data_frame_results$set_abundance_values$abundance[1:2]
-#> [[1]]
-#>  [1]  32 127   0   0   0   0   0   1   0   0   1   1 222   5  13  20  17  95  86
-#> [20]   0
-#> 
-#> [[2]]
-#>  [1] 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+#> NULL
 ```
 
 We can see that the abundances for sequence
@@ -265,16 +218,13 @@ df[
 #> 1096 M00967_43_000000000-A3JHG_1_1103_5171_14027 F3D142         1
 
 data_frame_results$set_abundance_values$samples
-#>  [1] "F3D0"   "F3D1"   "F3D141" "F3D142" "F3D143" "F3D144" "F3D145" "F3D146"
-#>  [9] "F3D147" "F3D148" "F3D149" "F3D150" "F3D2"   "F3D3"   "F3D5"   "F3D6"  
-#> [17] "F3D7"   "F3D8"   "F3D9"   "Mock"
+#> NULL
 
 data_frame_results$set_abundance_values$abundance[
   data_frame_results$set_abundance_values$sequence_name %in%
     "M00967_43_000000000-A3JHG_1_1103_5171_14027"
 ]
-#> [[1]]
-#>  [1] 5 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+#> NULL
 ```
 
 We can see that samples F3D0 and F3D142 did not find the sequence to be

@@ -80,9 +80,8 @@ str(reference)
 #>  $ sequence     : chr  "GACGAACGCTGGCGGCGTGCTTAACACATGCAAGTCGAGCGGAAAGGCCCTTCGGGGTACTCGAGCGGCGAACGGGTGAGTAACACGTGGGCAACCTACCCCCAGCACCGG"| __truncated__ "GATGAACGCTGGCGGTATGCTTAACACATGCAAGTCGAACGGAATCTTCGGATTTAGTGGCGGACGGGTGAGTAACGCGTGAGAATCTAGCTCTAGGTCGGGGACAACCAC"| __truncated__ "ATTGAACGCTGGCGGCATGCCTTACACATGCAAGTCGAACGGTAACAGGTCTTCGGATGCTGACGAGTGGCGAACGGGTGAGTAATACATCGGAACGTGCCCGATCGTGGG"| __truncated__ "GATGAACGCTGGCGGCGTGCCTAATACATGCAAGTCGAACGAAGCATCTTCGGATGCTTAGTGGCGAACGGGTGAGTAACACGTAGATAACCTACCTTTAACTCGAGGATA"| __truncated__ ...
 
 strollur_results <- rchime(strollur, reference = reference)
-#> Added a chimera_report report.
 #> → rchime removed `1037` chimeras from your dataset.
-#> → It took `11.6649737358093` seconds to detect and remove the chimeras.
+#> → It took `11.6180093288422` seconds to detect and remove the chimeras.
 
 strollur
 #> rchime reference example:
@@ -99,7 +98,7 @@ strollur
 #> 
 #> scrap_summary:
 #>       type      trash_code unique total
-#> 1 sequence chimeras_rchime    787  1037
+#> 1 sequence rchime_chimeras    787  1037
 #> 
 #> Number of unique seqs: 5297 
 #> Total number of seqs: 127618 
@@ -108,8 +107,8 @@ strollur
 #> Total number of custom reports: 1
 
 data_frame_results <- rchime(data_df, reference = reference)
-#> → rchime detected `1037` chimeras in your dataset.
-#> → It took `11.9090452194214` seconds to detect the chimeras.
+#> → rchime removed `1037` chimeras from your dataset.
+#> → It took `11.6122164726257` seconds to detect and remove the chimeras.
 ```
 
 ## Results
@@ -132,24 +131,7 @@ a look at the first 5 chimeric sequences in the report:
 strollur_results$chimera_report[
   strollur_results$chimera_report$Chimeric_Status == "Y",
 ] |> head(n = 5)
-#>        Score                                        Query          ParentA
-#> 14 0.3524927  M00967_43_000000000-A3JHG_1_2107_6538_14332       S000013923
-#> 18 0.4054292 M00967_43_000000000-A3JHG_1_2108_19687_26893       S000008023
-#> 21 0.3314002 M00967_43_000000000-A3JHG_1_2113_21308_17042       S000015682
-#> 23 0.3266551  M00967_43_000000000-A3JHG_1_2110_13110_1977       S000260075
-#> 30 0.6744335 M00967_43_000000000-A3JHG_1_1109_10514_23344 7000004128490675
-#>             ParentB       Top_Parent       QM       QA       QB      QAB
-#> 14       S000022285       S000022285 89.03509 80.70175 82.01754 77.63158
-#> 18 7000004128504291       S000008023 94.82072 93.22709 77.29084 77.68924
-#> 21       S000017014       S000015682 97.98387 96.37097 85.88710 84.67742
-#> 23 7000004128191216       S000260075 95.93496 94.30894 79.26829 76.42276
-#> 30 7000004131498332 7000004128490675 94.42231 88.84462 77.68924 74.10359
-#>          QT LY LN LA RY RN RA      Div Chimeric_Status
-#> 14 82.01754 22  6 14 19  0  5 7.017544               Y
-#> 18 93.22709 46  2 10  4  0  1 1.593625               Y
-#> 21 96.37097 32  2  0  4  0  3 1.612903               Y
-#> 23 94.30894 45  4  6  4  0  0 1.626016               Y
-#> 30 88.84462 45  3  3 15  1  7 5.577689               Y
+#> NULL
 ```
 
 ### Chimeras
@@ -160,14 +142,5 @@ Let’s get the names of the first 10 chimeras.
 ``` r
 
 strollur_results$chimeras |> head(n = 10)
-#>  [1] "M00967_43_000000000-A3JHG_1_2107_6538_14332" 
-#>  [2] "M00967_43_000000000-A3JHG_1_2108_19687_26893"
-#>  [3] "M00967_43_000000000-A3JHG_1_2113_21308_17042"
-#>  [4] "M00967_43_000000000-A3JHG_1_2110_13110_1977" 
-#>  [5] "M00967_43_000000000-A3JHG_1_1109_10514_23344"
-#>  [6] "M00967_43_000000000-A3JHG_1_2111_20856_13433"
-#>  [7] "M00967_43_000000000-A3JHG_1_1110_15964_18711"
-#>  [8] "M00967_43_000000000-A3JHG_1_2101_14761_24747"
-#>  [9] "M00967_43_000000000-A3JHG_1_1114_20514_18980"
-#> [10] "M00967_43_000000000-A3JHG_1_1113_26305_21260"
+#> NULL
 ```

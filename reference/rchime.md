@@ -1,4 +1,4 @@
-# Detect and remove chimeras from your [strollur](https://mothur.org/strollur/) object or data.frame using a de novo approach or alternatively a reference model.
+# rchime
 
 The `rchime()` function allows you to detect and remove chimeras from
 your data using a de novo approach or alternatively a reference model.
@@ -12,6 +12,29 @@ This function uses code from the
 ## Usage
 
 ``` r
+rchime(
+  data,
+  reference = NULL,
+  dereplicate = TRUE,
+  verbose = TRUE,
+  remove_chimeras = TRUE,
+  rchime_options = NULL,
+  table_names = list(sequence_name = "sequence_name", sequence = "sequence", abundance =
+    "abundance", sample = "sample")
+)
+
+# S3 method for class 'strollur'
+rchime(
+  data,
+  reference = NULL,
+  dereplicate = TRUE,
+  verbose = TRUE,
+  remove_chimeras = TRUE,
+  rchime_options = NULL,
+  table_names = list(sequence_name = "sequence_name", sequence = "sequence")
+)
+
+# S3 method for class 'data.frame'
 rchime(
   data,
   reference = NULL,
@@ -53,8 +76,7 @@ rchime(
 
 - remove_chimeras:
 
-  Boolean, remove chimeras from dataset. Default = `TRUE`. Only used
-  when `data` is a strollur object.
+  Boolean, remove chimeras from dataset. Default = `TRUE`.
 
 - rchime_options:
 
@@ -66,15 +88,21 @@ rchime(
 
   named list used to indicate the names of the columns in the
   data.frame. Only used when `data` or `reference` are a data.frames.
+  Default = table_names \<- list(sequence_name = "sequence_name",
+  sequence = "sequence")
+
+  In table_names, 'sequence_name' is a string containing the name of the
+  column in 'table' that contains the sequence names. Default column
+  name is 'sequence_name'.
+
+  In table_names, 'sequence' is a string containing the name of the
+  column in 'table' that contains the sequences. Default column name is
+  'sequence'.
 
 ## Value
 
-list() containing a chimera report, and vector of the chimeric
-sequence's names.
-
-The [strollur](https://mothur.org/strollur/) dataset object will also be
-updated. The sequences flagged as chimeric are removed and the chimera
-report is added.
+data a [strollur
+object](https://mothur.org/strollur/reference/strollur.html)
 
 ## References
 
@@ -105,11 +133,10 @@ data <- strollur::load_dataset(
   rchime_example("strollur_multi_sample_small.rds")
 )
 
-chimera_report <- rchime(data)
+rchime(data)
 #> ℹ The de novo method runs with a single processor.
-#> Added a chimera_report report.
 #> → rchime removed `128` chimeras from your dataset.
-#> → It took `0.520607233047485` seconds to detect and remove the chimeras.
+#> → It took `0.520518779754639` seconds to detect and remove the chimeras.
 data
 #> multi_sample - 500 sequences:
 #> 
@@ -125,7 +152,39 @@ data
 #> 
 #> scrap_summary:
 #>       type      trash_code unique total
-#> 1 sequence rchime-chimeras     90   128
+#> 1 sequence rchime_chimeras     90   128
+#> 
+#> Number of unique seqs: 410 
+#> Total number of seqs: 6688 
+#> 
+#> Total number of samples: 20 
+#> Total number of custom reports: 1 
+#> 
+
+
+# Detect and remove chimeras from the dataset using de novo approach by
+# sample (recommended)
+
+table <- readRDS(rchime_example("miseq_data_frame_by_sample_small.rds"))
+
+data <- rchime(data = table)
+#> ℹ The de novo method runs with a single processor.
+#> → rchime removed `128` chimeras from your dataset.
+#> → It took `0.503660440444946` seconds to detect and remove the chimeras.
+data
+#>             starts ends nbases ambigs polymers numns numseqs
+#> Minimum:         1  250    250      0        3     0    1.00
+#> 2.5%-tile:       1  252    252      0        4     0  168.18
+#> 25%-tile:        1  252    252      0        4     0 1672.75
+#> Median:          1  253    253      0        4     0 3344.50
+#> 75%-tile:        1  253    253      0        5     0 5016.25
+#> 97.5%-tile:      1  253    253      0        6     0 6520.82
+#> Maximum:         1  255    255      0        6     0 6688.00
+#> Mean:            1  252    252      0        4     0 3344.50
+#> 
+#> scrap_summary:
+#>       type      trash_code unique total
+#> 1 sequence rchime_chimeras     90   128
 #> 
 #> Number of unique seqs: 410 
 #> Total number of seqs: 6688 
