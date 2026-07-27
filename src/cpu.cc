@@ -80,6 +80,7 @@ void Vsearch_Cpu::increment_counters_from_bitmap(count_t * counters,
     auto * p = (unsigned short *) (bitmap);
     auto * q = (int16x8_t *) (counters);
 
+    // 1. Calculate safe SIMD iteration limits
     unsigned int const total_bytes = (totalbits + 7U) / 8U;
     unsigned int simd_iterations = 0U;
 
@@ -94,7 +95,9 @@ void Vsearch_Cpu::increment_counters_from_bitmap(count_t * counters,
 
     unsigned int j = 0U;
 
-    for (; j < simd_iterations; j++) {
+    // 2. Safe Vector Processing Loop
+    for (; j < simd_iterations; j++)
+    {
         uint16x8_t r0 = vdupq_n_u16(*p);
         ++p;
 
@@ -107,20 +110,21 @@ void Vsearch_Cpu::increment_counters_from_bitmap(count_t * counters,
 
         *q = vqsubq_s16(*q, r5);
         ++q;
+
         *q = vqsubq_s16(*q, r6);
         ++q;
     }
 
+    // 3. Strict Absolute Scalar Fallback for trailing leftover bits
     unsigned int const processed_elements = j * 16U;
-    auto * counters_scalar = (unsigned short *) q;
 
     for (auto i = processed_elements; i < totalbits; ++i)
     {
         if (bitmap[i >> 3U] & (1U << (i & 7U)))
         {
-            if (counters_scalar[i - processed_elements] < 65535U)
+            if (counters[i] < 65535U)
             {
-                counters_scalar[i - processed_elements]++;
+                counters[i]++;
             }
         }
     }
