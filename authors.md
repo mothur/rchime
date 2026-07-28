@@ -20,7 +20,7 @@
 ## Citation
 
 Source:
-[`inst/CITATION`](https://github.com/mothur/rchime/blob/main/inst/CITATION)
+[`inst/CITATION`](https://github.com/mothur/rchime/blob/v0.1.1/inst/CITATION)
 
 Sarah Westcott (2026). rchime: Detect and Remove Chimeras from Amplicon
 Sequence Data. R package version 0.1.1.
