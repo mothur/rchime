@@ -25,7 +25,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">rchime</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -151,10 +151,9 @@ remove the chimeras.</p>
 <span><span class="co">#&gt;  $ sequence_name: chr  "7000004128189528" "7000004128189537" "7000004128189547" "7000004128189554" ...</span></span>
 <span><span class="co">#&gt;  $ sequence     : chr  "GACGAACGCTGGCGGCGTGCTTAACACATGCAAGTCGAGCGGAAAGGCCCTTCGGGGTACTCGAGCGGCGAACGGGTGAGTAACACGTGGGCAACCTACCCCCAGCACCGG"| __truncated__ "GATGAACGCTGGCGGTATGCTTAACACATGCAAGTCGAACGGAATCTTCGGATTTAGTGGCGGACGGGTGAGTAACGCGTGAGAATCTAGCTCTAGGTCGGGGACAACCAC"| __truncated__ "ATTGAACGCTGGCGGCATGCCTTACACATGCAAGTCGAACGGTAACAGGTCTTCGGATGCTGACGAGTGGCGAACGGGTGAGTAATACATCGGAACGTGCCCGATCGTGGG"| __truncated__ "GATGAACGCTGGCGGCGTGCCTAATACATGCAAGTCGAACGAAGCATCTTCGGATGCTTAGTGGCGAACGGGTGAGTAACACGTAGATAACCTACCTTTAACTCGAGGATA"| __truncated__ ...</span></span>
 <span></span>
-<span><span class="va">strollur_results</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/rchime.html">rchime</a></span><span class="op">(</span><span class="va">strollur</span>, reference <span class="op">=</span> <span class="va">reference</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/rchime.html">rchime</a></span><span class="op">(</span><span class="va">strollur</span>, reference <span class="op">=</span> <span class="va">reference</span><span class="op">)</span></span>
 <span><span class="co">#&gt; → rchime removed `1037` chimeras from your dataset.</span></span>
-<span><span class="co">#&gt; → It took `11.5619034767151` seconds to detect and remove the chimeras.</span></span>
-<span></span>
+<span><span class="co">#&gt; → It took `11.7951259613037` seconds to detect and remove the chimeras.</span></span>
 <span><span class="va">strollur</span></span>
 <span><span class="co">#&gt; rchime reference example:</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -178,39 +177,59 @@ remove the chimeras.</p>
 <span><span class="co">#&gt; Total number of samples: 20 </span></span>
 <span><span class="co">#&gt; Total number of custom reports: 1</span></span>
 <span></span>
-<span><span class="va">data_frame_results</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/rchime.html">rchime</a></span><span class="op">(</span><span class="va">data_df</span>, reference <span class="op">=</span> <span class="va">reference</span><span class="op">)</span></span>
+<span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/rchime.html">rchime</a></span><span class="op">(</span><span class="va">data_df</span>, reference <span class="op">=</span> <span class="va">reference</span><span class="op">)</span></span>
 <span><span class="co">#&gt; → rchime removed `1037` chimeras from your dataset.</span></span>
-<span><span class="co">#&gt; → It took `11.5941569805145` seconds to detect and remove the chimeras.</span></span></code></pre></div>
+<span><span class="co">#&gt; → It took `11.7983915805817` seconds to detect and remove the chimeras.</span></span>
+<span><span class="va">data</span></span>
+<span><span class="co">#&gt;             starts ends nbases ambigs polymers numns   numseqs</span></span>
+<span><span class="co">#&gt; Minimum:         1  249    249      0        3     0      1.00</span></span>
+<span><span class="co">#&gt; 2.5%-tile:       1  252    252      0        4     0   3191.43</span></span>
+<span><span class="co">#&gt; 25%-tile:        1  252    252      0        4     0  31905.25</span></span>
+<span><span class="co">#&gt; Median:          1  253    253      0        4     0  63809.50</span></span>
+<span><span class="co">#&gt; 75%-tile:        1  253    253      0        5     0  95713.75</span></span>
+<span><span class="co">#&gt; 97.5%-tile:      1  254    254      0        6     0 124427.57</span></span>
+<span><span class="co">#&gt; Maximum:         1  256    256      0        8     0 127618.00</span></span>
+<span><span class="co">#&gt; Mean:            1  252    252      0        4     0  63809.50</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; scrap_summary:</span></span>
+<span><span class="co">#&gt;       type      trash_code unique total</span></span>
+<span><span class="co">#&gt; 1 sequence rchime_chimeras    787  1037</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Number of unique seqs: 5297 </span></span>
+<span><span class="co">#&gt; Total number of seqs: 127618 </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Total number of custom reports: 1</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="results">Results<a class="anchor" aria-label="anchor" href="#results"></a>
 </h2>
-<p>The <code><a href="../reference/rchime.html">rchime()</a></code> function returns a list containing the
-results of the function. When you are running the command with a
-strollur object, the chimera_report is added, and chimeras are removed
-for you automatically. Let’s take a closer look at the results
-returned.</p>
-<div class="section level3">
-<h3 id="chimera-report">Chimera Report<a class="anchor" aria-label="anchor" href="#chimera-report"></a>
-</h3>
-<p>The <a href="https://mothur.org/rchime/articles/chimera_report.html" class="external-link">chimera_report</a>
+<p>The <code><a href="../reference/rchime.html">rchime()</a></code> function returns a <a href="https://mothur.org/strollur/reference/strollur.html" class="external-link">strollur
+object</a>. Let’s take a closer look at the <code>chimera_report</code>
+generated by <code><a href="../reference/rchime.html">rchime()</a></code>. The <a href="https://mothur.org/rchime/articles/chimera_report.html" class="external-link">chimera_report</a>
 is a data.frame with a row for each sequence in your dataset. Let’s take
 a look at the first 5 chimeric sequences in the report:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">strollur_results</span><span class="op">$</span><span class="va">chimera_report</span><span class="op">[</span></span>
-<span>  <span class="va">strollur_results</span><span class="op">$</span><span class="va">chimera_report</span><span class="op">$</span><span class="va">Chimeric_Status</span> <span class="op">==</span> <span class="st">"Y"</span>,</span>
-<span><span class="op">]</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span>
-<span><span class="co">#&gt; NULL</span></span></code></pre></div>
-</div>
-<div class="section level3">
-<h3 id="chimeras">Chimeras<a class="anchor" aria-label="anchor" href="#chimeras"></a>
-</h3>
-<p>Results also contains a list of the names of the chimeric sequences.
-Let’s get the names of the first 10 chimeras.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">strollur_results</span><span class="op">$</span><span class="va">chimeras</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span>
-<span><span class="co">#&gt; NULL</span></span></code></pre></div>
-</div>
+<code class="sourceCode R"><span><span class="va">chimera_report</span> <span class="op">&lt;-</span> <span class="fu">strollur</span><span class="fu">::</span><span class="fu"><a href="https://mothur.org/strollur/reference/report.html" class="external-link">report</a></span><span class="op">(</span><span class="va">data</span>, type <span class="op">=</span> <span class="st">"chimera_report"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">chimera_report</span><span class="op">[</span><span class="va">chimera_report</span><span class="op">$</span><span class="va">Chimeric_Status</span> <span class="op">==</span> <span class="st">"Y"</span>, <span class="op">]</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span>
+<span><span class="co">#&gt;        Score                                        Query          ParentA</span></span>
+<span><span class="co">#&gt; 6  0.6724684  M00967_43_000000000-A3JHG_1_1101_10574_3283 7000004130085859</span></span>
+<span><span class="co">#&gt; 9  0.4391696 M00967_43_000000000-A3JHG_1_1101_10956_16121       S000008023</span></span>
+<span><span class="co">#&gt; 12 0.5777207 M00967_43_000000000-A3JHG_1_1101_11038_24430       S000008023</span></span>
+<span><span class="co">#&gt; 20 1.0522959 M00967_43_000000000-A3JHG_1_1101_11538_27185       S000429249</span></span>
+<span><span class="co">#&gt; 34 0.4824794 M00967_43_000000000-A3JHG_1_1101_13010_15146       S000149329</span></span>
+<span><span class="co">#&gt;             ParentB       Top_Parent        QM       QA       QB      QAB</span></span>
+<span><span class="co">#&gt; 6  7000004128190422 7000004130085859  93.22709 87.64940 81.67331 77.29084</span></span>
+<span><span class="co">#&gt; 9  7000004131498097       S000008023  96.01594 93.22709 87.25100 83.66534</span></span>
+<span><span class="co">#&gt; 12 7000004131498332       S000008023  96.41434 94.82072 80.87649 81.27490</span></span>
+<span><span class="co">#&gt; 20 7000004131252252 7000004131252252 100.00000 82.47012 98.80478 81.27490</span></span>
+<span><span class="co">#&gt; 34 7000004131498097       S000149329  91.23506 86.05578 78.08765 75.69721</span></span>
+<span><span class="co">#&gt;          QT LY LN LA RY RN RA      Div Chimeric_Status</span></span>
+<span><span class="co">#&gt; 6  87.64940 34  5 12 14  0  0 5.577689               Y</span></span>
+<span><span class="co">#&gt; 9  93.22709 22  0  0 11  4  6 2.788845               Y</span></span>
+<span><span class="co">#&gt; 12 94.82072 39  0  1  6  2  6 1.593625               Y</span></span>
+<span><span class="co">#&gt; 20 98.80478  3  0  0 44  0  0 1.195219               Y</span></span>
+<span><span class="co">#&gt; 34 86.05578 34  1 10 15  2  9 5.179283               Y</span></span></code></pre></div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
