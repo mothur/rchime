@@ -2,6 +2,8 @@
 
 ## rchime 0.1.1
 
+CRAN release: 2026-07-28
+
 - Updates version from 0.1.0 to 0.1.1.
 - Corrects address sanitizing issue found on m1-san.
 - Updates [`rchime()`](http://mothur.org/rchime/reference/rchime.md)

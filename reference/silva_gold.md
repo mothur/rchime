@@ -12,7 +12,8 @@ silva_gold()
 
 ## Value
 
-data.frame containing selected rchime parameters and their values.
+data.frame containing [silva reference files for chimera
+detection](https://mothur.org/wiki/silva_reference_files/)
 
 ## Author
 
