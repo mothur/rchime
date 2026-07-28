@@ -56,7 +56,7 @@ strollur::assign(data, table = abundance_data, type = "sequence_abundance")
 results <- rchime(data, dereplicate = TRUE)
 #> ℹ The de novo method runs with a single processor.
 #> → rchime removed `10453` chimeras from your dataset.
-#> → It took `7.66954827308655` seconds to detect and remove the chimeras.
+#> → It took `7.48844170570374` seconds to detect and remove the chimeras.
 
 
 results <- strollur::new_dataset("rchime de novo example") |>
@@ -70,7 +70,7 @@ results <- strollur::new_dataset("rchime de novo example") |>
 #> Assigned 6084 sequence abundances.
 #> ℹ The de novo method runs with a single processor.
 #> → rchime removed `10453` chimeras from your dataset.
-#> → It took `7.62025475502014` seconds to detect and remove the chimeras.
+#> → It took `7.43173360824585` seconds to detect and remove the chimeras.
 
 results$chimera_report[60:70, ]
 #> NULL
