@@ -10,7 +10,9 @@
 #'
 #' reference <- silva_gold()
 #'
-#' @return data.frame containing selected rchime parameters and their values.
+#' @return data.frame containing
+#'   \href{https://mothur.org/wiki/silva_reference_files/}{silva reference files
+#'   for chimera detection}
 #'
 #' @author Sarah Westcott, \email{swestcot@@umich.edu}
 #'
