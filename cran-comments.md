@@ -1,3 +1,9 @@
+## Submission - 0.1.1
+
+* Updates version from 0.1.0 to 0.1.1.
+* Corrects address sanitizing issue found on m1-san.
+* Updates `rchime()` function to return a [strollur object](https://mothur.org/strollur/reference/strollur.html).
+
 ## Resubmission - 0.1.0
 
 - Updates description field adding details about implementation and including 
@@ -33,4 +39,4 @@ Intial CRAN submission.
 
 ## Notes for Reviewer
 
-This is a new package. All automated checks on GitHub Actions pass cleanly.
+All automated checks on GitHub Actions pass cleanly.
