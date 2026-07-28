@@ -69,6 +69,7 @@
 
 #ifdef __aarch64__
 
+
 void Vsearch_Cpu::increment_counters_from_bitmap(count_t * counters,
                                                  unsigned char * bitmap,
                                                  unsigned int totalbits)
@@ -80,22 +81,10 @@ void Vsearch_Cpu::increment_counters_from_bitmap(count_t * counters,
     auto * p = (unsigned short *) (bitmap);
     auto * q = (int16x8_t *) (counters);
 
-    // 1. Calculate safe SIMD iteration limits
-    unsigned int const total_bytes = (totalbits + 7U) / 8U;
-    unsigned int simd_iterations = 0U;
-
-    if (total_bytes >= 2U) {
-        simd_iterations = ((total_bytes - 2U) / 2U) + 1U;
-    }
-
-    unsigned int const max_chunks = (totalbits + 15U) / 16U;
-    if (simd_iterations > max_chunks) {
-        simd_iterations = max_chunks;
-    }
-
+    // 16 bit interations
+    unsigned int const simd_iterations = totalbits / 16U;
     unsigned int j = 0U;
 
-    // 2. Safe Vector Processing Loop
     for (; j < simd_iterations; j++)
     {
         uint16x8_t r0 = vdupq_n_u16(*p);
@@ -115,7 +104,7 @@ void Vsearch_Cpu::increment_counters_from_bitmap(count_t * counters,
         ++q;
     }
 
-    // 3. Strict Absolute Scalar Fallback for trailing leftover bits
+    // leftover bits (0 to 15 bits)
     unsigned int const processed_elements = j * 16U;
 
     for (auto i = processed_elements; i < totalbits; ++i)
@@ -133,39 +122,30 @@ void Vsearch_Cpu::increment_counters_from_bitmap(count_t * counters,
 #elif defined __PPC__
 
 void Vsearch_Cpu::increment_counters_from_bitmap(count_t * counters,
-                                    unsigned char * bitmap,
-                                    unsigned int totalbits)
+                                                 unsigned char * bitmap,
+                                                 unsigned int totalbits)
 {
-  const __vector unsigned char c1 =
-    { 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0 };
-  const __vector unsigned char c2 =
-    { 0xfe, 0xfd, 0xfb, 0xf7, 0xef, 0xdf, 0xbf, 0x7f,
-      0xfe, 0xfd, 0xfb, 0xf7, 0xef, 0xdf, 0xbf, 0x7f };
-  const __vector unsigned char c3 =
-    { 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
-      0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff };
+    const __vector unsigned char c1 =
+        { 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0 };
+    const __vector unsigned char c2 =
+        { 0xfe, 0xfd, 0xfb, 0xf7, 0xef, 0xdf, 0xbf, 0x7f,
+          0xfe, 0xfd, 0xfb, 0xf7, 0xef, 0xdf, 0xbf, 0x7f };
+    const __vector unsigned char c3 =
+        { 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
+          0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff };
 
-  unsigned short * p = (unsigned short *) (bitmap);
-  __vector signed short * q = (__vector signed short *) (counters);
-  const auto r = (totalbits + 15) / 16;
+    auto * p = (unsigned short *) (bitmap);
+    auto * q = (__vector signed short *) (counters);
 
-  for (auto j = 0U; j < r; j++)
-    {
+    unsigned int const simd_iterations = totalbits / 16U;
+    unsigned int j = 0U;
+
+  for (; j < simd_iterations; j++)
+  {
       __vector unsigned char r0;
 
-      unsigned int remaining_bytes = (total_bytes > j * 2U) ? (total_bytes - j * 2U) : 0U;
-
-      if (remaining_bytes >= 2U) {
-          std::memcpy(&r0, p, 2);
-      } else if (remaining_bytes == 1U) {
-          unsigned char safe_buffer[2] = { *p, 0x00 };
-          std::memcpy(&r0, safe_buffer, 2);
-      } else {
-          unsigned char safe_buffer[2] = { 0x00, 0x00 };
-          std::memcpy(&r0, safe_buffer, 2);
-      }
-
-      p += 2; // Advance by 2 bytes (equivalent to ++p on an unsigned short pointer)
+      std::memcpy(&r0, p, 2);
+      ++p;
 
       __vector unsigned char r1 = vec_perm(r0, r0, c1);
       __vector unsigned char r2 = vec_or(r1, c2);
@@ -176,7 +156,20 @@ void Vsearch_Cpu::increment_counters_from_bitmap(count_t * counters,
       ++q;
       *q = vec_subs(*q, r5);
       ++q;
-    }
+  }
+
+  unsigned int const processed_elements = j * 16U;
+
+  for (auto i = processed_elements; i < totalbits; ++i)
+  {
+      if (bitmap[i >> 3U] & (1U << (i & 7U)))
+      {
+          if (counters[i] < 65535U)
+          {
+              counters[i]++;
+          }
+      }
+  }
 }
 
 #elif __x86_64__ || defined(SIMDE_VERSION)
@@ -235,29 +228,10 @@ void Vsearch_Cpu::increment_counters_from_bitmap_sse2(count_t * counters,
 
   auto * p = (unsigned short *) (bitmap);
   auto * q = (__m128i *) (counters);
-  //const auto r = (totalbits + 15) / 16;
 
-  // 1. Calculate how many blocks can be processed via SIMD without over-reading.
-  // We can only load a 16-byte block if there are at least 16 bytes remaining.
-  // The total size of the bitmap array in bytes is: (totalbits + 7) / 8
-  unsigned int const total_bytes = (totalbits + 7U) / 8U;
-  unsigned int simd_iterations = 0U;
-
-  if (total_bytes >= 16U) {
-      // Each SIMD loop advances 'p' by 16 bytes (since sizeof(__m128i) is 16).
-      // So we can run until the remaining space is less than 16 bytes.
-      simd_iterations = ((total_bytes - 16U) / 2U) + 1U;
-  }
-
-  // Ensure we don't accidentally overshoot totalbits chunks
-  unsigned int const max_chunks = (totalbits + 15U) / 16U;
-  if (simd_iterations > max_chunks) {
-      simd_iterations = max_chunks;
-  }
-
+  unsigned int const simd_iterations = totalbits / 16U;
   unsigned int j = 0U;
 
-  // 2. Optimized SIMD Loop for safe blocks
   for (; j < simd_iterations; j++) {
       const auto xmm0 = _mm_loadu_si128((__m128i *) p++);
 #if defined(__SSSE3__) || defined(SSSE3) || defined(SIMDE_VERSION)
@@ -275,20 +249,16 @@ void Vsearch_Cpu::increment_counters_from_bitmap_sse2(count_t * counters,
       ++q;
       *q = _mm_subs_epi16(*q, xmm5);
       ++q;
-    }
-
-  // 3. Precise Scalar Fallback Loop for the remaining tail sequences
-  // This explicitly reads bit-by-bit, strictly respecting ASan boundaries.
+  }
   unsigned int const processed_elements = j * 16U;
-  auto * counters_scalar = (unsigned short *) q;
 
   for (auto i = processed_elements; i < totalbits; ++i)
   {
       if (bitmap[i >> 3U] & (1U << (i & 7U)))
       {
-          if (counters_scalar[i - processed_elements] < 65535U) // Check saturation limit
+          if (counters[i] < 65535U)
           {
-              counters_scalar[i - processed_elements]++;
+              counters[i]++;
           }
       }
   }
