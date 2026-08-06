@@ -61,6 +61,7 @@
 
 */
 
+#include <array>
 #include "db.h"
 #include "util.h"
 #include "maps.h"

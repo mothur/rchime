@@ -63,7 +63,6 @@
 #include "maps.h"
 #include "util.h"
 #include <algorithm>  // std::min, std::max
-#include <array>
 #include <cstdint>  // int64_t, uint64_t
 #include <cstdio>  // std::printf, std::snprintf
 #include <cstring>  // std::memcpy, std::memmove, std::memset, std::strcpy, std::strlen
