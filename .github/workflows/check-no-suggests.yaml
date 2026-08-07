@@ -8,8 +8,9 @@
 # dependency.
 on:
   push:
-    branches: [main, master]
+    branches: [main, master, development]
   pull_request:
+  workflow_dispatch:
 
 name: check-no-suggests.yaml
 
