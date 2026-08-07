@@ -1,3 +1,10 @@
+# rchime 0.1.2
+
+* Updates version from 0.1.1 to 0.1.2.
+* Removes configure, cleanup and makevars files.
+* Corrects compilation error for r-release-macos-x86_64, r-oldrel-macos-arm64, r-oldrel-mocos-x86_64
+* Updates example files for strollur v0.1.3 compatibility. 
+
 # rchime 0.1.1
 
 * Updates version from 0.1.0 to 0.1.1.

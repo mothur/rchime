@@ -59,7 +59,7 @@ test_that("test rchime - errors and rchime_options", {
   chimera_report <- strollur::xdev_report(data, type = "chimera_report")
 
   # checks to make sure the correct things are created
-  expect_equal((num_seqs - strollur::count(data)), 2)
+  expect_equal((num_seqs - strollur::count(data, distinct = TRUE)), 2)
   expect_equal(nrow(chimera_report), 100)
 })
 
@@ -151,7 +151,7 @@ test_that("test rchime by reference - strollur", {
 
 test_that("test rchime de novo - strollur - single sample ", {
   data <- strollur::load_dataset(
-    rchime_example("strollur_single_sample_tiny.rds")
+    rchime_example("strollur_single_sample.rds")
   )
 
   num_seqs <- strollur::count(data, distinct = TRUE)
@@ -160,8 +160,8 @@ test_that("test rchime de novo - strollur - single sample ", {
   chimera_report <- strollur::xdev_report(data, type = "chimera_report")
 
   # checks to make sure the correct things are created
-  expect_equal((num_seqs - strollur::count(data, distinct = TRUE)), 19)
-  expect_equal(nrow(chimera_report), 100)
+  expect_equal((num_seqs - strollur::count(data, distinct = TRUE)), 3719)
+  expect_equal(nrow(chimera_report), 6084)
 })
 
 test_that("test rchime de novo -strollur/mulitple samples, dereplicate TRUE", {

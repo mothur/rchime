@@ -1,2 +1,0 @@
-# src/Makevars.win
-PKG_CXXFLAGS = -D_HAS_STD_BYTE=0
