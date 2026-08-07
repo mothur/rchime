@@ -23,13 +23,13 @@ Source:
 [`inst/CITATION`](https://github.com/mothur/rchime/blob/main/inst/CITATION)
 
 Sarah Westcott (2026). rchime: Detect and Remove Chimeras from Amplicon
-Sequence Data. R package version 0.1.1.
+Sequence Data. R package version 0.1.2.
 
     @Manual{,
       title = {rchime: Detect and Remove Chimeras from Amplicon Sequence Data},
       author = {Sarah Westcott},
       year = {2026},
-      note = {R package version 0.1.1},
+      note = {R package version 0.1.2},
       url = {https://mothur.org/rchime/},
     }
 
