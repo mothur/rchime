@@ -1339,7 +1339,7 @@ auto besti = 0;
 auto bestj = 0;
 std::array<int, word_count> counts {{}};
 std::array<int, dust_window> words {{}};
-auto word = 0;
+unsigned int word = 0;
 
 for (auto j = 0; j < len; j++)
 {
