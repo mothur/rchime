@@ -2,7 +2,7 @@ Package: rchime
 Type: Package
 Title: Detect and Remove Chimeras from Amplicon Sequence Analysis Data 
 Version: 0.1.2
-Date: 2026-07-07
+Date: 2026-08-19
 Authors@R: c(
   person("Sarah", "Westcott", , "swestcot@umich.edu", role = c("aut"),
   comment = c(ORCID = "0009-0001-1529-8247")),
