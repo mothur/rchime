@@ -2,6 +2,8 @@
 
 ## rchime 0.1.2
 
+CRAN release: 2026-08-21
+
 - Updates version from 0.1.1 to 0.1.2.
 - Removes configure, cleanup and makevars files.
 - Corrects compilation error for r-release-macos-x86_64,
