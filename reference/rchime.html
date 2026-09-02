@@ -17,7 +17,7 @@ vsearch tools."><meta property="og:image" content="http://mothur.org/rchime/logo
 
     <a class="navbar-brand me-2" href="../index.html">rchime</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -51,7 +51,7 @@ vsearch tools."><meta property="og:image" content="http://mothur.org/rchime/logo
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>rchime</h1>
-      <small class="dont-index">Source: <a href="https://github.com/mothur/rchime/blob/v0.1.2/R/rchime.R" class="external-link"><code>R/rchime.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/mothur/rchime/blob/main/R/rchime.R" class="external-link"><code>R/rchime.R</code></a></small>
       <div class="d-none name"><code>rchime.Rd</code></div>
     </div>
 
@@ -181,14 +181,13 @@ Bioinformatics 27:2194.</p>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Let's use a strollur object with 500 sequences</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu">strollur</span><span class="fu">::</span><span class="fu"><a href="https://mothur.org/strollur/reference/load_dataset.html" class="external-link">load_dataset</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>  <span class="fu"><a href="rchime_example.html">rchime_example</a></span><span class="op">(</span><span class="st">"strollur_multi_sample_small.rds"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="strollur_multi_sample_small.html">strollur_multi_sample_small</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Added 500 sequences.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Assigned 500 sequence abundances.</span>
 <span class="r-in"><span><span class="fu">rchime</span><span class="op">(</span><span class="va">data</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> The de novo method runs with a single processor.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → rchime removed `128` chimeras from your dataset.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → It took `0.555773973464966` seconds to detect and remove the chimeras.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → It took `0.533657789230347` seconds to detect and remove the chimeras.</span>
 <span class="r-in"><span><span class="va">data</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> miseq - 500 sequences:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -222,7 +221,7 @@ Bioinformatics 27:2194.</p>
 <span class="r-in"><span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu">rchime</span><span class="op">(</span>data <span class="op">=</span> <span class="va">table</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> The de novo method runs with a single processor.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → rchime removed `128` chimeras from your dataset.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> → It took `0.563264131546021` seconds to detect and remove the chimeras.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> → It took `0.514799833297729` seconds to detect and remove the chimeras.</span>
 <span class="r-in"><span><span class="va">data</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>             starts ends nbases ambigs polymers numns numseqs</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Minimum:         1  250    250      0        3     0    1.00</span>

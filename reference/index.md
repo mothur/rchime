@@ -22,3 +22,10 @@ helper functions
 
 - [`silva_gold()`](http://mothur.org/rchime/reference/silva_gold.md) :
   silva_gold
+
+- [`strollur_multi_sample_small()`](http://mothur.org/rchime/reference/strollur_multi_sample_small.md)
+  :
+
+  Create a [strollur
+  object](https://mothur.org/strollur/reference/strollur.html) object
+  with 500 sequences

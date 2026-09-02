@@ -129,14 +129,13 @@ Sarah Westcott, <swestcot@umich.edu>
 
 # Let's use a strollur object with 500 sequences
 
-data <- strollur::load_dataset(
-  rchime_example("strollur_multi_sample_small.rds")
-)
-
+data <- strollur_multi_sample_small()
+#> Added 500 sequences.
+#> Assigned 500 sequence abundances.
 rchime(data)
 #> ℹ The de novo method runs with a single processor.
 #> → rchime removed `128` chimeras from your dataset.
-#> → It took `0.555773973464966` seconds to detect and remove the chimeras.
+#> → It took `0.533657789230347` seconds to detect and remove the chimeras.
 data
 #> miseq - 500 sequences:
 #> 
@@ -170,7 +169,7 @@ table <- readRDS(rchime_example("miseq_data_frame_by_sample_small.rds"))
 data <- rchime(data = table)
 #> ℹ The de novo method runs with a single processor.
 #> → rchime removed `128` chimeras from your dataset.
-#> → It took `0.563264131546021` seconds to detect and remove the chimeras.
+#> → It took `0.514799833297729` seconds to detect and remove the chimeras.
 data
 #>             starts ends nbases ambigs polymers numns numseqs
 #> Minimum:         1  250    250      0        3     0    1.00
