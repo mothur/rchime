@@ -61,10 +61,7 @@
 #'
 #' # Let's use a strollur object with 500 sequences
 #'
-#' data <- strollur::load_dataset(
-#'   rchime_example("strollur_multi_sample_small.rds")
-#' )
-#'
+#' data <- strollur_multi_sample_small()
 #' rchime(data)
 #' data
 #'
@@ -305,7 +302,7 @@ do_chimera_check <- function(data, reference, dereplicate,
           type = "sequence",
           degap = TRUE
         ),
-        strollur::xdev_get_abundances_by_sample(data),
+        strollur::xdev_get_sequence_abundances_by_sample(data),
         parameters
       )
     }

@@ -1,52 +1,57 @@
-#' create internal strollur objects for tests and examples
-#'
-#' This function generates and saves the .rds strollur objects to inst/extdata.
-#' @return Invisible NULL
+#' @return strollur::strollur object with 100 sequences
 #' @noRd
 #' @keywords internal
-generate_strollur_objects <- function() {
-  output_dir <- "/Users/swestcot/Desktop/rchime/inst/extdata"
-
-  # strollur_miseq_tiny.rds
+strollur_miseq_tiny <- function() {
   fasta_data <- readRDS(rchime_example("miseq_fasta.rds"))
-  filename <- file.path(output_dir, "strollur_miseq_tiny.rds")
   data <- strollur::new_dataset("100 sequences")
   strollur::xdev_add_sequences(data, table = fasta_data[1:100, ])
-  strollur::save_dataset(data, filename)
+}
 
-  # strollur_reference.rds
-  reference_data <- silva_gold()
-  filename <- file.path(output_dir, "strollur_reference.rds")
-  data <- strollur::new_dataset("reference sequences")
-  strollur::xdev_add_sequences(data, table = reference_data)
-  strollur::save_dataset(data, filename)
+#' @return strollur::strollur object with silva gold sequences
+#' @noRd
+#' @keywords internal
+strollur_reference <- function() {
+  data <- strollur::new_dataset("silva gold reference sequences")
+  strollur::xdev_add_sequences(data, table = silva_gold())
+}
 
-  # "strollur_multi_sample_small.rds"
+#' @title Create a
+#'   \href{https://mothur.org/strollur/reference/strollur.html}{strollur object}
+#'   object with 500 sequences
+#' @description
+#' Create a \href{https://mothur.org/strollur/reference/strollur.html}{strollur
+#'   object} object with 500 sequences
+#' @examples
+#' rchime::strollur_multi_sample_small()
+#' @return \href{https://mothur.org/strollur/reference/strollur.html}{strollur
+#'   object} with 500 sequences
+#' @export
+strollur_multi_sample_small <- function() {
   table <- readRDS(rchime_example("miseq_data_frame_by_sample_small.rds"))
-  filename <- file.path(output_dir, "strollur_multi_sample_small.rds")
   data <- strollur::new_dataset("miseq - 500 sequences")
   strollur::xdev_add_sequences(data, table = unique(table[, c(
     "sequence_name",
     "sequence"
   )]))
   strollur::assign(data, table = table, type = "sequence_abundance")
-  strollur::save_dataset(data, filename)
+}
 
-  # strollur_single_sample.rds
+#' @return strollur::strollur object with single sample
+#' @noRd
+#' @keywords internal
+strollur_single_sample <- function() {
   table <- readRDS(rchime_example("miseq_data_frame.rds"))
-  filename <- file.path(output_dir, "strollur_single_sample.rds")
   data <- strollur::new_dataset("single sample")
   strollur::xdev_add_sequences(data, table = table)
   strollur::assign(data, table = table, type = "sequence_abundance")
-  strollur::save_dataset(data, filename)
+}
 
-  # strollur_multi_sample_tiny.rds
+#' @return strollur::strollur object with 500 sequences and multiple samples
+#' @noRd
+#' @keywords internal
+strollur_multi_sample_tiny <- function() {
   table <- readRDS(rchime_example("miseq_data_frame.rds"))
-  filename <- file.path(output_dir, "strollur_multi_sample_tiny.rds")
   data <- strollur::new_dataset("miseq - 500 sequences")
   strollur::xdev_add_sequences(data, table = table)
   strollur::assign(data, table = table, type = "sequence_abundance")
-  strollur::save_dataset(data, filename)
-
-  invisible(NULL)
 }

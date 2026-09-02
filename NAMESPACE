@@ -7,11 +7,14 @@ export(rchime)
 export(rchime_example)
 export(rchime_options)
 export(silva_gold)
+export(strollur_multi_sample_small)
 import(RcppThread)
 import(cli)
 import(strollur)
-importFrom(Rcpp,evalCpp)
-importFrom(Rcpp,sourceCpp)
+importFrom(Rcpp,
+  evalCpp,
+  sourceCpp
+)
 importFrom(parallelly,availableCores)
 importFrom(utils,modifyList)
 useDynLib(rchime, .registration = TRUE)

@@ -1,12 +1,8 @@
 # test rchime function
 
 test_that("test rchime - errors and rchime_options", {
-  data <- strollur::load_dataset(
-    rchime_example("strollur_miseq_tiny.rds")
-  )
-  reference_ob <- strollur::load_dataset(
-    rchime_example("strollur_reference.rds")
-  )
+  data <- strollur_miseq_tiny()
+  reference_ob <- strollur_reference()
 
   fasta_data <- strollur::report(data, type = "fasta")
 
@@ -47,7 +43,7 @@ test_that("test rchime - errors and rchime_options", {
     xn = 8.01, dn = 1.401, maxp = 4
   )
 
-  data <- strollur::load_dataset(rchime_example("strollur_miseq_tiny.rds"))
+  data <- strollur_miseq_tiny()
 
   num_seqs <- strollur::count(data)
   rchime(data,
@@ -64,7 +60,7 @@ test_that("test rchime - errors and rchime_options", {
 })
 
 test_that("test rchime by reference - strollur", {
-  data <- strollur::load_dataset(rchime_example("strollur_miseq_tiny.rds"))
+  data <- strollur_miseq_tiny()
 
   rchime(data,
     reference = silva_gold(),
@@ -87,59 +83,56 @@ test_that("test rchime by reference - strollur", {
   expect_equal((num_seqs - strollur::count(data)), 12)
   expect_equal(nrow(chimera_report), 100)
 
-
   # spot check chimera report
   # check first chimeric sequence
   last_chimeras_name <- "M00967_43_000000000-A3JHG_1_1107_6019_11612"
 
   # query and parent names
-  expect_equal(chimera_report[[22, 2]], last_chimeras_name)
-  expect_equal(chimera_report[[22, 3]], "S000001961")
-  expect_equal(chimera_report[[22, 4]], "7000004131498332")
-  expect_equal(chimera_report[[22, 5]], "S000001961")
+  expect_equal(chimera_report[[83, 2]], last_chimeras_name)
+  expect_equal(chimera_report[[83, 3]], "S000001961")
+  expect_equal(chimera_report[[83, 4]], "7000004131498332")
+  expect_equal(chimera_report[[83, 5]], "S000001961")
 
   # right and left votes
-  expect_equal(chimera_report[[22, 11]], 33)
-  expect_equal(chimera_report[[22, 12]], 2)
-  expect_equal(chimera_report[[22, 13]], 6)
-  expect_equal(chimera_report[[22, 14]], 18)
-  expect_equal(chimera_report[[22, 15]], 4)
-  expect_equal(chimera_report[[22, 16]], 8)
+  expect_equal(chimera_report[[83, 11]], 33)
+  expect_equal(chimera_report[[83, 12]], 2)
+  expect_equal(chimera_report[[83, 13]], 6)
+  expect_equal(chimera_report[[83, 14]], 18)
+  expect_equal(chimera_report[[83, 15]], 4)
+  expect_equal(chimera_report[[83, 16]], 8)
 
   # check non chimeric sequence
   non_chimeras_name <- "M00967_43_000000000-A3JHG_1_1101_11348_22601"
 
-  expect_equal(chimera_report[[1, 2]], non_chimeras_name)
-  expect_equal(chimera_report[[1, 3]], "*")
-  expect_equal(chimera_report[[1, 4]], "*")
-  expect_equal(chimera_report[[1, 5]], "*")
+  expect_equal(chimera_report[[7, 2]], non_chimeras_name)
+  expect_equal(chimera_report[[7, 3]], "*")
+  expect_equal(chimera_report[[7, 4]], "*")
+  expect_equal(chimera_report[[7, 5]], "*")
 
   # right and left votes
-  expect_equal(chimera_report[[1, 11]], -1)
-  expect_equal(chimera_report[[1, 12]], -1)
-  expect_equal(chimera_report[[1, 13]], -1)
-  expect_equal(chimera_report[[1, 14]], -1)
-  expect_equal(chimera_report[[1, 15]], -1)
-  expect_equal(chimera_report[[1, 16]], -1)
+  expect_equal(chimera_report[[7, 11]], -1)
+  expect_equal(chimera_report[[7, 12]], -1)
+  expect_equal(chimera_report[[7, 13]], -1)
+  expect_equal(chimera_report[[7, 14]], -1)
+  expect_equal(chimera_report[[7, 15]], -1)
+  expect_equal(chimera_report[[7, 16]], -1)
 
   # non chimera with parents selected
   non_chimera_wp <- "M00967_43_000000000-A3JHG_1_1101_18089_2781"
 
-  expect_equal(chimera_report[[2, 2]], non_chimera_wp)
-  expect_equal(chimera_report[[2, 3]], "7000004128491853")
-  expect_equal(chimera_report[[2, 4]], "7000004131499064")
-  expect_equal(chimera_report[[2, 5]], "7000004131499064")
-  expect_equal(chimera_report[[2, 11]], 10)
-  expect_equal(chimera_report[[2, 12]], 6)
-  expect_equal(chimera_report[[2, 13]], 10)
-  expect_equal(chimera_report[[2, 14]], 9)
-  expect_equal(chimera_report[[2, 15]], 0)
-  expect_equal(chimera_report[[2, 16]], 3)
+  expect_equal(chimera_report[[10, 2]], non_chimera_wp)
+  expect_equal(chimera_report[[10, 3]], "7000004128491853")
+  expect_equal(chimera_report[[10, 4]], "7000004131499064")
+  expect_equal(chimera_report[[10, 5]], "7000004131499064")
+  expect_equal(chimera_report[[10, 11]], 10)
+  expect_equal(chimera_report[[10, 12]], 6)
+  expect_equal(chimera_report[[10, 13]], 10)
+  expect_equal(chimera_report[[10, 14]], 9)
+  expect_equal(chimera_report[[10, 15]], 0)
+  expect_equal(chimera_report[[10, 16]], 3)
 
   # check by reference with multiple sample object
-  data <- strollur::load_dataset(
-    rchime_example("strollur_multi_sample_small.rds")
-  )
+  data <- strollur_multi_sample_small()
   num_seqs <- strollur::count(data, distinct = TRUE)
   rchime(data, reference = silva_gold())
 
@@ -150,9 +143,7 @@ test_that("test rchime by reference - strollur", {
 })
 
 test_that("test rchime de novo - strollur - single sample ", {
-  data <- strollur::load_dataset(
-    rchime_example("strollur_single_sample.rds")
-  )
+  data <- strollur_single_sample()
 
   num_seqs <- strollur::count(data, distinct = TRUE)
   rchime(data, verbose = FALSE)
@@ -165,9 +156,7 @@ test_that("test rchime de novo - strollur - single sample ", {
 })
 
 test_that("test rchime de novo -strollur/mulitple samples, dereplicate TRUE", {
-  data <- strollur::load_dataset(
-    rchime_example("strollur_multi_sample_small.rds")
-  )
+  data <- strollur_multi_sample_small()
   num_seqs <- strollur::count(data, distinct = TRUE)
   rchime(data, verbose = FALSE)
 
@@ -270,9 +259,7 @@ test_that("test rchime de novo -strollur/mulitple samples, dereplicate TRUE", {
 })
 
 test_that("test rchime de novo strollur/mulitple samples, dereplicate FALSE", {
-  data <- strollur::load_dataset(
-    rchime_example("strollur_multi_sample_small.rds")
-  )
+  data <- strollur_multi_sample_small()
 
   options <- rchime_options(dereplicate = FALSE)
 
