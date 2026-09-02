@@ -302,7 +302,7 @@ do_chimera_check <- function(data, reference, dereplicate,
           type = "sequence",
           degap = TRUE
         ),
-        strollur::xdev_get_sequence_abundances_by_sample(data),
+        strollur::xdev_get_abundances_by_sample(data),
         parameters
       )
     }
