@@ -8,8 +8,8 @@ This package uses code from the
 [vsearch](https://github.com/torognes/vsearch) tools.
 
 - [`rchime()`](http://mothur.org/rchime/reference/rchime.md) detect and
-  remove chimeras from your [strollur](https://mothur.org/strollur/)
-  dataset object or data.frame
+  remove chimeras from your [strollur
+  object](https://mothur.org/strollur/) or data.frame
 
 ## Installation
 
@@ -56,28 +56,28 @@ strollur::assign(data, table = abundance_data, type = "sequence_abundance")
 
 rchime(data)
 #> ℹ The de novo method runs with a single processor.
-#> → rchime removed `10039` chimeras from your dataset.
-#> → It took `4.30051493644714` seconds to detect and remove the chimeras.
+#> → rchime removed `10453` chimeras from your dataset.
+#> → It took `4.24229192733765` seconds to detect and remove the chimeras.
 
 data
 #> rchime de novo example:
 #> 
 #>             starts ends nbases ambigs polymers numns   numseqs
 #> Minimum:         1  249    249      0        3     0      1.00
-#> 2.5%-tile:       1  252    252      0        4     0   2965.40
-#> 25%-tile:        1  252    252      0        4     0  29654.00
-#> Median:          1  253    253      0        4     0  59308.00
-#> 75%-tile:        1  253    253      0        5     0  88962.00
-#> 97.5%-tile:      1  254    254      0        6     0 115650.60
-#> Maximum:         1  256    256      0        8     0 118616.00
-#> Mean:            1  252    252      0        4     0  59308.14
+#> 2.5%-tile:       1  252    252      0        4     0   2956.03
+#> 25%-tile:        1  252    252      0        4     0  29551.25
+#> Median:          1  253    253      0        4     0  59101.50
+#> 75%-tile:        1  253    253      0        5     0  88651.75
+#> 97.5%-tile:      1  254    254      0        6     0 115246.97
+#> Maximum:         1  256    256      0        8     0 118202.00
+#> Mean:            1  252    252      0        4     0  59101.50
 #> 
 #> scrap_summary:
 #>       type      trash_code unique total
-#> 1 sequence rchime_chimeras   3332 10039
+#> 1 sequence rchime_chimeras   3588 10453
 #> 
-#> Number of unique seqs: 2752 
-#> Total number of seqs: 118616 
+#> Number of unique seqs: 2496 
+#> Total number of seqs: 118202 
 #> 
 #> Total number of samples: 20 
 #> Total number of custom reports: 1
