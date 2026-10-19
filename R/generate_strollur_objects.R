@@ -49,12 +49,14 @@ strollur_single_sample <- function() {
 #' @noRd
 #' @keywords internal
 strollur_multi_sample <- function() {
-    fasta_table <- readRDS(rchime_example("test_fasta.rds"))
-    abundance_table <- readRDS(rchime_example("test_abundance.rds"))
-    data <- strollur::new_dataset("multi sample")
-    strollur::xdev_add_sequences(data, table = fasta_table)
-    strollur::assign(data, table = abundance_table,
-                     type = "sequence_abundance")
+  fasta_table <- readRDS(rchime_example("test_fasta.rds"))
+  abundance_table <- readRDS(rchime_example("test_abundance.rds"))
+  data <- strollur::new_dataset("multi sample")
+  strollur::xdev_add_sequences(data, table = fasta_table)
+  strollur::assign(data,
+    table = abundance_table,
+    type = "sequence_abundance"
+  )
 }
 
 #' @return strollur::strollur object with 500 sequences and multiple samples
