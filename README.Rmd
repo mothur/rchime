@@ -31,7 +31,7 @@ knitr::opts_chunk$set(
 The *rchime* package allows you to detect and remove chimeras from your dataset using a de novo approach or alternatively a reference model. This package uses 
 code from the [vsearch](https://github.com/torognes/vsearch) tools.
 
-* `rchime()` detect and remove chimeras from your [strollur](https://mothur.org/strollur/) dataset object or data.frame
+* `rchime()` detect and remove chimeras from your [strollur object](https://mothur.org/strollur/) or data.frame
 
 ## Installation
 

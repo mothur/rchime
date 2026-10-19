@@ -18,10 +18,9 @@ All automated checks on GitHub Actions pass cleanly.
 
 ## Submission - 0.1.3
 
-- Adds rchime::strollur_multi_sample_small() function to create the [strollur object](https://mothur.org/strollur/reference/strollur.html) used in examples.
-- Adds internal functions to build the [strollur objects](https://mothur.org/strollur/reference/strollur.html) used in testing.
-- Removes prebuilt [strollur objects](https://mothur.org/strollur/reference/strollur.html) from inst/extdata.
-
+- Updates version from 0.1.2 to 0.1.3.
+- Replaces saved [strollur objects](https://mothur.org/strollur/reference/strollur.html) with functions to create them. This resolves a backwards compatibility issue with strollur.
+- Changes R version dependency from >=4.5.0 to >=4.2.0.
 
 ## Submission - 0.1.2
 
