@@ -2,6 +2,8 @@
 
 ## rchime 0.1.3
 
+CRAN release: 2026-10-19
+
 - Updates version from 0.1.2 to 0.1.3.
 - Replaces saved [strollur
   objects](https://mothur.org/strollur/reference/strollur.html) with
