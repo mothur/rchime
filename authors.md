@@ -20,17 +20,17 @@
 ## Citation
 
 Source:
-[`inst/CITATION`](https://github.com/mothur/rchime/blob/v0.1.3/inst/CITATION)
+[`inst/CITATION`](https://github.com/mothur/rchime/blob/main/inst/CITATION)
 
-Sarah Westcott (2026). rchime: Detect and Remove Chimeras from Amplicon
-Sequence Data. R package version 0.1.2.
+Westcott SL, Schloss PD. 0. rchime: an R package for detecting chimeras
+in amplicon sequencing data. Microbiol Resour Announc 0:e01048-26.
 
-    @Manual{,
-      title = {rchime: Detect and Remove Chimeras from Amplicon Sequence Data},
+    @Article{,
+      title = {rchime: an R package for detecting chimeras in amplicon sequencing data},
       author = {Sarah Westcott},
+      journal = {Microbiology Resource Announcements},
       year = {2026},
-      note = {R package version 0.1.2},
-      url = {https://mothur.org/rchime/},
+      doi = {10.1128/mra.01048-26},
     }
 
 Rognes, T., Flouri, T., Nichols, B., Quince, C., & Mahé, F. (2016).
