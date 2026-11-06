@@ -1,15 +1,19 @@
 # Package Citation
 bibentry(
-  bibtype = "Manual",
-  title = "rchime: Detect and Remove Chimeras from Amplicon Sequence Data",
+  bibtype = "Article",
+  title = "rchime: an R package for detecting chimeras in amplicon sequencing data",
   author = person("Sarah", "Westcott", , "swestcot@umich.edu",
                     role = c("aut", "cre"),
                     comment = c(ORCID = "0009-0001-1529-8247")),
+
+            person("Pat", "Schloss", , "pschloss@umich.edu",
+            role = c("cph", "cre"),
+            comment = c(ORCID = "0000-0002-6935-4275")),
+  journal = "Microbiology Resource Announcements",
   year = "2026",
-  note = "R package version 0.1.2",
-  url = "https://mothur.org/rchime/",
-  textVersion = "Sarah Westcott (2026). rchime: Detect and Remove Chimeras
-  from Amplicon Sequence Data. R package version 0.1.2."
+  doi = "10.1128/mra.01048-26",
+  textVersion = "Westcott SL, Schloss PD. 0. rchime: an R package for detecting
+  chimeras in amplicon sequencing data. Microbiol Resour Announc 0:e01048-26."
 )
 
 # Reference 1: VSEARCH
