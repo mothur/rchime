@@ -80,7 +80,7 @@ remove the chimeras.
 rchime(strollur)
 #> ℹ The de novo method runs with a single processor.
 #> → rchime removed `10453` chimeras from your dataset.
-#> → It took `6.21640658378601` seconds to detect and remove the chimeras.
+#> → It took `7.84096622467041` seconds to detect and remove the chimeras.
 strollur
 #> rchime de novo example:
 #> 
@@ -107,7 +107,7 @@ strollur
 data <- rchime(df)
 #> ℹ The de novo method runs with a single processor.
 #> → rchime removed `10453` chimeras from your dataset.
-#> → It took `6.24062466621399` seconds to detect and remove the chimeras.
+#> → It took `7.77815437316895` seconds to detect and remove the chimeras.
 data
 #>             starts ends nbases ambigs polymers numns   numseqs
 #> Minimum:         1  249    249      0        3     0      1.00

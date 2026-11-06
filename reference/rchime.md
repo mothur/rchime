@@ -135,7 +135,7 @@ data <- strollur_multi_sample_small()
 rchime(data)
 #> ℹ The de novo method runs with a single processor.
 #> → rchime removed `128` chimeras from your dataset.
-#> → It took `0.433287620544434` seconds to detect and remove the chimeras.
+#> → It took `0.538802862167358` seconds to detect and remove the chimeras.
 data
 #> miseq - 500 sequences:
 #> 
@@ -169,7 +169,7 @@ table <- readRDS(rchime_example("miseq_data_frame_by_sample_small.rds"))
 data <- rchime(data = table)
 #> ℹ The de novo method runs with a single processor.
 #> → rchime removed `128` chimeras from your dataset.
-#> → It took `0.415574789047241` seconds to detect and remove the chimeras.
+#> → It took `0.523584842681885` seconds to detect and remove the chimeras.
 data
 #>             starts ends nbases ambigs polymers numns numseqs
 #> Minimum:         1  250    250      0        3     0    1.00
